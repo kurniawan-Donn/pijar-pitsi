@@ -1,12 +1,30 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>MAGENTA - Sistem Informasi Magang</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        @if(isset($perusahaan) && $perusahaan && $perusahaan->nama)
+            {{ $perusahaan->nama }} - Sistem Informasi Magang
+        @else
+            MAGENTA - Sistem Informasi Magang
+        @endif
+    </title>
+
 
     <style>
+
+        /* =====================================================
+           RESET
+        ====================================================== */
+
         * {
             margin: 0;
             padding: 0;
@@ -14,23 +32,40 @@
             scroll-behavior: smooth;
         }
 
+
+        /* =====================================================
+           BODY
+        ====================================================== */
+
         body {
             font-family: Arial, sans-serif;
             color: #222;
             background: #f7f8fc;
         }
 
+
+        /* =====================================================
+           NAVBAR
+        ====================================================== */
+
         nav {
             position: sticky;
             top: 0;
             z-index: 1000;
+
             background: white;
+
             padding: 18px 8%;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 2px 10px
+                rgba(0, 0, 0, 0.08);
         }
+
 
         .logo {
             font-size: 24px;
@@ -38,11 +73,16 @@
             color: #7c3aed;
         }
 
+
         nav ul {
             list-style: none;
+
             display: flex;
+            align-items: center;
+
             gap: 25px;
         }
+
 
         nav ul li a {
             text-decoration: none;
@@ -50,344 +90,973 @@
             font-weight: 500;
         }
 
+
         nav ul li a:hover {
             color: #7c3aed;
         }
 
+
+        .login-link {
+            padding: 10px 16px;
+
+            background: #7c3aed;
+
+            color: white !important;
+
+            border-radius: 8px;
+        }
+
+
+        .login-link:hover {
+            background: #6d28d9;
+        }
+
+
+        /* =====================================================
+           SECTION
+        ====================================================== */
+
         section {
             min-height: 100vh;
-            padding: 90px 8%;
+
+            padding:
+                90px 8%;
         }
+
+
+        /* =====================================================
+           HERO
+        ====================================================== */
 
         .hero {
+
+            min-height:
+                calc(100vh - 75px);
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 50px;
-            background: linear-gradient(135deg, #f5f3ff, #ffffff);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5f3ff,
+                    #ffffff
+                );
         }
+
 
         .hero-text {
-            max-width: 600px;
+            max-width: 650px;
         }
 
+
         .hero-text h1 {
+
             font-size: 52px;
+
+            line-height: 1.15;
+
             margin-bottom: 20px;
+
             color: #1f2937;
         }
 
-        .hero-text h1 span {
-            color: #7c3aed;
-        }
 
         .hero-text p {
+
             font-size: 18px;
+
             line-height: 1.7;
+
             margin-bottom: 30px;
+
             color: #555;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 14px 25px;
-            background: #7c3aed;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
-            font-weight: bold;
+
+        .hero-box {
+
+            width: 460px;
+
+            height: 320px;
+
+            background: #ede9fe;
+
+            border-radius: 25px;
+
+            overflow: hidden;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            flex-shrink: 0;
         }
+
+
+        .hero-image {
+
+            width: 100%;
+
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+
+        .hero-placeholder {
+
+            width: 100%;
+
+            height: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 30px;
+
+            font-weight: bold;
+
+            color: #7c3aed;
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ====================================================== */
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 14px 25px;
+
+            background: #7c3aed;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            border: none;
+
+            cursor: pointer;
+        }
+
 
         .btn:hover {
             background: #6d28d9;
         }
 
-        .hero-box {
-            width: 380px;
-            height: 300px;
-            background: #ede9fe;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            font-weight: bold;
-            color: #7c3aed;
-        }
+
+        /* =====================================================
+           SECTION TITLE
+        ====================================================== */
 
         .section-title {
+
             text-align: center;
+
             margin-bottom: 50px;
         }
 
+
         .section-title h2 {
+
             font-size: 36px;
+
             margin-bottom: 15px;
         }
 
+
         .section-title p {
+
             color: #666;
+
+            line-height: 1.6;
         }
 
+
+        /* =====================================================
+           CARDS
+        ====================================================== */
+
         .cards {
+
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
             gap: 25px;
         }
 
+
         .card {
+
             background: white;
+
             padding: 30px;
+
             border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.07);
         }
 
+
         .card h3 {
+
             margin-bottom: 15px;
+
             color: #7c3aed;
         }
 
+
         .card p,
         .card li {
+
             line-height: 1.7;
+
             color: #555;
         }
 
+
         .card ul {
+
             padding-left: 20px;
         }
 
+
+        /* =====================================================
+           TENTANG PERUSAHAAN
+        ====================================================== */
+
+        .company-description {
+
+            white-space: pre-line;
+
+            color: #555;
+
+            line-height: 1.8;
+
+            font-size: 17px;
+        }
+
+
+        .company-name {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            color: #1f2937;
+        }
+
+
+        /* =====================================================
+           TIMELINE
+        ====================================================== */
+
         .timeline {
+
             max-width: 800px;
+
             margin: auto;
         }
+
 
         .timeline-item {
+
             background: white;
+
             padding: 25px;
+
             margin-bottom: 20px;
-            border-left: 5px solid #7c3aed;
+
+            border-left:
+                5px solid #7c3aed;
+
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.06);
+
+            box-shadow:
+                0 5px 15px
+                rgba(0, 0, 0, 0.06);
         }
+
+
+        .timeline-item h3 {
+
+            margin-bottom: 10px;
+
+            color: #7c3aed;
+        }
+
+
+        .timeline-item p {
+
+            color: #555;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           FORM
+        ====================================================== */
 
         .form-container {
+
             max-width: 700px;
+
             margin: auto;
+
             background: white;
+
             padding: 35px;
+
             border-radius: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+
+            box-shadow:
+                0 5px 25px
+                rgba(0, 0, 0, 0.08);
         }
 
+
         .form-group {
+
             margin-bottom: 20px;
         }
 
+
         .form-group label {
+
             display: block;
+
             margin-bottom: 8px;
+
             font-weight: bold;
         }
+
 
         .form-group input,
         .form-group select,
         .form-group textarea {
+
             width: 100%;
+
             padding: 13px;
-            border: 1px solid #ddd;
+
+            border:
+                1px solid #ddd;
+
             border-radius: 8px;
+
             font-size: 15px;
+
+            font-family: Arial, sans-serif;
         }
 
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+
+            outline: none;
+
+            border-color: #7c3aed;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(124, 58, 237, 0.10);
+        }
+
+
         .form-group textarea {
+
             min-height: 120px;
+
             resize: vertical;
         }
 
+
         .form-button {
+
             border: none;
+
             cursor: pointer;
         }
 
-        .status-box {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-            text-align: center;
-        }
+
+        /* =====================================================
+           ALERT
+        ====================================================== */
 
         .alert-success {
+
             background: #dcfce7;
+
             color: #166534;
+
             padding: 15px;
+
             border-radius: 10px;
+
             margin-bottom: 20px;
         }
+
 
         .alert-error {
+
             background: #fee2e2;
+
             color: #991b1b;
+
             padding: 15px;
+
             border-radius: 10px;
+
             margin-bottom: 20px;
         }
 
+
         .alert-error ul {
+
             margin-top: 10px;
+
             padding-left: 20px;
         }
 
-        footer {
-            background: #1f2937;
-            color: white;
-            padding: 40px 8%;
+
+        /* =====================================================
+           CONTACT
+        ====================================================== */
+
+        .contact-link {
+
+            color: #7c3aed;
+
+            text-decoration: none;
+
+            word-break: break-word;
+        }
+
+
+        .contact-link:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =====================================================
+           STATUS
+        ====================================================== */
+
+        .status-box {
+
+            max-width: 600px;
+
+            margin: auto;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 5px 25px
+                rgba(0, 0, 0, 0.08);
+
             text-align: center;
         }
 
-        @media (max-width: 900px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
 
-            .cards {
-                grid-template-columns: 1fr;
-            }
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        footer {
+
+            background: #1f2937;
+
+            color: white;
+
+            padding:
+                40px 8%;
+
+            text-align: center;
+        }
+
+
+        footer p {
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 1000px) {
 
             nav {
+
                 flex-direction: column;
+
                 gap: 15px;
             }
 
+
             nav ul {
-                gap: 12px;
+
                 flex-wrap: wrap;
+
                 justify-content: center;
+
+                gap: 14px;
             }
 
-            .hero-text h1 {
-                font-size: 40px;
+
+            .hero {
+
+                flex-direction: column;
+
+                text-align: center;
+
+                padding-top: 70px;
             }
+
+
+            .hero-text {
+
+                max-width: 750px;
+            }
+
 
             .hero-box {
+
                 width: 100%;
-                max-width: 380px;
+
+                max-width: 500px;
             }
+
+
+            .cards {
+
+                grid-template-columns:
+                    1fr;
+            }
+
         }
+
+
+        @media (max-width: 600px) {
+
+            section {
+
+                padding: 70px 5%;
+            }
+
+
+            .hero-text h1 {
+
+                font-size: 38px;
+            }
+
+
+            .hero-text p {
+
+                font-size: 16px;
+            }
+
+
+            .section-title h2 {
+
+                font-size: 30px;
+            }
+
+
+            .form-container {
+
+                padding: 25px 20px;
+            }
+
+        }
+
     </style>
+
 </head>
+
 
 <body>
 
-    <!-- =========================
+
+    <!-- =====================================================
          NAVBAR
-    ========================== -->
+    ====================================================== -->
+
     <nav>
-        <div class="logo">MAGENTA</div>
 
-        <ul>
-            <li><a href="#beranda">Beranda</a></li>
-            <li><a href="#tentang">Tentang</a></li>
-            <li><a href="#persyaratan">Persyaratan</a></li>
-            <li><a href="#alur">Alur</a></li>
-            <li><a href="#pengajuan">Pengajuan</a></li>
-            <li><a href="#status">Cek Status</a></li>
-        </ul>
-    </nav>
-
-
-    <!-- =========================
-         BERANDA
-    ========================== -->
-    <section id="beranda" class="hero">
-
-        <div class="hero-text">
-
-            <h1>
-                Sistem Informasi
-                <span>Magang</span>
-            </h1>
-
-            <p>
-                MAGENTA merupakan sistem informasi magang terintegrasi
-                untuk membantu proses pengajuan, pengelolaan,
-                dan pemantauan kegiatan magang.
-            </p>
-
-            <a href="#pengajuan" class="btn">
-                Ajukan Magang
-            </a>
-
-        </div>
-
-        <div class="hero-box">
+        <div class="logo">
             MAGENTA
         </div>
 
+
+        <ul>
+
+            <li>
+                <a href="#beranda">
+                    Beranda
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#tentang">
+                    Tentang
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#persyaratan">
+                    Persyaratan
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#alur">
+                    Alur
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#pengajuan">
+                    Pengajuan
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#status">
+                    Cek Status
+                </a>
+            </li>
+
+
+            <li>
+                <a
+                    href="{{ route('login') }}"
+                    class="login-link"
+                >
+                    Login Admin
+                </a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         BERANDA / BANNER
+    ====================================================== -->
+
+    <section
+        id="beranda"
+        class="hero"
+    >
+
+        @if(isset($banners) && $banners->isNotEmpty())
+
+            @php
+                $banner = $banners->first();
+            @endphp
+
+
+            <div class="hero-text">
+
+                <h1>
+                    {{ $banner->judul }}
+                </h1>
+
+
+                @if($banner->deskripsi)
+
+                    <p>
+                        {{ $banner->deskripsi }}
+                    </p>
+
+                @endif
+
+
+                @if($banner->tombol_teks)
+
+                    <a
+                        href="{{ $banner->tombol_link ?: '#pengajuan' }}"
+                        class="btn"
+                    >
+                        {{ $banner->tombol_teks }}
+                    </a>
+
+                @endif
+
+            </div>
+
+
+            <div class="hero-box">
+
+                @if($banner->gambar)
+
+                    <img
+                        src="{{ asset('storage/' . $banner->gambar) }}"
+                        alt="{{ $banner->judul }}"
+                        class="hero-image"
+                    >
+
+                @else
+
+                    <div class="hero-placeholder">
+                        MAGENTA
+                    </div>
+
+                @endif
+
+            </div>
+
+
+        @else
+
+
+            <div class="hero-text">
+
+                <h1>
+
+                    Sistem Informasi
+
+                    <br>
+
+                    <span style="color: #7c3aed;">
+                        Magang
+                    </span>
+
+                </h1>
+
+
+                <p>
+
+                    MAGENTA merupakan sistem informasi
+                    magang terintegrasi untuk membantu
+                    proses pengajuan, pengelolaan,
+                    dan pemantauan kegiatan magang.
+
+                </p>
+
+
+                <a
+                    href="#pengajuan"
+                    class="btn"
+                >
+                    Ajukan Magang
+                </a>
+
+            </div>
+
+
+            <div class="hero-box">
+
+                <div class="hero-placeholder">
+                    MAGENTA
+                </div>
+
+            </div>
+
+
+        @endif
+
     </section>
 
 
-    <!-- =========================
-         TENTANG
-    ========================== -->
+
+    <!-- =====================================================
+         TENTANG SISTEM MAGENTA
+    ====================================================== -->
+
     <section id="tentang">
+
 
         <div class="section-title">
 
-            <h2>Tentang MAGENTA</h2>
 
-            <p>
-                Sistem informasi untuk mengelola kegiatan magang.
-            </p>
+            <h2>
+                {{ $pengaturan?->tentang_judul ?? 'Tentang Sistem MAGENTA' }}
+            </h2>
+
+
+            @if($pengaturan?->tentang_deskripsi)
+
+                <p>
+                    {{ $pengaturan->tentang_deskripsi }}
+                </p>
+
+            @else
+
+                <p>
+                    Sistem informasi untuk mengelola kegiatan magang.
+                </p>
+
+            @endif
+
 
         </div>
+
 
         <div class="cards">
 
-            <div class="card">
-                <h3>Pengajuan</h3>
 
-                <p>
-                    Mahasiswa dapat mengajukan kegiatan magang
-                    melalui sistem dengan mudah.
-                </p>
-            </div>
+            <!-- =================================================
+                 KARTU 1
+            ================================================== -->
 
             <div class="card">
-                <h3>Pengelolaan</h3>
+
+
+                <h3>
+                    {{ $pengaturan?->tentang_card1_judul ?? 'Pengajuan' }}
+                </h3>
+
 
                 <p>
-                    Admin dapat mengelola mahasiswa,
-                    perusahaan, dan pengajuan magang.
+
+                    {{ $pengaturan?->tentang_card1_deskripsi
+                        ?? 'Mahasiswa dapat mengajukan kegiatan magang melalui sistem dengan mudah.'
+                    }}
+
                 </p>
+
+
             </div>
+
+
+
+            <!-- =================================================
+                 KARTU 2
+            ================================================== -->
 
             <div class="card">
-                <h3>Pemantauan</h3>
+
+
+                <h3>
+                    {{ $pengaturan?->tentang_card2_judul ?? 'Pengelolaan' }}
+                </h3>
+
 
                 <p>
-                    Proses magang dapat dipantau secara
-                    terstruktur melalui sistem.
+
+                    {{ $pengaturan?->tentang_card2_deskripsi
+                        ?? 'Admin dapat mengelola mahasiswa, proses pengajuan, dan kegiatan magang.'
+                    }}
+
                 </p>
+
+
             </div>
+
+
+
+            <!-- =================================================
+                 KARTU 3
+            ================================================== -->
+
+            <div class="card">
+
+
+                <h3>
+                    {{ $pengaturan?->tentang_card3_judul ?? 'Pemantauan' }}
+                </h3>
+
+
+                <p>
+
+                    {{ $pengaturan?->tentang_card3_deskripsi
+                        ?? 'Proses magang dapat dipantau secara terstruktur melalui sistem.'
+                    }}
+
+                </p>
+
+
+            </div>
+
 
         </div>
+
+
+        <!-- =================================================
+             TENTANG PERUSAHAAN
+        ================================================== -->
+
+        @if(isset($perusahaan) && $perusahaan && $perusahaan->deskripsi)
+
+
+            <div
+                class="card"
+                style="margin-top: 30px;"
+            >
+
+                <h3>
+                    {{ $perusahaan->nama ?: 'Tentang Perusahaan' }}
+                </h3>
+
+
+                <p class="company-description">
+
+                    {{ $perusahaan->deskripsi }}
+
+                </p>
+
+            </div>
+
+
+        @endif
+
 
     </section>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          PERSYARATAN
-    ========================== -->
+    ====================================================== -->
+
     <section id="persyaratan">
+
 
         <div class="section-title">
 
-            <h2>Persyaratan Magang</h2>
+            <h2>
+                Persyaratan Magang
+            </h2>
 
             <p>
                 Persyaratan yang harus dipenuhi mahasiswa.
@@ -395,57 +1064,103 @@
 
         </div>
 
+
         <div class="cards">
 
+
             <div class="card">
 
-                <h3>Mahasiswa</h3>
+                <h3>
+                    Mahasiswa
+                </h3>
 
                 <ul>
-                    <li>Mahasiswa aktif</li>
-                    <li>Memenuhi ketentuan program studi</li>
-                    <li>Melengkapi data mahasiswa</li>
+
+                    <li>
+                        Mahasiswa aktif
+                    </li>
+
+                    <li>
+                        Memenuhi ketentuan program studi
+                    </li>
+
+                    <li>
+                        Melengkapi data mahasiswa
+                    </li>
+
                 </ul>
 
             </div>
 
+
             <div class="card">
 
-                <h3>Dokumen</h3>
+                <h3>
+                    Dokumen
+                </h3>
 
                 <ul>
-                    <li>Surat pengantar</li>
-                    <li>Proposal / CV</li>
-                    <li>Dokumen pendukung lainnya</li>
+
+                    <li>
+                        Surat pengantar
+                    </li>
+
+                    <li>
+                        Proposal / CV
+                    </li>
+
+                    <li>
+                        Dokumen pendukung lainnya
+                    </li>
+
                 </ul>
 
             </div>
 
+
             <div class="card">
 
-                <h3>Ketentuan</h3>
+                <h3>
+                    Ketentuan
+                </h3>
 
                 <ul>
-                    <li>Memiliki tempat magang</li>
-                    <li>Mengikuti jadwal yang ditentukan</li>
-                    <li>Mengikuti aturan instansi</li>
+
+                    <li>
+                        Memiliki tempat magang
+                    </li>
+
+                    <li>
+                        Mengikuti jadwal yang ditentukan
+                    </li>
+
+                    <li>
+                        Mengikuti aturan instansi
+                    </li>
+
                 </ul>
 
             </div>
+
 
         </div>
 
     </section>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          ALUR MAGANG
-    ========================== -->
+    ====================================================== -->
+
     <section id="alur">
+
 
         <div class="section-title">
 
-            <h2>Alur Magang</h2>
+            <h2>
+                Alur Magang
+            </h2>
 
             <p>
                 Proses pengajuan sampai kegiatan magang selesai.
@@ -453,11 +1168,15 @@
 
         </div>
 
+
         <div class="timeline">
+
 
             <div class="timeline-item">
 
-                <h3>1. Pengajuan</h3>
+                <h3>
+                    1. Pengajuan
+                </h3>
 
                 <p>
                     Mahasiswa mengisi formulir pengajuan magang.
@@ -465,9 +1184,12 @@
 
             </div>
 
+
             <div class="timeline-item">
 
-                <h3>2. Verifikasi</h3>
+                <h3>
+                    2. Verifikasi
+                </h3>
 
                 <p>
                     Admin memeriksa kelengkapan data pengajuan.
@@ -475,9 +1197,12 @@
 
             </div>
 
+
             <div class="timeline-item">
 
-                <h3>3. Persetujuan</h3>
+                <h3>
+                    3. Persetujuan
+                </h3>
 
                 <p>
                     Pengajuan disetujui atau ditolak oleh
@@ -486,9 +1211,12 @@
 
             </div>
 
+
             <div class="timeline-item">
 
-                <h3>4. Pelaksanaan</h3>
+                <h3>
+                    4. Pelaksanaan
+                </h3>
 
                 <p>
                     Mahasiswa melaksanakan kegiatan magang.
@@ -496,9 +1224,12 @@
 
             </div>
 
+
             <div class="timeline-item">
 
-                <h3>5. Laporan & Penilaian</h3>
+                <h3>
+                    5. Laporan & Penilaian
+                </h3>
 
                 <p>
                     Mahasiswa mengumpulkan laporan dan
@@ -507,19 +1238,25 @@
 
             </div>
 
+
         </div>
 
     </section>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          PENGAJUAN MAGANG
-    ========================== -->
+    ====================================================== -->
+
     <section id="pengajuan">
+
 
         <div class="section-title">
 
-            <h2>Pengajuan Magang</h2>
+            <h2>
+                Pengajuan Magang
+            </h2>
 
             <p>
                 Isi data untuk mengajukan kegiatan magang.
@@ -527,12 +1264,16 @@
 
         </div>
 
+
         <div class="form-container">
+
 
             @if(session('success'))
 
                 <div class="alert-success">
+
                     {{ session('success') }}
+
                 </div>
 
             @endif
@@ -545,6 +1286,7 @@
                     <strong>
                         Periksa data berikut:
                     </strong>
+
 
                     <ul>
 
@@ -572,6 +1314,7 @@
 
 
                 <!-- NIM -->
+
                 <div class="form-group">
 
                     <label for="nim">
@@ -582,15 +1325,16 @@
                         type="text"
                         id="nim"
                         name="nim"
-                        placeholder="Masukkan NIM"
                         value="{{ old('nim') }}"
+                        placeholder="Masukkan NIM"
                         required
                     >
 
                 </div>
 
 
-                <!-- Nama -->
+                <!-- NAMA -->
+
                 <div class="form-group">
 
                     <label for="nama">
@@ -601,15 +1345,16 @@
                         type="text"
                         id="nama"
                         name="nama"
-                        placeholder="Masukkan nama lengkap"
                         value="{{ old('nama') }}"
+                        placeholder="Masukkan nama lengkap"
                         required
                     >
 
                 </div>
 
 
-                <!-- Email -->
+                <!-- EMAIL -->
+
                 <div class="form-group">
 
                     <label for="email">
@@ -620,15 +1365,16 @@
                         type="email"
                         id="email"
                         name="email"
-                        placeholder="Masukkan email"
                         value="{{ old('email') }}"
+                        placeholder="Masukkan email"
                         required
                     >
 
                 </div>
 
 
-                <!-- Perusahaan -->
+                <!-- PERUSAHAAN -->
+
                 <div class="form-group">
 
                     <label for="nama_perusahaan">
@@ -639,15 +1385,16 @@
                         type="text"
                         id="nama_perusahaan"
                         name="nama_perusahaan"
+                        value="{{ old('nama_perusahaan', $perusahaan?->nama ?? '') }}"
                         placeholder="Nama perusahaan / instansi"
-                        value="{{ old('nama_perusahaan') }}"
                         required
                     >
 
                 </div>
 
 
-                <!-- Tanggal Mulai -->
+                <!-- TANGGAL MULAI -->
+
                 <div class="form-group">
 
                     <label for="tanggal_mulai">
@@ -665,7 +1412,8 @@
                 </div>
 
 
-                <!-- Tanggal Selesai -->
+                <!-- TANGGAL SELESAI -->
+
                 <div class="form-group">
 
                     <label for="tanggal_selesai">
@@ -683,7 +1431,8 @@
                 </div>
 
 
-                <!-- Posisi -->
+                <!-- POSISI -->
+
                 <div class="form-group">
 
                     <label for="posisi">
@@ -694,15 +1443,16 @@
                         type="text"
                         id="posisi"
                         name="posisi"
-                        placeholder="Contoh: Web Developer"
                         value="{{ old('posisi') }}"
+                        placeholder="Contoh: Web Developer"
                         required
                     >
 
                 </div>
 
 
-                <!-- Keterangan -->
+                <!-- KETERANGAN -->
+
                 <div class="form-group">
 
                     <label for="keterangan">
@@ -718,13 +1468,15 @@
                 </div>
 
 
-                <!-- Tombol -->
+                <!-- SUBMIT -->
+
                 <button
                     type="submit"
                     class="btn form-button"
                 >
                     Kirim Pengajuan
                 </button>
+
 
             </form>
 
@@ -733,14 +1485,19 @@
     </section>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          CEK STATUS
-    ========================== -->
+    ====================================================== -->
+
     <section id="status">
+
 
         <div class="section-title">
 
-            <h2>Cek Status Pengajuan</h2>
+            <h2>
+                Cek Status Pengajuan
+            </h2>
 
             <p>
                 Periksa status pengajuan magang menggunakan NIM.
@@ -748,13 +1505,16 @@
 
         </div>
 
+
         <div class="status-box">
+
 
             <div class="form-group">
 
                 <label for="cek_nim">
                     NIM
                 </label>
+
 
                 <input
                     type="text"
@@ -764,6 +1524,7 @@
 
             </div>
 
+
             <button
                 type="button"
                 class="btn form-button"
@@ -771,75 +1532,293 @@
                 Cek Status
             </button>
 
+
         </div>
 
     </section>
 
 
-    <!-- =========================
-         KONTAK
-    ========================== -->
-    <section>
+
+    <!-- =====================================================
+         KONTAK / PROFIL PERUSAHAAN
+    ====================================================== -->
+
+    <section id="kontak">
+
 
         <div class="section-title">
 
-            <h2>Kontak</h2>
+            <h2>
+                Kontak
+            </h2>
 
             <p>
-                Hubungi bagian pengelola magang untuk
-                informasi lebih lanjut.
+                Hubungi perusahaan untuk informasi lebih lanjut
+                mengenai kegiatan magang.
             </p>
 
         </div>
 
-        <div class="cards">
+
+        @if(isset($perusahaan) && $perusahaan)
+
+
+            <div class="cards">
+
+
+                <!-- NAMA PERUSAHAAN -->
+
+                <div class="card">
+
+                    <h3>
+                        Perusahaan
+                    </h3>
+
+                    <p class="company-name">
+
+                        {{ $perusahaan->nama ?: '-' }}
+
+                    </p>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="card">
+
+                    <h3>
+                        Email
+                    </h3>
+
+
+                    @if($perusahaan->email)
+
+                        <p>
+
+                            <a
+                                href="mailto:{{ $perusahaan->email }}"
+                                class="contact-link"
+                            >
+                                {{ $perusahaan->email }}
+                            </a>
+
+                        </p>
+
+                    @else
+
+                        <p>
+                            -
+                        </p>
+
+                    @endif
+
+                </div>
+
+
+                <!-- TELEPON -->
+
+                <div class="card">
+
+                    <h3>
+                        Telepon
+                    </h3>
+
+
+                    @if($perusahaan->telepon)
+
+                        <p>
+
+                            <a
+                                href="tel:{{ $perusahaan->telepon }}"
+                                class="contact-link"
+                            >
+                                {{ $perusahaan->telepon }}
+                            </a>
+
+                        </p>
+
+                    @else
+
+                        <p>
+                            -
+                        </p>
+
+                    @endif
+
+                </div>
+
+
+                <!-- ALAMAT -->
+
+                <div class="card">
+
+                    <h3>
+                        Alamat
+                    </h3>
+
+
+                    <p>
+
+                        @if($perusahaan->alamat)
+
+                            {{ $perusahaan->alamat }}
+
+                        @else
+
+                            -
+
+                        @endif
+
+
+                        @if($perusahaan->kota)
+
+                            <br>
+
+                            {{ $perusahaan->kota }}
+
+                        @endif
+
+                    </p>
+
+                </div>
+
+
+                <!-- WEBSITE -->
+
+                <div class="card">
+
+                    <h3>
+                        Website
+                    </h3>
+
+
+                    @if($perusahaan->website)
+
+                        @php
+
+                            $websiteUrl =
+                                $perusahaan->website;
+
+                            if (
+                                !str_starts_with(
+                                    $websiteUrl,
+                                    'http://'
+                                ) &&
+                                !str_starts_with(
+                                    $websiteUrl,
+                                    'https://'
+                                )
+                            ) {
+
+                                $websiteUrl =
+                                    'https://' .
+                                    $websiteUrl;
+                            }
+
+                        @endphp
+
+
+                        <p>
+
+                            <a
+                                href="{{ $websiteUrl }}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="contact-link"
+                            >
+                                {{ $perusahaan->website }}
+                            </a>
+
+                        </p>
+
+                    @else
+
+                        <p>
+                            -
+                        </p>
+
+                    @endif
+
+                </div>
+
+
+                <!-- DESKRIPSI -->
+
+                @if($perusahaan->deskripsi)
+
+                    <div class="card">
+
+                        <h3>
+                            Tentang Perusahaan
+                        </h3>
+
+
+                        <p class="company-description">
+
+                            {{ $perusahaan->deskripsi }}
+
+                        </p>
+
+                    </div>
+
+                @endif
+
+
+            </div>
+
+
+        @else
+
 
             <div class="card">
 
-                <h3>Email</h3>
+                <h3>
+                    Profil Perusahaan
+                </h3>
 
                 <p>
-                    magang@example.com
+                    Informasi perusahaan belum tersedia.
                 </p>
 
             </div>
 
-            <div class="card">
 
-                <h3>Telepon</h3>
-
-                <p>
-                    08xxxxxxxxxx
-                </p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Alamat</h3>
-
-                <p>
-                    Kampus / Institusi Anda
-                </p>
-
-            </div>
-
-        </div>
+        @endif
 
     </section>
 
 
-    <!-- =========================
+
+    <!-- =====================================================
          FOOTER
-    ========================== -->
+    ====================================================== -->
+
     <footer>
 
         <p>
-            © 2026 MAGENTA -
+
+            © 2026
+
+            @if(isset($perusahaan) && $perusahaan && $perusahaan->nama)
+
+                {{ $perusahaan->nama }}
+
+            @else
+
+                MAGENTA
+
+            @endif
+
+            -
+
             Sistem Informasi Magang Terintegrasi
+
         </p>
 
     </footer>
 
+
 </body>
+
 </html>
