@@ -6,22 +6,19 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perusahaan extends Model
 {
-    /**
-     * Nama tabel database.
-     */
     protected $table = 'perusahaans';
 
-    /**
-     * Kolom yang boleh diisi melalui create()
-     * dan update().
-     */
     protected $fillable = [
+        'nama_perusahaan',
         'nama',
         'alamat',
         'kota',
+        'no_telepon',
         'telepon',
         'email',
         'website',
+        'nama_pembimbing',
+        'jabatan_pembimbing',
         'deskripsi',
     ];
 }

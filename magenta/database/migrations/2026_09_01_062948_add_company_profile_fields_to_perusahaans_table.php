@@ -6,47 +6,65 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Tambahkan kolom profil perusahaan.
-     */
     public function up(): void
     {
         Schema::table('perusahaans', function (Blueprint $table) {
+            if (!Schema::hasColumn('perusahaans', 'nama')) {
+                $table->string('nama')->nullable();
+            }
 
-            $table->string('nama')->nullable();
-            $table->text('alamat')->nullable();
-            $table->string('kota')->nullable();
-            $table->string('telepon')->nullable();
-            $table->string('email')->nullable();
-            $table->string('website')->nullable();
+            if (!Schema::hasColumn('perusahaans', 'alamat')) {
+                $table->text('alamat')->nullable();
+            }
 
-            $table->string('nama_pembimbing')->nullable();
-            $table->string('jabatan_pembimbing')->nullable();
+            if (!Schema::hasColumn('perusahaans', 'kota')) {
+                $table->string('kota', 100)->nullable();
+            }
 
-            $table->text('deskripsi')->nullable();
+            if (!Schema::hasColumn('perusahaans', 'telepon')) {
+                $table->string('telepon', 50)->nullable();
+            }
 
+            if (!Schema::hasColumn('perusahaans', 'email')) {
+                $table->string('email')->nullable();
+            }
+
+            if (!Schema::hasColumn('perusahaans', 'website')) {
+                $table->string('website')->nullable();
+            }
+
+            if (!Schema::hasColumn('perusahaans', 'nama_pembimbing')) {
+                $table->string('nama_pembimbing')->nullable();
+            }
+
+            if (!Schema::hasColumn('perusahaans', 'jabatan_pembimbing')) {
+                $table->string('jabatan_pembimbing')->nullable();
+            }
+
+            if (!Schema::hasColumn('perusahaans', 'deskripsi')) {
+                $table->text('deskripsi')->nullable();
+            }
         });
     }
 
-    /**
-     * Hapus kolom profil perusahaan.
-     */
     public function down(): void
     {
         Schema::table('perusahaans', function (Blueprint $table) {
+            if (Schema::hasColumn('perusahaans', 'deskripsi')) {
+                $table->dropColumn('deskripsi');
+            }
 
-            $table->dropColumn([
-                'nama',
-                'alamat',
-                'kota',
-                'telepon',
-                'email',
-                'website',
-                'nama_pembimbing',
-                'jabatan_pembimbing',
-                'deskripsi',
-            ]);
+            if (Schema::hasColumn('perusahaans', 'website')) {
+                $table->dropColumn('website');
+            }
 
+            if (Schema::hasColumn('perusahaans', 'telepon')) {
+                $table->dropColumn('telepon');
+            }
+
+            if (Schema::hasColumn('perusahaans', 'nama')) {
+                $table->dropColumn('nama');
+            }
         });
     }
 };

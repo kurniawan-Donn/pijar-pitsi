@@ -6,8 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class PengaturanWebsite extends Model
 {
+    /**
+     * Nama tabel database.
+     */
     protected $table = 'pengaturan_websites';
 
+    /**
+     * Kolom yang boleh diisi melalui create()
+     * dan update().
+     */
     protected $fillable = [
         'tentang_judul',
         'tentang_deskripsi',

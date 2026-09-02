@@ -3,56 +3,71 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
-use App\Models\PengaturanWebsite;
+use App\Models\Perusahaan;
 use Illuminate\Http\Request;
 
-class PengaturanWebsiteController extends Controller
+class PerusahaanController extends Controller
 {
     /**
-     * Menampilkan halaman Pengaturan Website.
+     * Menampilkan halaman Profil Perusahaan.
      */
     public function index()
     {
-        $pengaturan = PengaturanWebsite::first();
+        $perusahaan = Perusahaan::first();
 
         return view(
-            'superadmin.pengaturan.index',
-            compact('pengaturan')
+            'superadmin.perusahaan.index',
+            compact('perusahaan')
         );
     }
 
     /**
-     * Menyimpan atau memperbarui pengaturan website.
+     * Menyimpan atau memperbarui Profil Perusahaan.
      */
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'tentang_judul' => 'required|string|max:255',
-            'tentang_deskripsi' => 'nullable|string',
-
-            'tentang_card1_judul' => 'required|string|max:255',
-            'tentang_card1_deskripsi' => 'nullable|string',
-
-            'tentang_card2_judul' => 'required|string|max:255',
-            'tentang_card2_deskripsi' => 'nullable|string',
-
-            'tentang_card3_judul' => 'required|string|max:255',
-            'tentang_card3_deskripsi' => 'nullable|string',
+            'nama' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'kota' => 'nullable|string|max:100',
+            'telepon' => 'nullable|string|max:50',
+            'email' => 'nullable|email|max:255',
+            'website' => 'nullable|string|max:255',
+            'deskripsi' => 'nullable|string',
+        ], [
+            'nama.required' => 'Nama perusahaan wajib diisi.',
+            'alamat.required' => 'Alamat perusahaan wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
         ]);
 
-        $pengaturan = PengaturanWebsite::first();
+        $data = [
+            'nama' => $validated['nama'],
+            'nama_perusahaan' => $validated['nama'],
 
-        if ($pengaturan) {
-            $pengaturan->update($validated);
+            'alamat' => $validated['alamat'],
+            'kota' => $validated['kota'] ?? '',
+
+            'telepon' => $validated['telepon'] ?? '',
+            'no_telepon' => $validated['telepon'] ?? '',
+
+            'email' => $validated['email'] ?? '',
+            'website' => $validated['website'] ?? '',
+            'deskripsi' => $validated['deskripsi'] ?? null,
+        ];
+
+        $perusahaan = Perusahaan::first();
+
+        if ($perusahaan) {
+            $perusahaan->update($data);
         } else {
-            PengaturanWebsite::create($validated);
+            Perusahaan::create($data);
         }
 
         return redirect()
-            ->route('superadmin.pengaturan.index')
+            ->route('superadmin.perusahaan.index')
             ->with(
                 'success',
-                'Pengaturan website berhasil disimpan.'
+                'Profil perusahaan berhasil disimpan.'
             );
     }
 }

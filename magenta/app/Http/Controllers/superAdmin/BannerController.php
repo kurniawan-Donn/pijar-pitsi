@@ -10,225 +10,233 @@ use Illuminate\Support\Facades\Storage;
 class BannerController extends Controller
 {
     /**
-     * Menampilkan daftar banner.
+     * Halaman kelola banner.
+     * MAGENTA hanya menggunakan 1 banner utama.
      */
     public function index()
     {
-        $banners = Banner::orderBy('urutan', 'asc')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $banner = Banner::orderBy('id', 'asc')->first();
 
         return view(
             'superadmin.banners.index',
-            compact('banners')
-        );
-    }
-
-    /**
-     * Menampilkan halaman Kelola Banner.
-     */
-    public function create()
-    {
-        $banner = Banner::where('status', 'aktif')
-            ->orderBy('urutan', 'asc')
-            ->first();
-
-        return view(
-            'superadmin.banners.create',
             compact('banner')
         );
     }
 
     /**
-     * Menyimpan atau memperbarui banner utama.
+     * Halaman create tidak digunakan lagi.
+     * Kita arahkan langsung ke halaman kelola banner.
+     */
+    public function create()
+    {
+        return redirect()->route('superadmin.banners.index');
+    }
+
+    /**
+     * Simpan banner.
      *
-     * Kalau sudah ada banner aktif:
-     * → update banner tersebut.
+     * Jika banner sudah ada:
+     * - update banner tersebut
      *
-     * Kalau belum ada:
-     * → buat banner baru.
+     * Jika belum ada:
+     * - buat banner baru
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'judul' => 'required|string|max:255',
+            'judul' => [
+                'required',
+                'string',
+                'max:255'
+            ],
 
-            'deskripsi' => 'nullable|string',
+            'deskripsi' => [
+                'nullable',
+                'string'
+            ],
 
             'gambar' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:2048',
+                'max:2048'
             ],
 
-            'tombol_teks' => 'nullable|string|max:100',
+            'tombol_teks' => [
+                'nullable',
+                'string',
+                'max:100'
+            ],
 
-            'tombol_link' => 'nullable|string|max:255',
-
-            'status' => 'required|in:aktif,nonaktif',
-
-            'urutan' => 'required|integer|min:0',
+            'tombol_link' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
         ]);
 
         /*
         |--------------------------------------------------------------------------
-        | CARI BANNER AKTIF
+        | Ambil banner utama
         |--------------------------------------------------------------------------
         */
 
-        $banner = Banner::where('status', 'aktif')
-            ->orderBy('urutan', 'asc')
-            ->first();
-
+        $banner = Banner::orderBy('id', 'asc')->first();
 
         /*
         |--------------------------------------------------------------------------
-        | JIKA SUDAH ADA BANNER AKTIF → UPDATE
+        | Upload gambar baru
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->hasFile('gambar')) {
+
+            /*
+             * Kalau sebelumnya sudah ada gambar,
+             * hapus file gambar lama.
+             */
+            if ($banner && $banner->gambar) {
+                Storage::disk('public')->delete(
+                    $banner->gambar
+                );
+            }
+
+            /*
+             * Simpan gambar baru.
+             */
+            $validated['gambar'] = $request
+                ->file('gambar')
+                ->store('banners', 'public');
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Nilai default
+        |--------------------------------------------------------------------------
+        */
+
+        $validated['status'] = 'aktif';
+        $validated['urutan'] = 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update atau Create
         |--------------------------------------------------------------------------
         */
 
         if ($banner) {
 
-            /*
-             * Jika upload gambar baru,
-             * hapus gambar lama.
-             */
-            if ($request->hasFile('gambar')) {
-
-                if ($banner->gambar) {
-
-                    Storage::disk('public')
-                        ->delete($banner->gambar);
-                }
-
-                $validated['gambar'] = $request
-                    ->file('gambar')
-                    ->store('banners', 'public');
-            }
-
-            /*
-             * Banner ini tetap menjadi banner utama.
-             */
-            $validated['status'] = 'aktif';
-
-            /*
-             * Nonaktifkan banner aktif lainnya.
-             */
-            Banner::where('id', '!=', $banner->id)
-                ->where('status', 'aktif')
-                ->update([
-                    'status' => 'nonaktif',
-                ]);
-
-            /*
-             * Update banner utama.
-             */
             $banner->update($validated);
 
         } else {
 
-            /*
-             |--------------------------------------------------------------------------
-             | JIKA BELUM ADA BANNER AKTIF → BUAT BARU
-             |--------------------------------------------------------------------------
-             */
-
-            if ($request->hasFile('gambar')) {
-
-                $validated['gambar'] = $request
-                    ->file('gambar')
-                    ->store('banners', 'public');
-            }
-
-            /*
-             * Nonaktifkan semua banner lama.
-             */
-            Banner::where('status', 'aktif')
-                ->update([
-                    'status' => 'nonaktif',
-                ]);
-
-            /*
-             * Buat banner utama.
-             */
-            $validated['status'] = 'aktif';
-
-            Banner::create($validated);
+            $banner = Banner::create($validated);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Hapus banner lain jika ternyata ada data lama
+        |--------------------------------------------------------------------------
+        |
+        | Karena MAGENTA hanya menggunakan 1 banner,
+        | kita pastikan database hanya menyimpan banner utama.
+        |
+        */
+
+        $bannerLain = Banner::where('id', '!=', $banner->id)->get();
+
+        foreach ($bannerLain as $item) {
+
+            if ($item->gambar) {
+                Storage::disk('public')->delete(
+                    $item->gambar
+                );
+            }
+
+            $item->delete();
+        }
 
         return redirect()
-            ->route('superadmin.banners.create')
+            ->route('superadmin.banners.index')
             ->with(
                 'success',
-                'Banner berhasil diperbarui.'
+                'Banner utama berhasil disimpan.'
             );
     }
 
-
     /**
-     * Menampilkan detail banner.
+     * Tidak digunakan.
      */
     public function show(Banner $banner)
     {
-        return view(
-            'superadmin.banners.show',
-            compact('banner')
+        return redirect()->route(
+            'superadmin.banners.index'
         );
     }
 
-
     /**
-     * Form edit banner.
+     * Edit diarahkan ke halaman utama.
      */
     public function edit(Banner $banner)
     {
-        return view(
-            'superadmin.banners.edit',
-            compact('banner')
+        return redirect()->route(
+            'superadmin.banners.index'
         );
     }
 
-
     /**
-     * Memperbarui banner.
+     * Update banner.
+     *
+     * Tetap disediakan untuk kompatibilitas route resource.
      */
     public function update(
         Request $request,
         Banner $banner
     ) {
         $validated = $request->validate([
-            'judul' => 'required|string|max:255',
+            'judul' => [
+                'required',
+                'string',
+                'max:255'
+            ],
 
-            'deskripsi' => 'nullable|string',
+            'deskripsi' => [
+                'nullable',
+                'string'
+            ],
 
             'gambar' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
-                'max:2048',
+                'max:2048'
             ],
 
-            'tombol_teks' => 'nullable|string|max:100',
+            'tombol_teks' => [
+                'nullable',
+                'string',
+                'max:100'
+            ],
 
-            'tombol_link' => 'nullable|string|max:255',
-
-            'status' => 'required|in:aktif,nonaktif',
-
-            'urutan' => 'required|integer|min:0',
+            'tombol_link' => [
+                'nullable',
+                'string',
+                'max:255'
+            ],
         ]);
 
-
         /*
-         * Ganti gambar jika ada upload baru.
-         */
+        |--------------------------------------------------------------------------
+        | Upload gambar baru
+        |--------------------------------------------------------------------------
+        */
+
         if ($request->hasFile('gambar')) {
 
             if ($banner->gambar) {
-
-                Storage::disk('public')
-                    ->delete($banner->gambar);
+                Storage::disk('public')->delete(
+                    $banner->gambar
+                );
             }
 
             $validated['gambar'] = $request
@@ -236,51 +244,61 @@ class BannerController extends Controller
                 ->store('banners', 'public');
         }
 
-
-        /*
-         * Kalau banner menjadi aktif,
-         * nonaktifkan banner lain.
-         */
-        if ($validated['status'] === 'aktif') {
-
-            Banner::where('id', '!=', $banner->id)
-                ->where('status', 'aktif')
-                ->update([
-                    'status' => 'nonaktif',
-                ]);
-        }
-
+        $validated['status'] = 'aktif';
+        $validated['urutan'] = 0;
 
         $banner->update($validated);
 
+        /*
+        |--------------------------------------------------------------------------
+        | Hapus banner lain
+        |--------------------------------------------------------------------------
+        */
+
+        $bannerLain = Banner::where(
+            'id',
+            '!=',
+            $banner->id
+        )->get();
+
+        foreach ($bannerLain as $item) {
+
+            if ($item->gambar) {
+                Storage::disk('public')->delete(
+                    $item->gambar
+                );
+            }
+
+            $item->delete();
+        }
 
         return redirect()
-            ->route('superadmin.banners.create')
+            ->route('superadmin.banners.index')
             ->with(
                 'success',
-                'Banner berhasil diperbarui.'
+                'Banner utama berhasil diperbarui.'
             );
     }
 
-
     /**
-     * Menghapus banner.
+     * Hapus banner utama.
      */
     public function destroy(Banner $banner)
     {
         if ($banner->gambar) {
 
-            Storage::disk('public')
-                ->delete($banner->gambar);
+            Storage::disk('public')->delete(
+                $banner->gambar
+            );
         }
 
         $banner->delete();
 
         return redirect()
-            ->route('superadmin.banners.create')
+            ->route('superadmin.banners.index')
             ->with(
                 'success',
-                'Banner berhasil dihapus.'
+                'Banner utama berhasil dihapus.'
             );
     }
 }
