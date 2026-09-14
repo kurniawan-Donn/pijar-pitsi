@@ -12,6 +12,7 @@ use App\Http\Controllers\PengajuanMagangController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
+use App\Http\Controllers\SuperAdmin\UserController;
 
 
 /*
@@ -22,40 +23,11 @@ use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 
 Route::get('/', function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Ambil banner aktif
-    |--------------------------------------------------------------------------
-    */
-
-    $banners = Banner::where('status', 'aktif')
-        ->orderBy('urutan', 'asc')
-        ->get();
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Ambil profil perusahaan
-    |--------------------------------------------------------------------------
-    */
+    $banners = Banner::aktif()->get();
 
     $perusahaan = Perusahaan::first();
 
-
-    /*
-    |--------------------------------------------------------------------------
-    | Ambil pengaturan website
-    |--------------------------------------------------------------------------
-    */
-
     $pengaturan = PengaturanWebsite::first();
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Kirim data ke website utama
-    |--------------------------------------------------------------------------
-    */
 
     return view('website.index', [
         'banners' => $banners,
@@ -72,122 +44,91 @@ Route::get('/', function () {
 |--------------------------------------------------------------------------
 */
 
-// Menampilkan halaman login
-Route::get(
-    '/login',
-    [AuthController::class, 'showLogin']
-)->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])
+    ->name('login');
 
+Route::post('/login', [AuthController::class, 'login'])
+    ->name('login.process');
 
-// Proses login
-Route::post(
-    '/login',
-    [AuthController::class, 'login']
-)->name('login.process');
-
-
-// Logout
-Route::post(
-    '/logout',
-    [AuthController::class, 'logout']
-)->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 
 /*
 |--------------------------------------------------------------------------
-| PENGAJUAN MAGANG
+| AREA ADMIN
 |--------------------------------------------------------------------------
+|
+| Khusus Admin.
+|
 */
 
-// Menampilkan daftar pengajuan
-Route::get(
-    '/pengajuan',
-    [PengajuanMagangController::class, 'index']
-)->name('admin.pengajuan.index');
+Route::middleware(['auth', 'admin'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard.index');
+    })->name('admin.dashboard');
 
 
-// Menampilkan form pengajuan
-Route::get(
-    '/pengajuan/create',
-    [PengajuanMagangController::class, 'create']
-)->name('admin.pengajuan.create');
+    /*
+    |--------------------------------------------------------------------------
+    | PENGAJUAN MAGANG
+    |--------------------------------------------------------------------------
+    */
 
+    Route::get('/pengajuan', [PengajuanMagangController::class, 'index'])
+        ->name('admin.pengajuan.index');
 
-// Menyimpan pengajuan
-Route::post(
-    '/pengajuan',
-    [PengajuanMagangController::class, 'store']
-)->name('admin.pengajuan.store');
+    Route::get('/pengajuan/create', [PengajuanMagangController::class, 'create'])
+        ->name('admin.pengajuan.create');
 
+    Route::post('/pengajuan', [PengajuanMagangController::class, 'store'])
+        ->name('admin.pengajuan.store');
 
-// Menampilkan detail pengajuan
-Route::get(
-    '/pengajuan/{pengajuanMagang}',
-    [PengajuanMagangController::class, 'show']
-)->name('admin.pengajuan.show');
+    Route::get('/pengajuan/{pengajuanMagang}', [PengajuanMagangController::class, 'show'])
+        ->name('admin.pengajuan.show');
 
+    Route::put('/pengajuan/{pengajuanMagang}/status', [PengajuanMagangController::class, 'updateStatus'])
+        ->name('admin.pengajuan.status');
 
-// Update status pengajuan
-Route::put(
-    '/pengajuan/{pengajuanMagang}/status',
-    [PengajuanMagangController::class, 'updateStatus']
-)->name('admin.pengajuan.status');
-
-
-// Menghapus pengajuan
-Route::delete(
-    '/pengajuan/{pengajuanMagang}',
-    [PengajuanMagangController::class, 'destroy']
-)->name('admin.pengajuan.destroy');
-
-
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD ADMIN
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware('auth')->group(function () {
-
-    Route::get(
-        '/admin/dashboard',
-        function () {
-
-            return view(
-                'admin.dashboard.index'
-            );
-
-        }
-    )->name('admin.dashboard');
+    Route::delete('/pengajuan/{pengajuanMagang}', [PengajuanMagangController::class, 'destroy'])
+        ->name('admin.pengajuan.destroy');
 
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| SUPER ADMIN
+| FITUR BERSAMA ADMIN + SUPER ADMIN
 |--------------------------------------------------------------------------
+|
+| Admin dan Super Admin dapat mengakses:
+| - Profil Perusahaan
+| - Kelola Banner
+| - Kelola Konten
+|
 */
 
-Route::middleware('auth')->group(function () {
-
+Route::middleware(['auth', 'admin.superadmin'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | DASHBOARD SUPER ADMIN
+    | PROFIL PERUSAHAAN
     |--------------------------------------------------------------------------
     */
 
-    Route::get(
-        '/superadmin/dashboard',
-        function () {
+    Route::get('/superadmin/perusahaan', [PerusahaanController::class, 'index'])
+        ->name('superadmin.perusahaan.index');
 
-            return view(
-                'superadmin.dashboard.index'
-            );
-
-        }
-    )->name('superadmin.dashboard');
+    Route::put('/superadmin/perusahaan', [PerusahaanController::class, 'update'])
+        ->name('superadmin.perusahaan.update');
 
 
     /*
@@ -196,49 +137,57 @@ Route::middleware('auth')->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource(
-        '/superadmin/banners',
-        BannerController::class
-    )->names('superadmin.banners');
+    Route::resource('/superadmin/banners', BannerController::class)
+        ->names('superadmin.banners');
 
 
     /*
     |--------------------------------------------------------------------------
-    | PROFIL PERUSAHAAN
+    | KELOLA KONTEN WEBSITE
     |--------------------------------------------------------------------------
     */
 
-    // Menampilkan halaman profil perusahaan
-    Route::get(
-        '/superadmin/perusahaan',
-        [PerusahaanController::class, 'index']
-    )->name('superadmin.perusahaan.index');
+    Route::get('/superadmin/pengaturan', [PengaturanWebsiteController::class, 'index'])
+        ->name('superadmin.pengaturan.index');
+
+    Route::put('/superadmin/pengaturan', [PengaturanWebsiteController::class, 'update'])
+        ->name('superadmin.pengaturan.update');
+
+});
 
 
-    // Menyimpan / memperbarui profil perusahaan
-    Route::put(
-        '/superadmin/perusahaan',
-        [PerusahaanController::class, 'update']
-    )->name('superadmin.perusahaan.update');
+/*
+|--------------------------------------------------------------------------
+| AREA KHUSUS SUPER ADMIN
+|--------------------------------------------------------------------------
+|
+| Hanya Super Admin.
+|
+*/
+
+Route::middleware(['auth', 'superadmin'])->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | DASHBOARD SUPER ADMIN
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/superadmin/dashboard', function () {
+        return view('superadmin.dashboard.index');
+    })->name('superadmin.dashboard');
 
 
     /*
     |--------------------------------------------------------------------------
-    | PENGATURAN WEBSITE
+    | KELOLA PENGGUNA
     |--------------------------------------------------------------------------
     */
 
-    // Menampilkan halaman pengaturan website
-    Route::get(
-        '/superadmin/pengaturan',
-        [PengaturanWebsiteController::class, 'index']
-    )->name('superadmin.pengaturan.index');
-
-
-    // Menyimpan / memperbarui pengaturan website
-    Route::put(
-        '/superadmin/pengaturan',
-        [PengaturanWebsiteController::class, 'update']
-    )->name('superadmin.pengaturan.update');
+    Route::resource('/superadmin/pengguna', UserController::class)
+        ->parameters([
+            'pengguna' => 'user',
+        ])
+        ->names('superadmin.pengguna');
 
 });

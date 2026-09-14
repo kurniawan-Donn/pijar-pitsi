@@ -2,7 +2,6 @@
 <html lang="id">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -12,31 +11,19 @@
 
     <title>Kelola Banner - MAGENTA</title>
 
-
     <style>
 
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        html,
+
         body {
-            margin: 0;
-            padding: 0;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
+            font-family: Arial, Helvetica, sans-serif;
             background: #f4f7fb;
-
-            color: #1e293b;
-        }
-
-
-        body {
-            min-height: 100vh;
+            color: #243b5a;
         }
 
 
@@ -48,188 +35,247 @@
         button,
         input,
         textarea {
-            font-family: inherit;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+
+        /* =====================================================
+           LAYOUT
+        ====================================================== */
+
+        .layout {
+            min-height: 100vh;
         }
 
 
         /* =====================================================
            SIDEBAR
-        ===================================================== */
+        ====================================================== */
 
         .sidebar {
+            width: 275px;
+            min-width: 275px;
+
+            background: #12345b;
+            color: white;
 
             position: fixed;
 
-            left: 0;
             top: 0;
+            left: 0;
             bottom: 0;
 
-            width: 250px;
-
-            background: #062b63;
-
-            color: white;
-
-            padding: 25px 18px;
-
-            overflow-y: auto;
+            padding: 28px 18px 24px;
 
             z-index: 1000;
+
+            overflow-y: auto;
         }
 
+
+        /* =====================================================
+           BRAND
+        ====================================================== */
 
         .brand {
+            display: flex;
+            align-items: flex-start;
 
-            text-align: center;
+            gap: 12px;
 
-            padding-bottom: 24px;
-
-            margin-bottom: 22px;
+            padding: 4px 6px 25px;
 
             border-bottom:
-                1px solid
-                rgba(255,255,255,.15);
+                1px solid rgba(255, 255, 255, .12);
         }
 
 
-        .brand h2 {
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
 
-            margin: 0;
+            border-radius: 8px;
 
-            font-size: 25px;
+            background: #ffffff;
+            color: #12345b;
 
-            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            letter-spacing: 1px;
+            font-size: 17px;
+            font-weight: 700;
         }
 
 
-        .brand p {
+        .brand-text h2 {
+            color: #ffffff;
 
-            margin: 6px 0 0;
+            font-size: 17px;
 
-            font-size: 10px;
+            line-height: 1.1;
 
-            color: #cbd5e1;
-
-            letter-spacing: .5px;
+            letter-spacing: .2px;
         }
 
+
+        .brand-text span {
+            display: block;
+
+            margin-top: 4px;
+
+            color:
+                rgba(255, 255, 255, .65);
+
+            font-size: 9px;
+
+            line-height: 1.35;
+
+            letter-spacing: .6px;
+        }
+
+
+        /* =====================================================
+           MENU
+        ====================================================== */
 
         .menu-title {
+            margin: 22px 8px 8px;
 
-            margin:
-                22px 10px 8px;
+            color:
+                rgba(255, 255, 255, .62);
 
-            font-size: 10px;
+            font-size: 9px;
 
             font-weight: 700;
 
-            color: #94a3b8;
+            text-transform: uppercase;
 
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
         }
 
 
-        .menu-link {
+        .menu a {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            min-height: 40px;
+
+            padding: 0 13px;
+
+            margin-bottom: 4px;
+
+            border-radius: 7px;
+
+            color: #e4edf7;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: .2s ease;
+        }
+
+
+        .menu a:hover {
+            background:
+                rgba(255, 255, 255, .08);
+
+            color: #ffffff;
+        }
+
+
+        .menu a.active {
+            background: #1779c9;
+
+            color: #ffffff;
+        }
+
+
+        .menu-icon {
+            width: 18px;
+            min-width: 18px;
 
             display: flex;
 
             align-items: center;
 
-            gap: 11px;
-
-            padding: 11px 13px;
-
-            margin-bottom: 5px;
-
-            border-radius: 8px;
-
-            color: #dbeafe;
-
-            font-size: 13px;
-
-            transition: .2s;
-        }
-
-
-        .menu-link:hover {
-
-            background:
-                rgba(255,255,255,.10);
-
-            color: white;
-        }
-
-
-        .menu-link.active {
-
-            background: #f58220;
-
-            color: white;
-
-            font-weight: 700;
-        }
-
-
-        .menu-icon {
-
-            width: 20px;
+            justify-content: center;
 
             text-align: center;
 
-            font-size: 15px;
+            font-size: 13px;
+
+            line-height: 1;
         }
 
+
+        /* =====================================================
+           LOGOUT
+        ====================================================== */
 
         .logout-area {
+            position: absolute;
 
-            margin-top: 28px;
+            left: 18px;
+            right: 18px;
+            bottom: 24px;
 
-            padding-top: 18px;
+            padding-top: 15px;
 
             border-top:
-                1px solid
-                rgba(255,255,255,.15);
+                1px solid rgba(255, 255, 255, .12);
         }
 
 
-        .logout-button {
+        .logout-area form {
+            margin: 0;
+        }
 
+
+        .logout-btn {
             width: 100%;
+
+            min-height: 40px;
 
             border: none;
 
-            padding: 11px 13px;
-
-            border-radius: 8px;
+            border-radius: 7px;
 
             background:
-                rgba(255,255,255,.08);
+                rgba(255, 255, 255, .08);
 
-            color: white;
+            color: #e4edf7;
 
             cursor: pointer;
 
-            font-size: 13px;
+            font-size: 12px;
 
-            text-align: left;
+            font-weight: 600;
+
+            transition: .2s ease;
         }
 
 
-        .logout-button:hover {
-
+        .logout-btn:hover {
             background: #dc3545;
+
+            color: #ffffff;
         }
 
 
         /* =====================================================
            MAIN
-        ===================================================== */
+        ====================================================== */
 
         .main {
+            margin-left: 275px;
 
-            margin-left: 250px;
+            width:
+                calc(100% - 275px);
 
             min-height: 100vh;
         }
@@ -237,19 +283,15 @@
 
         /* =====================================================
            TOPBAR
-        ===================================================== */
+        ====================================================== */
 
         .topbar {
+            height: 64px;
 
-            height: 75px;
-
-            background: white;
+            background: #ffffff;
 
             border-bottom:
-                1px solid
-                #e2e8f0;
-
-            padding: 0 35px;
+                1px solid #e5ebf2;
 
             display: flex;
 
@@ -257,56 +299,72 @@
 
             justify-content: space-between;
 
-            position: sticky;
-
-            top: 0;
-
-            z-index: 900;
+            padding: 0 28px;
         }
 
 
         .topbar-left h1 {
+            color: #17365d;
 
-            margin: 0;
+            font-size: 16px;
 
-            color: #062b63;
-
-            font-size: 21px;
-
-            font-weight: 800;
+            line-height: 1.2;
         }
 
 
         .topbar-left p {
+            margin-top: 3px;
 
-            margin: 5px 0 0;
+            color: #7c8da3;
 
-            color: #64748b;
-
-            font-size: 12px;
+            font-size: 9px;
         }
 
 
         .user-box {
-
             display: flex;
 
             align-items: center;
 
-            gap: 10px;
+            gap: 9px;
+        }
+
+
+        .user-info {
+            text-align: right;
+        }
+
+
+        .user-name {
+            color: #243b5a;
+
+            font-size: 10px;
+
+            font-weight: 700;
+
+            line-height: 1.2;
+        }
+
+
+        .user-role {
+            margin-top: 2px;
+
+            color: #8a96a6;
+
+            font-size: 8px;
         }
 
 
         .user-avatar {
+            width: 30px;
 
-            width: 40px;
-            height: 40px;
+            height: 30px;
 
             border-radius: 50%;
 
-            background: #eaf2ff;
+            background: #eef5ff;
 
-            color: #062b63;
+            color: #1768b0;
 
             display: flex;
 
@@ -314,201 +372,234 @@
 
             justify-content: center;
 
-            font-size: 14px;
-
-            font-weight: 800;
-        }
-
-
-        .user-name {
-
-            font-size: 13px;
+            font-size: 11px;
 
             font-weight: 700;
-
-            color: #334155;
-        }
-
-
-        .user-role {
-
-            margin-top: 2px;
-
-            font-size: 10px;
-
-            color: #64748b;
         }
 
 
         /* =====================================================
            CONTENT
-        ===================================================== */
+        ====================================================== */
 
         .content {
-
-            padding: 30px 35px;
-        }
-
-
-        /* =====================================================
-           ALERT
-        ===================================================== */
-
-        .alert {
-
-            padding: 13px 16px;
-
-            border-radius: 9px;
-
-            margin-bottom: 22px;
-
-            font-size: 13px;
-        }
-
-
-        .alert-success {
-
-            background: #ecfdf5;
-
-            color: #047857;
-
-            border:
-                1px solid
-                #a7f3d0;
-        }
-
-
-        .alert-danger {
-
-            background: #fef2f2;
-
-            color: #b91c1c;
-
-            border:
-                1px solid
-                #fecaca;
-        }
-
-
-        .alert-danger ul {
-
-            margin: 7px 0 0 18px;
-
-            padding: 0;
+            padding: 28px 30px 40px;
         }
 
 
         /* =====================================================
            PAGE HEADER
-        ===================================================== */
+        ====================================================== */
 
         .page-header {
-
             display: flex;
 
             align-items: center;
 
             justify-content: space-between;
 
-            gap: 20px;
+            gap: 15px;
 
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
 
 
-        .page-header h2 {
+        .page-header-left {
+            display: flex;
 
-            margin: 0;
+            align-items: center;
 
-            color: #062b63;
-
-            font-size: 25px;
-
-            font-weight: 800;
+            gap: 13px;
         }
 
 
-        .page-header p {
+        .page-header-icon {
+            width: 42px;
 
-            margin: 6px 0 0;
+            height: 42px;
 
-            color: #64748b;
+            min-width: 42px;
 
-            font-size: 13px;
-        }
+            border-radius: 9px;
 
+            background: #eaf4ff;
 
-        /* =====================================================
-           BUTTON
-        ===================================================== */
+            border:
+                1px solid #d8eafb;
 
-        .btn {
+            color: #1779c9;
 
-            display: inline-flex;
+            display: flex;
 
             align-items: center;
 
             justify-content: center;
 
-            gap: 7px;
-
-            padding: 10px 16px;
-
-            border: none;
-
-            border-radius: 8px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition: .2s;
+            font-size: 17px;
         }
 
 
-        .btn-primary {
+        .page-header h2 {
+            color: #17365d;
 
-            background: #0b63ce;
+            font-size: 17px;
 
-            color: white;
+            line-height: 1.2;
         }
 
 
-        .btn-primary:hover {
+        .page-header p {
+            margin-top: 4px;
 
-            background: #084eaa;
-        }
+            color: #7c8da3;
 
+            font-size: 10px;
 
-        .btn-danger {
-
-            background: #dc3545;
-
-            color: white;
-        }
-
-
-        .btn-danger:hover {
-
-            background: #b91c2c;
+            line-height: 1.5;
         }
 
 
         /* =====================================================
-           MAIN GRID
-        ===================================================== */
+           ALERT
+        ====================================================== */
+
+        .alert {
+            margin-bottom: 16px;
+
+            padding: 12px 15px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+        }
+
+
+        .alert-success {
+            background: #ecfdf3;
+
+            border:
+                1px solid #b7ebcc;
+
+            color: #167342;
+
+            font-weight: 600;
+        }
+
+
+        .alert-danger {
+            background: #fff1f2;
+
+            border:
+                1px solid #fecdd3;
+
+            color: #b42318;
+        }
+
+
+        .alert-danger strong {
+            display: block;
+
+            margin-bottom: 7px;
+        }
+
+
+        .alert-danger ul {
+            margin: 0;
+
+            padding-left: 18px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           NOTICE
+        ====================================================== */
+
+        .notice {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 11px;
+
+            margin-bottom: 18px;
+
+            padding: 14px 16px;
+
+            border:
+                1px solid #f3dfb0;
+
+            border-left:
+                4px solid #f59e0b;
+
+            border-radius: 10px;
+
+            background: linear-gradient(
+                135deg,
+                #fff8e8,
+                #fffdf7
+            );
+        }
+
+
+        .notice-icon {
+            width: 27px;
+
+            height: 27px;
+
+            min-width: 27px;
+
+            border-radius: 7px;
+
+            background: #fff0c7;
+
+            color: #c27a00;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        .notice strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #7a5200;
+
+            font-size: 11px;
+        }
+
+
+        .notice p {
+            color: #8a6a2b;
+
+            font-size: 9px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =====================================================
+           BANNER LAYOUT
+        ====================================================== */
 
         .banner-layout {
-
             display: grid;
 
             grid-template-columns:
                 minmax(0, 1.25fr)
-                minmax(360px, .75fr);
+                minmax(340px, .75fr);
 
-            gap: 25px;
+            gap: 20px;
 
             align-items: start;
         }
@@ -516,103 +607,113 @@
 
         /* =====================================================
            CARD
-        ===================================================== */
+        ====================================================== */
 
         .card {
-
-            background: white;
+            background: #ffffff;
 
             border:
-                1px solid
-                #e2e8f0;
+                1px solid #e2e9f1;
 
-            border-radius: 13px;
+            border-radius: 12px;
 
             box-shadow:
-                0 2px 8px
-                rgba(15,23,42,.04);
+                0 4px 16px
+                rgba(18, 52, 91, .05);
 
             overflow: hidden;
         }
 
 
         .card-header {
-
-            padding: 20px 22px;
+            padding: 17px 20px;
 
             border-bottom:
-                1px solid
-                #edf2f7;
+                1px solid #edf1f5;
         }
 
 
         .card-header h3 {
+            color: #17365d;
 
-            margin: 0;
+            font-size: 12px;
 
-            color: #062b63;
-
-            font-size: 17px;
-
-            font-weight: 800;
+            line-height: 1.2;
         }
 
 
         .card-header p {
+            margin-top: 4px;
 
-            margin: 5px 0 0;
+            color: #8996a7;
 
-            color: #64748b;
-
-            font-size: 11px;
+            font-size: 9px;
 
             line-height: 1.5;
         }
 
 
         /* =====================================================
-           CURRENT BANNER
-        ===================================================== */
+           PREVIEW
+        ====================================================== */
 
         .preview-area {
+            padding: 20px;
+        }
 
-            padding: 22px;
+
+        .current-label {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            margin-bottom: 12px;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            background: #ecfdf3;
+
+            color: #168044;
+
+            font-size: 9px;
+
+            font-weight: 700;
         }
 
 
         .current-banner {
+            overflow: hidden;
 
             border:
-                1px solid
-                #e2e8f0;
+                1px solid #e2e9f1;
 
             border-radius: 10px;
-
-            overflow: hidden;
 
             background: #f8fafc;
         }
 
 
         .current-banner-image {
+            display: block;
 
             width: 100%;
 
-            height: 300px;
-
-            display: block;
+            height: 290px;
 
             object-fit: cover;
 
-            background: #e2e8f0;
+            background: #e9eef4;
         }
 
 
         .no-image {
-
             width: 100%;
 
-            height: 300px;
+            height: 290px;
 
             display: flex;
 
@@ -626,193 +727,159 @@
 
             color: #94a3b8;
 
-            font-size: 13px;
+            font-size: 10px;
         }
 
 
         .no-image-icon {
+            margin-bottom: 9px;
 
-            font-size: 45px;
-
-            margin-bottom: 10px;
+            font-size: 34px;
         }
 
 
         .preview-info {
+            padding: 16px;
 
-            padding: 18px;
-
-            background: white;
+            background: #ffffff;
         }
 
 
         .preview-info h4 {
+            color: #17365d;
 
-            margin: 0;
+            font-size: 15px;
 
-            color: #062b63;
-
-            font-size: 20px;
-
-            font-weight: 800;
+            line-height: 1.35;
         }
 
 
         .preview-description {
-
-            margin: 9px 0 0;
-
-            color: #64748b;
-
-            font-size: 13px;
-
-            line-height: 1.7;
-
-            white-space: pre-line;
-        }
-
-
-        .preview-button {
-
-            display: inline-block;
-
-            margin-top: 15px;
-
-            padding: 9px 14px;
-
-            border-radius: 7px;
-
-            background: #f58220;
-
-            color: white;
-
-            font-size: 11px;
-
-            font-weight: 700;
-        }
-
-
-        .preview-link {
-
-            display: block;
-
             margin-top: 7px;
 
             color: #64748b;
 
             font-size: 10px;
 
-            word-break: break-all;
+            line-height: 1.65;
+
+            white-space: pre-line;
         }
 
 
-        .current-label {
+        .preview-button {
+            display: inline-block;
 
-            display: inline-flex;
+            margin-top: 11px;
 
-            align-items: center;
+            padding: 7px 11px;
 
-            gap: 6px;
+            border-radius: 6px;
 
-            margin-bottom: 12px;
+            background: #f58220;
 
-            padding: 6px 10px;
+            color: #ffffff;
 
-            border-radius: 20px;
+            font-size: 9px;
 
-            background: #dcfce7;
+            font-weight: 700;
+        }
 
-            color: #15803d;
 
-            font-size: 10px;
+        .preview-link {
+            margin-top: 7px;
 
-            font-weight: 800;
+            color: #7c8da3;
+
+            font-size: 8px;
+
+            line-height: 1.5;
+
+            word-break: break-all;
         }
 
 
         /* =====================================================
            FORM
-        ===================================================== */
+        ====================================================== */
 
         .form-body {
-
-            padding: 22px;
+            padding: 20px;
         }
 
 
         .form-group {
-
-            margin-bottom: 17px;
+            margin-bottom: 16px;
         }
 
 
         .form-group label {
-
             display: block;
 
-            margin-bottom: 7px;
+            margin-bottom: 6px;
 
             color: #334155;
 
-            font-size: 12px;
+            font-size: 10px;
 
             font-weight: 700;
         }
 
 
         .form-group label span {
-
             color: #dc3545;
         }
 
 
         .form-control {
-
             width: 100%;
 
-            padding: 11px 12px;
+            min-height: 37px;
+
+            padding: 9px 10px;
 
             border:
-                1px solid
-                #cbd5e1;
+                1px solid #d5dce5;
 
-            border-radius: 8px;
+            border-radius: 7px;
 
-            background: white;
+            background: #ffffff;
 
-            color: #334155;
+            color: #1f2937;
 
-            font-size: 12px;
+            font-size: 10px;
 
             outline: none;
 
-            transition: .2s;
+            transition: .2s ease;
+        }
+
+
+        .form-control:hover {
+            border-color: #b9c5d2;
         }
 
 
         .form-control:focus {
-
-            border-color: #0b63ce;
+            border-color: #1779c9;
 
             box-shadow:
                 0 0 0 3px
-                rgba(11,99,206,.10);
+                rgba(23, 121, 201, .09);
         }
 
 
         textarea.form-control {
-
-            min-height: 115px;
+            min-height: 90px;
 
             resize: vertical;
 
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
 
         .file-input {
-
-            padding: 9px;
+            padding: 8px;
 
             background: #f8fafc;
 
@@ -821,59 +888,132 @@
 
 
         .form-help {
+            margin-top: 5px;
 
-            margin-top: 6px;
+            color: #8a96a5;
 
-            color: #94a3b8;
-
-            font-size: 10px;
+            font-size: 8px;
 
             line-height: 1.5;
         }
 
 
         .old-image {
+            margin-top: 9px;
 
-            margin-top: 10px;
-
-            padding: 10px;
-
-            background: #f8fafc;
-
-            border-radius: 8px;
+            padding: 9px;
 
             border:
-                1px solid
-                #e2e8f0;
+                1px solid #e2e9f1;
+
+            border-radius: 7px;
+
+            background: #f8fafc;
         }
 
 
         .old-image-title {
-
-            margin-bottom: 8px;
+            margin-bottom: 7px;
 
             color: #64748b;
 
-            font-size: 10px;
+            font-size: 8px;
 
             font-weight: 700;
         }
 
 
         .old-image img {
-
             width: 100%;
 
-            height: 90px;
+            height: 80px;
+
+            display: block;
 
             object-fit: cover;
 
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
 
-        .form-actions {
+        /* =====================================================
+           BUTTON
+        ====================================================== */
 
+        .btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 6px;
+
+            min-height: 36px;
+
+            padding: 0 13px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            transition: .2s ease;
+        }
+
+
+        .btn-primary {
+            background: #1779c9;
+
+            color: #ffffff;
+
+            box-shadow:
+                0 4px 10px
+                rgba(23, 121, 201, .13);
+        }
+
+
+        .btn-primary:hover {
+            background: #1265aa;
+
+            transform: translateY(-1px);
+        }
+
+
+        .btn-danger {
+            background: #dc3545;
+
+            color: #ffffff;
+        }
+
+
+        .btn-danger:hover {
+            background: #b91c2c;
+        }
+
+
+        .btn-secondary {
+            background: #eef1f5;
+
+            color: #526171;
+        }
+
+
+        .btn-secondary:hover {
+            background: #dfe5eb;
+        }
+
+
+        /* =====================================================
+           FORM ACTION
+        ====================================================== */
+
+        .form-actions {
             display: flex;
 
             align-items: center;
@@ -882,40 +1022,63 @@
 
             gap: 10px;
 
-            padding-top: 5px;
+            margin-top: 19px;
+
+            padding-top: 16px;
+
+            border-top:
+                1px solid #edf1f5;
+        }
+
+
+        .form-actions-note {
+            color: #98a2b0;
+
+            font-size: 8px;
         }
 
 
         .form-actions-right {
-
             display: flex;
 
-            gap: 8px;
+            align-items: center;
+
+            gap: 7px;
+        }
+
+
+        /* =====================================================
+           DELETE
+        ====================================================== */
+
+        .delete-form {
+            margin-top: 9px;
         }
 
 
         /* =====================================================
            EMPTY STATE
-        ===================================================== */
+        ====================================================== */
 
         .empty-state {
-
-            padding: 60px 25px;
+            padding: 50px 25px;
 
             text-align: center;
         }
 
 
         .empty-icon {
+            width: 58px;
 
-            width: 70px;
-            height: 70px;
+            height: 58px;
 
-            margin: 0 auto 18px;
+            margin: 0 auto 14px;
 
             border-radius: 50%;
 
-            background: #eaf2ff;
+            background: #eef6ff;
+
+            color: #1779c9;
 
             display: flex;
 
@@ -923,136 +1086,145 @@
 
             justify-content: center;
 
-            font-size: 30px;
+            font-size: 25px;
         }
 
 
         .empty-state h3 {
+            color: #17365d;
 
-            margin: 0 0 8px;
-
-            color: #062b63;
-
-            font-size: 20px;
+            font-size: 15px;
         }
 
 
         .empty-state p {
+            max-width: 460px;
 
-            max-width: 480px;
+            margin: 7px auto 0;
 
-            margin: 0 auto;
+            color: #7c8da3;
 
-            color: #64748b;
-
-            font-size: 12px;
+            font-size: 9px;
 
             line-height: 1.7;
         }
 
 
+        .add-banner-card {
+            margin-top: 18px;
+        }
+
+
+        /* =====================================================
+           FOOT NOTE
+        ====================================================== */
+
+        .foot-note {
+            margin-top: 15px;
+
+            color: #98a2b0;
+
+            font-size: 8px;
+
+            text-align: center;
+        }
+
+
         /* =====================================================
            RESPONSIVE
-        ===================================================== */
+        ====================================================== */
 
         @media (max-width: 1100px) {
 
             .banner-layout {
-
                 grid-template-columns: 1fr;
             }
 
         }
 
 
-        @media (max-width: 850px) {
+        @media (max-width: 800px) {
 
             .sidebar {
-
                 position: relative;
 
                 width: 100%;
 
+                min-width: 0;
+
                 height: auto;
+
+                padding: 20px 16px;
             }
 
 
             .main {
-
                 margin-left: 0;
+
+                width: 100%;
+            }
+
+
+            .logout-area {
+                position: static;
+
+                margin-top: 18px;
             }
 
 
             .topbar {
-
-                position: relative;
-
-                padding: 15px 20px;
-
                 height: auto;
+
+                min-height: 64px;
+
+                padding: 14px 18px;
             }
 
 
             .content {
-
-                padding: 20px;
+                padding: 22px 18px 35px;
             }
 
         }
 
 
-        @media (max-width: 600px) {
+        @media (max-width: 550px) {
 
             .user-box {
-
                 display: none;
             }
 
 
             .page-header {
-
-                flex-direction: column;
-
                 align-items: flex-start;
-            }
-
-
-            .content {
-
-                padding: 15px;
             }
 
 
             .preview-area,
             .form-body {
-
                 padding: 15px;
             }
 
 
             .current-banner-image,
             .no-image {
-
                 height: 210px;
             }
 
 
             .form-actions {
+                align-items: stretch;
 
                 flex-direction: column;
-
-                align-items: stretch;
             }
 
 
             .form-actions-right {
-
                 width: 100%;
             }
 
 
             .form-actions-right .btn {
-
                 flex: 1;
             }
 
@@ -1066,7 +1238,7 @@
 <body>
 
 
-<div class="page-wrapper">
+<div class="layout">
 
 
     {{-- =====================================================
@@ -1076,164 +1248,147 @@
     <aside class="sidebar">
 
 
+        {{-- BRAND --}}
+
         <div class="brand">
 
-            <h2>
-                MAGENTA
-            </h2>
+            <div class="brand-logo">
+                M
+            </div>
 
-            <p>
-                SISTEM INFORMASI MAGANG
-            </p>
+
+            <div class="brand-text">
+
+                <h2>
+                    MAGENTA
+                </h2>
+
+
+                <span>
+                    SISTEM INFORMASI MAGANG
+                </span>
+
+            </div>
 
         </div>
 
+
+        {{-- =================================================
+             UTAMA
+        ================================================== --}}
 
         <div class="menu-title">
             UTAMA
         </div>
 
 
-        <a
-            href="{{ route('superadmin.dashboard') }}"
-            class="menu-link"
-        >
+        <div class="menu">
 
-            <span class="menu-icon">
-                ▦
-            </span>
+            {{-- DASHBOARD MENGIKUTI ROLE --}}
 
-            <span>
+            <a
+                href="{{ auth()->user()->role === 'super_admin'
+                    ? route('superadmin.dashboard')
+                    : route('admin.dashboard') }}"
+            >
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
                 Dashboard
-            </span>
 
-        </a>
+            </a>
 
-
-        <div class="menu-title">
-            PENDAFTARAN
         </div>
 
 
-        <a
-            href="#"
-            class="menu-link"
-        >
-
-            <span class="menu-icon">
-                👨‍🎓
-            </span>
-
-            <span>
-                Data Mahasiswa
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="menu-link"
-        >
-
-            <span class="menu-icon">
-                📄
-            </span>
-
-            <span>
-                Pengajuan Magang
-            </span>
-
-        </a>
-
-
-        <a
-            href="#"
-            class="menu-link"
-        >
-
-            <span class="menu-icon">
-                🔎
-            </span>
-
-            <span>
-                Cek Status Pengajuan
-            </span>
-
-        </a>
-
+        {{-- =================================================
+             SISTEM
+        ================================================== --}}
 
         <div class="menu-title">
             SISTEM
         </div>
 
 
-        <a
-            href="{{ route('superadmin.perusahaan.index') }}"
-            class="menu-link"
-        >
+        <div class="menu">
 
-            <span class="menu-icon">
-                🏢
-            </span>
 
-            <span>
+            {{-- PROFIL PERUSAHAAN --}}
+
+            <a
+                href="{{ route('superadmin.perusahaan.index') }}"
+            >
+
+                <span class="menu-icon">
+                    ▰
+                </span>
+
                 Profil Perusahaan
-            </span>
 
-        </a>
+            </a>
 
 
-        <a
-            href="{{ route('superadmin.banners.index') }}"
-            class="menu-link active"
-        >
+            {{-- KELOLA BANNER --}}
 
-            <span class="menu-icon">
-                🖼️
-            </span>
+            <a
+                href="{{ route('superadmin.banners.index') }}"
+                class="active"
+            >
 
-            <span>
+                <span class="menu-icon">
+                    ▧
+                </span>
+
                 Kelola Banner
-            </span>
 
-        </a>
-
-
-        <a
-            href="{{ route('superadmin.pengaturan.index') }}"
-            class="menu-link"
-        >
-
-            <span class="menu-icon">
-                ⚙
-            </span>
-
-            <span>
-                Pengaturan Website
-            </span>
-
-        </a>
+            </a>
 
 
-        <a
-            href="#"
-            class="menu-link"
-        >
+            {{-- KELOLA KONTEN --}}
 
-            <span class="menu-icon">
-                🕘
-            </span>
+            <a
+                href="{{ route('superadmin.pengaturan.index') }}"
+            >
 
-            <span>
-                Riwayat Aktivitas
-            </span>
+                <span class="menu-icon">
+                    ⚙
+                </span>
 
-        </a>
+                Kelola Konten
 
+            </a>
+
+
+            {{-- KELOLA PENGGUNA
+                 HANYA SUPER ADMIN --}}
+
+            @if(auth()->user()->role === 'super_admin')
+
+                <a
+                    href="{{ route('superadmin.pengguna.index') }}"
+                >
+
+                    <span class="menu-icon">
+                        ◉
+                    </span>
+
+                    Kelola Pengguna
+
+                </a>
+
+            @endif
+
+
+        </div>
+
+
+        {{-- =================================================
+             LOGOUT
+        ================================================== --}}
 
         <div class="logout-area">
-
 
             <form
                 action="{{ route('logout') }}"
@@ -1244,18 +1399,14 @@
 
                 <button
                     type="submit"
-                    class="logout-button"
+                    class="logout-btn"
                 >
-
-                    ↪ &nbsp; Logout
-
+                    ⇥ &nbsp; Logout
                 </button>
 
             </form>
 
-
         </div>
-
 
     </aside>
 
@@ -1267,7 +1418,9 @@
     <main class="main">
 
 
-        {{-- TOPBAR --}}
+        {{-- =================================================
+             TOPBAR
+        ================================================== --}}
 
         <header class="topbar">
 
@@ -1278,14 +1431,34 @@
                     Kelola Banner
                 </h1>
 
+
                 <p>
-                    Kelola satu banner utama untuk halaman depan MAGENTA
+                    Kelola banner utama website MAGENTA
                 </p>
 
             </div>
 
 
+            {{-- USER PROFILE --}}
+
             <div class="user-box">
+
+                <div class="user-info">
+
+                    <div class="user-name">
+                        {{ auth()->user()->name ?? 'Administrator' }}
+                    </div>
+
+
+                    <div class="user-role">
+
+                        {{ auth()->user()->role === 'super_admin'
+                            ? 'Super Admin'
+                            : 'Admin' }}
+
+                    </div>
+
+                </div>
 
 
                 <div class="user-avatar">
@@ -1300,21 +1473,48 @@
 
                 </div>
 
+            </div>
 
-                <div>
 
-                    <div class="user-name">
+        </header>
 
-                        {{ auth()->user()->name ?? 'Administrator' }}
 
+        {{-- =================================================
+             CONTENT
+        ================================================== --}}
+
+        <div class="content">
+
+
+            {{-- =================================================
+                 PAGE HEADER
+            ================================================== --}}
+
+            <div class="page-header">
+
+
+                <div class="page-header-left">
+
+
+                    <div class="page-header-icon">
+                        ▧
                     </div>
 
 
-                    <div class="user-role">
+                    <div>
 
-                        Super Administrator
+                        <h2>
+                            Banner Utama Website
+                        </h2>
+
+
+                        <p>
+                            Website MAGENTA menggunakan satu banner utama
+                            yang dapat dikelola dari halaman ini.
+                        </p>
 
                     </div>
+
 
                 </div>
 
@@ -1322,23 +1522,15 @@
             </div>
 
 
-        </header>
-
-
-        {{-- =====================================================
-             CONTENT
-        ====================================================== --}}
-
-        <div class="content">
-
-
-            {{-- SUCCESS --}}
+            {{-- =================================================
+                 SUCCESS
+            ================================================== --}}
 
             @if(session('success'))
 
                 <div class="alert alert-success">
 
-                    ✓
+                    ✓ &nbsp;
 
                     {{ session('success') }}
 
@@ -1347,7 +1539,9 @@
             @endif
 
 
-            {{-- ERROR --}}
+            {{-- =================================================
+                 ERROR
+            ================================================== --}}
 
             @if($errors->any())
 
@@ -1375,34 +1569,41 @@
             @endif
 
 
-            {{-- PAGE HEADER --}}
+            {{-- =================================================
+                 NOTICE
+            ================================================== --}}
 
-            <div class="page-header">
+            <div class="notice">
+
+                <div class="notice-icon">
+                    !
+                </div>
 
 
                 <div>
 
-                    <h2>
-                        Banner Utama Website
-                    </h2>
+                    <strong>
+                        Banner utama MAGENTA
+                    </strong>
+
 
                     <p>
-                        Website MAGENTA menggunakan satu banner utama.
-                        Banner dapat diganti kapan saja dari halaman ini.
+                        Banner digunakan sebagai tampilan utama pada
+                        halaman depan website. Karena website MAGENTA
+                        menggunakan satu banner utama, banner yang
+                        tersimpan akan menjadi banner aktif.
                     </p>
 
                 </div>
-
 
             </div>
 
 
             {{-- =================================================
-                 BANNER ADA
+                 JIKA SUDAH ADA BANNER
             ================================================== --}}
 
             @if($banner)
-
 
                 <div class="banner-layout">
 
@@ -1420,8 +1621,10 @@
                                 Banner Saat Ini
                             </h3>
 
+
                             <p>
-                                Banner yang sedang digunakan pada halaman utama.
+                                Tampilan banner yang sedang digunakan
+                                pada halaman utama website.
                             </p>
 
                         </div>
@@ -1455,7 +1658,7 @@
                                     <div class="no-image">
 
                                         <div class="no-image-icon">
-                                            🖼️
+                                            ▧
                                         </div>
 
                                         Belum ada gambar banner
@@ -1467,7 +1670,6 @@
 
                                 <div class="preview-info">
 
-
                                     <h4>
                                         {{ $banner->judul }}
                                     </h4>
@@ -1476,9 +1678,7 @@
                                     @if($banner->deskripsi)
 
                                         <div class="preview-description">
-
                                             {{ $banner->deskripsi }}
-
                                         </div>
 
                                     @endif
@@ -1489,9 +1689,7 @@
                                         <div>
 
                                             <span class="preview-button">
-
                                                 {{ $banner->tombol_teks }}
-
                                             </span>
 
                                         </div>
@@ -1514,18 +1712,16 @@
 
                                 </div>
 
-
                             </div>
 
 
                         </div>
 
-
                     </div>
 
 
                     {{-- =================================================
-                         FORM EDIT
+                         FORM UBAH BANNER
                     ================================================== --}}
 
                     <div class="card">
@@ -1537,8 +1733,9 @@
                                 Ubah Banner
                             </h3>
 
+
                             <p>
-                                Isi data di bawah untuk mengganti banner utama.
+                                Perbarui informasi banner utama MAGENTA.
                             </p>
 
                         </div>
@@ -1560,17 +1757,20 @@
 
                                 <div class="form-group">
 
-                                    <label>
+                                    <label for="judul">
 
                                         Judul Banner
 
-                                        <span>*</span>
+                                        <span>
+                                            *
+                                        </span>
 
                                     </label>
 
 
                                     <input
                                         type="text"
+                                        id="judul"
                                         name="judul"
                                         class="form-control"
                                         value="{{ old('judul', $banner->judul) }}"
@@ -1585,12 +1785,13 @@
 
                                 <div class="form-group">
 
-                                    <label>
+                                    <label for="deskripsi">
                                         Deskripsi
                                     </label>
 
 
                                     <textarea
+                                        id="deskripsi"
                                         name="deskripsi"
                                         class="form-control"
                                         placeholder="Masukkan deskripsi singkat banner..."
@@ -1603,13 +1804,14 @@
 
                                 <div class="form-group">
 
-                                    <label>
+                                    <label for="gambar">
                                         Gambar Banner
                                     </label>
 
 
                                     <input
                                         type="file"
+                                        id="gambar"
                                         name="gambar"
                                         class="form-control file-input"
                                         accept=".jpg,.jpeg,.png,.webp"
@@ -1618,7 +1820,7 @@
 
                                     <div class="form-help">
 
-                                        Pilih gambar baru hanya jika ingin
+                                        Pilih gambar baru jika ingin
                                         mengganti gambar banner.
 
                                         Format:
@@ -1649,26 +1851,34 @@
 
                                     @endif
 
-
                                 </div>
 
 
-                                {{-- TOMBOL --}}
+                                {{-- TEKS TOMBOL --}}
 
                                 <div class="form-group">
 
-                                    <label>
+                                    <label for="tombol_teks">
                                         Teks Tombol
                                     </label>
 
 
                                     <input
                                         type="text"
+                                        id="tombol_teks"
                                         name="tombol_teks"
                                         class="form-control"
                                         value="{{ old('tombol_teks', $banner->tombol_teks) }}"
-                                        placeholder="Contoh: Ajukan Magang"
+                                        placeholder="Contoh: Daftar Magang"
                                     >
+
+
+                                    <div class="form-help">
+
+                                        Contoh:
+                                        Daftar Magang
+
+                                    </div>
 
                                 </div>
 
@@ -1677,18 +1887,27 @@
 
                                 <div class="form-group">
 
-                                    <label>
+                                    <label for="tombol_link">
                                         Link Tombol
                                     </label>
 
 
                                     <input
                                         type="text"
+                                        id="tombol_link"
                                         name="tombol_link"
                                         class="form-control"
                                         value="{{ old('tombol_link', $banner->tombol_link) }}"
-                                        placeholder="Contoh: #pengajuan"
+                                        placeholder="Masukkan link Google Form"
                                     >
+
+
+                                    <div class="form-help">
+
+                                        Untuk pendaftaran,
+                                        masukkan link Google Form.
+
+                                    </div>
 
                                 </div>
 
@@ -1698,24 +1917,14 @@
                                 <div class="form-actions">
 
 
-                                    <div>
+                                    <div class="form-actions-note">
 
-                                        <small
-                                            style="
-                                                color:#94a3b8;
-                                                font-size:10px;
-                                            "
-                                        >
-
-                                            Banner hanya satu.
-
-                                        </small>
+                                        Banner utama hanya satu.
 
                                     </div>
 
 
                                     <div class="form-actions-right">
-
 
                                         <button
                                             type="submit"
@@ -1723,10 +1932,10 @@
                                         >
 
                                             ✓
+
                                             Simpan Perubahan
 
                                         </button>
-
 
                                     </div>
 
@@ -1742,7 +1951,7 @@
                             <form
                                 action="{{ route('superadmin.banners.destroy', $banner) }}"
                                 method="POST"
-                                style="margin-top:10px;"
+                                class="delete-form"
                                 onsubmit="return confirm('Yakin ingin menghapus banner utama?')"
                             >
 
@@ -1757,7 +1966,7 @@
                                     style="width:100%;"
                                 >
 
-                                    🗑
+                                    ×
 
                                     Hapus Banner
 
@@ -1767,7 +1976,6 @@
 
 
                         </div>
-
 
                     </div>
 
@@ -1787,9 +1995,8 @@
 
                     <div class="empty-state">
 
-
                         <div class="empty-icon">
-                            🖼️
+                            ▧
                         </div>
 
 
@@ -1799,13 +2006,9 @@
 
 
                         <p>
-
                             Website MAGENTA belum memiliki banner utama.
-                            Silakan isi form di bawah untuk menambahkan
-                            banner pertama.
-
+                            Silakan tambahkan banner melalui form di bawah.
                         </p>
-
 
                     </div>
 
@@ -1813,10 +2016,11 @@
                 </div>
 
 
-                <br>
+                {{-- =================================================
+                     FORM TAMBAH
+                ================================================== --}}
 
-
-                <div class="card">
+                <div class="card add-banner-card">
 
 
                     <div class="card-header">
@@ -1825,8 +2029,10 @@
                             Tambah Banner Utama
                         </h3>
 
+
                         <p>
-                            Banner ini akan ditampilkan pada halaman utama MAGENTA.
+                            Banner ini akan ditampilkan pada halaman
+                            utama website MAGENTA.
                         </p>
 
                     </div>
@@ -1848,17 +2054,20 @@
 
                             <div class="form-group">
 
-                                <label>
+                                <label for="judul">
 
                                     Judul Banner
 
-                                    <span>*</span>
+                                    <span>
+                                        *
+                                    </span>
 
                                 </label>
 
 
                                 <input
                                     type="text"
+                                    id="judul"
                                     name="judul"
                                     class="form-control"
                                     value="{{ old('judul') }}"
@@ -1873,12 +2082,13 @@
 
                             <div class="form-group">
 
-                                <label>
+                                <label for="deskripsi">
                                     Deskripsi
                                 </label>
 
 
                                 <textarea
+                                    id="deskripsi"
                                     name="deskripsi"
                                     class="form-control"
                                     placeholder="Masukkan deskripsi banner..."
@@ -1891,13 +2101,14 @@
 
                             <div class="form-group">
 
-                                <label>
+                                <label for="gambar">
                                     Gambar Banner
                                 </label>
 
 
                                 <input
                                     type="file"
+                                    id="gambar"
                                     name="gambar"
                                     class="form-control file-input"
                                     accept=".jpg,.jpeg,.png,.webp"
@@ -1907,6 +2118,7 @@
                                 <div class="form-help">
 
                                     Format JPG, JPEG, PNG atau WEBP.
+
                                     Maksimal 2 MB.
 
                                 </div>
@@ -1918,17 +2130,18 @@
 
                             <div class="form-group">
 
-                                <label>
+                                <label for="tombol_teks">
                                     Teks Tombol
                                 </label>
 
 
                                 <input
                                     type="text"
+                                    id="tombol_teks"
                                     name="tombol_teks"
                                     class="form-control"
                                     value="{{ old('tombol_teks') }}"
-                                    placeholder="Contoh: Ajukan Magang"
+                                    placeholder="Contoh: Daftar Magang"
                                 >
 
                             </div>
@@ -1938,30 +2151,64 @@
 
                             <div class="form-group">
 
-                                <label>
+                                <label for="tombol_link">
                                     Link Tombol
                                 </label>
 
 
                                 <input
                                     type="text"
+                                    id="tombol_link"
                                     name="tombol_link"
                                     class="form-control"
                                     value="{{ old('tombol_link') }}"
-                                    placeholder="Contoh: #pengajuan"
+                                    placeholder="Masukkan link Google Form"
                                 >
+
+
+                                <div class="form-help">
+
+                                    Untuk tombol pendaftaran,
+                                    masukkan link Google Form.
+
+                                </div>
 
                             </div>
 
 
-                            <button
-                                type="submit"
-                                class="btn btn-primary"
-                            >
+                            {{-- ACTION --}}
 
-                                + Simpan Banner
+                            <div class="form-actions">
 
-                            </button>
+
+                                <div class="form-actions-note">
+
+                                    <span style="color:#dc3545;">
+                                        *
+                                    </span>
+
+                                    Judul wajib diisi.
+
+                                </div>
+
+
+                                <div class="form-actions-right">
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-primary"
+                                    >
+
+                                        +
+
+                                        Simpan Banner
+
+                                    </button>
+
+                                </div>
+
+
+                            </div>
 
 
                         </form>
@@ -1969,18 +2216,26 @@
 
                     </div>
 
-
                 </div>
 
 
             @endif
 
 
+            {{-- FOOT NOTE --}}
+
+            <div class="foot-note">
+
+                MAGENTA
+                &nbsp;•&nbsp;
+                Sistem Informasi Magang
+
+            </div>
+
+
         </div>
 
-
     </main>
-
 
 </div>
 

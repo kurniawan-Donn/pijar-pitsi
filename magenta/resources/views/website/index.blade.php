@@ -1,3 +1,182 @@
+@php
+    /*
+    |--------------------------------------------------------------------------
+    | LINK GOOGLE FORM
+    |--------------------------------------------------------------------------
+    */
+
+    $googleFormUrl = 'ISI_LINK_GOOGLE_FORM_DI_SINI';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DATA BANNER
+    |--------------------------------------------------------------------------
+    */
+
+    $banner = isset($banners) && $banners->isNotEmpty()
+        ? $banners->first()
+        : null;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DATA PERUSAHAAN
+    |--------------------------------------------------------------------------
+    */
+
+    $namaPerusahaan = $perusahaan?->nama ?? 'MAGENTA';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DATA PENGATURAN WEBSITE
+    |--------------------------------------------------------------------------
+    |
+    | Data ini berasal dari Kelola Konten.
+    |
+    */
+
+    $informasiTerbaruJudul =
+        $pengaturan?->informasi_terbaru_judul
+        ?? 'Informasi Terbaru';
+
+    $informasiTerbaruDeskripsi =
+        $pengaturan?->informasi_terbaru_deskripsi
+        ?? 'Informasi terbaru mengenai kegiatan dan penerimaan mahasiswa magang.';
+
+
+    $pengumumanJudul =
+        $pengaturan?->pengumuman_judul
+        ?? 'Pengumuman';
+
+    $pengumumanDeskripsi =
+        $pengaturan?->pengumuman_deskripsi
+        ?? 'Informasi terbaru mengenai kegiatan dan penerimaan mahasiswa magang.';
+
+
+    $pengumumanCard1Judul =
+        $pengaturan?->pengumuman_card1_judul
+        ?? 'Persiapkan Dokumen';
+
+    $pengumumanCard1Deskripsi =
+        $pengaturan?->pengumuman_card1_deskripsi
+        ?? 'Pastikan dokumen persyaratan telah disiapkan sebelum melakukan pendaftaran.';
+
+
+    $pengumumanCard2Judul =
+        $pengaturan?->pengumuman_card2_judul
+        ?? 'Pendaftaran Online';
+
+    $pengumumanCard2Deskripsi =
+        $pengaturan?->pengumuman_card2_deskripsi
+        ?? 'Pendaftaran dilakukan melalui Google Form yang telah disediakan.';
+
+
+    $pengumumanCard3Judul =
+        $pengaturan?->pengumuman_card3_judul
+        ?? 'Informasi Perusahaan';
+
+    $pengumumanCard3Deskripsi =
+        $pengaturan?->pengumuman_card3_deskripsi
+        ?? 'Informasi perusahaan dan kontak tersedia pada bagian Kontak.';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PERSYARATAN
+    |--------------------------------------------------------------------------
+    */
+
+    $persyaratanJudul =
+        $pengaturan?->persyaratan_judul
+        ?? 'Persyaratan Magang';
+
+    $persyaratanDeskripsi =
+        $pengaturan?->persyaratan_deskripsi
+        ?? 'Pastikan seluruh kebutuhan administrasi telah disiapkan sebelum mengisi Google Form.';
+
+
+    $persyaratan1Judul =
+        $pengaturan?->persyaratan1_judul
+        ?? 'Surat Pengantar';
+
+    $persyaratan1Deskripsi =
+        $pengaturan?->persyaratan1_deskripsi
+        ?? 'Siapkan surat pengantar atau surat permohonan magang dari kampus sesuai ketentuan yang berlaku.';
+
+
+    $persyaratan2Judul =
+        $pengaturan?->persyaratan2_judul
+        ?? 'Data Mahasiswa';
+
+    $persyaratan2Deskripsi =
+        $pengaturan?->persyaratan2_deskripsi
+        ?? 'Siapkan data diri dan informasi akademik yang diperlukan pada saat mengisi formulir pendaftaran.';
+
+
+    $persyaratan3Judul =
+        $pengaturan?->persyaratan3_judul
+        ?? 'Dokumen Pendukung';
+
+    $persyaratan3Deskripsi =
+        $pengaturan?->persyaratan3_deskripsi
+        ?? 'Siapkan dokumen pendukung lain sesuai dengan persyaratan yang ditentukan oleh perusahaan.';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ALUR MAGANG
+    |--------------------------------------------------------------------------
+    */
+
+    $alurJudul =
+        $pengaturan?->alur_judul
+        ?? 'Alur Magang';
+
+    $alurDeskripsi =
+        $pengaturan?->alur_deskripsi
+        ?? 'Ikuti tahapan berikut agar proses pendaftaran magang berjalan dengan baik.';
+
+
+    $alur1Judul =
+        $pengaturan?->alur1_judul
+        ?? 'Persiapkan';
+
+    $alur1Deskripsi =
+        $pengaturan?->alur1_deskripsi
+        ?? 'Siapkan data dan dokumen yang diperlukan.';
+
+
+    $alur2Judul =
+        $pengaturan?->alur2_judul
+        ?? 'Daftar';
+
+    $alur2Deskripsi =
+        $pengaturan?->alur2_deskripsi
+        ?? 'Isi Google Form pendaftaran magang secara lengkap.';
+
+
+    $alur3Judul =
+        $pengaturan?->alur3_judul
+        ?? 'Verifikasi';
+
+    $alur3Deskripsi =
+        $pengaturan?->alur3_deskripsi
+        ?? 'Data pendaftaran akan diproses dan diverifikasi oleh pihak terkait.';
+
+
+    $alur4Judul =
+        $pengaturan?->alur4_judul
+        ?? 'Pelaksanaan';
+
+    $alur4Deskripsi =
+        $pengaturan?->alur4_deskripsi
+        ?? 'Mahasiswa melaksanakan kegiatan magang sesuai ketentuan perusahaan.';
+
+@endphp
+
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -11,19 +190,11 @@
     >
 
     <title>
-        @if(isset($perusahaan) && $perusahaan && $perusahaan->nama)
-            {{ $perusahaan->nama }} - Sistem Informasi Magang
-        @else
-            MAGENTA - Sistem Informasi Magang
-        @endif
+        {{ $namaPerusahaan }} - Sistem Informasi Magang
     </title>
 
 
     <style>
-
-        /* =====================================================
-           RESET
-        ====================================================== */
 
         * {
             margin: 0;
@@ -49,10 +220,6 @@
             text-decoration: none;
         }
 
-
-        /* =====================================================
-           COLOR
-        ====================================================== */
 
         :root {
             --primary: #0878a8;
@@ -108,8 +275,6 @@
         }
 
 
-        /* LOGO */
-
         .logo {
             display: flex;
             align-items: center;
@@ -148,8 +313,6 @@
             font-weight: bold;
         }
 
-
-        /* MENU */
 
         .nav-menu {
             display: flex;
@@ -369,7 +532,9 @@
         }
 
 
-        /* HERO IMAGE */
+        /* =====================================================
+           HERO IMAGE
+        ====================================================== */
 
         .hero-image-box {
             position: relative;
@@ -435,7 +600,7 @@
 
         .quick-container {
             width: 90%;
-            max-width: 1150px;
+            max-width: 1050px;
 
             margin:
                 -30px auto 0;
@@ -450,7 +615,7 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4, 1fr);
+                repeat(3, 1fr);
 
             gap: 16px;
         }
@@ -543,7 +708,7 @@
 
         .section {
             padding:
-                85px 0;
+                80px 0;
         }
 
 
@@ -705,78 +870,132 @@
 
 
         /* =====================================================
-           TENTANG
+           PERSYARATAN
         ====================================================== */
 
-        .about-grid {
+        .requirements-grid {
             display: grid;
 
             grid-template-columns:
-                0.8fr 1.2fr;
+                repeat(3, 1fr);
 
-            gap: 60px;
-
-            align-items: center;
+            gap: 20px;
         }
 
 
-        .about-label {
-            color: var(--secondary);
-
-            font-size: 13px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            margin-bottom: 10px;
-        }
-
-
-        .about-content h2 {
-            font-size: 36px;
-
-            color: #20343d;
-
-            margin-bottom: 18px;
-        }
-
-
-        .about-content p {
-            color: var(--muted);
-
-            line-height: 1.8;
-
-            font-size: 15px;
-        }
-
-
-        .about-cards {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 15px;
-        }
-
-
-        .about-card {
-            padding: 24px;
-
-            border-radius: 12px;
-
+        .requirement-card {
             background: white;
 
             border:
                 1px solid var(--border);
 
+            border-radius: 14px;
+
+            padding: 28px;
+
             box-shadow: var(--shadow);
         }
 
 
-        .about-card h3 {
+        .requirement-number {
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #eef8fc;
+
             color: var(--primary);
+
+            font-weight: 800;
+
+            margin-bottom: 16px;
+        }
+
+
+        .requirement-card h3 {
+            color: #20343d;
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .requirement-card p {
+            color: var(--muted);
+
+            font-size: 14px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           ALUR MAGANG
+        ====================================================== */
+
+        .flow-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+
+            position: relative;
+        }
+
+
+        .flow-card {
+            background: white;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 14px;
+
+            padding: 28px 22px;
+
+            text-align: center;
+
+            box-shadow: var(--shadow);
+
+            position: relative;
+        }
+
+
+        .flow-number {
+            width: 48px;
+            height: 48px;
+
+            margin:
+                0 auto 15px;
+
+            border-radius: 50%;
+
+            background: var(--primary);
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 800;
+
+            font-size: 18px;
+        }
+
+
+        .flow-card h3 {
+            color: #20343d;
 
             font-size: 17px;
 
@@ -784,10 +1003,58 @@
         }
 
 
-        .about-card p {
+        .flow-card p {
             color: var(--muted);
 
             font-size: 13px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           CTA
+        ====================================================== */
+
+        .registration-box {
+            background:
+                linear-gradient(
+                    135deg,
+                    #0878a8,
+                    #075d83
+                );
+
+            border-radius: 20px;
+
+            padding: 45px;
+
+            color: white;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 45px
+                rgba(8, 120, 168, 0.16);
+        }
+
+
+        .registration-box h2 {
+            font-size: 32px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .registration-box p {
+            max-width: 650px;
+
+            margin:
+                0 auto 25px;
+
+            color:
+                rgba(255,255,255,0.85);
+
+            font-size: 15px;
         }
 
 
@@ -950,7 +1217,7 @@
 
             .quick-grid {
                 grid-template-columns:
-                    repeat(2, 1fr);
+                    repeat(3, 1fr);
             }
 
 
@@ -959,13 +1226,20 @@
             }
 
 
-            .about-grid {
+            .company-box {
                 grid-template-columns: 1fr;
             }
 
 
-            .company-box {
-                grid-template-columns: 1fr;
+            .requirements-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .flow-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
 
         }
@@ -1003,7 +1277,12 @@
             }
 
 
-            .about-cards {
+            .requirements-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .flow-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -1014,11 +1293,23 @@
 
 
             .company-box {
-                padding: 30px 25px;
+                padding:
+                    30px 25px;
             }
 
 
             .company-box h2 {
+                font-size: 27px;
+            }
+
+
+            .registration-box {
+                padding:
+                    35px 25px;
+            }
+
+
+            .registration-box h2 {
                 font-size: 27px;
             }
 
@@ -1069,11 +1360,6 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="#tentang">
-                        Tentang
-                    </a>
-                </li>
 
                 <li>
                     <a href="#pengumuman">
@@ -1081,11 +1367,27 @@
                     </a>
                 </li>
 
+
+                <li>
+                    <a href="#persyaratan">
+                        Persyaratan
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#alur">
+                        Alur
+                    </a>
+                </li>
+
+
                 <li>
                     <a href="#kontak">
                         Kontak
                     </a>
                 </li>
+
 
                 <li>
                     <a
@@ -1106,17 +1408,12 @@
 
     {{-- =====================================================
          HERO
-         DATA DIAMBIL DARI BANNER DATABASE
     ====================================================== --}}
 
     <section class="hero">
 
         <div class="hero-container">
 
-
-            {{-- =================================================
-                 HERO CONTENT
-            ================================================== --}}
 
             <div class="hero-content">
 
@@ -1125,19 +1422,11 @@
                 </div>
 
 
-                {{-- =================================================
-                     JUDUL BANNER
-                ================================================== --}}
-
                 <h1>
 
-                    @if(
-                        isset($banners) &&
-                        $banners->isNotEmpty() &&
-                        $banners->first()->judul
-                    )
+                    @if($banner?->judul)
 
-                        {{ $banners->first()->judul }}
+                        {{ $banner->judul }}
 
                     @else
 
@@ -1152,94 +1441,50 @@
                 </h1>
 
 
-                {{-- =================================================
-                     DESKRIPSI BANNER
-                ================================================== --}}
-
                 <p>
 
-                    @if(
-                        isset($banners) &&
-                        $banners->isNotEmpty() &&
-                        $banners->first()->deskripsi
-                    )
+                    @if($banner?->deskripsi)
 
-                        {{ $banners->first()->deskripsi }}
+                        {{ $banner->deskripsi }}
 
-                    @elseif(
-                        isset($perusahaan) &&
-                        $perusahaan &&
-                        $perusahaan->nama
-                    )
+                    @elseif($perusahaan?->nama)
 
                         Sistem informasi magang
                         {{ $perusahaan->nama }}
                         untuk membantu mahasiswa
-                        dalam proses pendaftaran,
-                        pengajuan, dan pemantauan
-                        kegiatan magang.
+                        memperoleh informasi dan
+                        melakukan pendaftaran magang.
 
                     @else
 
-                        Sistem informasi magang terintegrasi
-                        untuk membantu mahasiswa dalam proses
-                        pendaftaran, pengajuan, dan pemantauan
-                        kegiatan magang.
+                        Sistem informasi magang
+                        untuk membantu mahasiswa
+                        memperoleh informasi dan
+                        melakukan pendaftaran magang.
 
                     @endif
 
                 </p>
 
 
-                {{-- =================================================
-                     TOMBOL HERO
-                ================================================== --}}
-
                 <div class="hero-buttons">
 
-
-                    {{-- TOMBOL DARI BANNER --}}
-
-                    @if(
-                        isset($banners) &&
-                        $banners->isNotEmpty() &&
-                        $banners->first()->tombol_teks
-                    )
-
-                        <a
-                            href="{{ $banners->first()->tombol_link ?: url('/pengajuan') }}"
-                            class="btn btn-orange"
-                        >
-
-                            {{ $banners->first()->tombol_teks }}
-
-                        </a>
-
-                    @else
-
-                        <a
-                            href="{{ url('/pengajuan') }}"
-                            class="btn btn-orange"
-                        >
-
-                            Daftar Magang
-
-                        </a>
-
-                    @endif
-
-
-                    {{-- TOMBOL STATUS --}}
-
                     <a
-                        href="{{ url('/status') }}"
-                        class="btn btn-primary"
+                        href="{{ $googleFormUrl }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn btn-orange"
                     >
-
-                        Cek Status Pengajuan
-
+                        Daftar Magang
                     </a>
 
+
+                    <a
+                        href="#persyaratan"
+                        class="btn btn-primary"
+                    >
+                        Lihat Persyaratan
+                    </a>
 
                 </div>
 
@@ -1247,39 +1492,15 @@
 
 
 
-            {{-- =================================================
-                 HERO IMAGE
-            ================================================== --}}
-
             <div class="hero-image-box">
 
+                @if($banner?->gambar)
 
-                @if(
-                    isset($banners) &&
-                    $banners->isNotEmpty()
-                )
-
-                    @php
-                        $banner = $banners->first();
-                    @endphp
-
-
-                    @if($banner->gambar)
-
-                        <img
-                            src="{{ asset('storage/' . $banner->gambar) }}"
-                            alt="{{ $banner->judul }}"
-                            class="hero-image"
-                        >
-
-                    @else
-
-                        <div class="hero-placeholder">
-                            MAGENTA
-                        </div>
-
-                    @endif
-
+                    <img
+                        src="{{ asset('storage/' . $banner->gambar) }}"
+                        alt="{{ $banner->judul ?: 'Banner MAGENTA' }}"
+                        class="hero-image"
+                    >
 
                 @else
 
@@ -1288,7 +1509,6 @@
                     </div>
 
                 @endif
-
 
             </div>
 
@@ -1299,7 +1519,7 @@
 
 
     {{-- =====================================================
-         MENU UTAMA
+         QUICK MENU
     ====================================================== --}}
 
     <section class="quick-section">
@@ -1318,16 +1538,15 @@
                     </div>
 
                     <h3>
-                        Persyaratan Magang
+                        {{ $persyaratanJudul }}
                     </h3>
 
                     <p>
-                        Lihat dokumen dan persyaratan
-                        yang harus disiapkan.
+                        {{ $persyaratanDeskripsi }}
                     </p>
 
                     <a
-                        href="{{ url('/persyaratan') }}"
+                        href="#persyaratan"
                         class="quick-link"
                     >
                         Lihat Persyaratan →
@@ -1337,7 +1556,7 @@
 
 
 
-                {{-- DAFTAR --}}
+                {{-- DAFTAR MAGANG --}}
 
                 <div class="quick-card">
 
@@ -1346,47 +1565,21 @@
                     </div>
 
                     <h3>
-                        Daftar Magang
+                        Pendaftaran Magang
                     </h3>
 
                     <p>
-                        Ajukan kegiatan magang
-                        melalui formulir pendaftaran.
+                        Pendaftaran magang dilakukan
+                        melalui Google Form resmi.
                     </p>
 
                     <a
-                        href="{{ url('/pengajuan') }}"
+                        href="{{ $googleFormUrl }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         class="quick-link"
                     >
                         Daftar Sekarang →
-                    </a>
-
-                </div>
-
-
-
-                {{-- STATUS --}}
-
-                <div class="quick-card">
-
-                    <div class="quick-icon">
-                        🔎
-                    </div>
-
-                    <h3>
-                        Cek Status
-                    </h3>
-
-                    <p>
-                        Periksa apakah pengajuan
-                        sudah diterima atau belum.
-                    </p>
-
-                    <a
-                        href="{{ url('/status') }}"
-                        class="quick-link"
-                    >
-                        Cek Pengajuan →
                     </a>
 
                 </div>
@@ -1402,16 +1595,15 @@
                     </div>
 
                     <h3>
-                        Alur Magang
+                        {{ $alurJudul }}
                     </h3>
 
                     <p>
-                        Pelajari proses magang
-                        dari pengajuan sampai selesai.
+                        {{ $alurDeskripsi }}
                     </p>
 
                     <a
-                        href="{{ url('/alur') }}"
+                        href="#alur"
                         class="quick-link"
                     >
                         Lihat Alur →
@@ -1442,16 +1634,15 @@
             <div class="section-heading">
 
                 <div class="label">
-                    Informasi Terbaru
+                    {{ $informasiTerbaruJudul }}
                 </div>
 
                 <h2>
-                    Pengumuman
+                    {{ $pengumumanJudul }}
                 </h2>
 
                 <p>
-                    Informasi terbaru mengenai kegiatan
-                    dan penerimaan mahasiswa magang.
+                    {{ $informasiTerbaruDeskripsi }}
                 </p>
 
             </div>
@@ -1459,6 +1650,8 @@
 
             <div class="announcement-grid">
 
+
+                {{-- PENGUMUMAN UTAMA --}}
 
                 <div class="announcement-main">
 
@@ -1468,27 +1661,19 @@
 
 
                     <h3>
-                        Informasi Pendaftaran Magang
+                        {{ $pengumumanJudul }}
                     </h3>
 
 
                     <p>
-
-                        Silakan pastikan seluruh persyaratan
-                        telah disiapkan sebelum melakukan
-                        pengajuan magang melalui sistem MAGENTA.
-
-                        <br><br>
-
-                        Informasi mengenai jadwal,
-                        ketentuan, dan proses seleksi
-                        dapat diperbarui oleh administrator.
-
+                        {{ $pengumumanDeskripsi }}
                     </p>
 
                 </div>
 
 
+
+                {{-- 3 INFORMASI PENGUMUMAN --}}
 
                 <div class="announcement-side">
 
@@ -1496,13 +1681,11 @@
                     <div class="announcement-item">
 
                         <h4>
-                            Pendaftaran Magang
+                            {{ $pengumumanCard1Judul }}
                         </h4>
 
                         <p>
-                            Mahasiswa dapat melakukan
-                            pengajuan melalui menu
-                            Daftar Magang.
+                            {{ $pengumumanCard1Deskripsi }}
                         </p>
 
                     </div>
@@ -1511,13 +1694,11 @@
                     <div class="announcement-item">
 
                         <h4>
-                            Periksa Status
+                            {{ $pengumumanCard2Judul }}
                         </h4>
 
                         <p>
-                            Setelah mengajukan,
-                            gunakan menu Cek Status
-                            untuk melihat perkembangan.
+                            {{ $pengumumanCard2Deskripsi }}
                         </p>
 
                     </div>
@@ -1526,13 +1707,11 @@
                     <div class="announcement-item">
 
                         <h4>
-                            Informasi Perusahaan
+                            {{ $pengumumanCard3Judul }}
                         </h4>
 
                         <p>
-                            Informasi perusahaan dan
-                            kontak tersedia pada bagian
-                            Tentang dan Kontak.
+                            {{ $pengumumanCard3Deskripsi }}
                         </p>
 
                     </div>
@@ -1549,106 +1728,237 @@
 
 
     {{-- =====================================================
-         TENTANG
+         PERSYARATAN MAGANG
     ====================================================== --}}
 
     <section
-        id="tentang"
+        id="persyaratan"
         class="section"
     >
 
         <div class="container">
 
-            <div class="about-grid">
+            <div class="section-heading">
+
+                <div class="label">
+                    Sebelum Mendaftar
+                </div>
+
+                <h2>
+                    {{ $persyaratanJudul }}
+                </h2>
+
+                <p>
+                    {{ $persyaratanDeskripsi }}
+                </p>
+
+            </div>
 
 
-                <div class="about-content">
+            <div class="requirements-grid">
 
-                    <div class="about-label">
-                        Tentang MAGENTA
+
+                <div class="requirement-card">
+
+                    <div class="requirement-number">
+                        01
                     </div>
 
-
-                    <h2>
-
-                        {{ $pengaturan?->tentang_judul
-                            ?? 'Sistem Informasi Magang Terintegrasi' }}
-
-                    </h2>
-
+                    <h3>
+                        {{ $persyaratan1Judul }}
+                    </h3>
 
                     <p>
-
-                        {{ $pengaturan?->tentang_deskripsi
-                            ?? 'MAGENTA merupakan sistem informasi yang dirancang untuk membantu proses pengajuan, pengelolaan, dan pemantauan kegiatan magang secara lebih terstruktur.' }}
-
+                        {{ $persyaratan1Deskripsi }}
                     </p>
 
                 </div>
 
 
 
-                <div class="about-cards">
+                <div class="requirement-card">
 
-
-                    <div class="about-card">
-
-                        <h3>
-                            {{ $pengaturan?->tentang_card1_judul ?? 'Pengajuan' }}
-                        </h3>
-
-                        <p>
-                            {{ $pengaturan?->tentang_card1_deskripsi
-                                ?? 'Mahasiswa dapat mengajukan kegiatan magang melalui sistem dengan mudah.' }}
-                        </p>
-
+                    <div class="requirement-number">
+                        02
                     </div>
 
+                    <h3>
+                        {{ $persyaratan2Judul }}
+                    </h3>
 
-                    <div class="about-card">
-
-                        <h3>
-                            {{ $pengaturan?->tentang_card2_judul ?? 'Pengelolaan' }}
-                        </h3>
-
-                        <p>
-                            {{ $pengaturan?->tentang_card2_deskripsi
-                                ?? 'Admin dapat mengelola proses pengajuan dan data mahasiswa.' }}
-                        </p>
-
-                    </div>
-
-
-                    <div class="about-card">
-
-                        <h3>
-                            {{ $pengaturan?->tentang_card3_judul ?? 'Pemantauan' }}
-                        </h3>
-
-                        <p>
-                            {{ $pengaturan?->tentang_card3_deskripsi
-                                ?? 'Mahasiswa dapat memantau status pengajuan melalui sistem.' }}
-                        </p>
-
-                    </div>
-
-
-                    <div class="about-card">
-
-                        <h3>
-                            Informasi
-                        </h3>
-
-                        <p>
-                            Informasi dan pengumuman
-                            dapat ditampilkan pada
-                            halaman utama MAGENTA.
-                        </p>
-
-                    </div>
-
+                    <p>
+                        {{ $persyaratan2Deskripsi }}
+                    </p>
 
                 </div>
+
+
+
+                <div class="requirement-card">
+
+                    <div class="requirement-number">
+                        03
+                    </div>
+
+                    <h3>
+                        {{ $persyaratan3Judul }}
+                    </h3>
+
+                    <p>
+                        {{ $persyaratan3Deskripsi }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {{-- =====================================================
+         ALUR MAGANG
+    ====================================================== --}}
+
+    <section
+        id="alur"
+        class="section section-light"
+    >
+
+        <div class="container">
+
+            <div class="section-heading">
+
+                <div class="label">
+                    Proses Magang
+                </div>
+
+                <h2>
+                    {{ $alurJudul }}
+                </h2>
+
+                <p>
+                    {{ $alurDeskripsi }}
+                </p>
+
+            </div>
+
+
+            <div class="flow-grid">
+
+
+                <div class="flow-card">
+
+                    <div class="flow-number">
+                        1
+                    </div>
+
+                    <h3>
+                        {{ $alur1Judul }}
+                    </h3>
+
+                    <p>
+                        {{ $alur1Deskripsi }}
+                    </p>
+
+                </div>
+
+
+
+                <div class="flow-card">
+
+                    <div class="flow-number">
+                        2
+                    </div>
+
+                    <h3>
+                        {{ $alur2Judul }}
+                    </h3>
+
+                    <p>
+                        {{ $alur2Deskripsi }}
+                    </p>
+
+                </div>
+
+
+
+                <div class="flow-card">
+
+                    <div class="flow-number">
+                        3
+                    </div>
+
+                    <h3>
+                        {{ $alur3Judul }}
+                    </h3>
+
+                    <p>
+                        {{ $alur3Deskripsi }}
+                    </p>
+
+                </div>
+
+
+
+                <div class="flow-card">
+
+                    <div class="flow-number">
+                        4
+                    </div>
+
+                    <h3>
+                        {{ $alur4Judul }}
+                    </h3>
+
+                    <p>
+                        {{ $alur4Deskripsi }}
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    {{-- =====================================================
+         CTA PENDAFTARAN
+    ====================================================== --}}
+
+    <section class="section section-light">
+
+        <div class="container">
+
+            <div class="registration-box">
+
+                <h2>
+                    Siap Mendaftar Magang?
+                </h2>
+
+
+                <p>
+                    Pastikan seluruh persyaratan telah
+                    disiapkan, kemudian lakukan pendaftaran
+                    melalui Google Form resmi.
+                </p>
+
+
+                <a
+                    href="{{ $googleFormUrl }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn btn-orange"
+                >
+                    Buka Form Pendaftaran
+                </a>
 
             </div>
 
@@ -1670,7 +1980,7 @@
         <div class="container">
 
 
-            @if(isset($perusahaan) && $perusahaan)
+            @if($perusahaan)
 
 
                 <div class="company-box">
@@ -1829,9 +2139,7 @@
                 </div>
 
                 <div class="footer-text">
-
-                    Sistem Informasi Magang Terintegrasi
-
+                    Sistem Informasi Magang
                 </div>
 
             </div>
@@ -1841,15 +2149,7 @@
 
                 © 2026
 
-                @if(isset($perusahaan) && $perusahaan && $perusahaan->nama)
-
-                    {{ $perusahaan->nama }}
-
-                @else
-
-                    MAGENTA
-
-                @endif
+                {{ $namaPerusahaan }}
 
                 . All rights reserved.
 

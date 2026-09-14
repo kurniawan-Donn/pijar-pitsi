@@ -22,7 +22,7 @@ class Banner extends Model
     ];
 
     /**
-     * Hanya mengambil banner aktif.
+     * Scope untuk mengambil banner yang aktif.
      */
     public function scopeAktif(Builder $query): Builder
     {

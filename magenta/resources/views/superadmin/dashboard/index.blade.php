@@ -1,862 +1,605 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard Super Admin - MAGENTA</title>
 
     <style>
-
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #f4f7fb;
-            color: #1f2937;
+            color: #12345b;
+            min-height: 100vh;
         }
 
         a {
             text-decoration: none;
+            color: inherit;
         }
 
-
-        /* =====================================================
-           SIDEBAR
-        ====================================================== */
-
-        .sidebar {
-
-            position: fixed;
-
-            left: 0;
-            top: 0;
-
-            width: 255px;
-            height: 100vh;
-
-            background: #0f2f5f;
-
-            color: white;
-
-            padding: 28px 18px;
-
-            overflow-y: auto;
-
-            z-index: 1000;
+        button {
+            font-family: inherit;
         }
 
+        /* =========================================================
+           LAYOUT
+        ========================================================= */
 
-        .brand {
-
+        .layout {
             display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 0 10px;
-
-            margin-bottom: 8px;
-        }
-
-
-        .brand-logo {
-
-            width: 42px;
-            height: 42px;
-
-            border-radius: 10px;
-
-            background: white;
-
-            color: #1769aa;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            font-size: 18px;
-
-            font-weight: bold;
-        }
-
-
-        .brand-text h2 {
-
-            font-size: 21px;
-
-            color: white;
-
-            margin-bottom: 3px;
-        }
-
-
-        .brand-text span {
-
-            font-size: 11px;
-
-            color: #bcd0e8;
-
-            letter-spacing: .5px;
-        }
-
-
-        .sidebar-line {
-
-            height: 1px;
-
-            background: rgba(255,255,255,.12);
-
-            margin: 25px 5px;
-        }
-
-
-        /* =====================================================
-           MENU
-        ====================================================== */
-
-        .menu-title {
-
-            font-size: 10px;
-
-            text-transform: uppercase;
-
-            letter-spacing: 1.2px;
-
-            color: #9fb9d8;
-
-            margin: 22px 12px 9px;
-        }
-
-
-        .menu a {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 12px 13px;
-
-            margin-bottom: 5px;
-
-            border-radius: 9px;
-
-            color: #dbe8f6;
-
-            font-size: 14px;
-
-            transition: .2s;
-        }
-
-
-        .menu a:hover {
-
-            background: rgba(255,255,255,.10);
-
-            color: white;
-        }
-
-
-        .menu a.active {
-
-            background: #1976c9;
-
-            color: white;
-
-            box-shadow:
-                0 5px 15px rgba(0,0,0,.12);
-        }
-
-
-        .menu-icon {
-
-            width: 25px;
-
-            text-align: center;
-
-            font-size: 15px;
-        }
-
-
-        /* =====================================================
-           LOGOUT
-        ====================================================== */
-
-        .logout-area {
-
-            margin-top: 30px;
-
-            padding-top: 20px;
-
-            border-top:
-                1px solid rgba(255,255,255,.12);
-        }
-
-
-        .logout-btn {
-
-            width: 100%;
-
-            border: none;
-
-            background: rgba(255,255,255,.08);
-
-            color: #dbe8f6;
-
-            padding: 12px;
-
-            border-radius: 9px;
-
-            cursor: pointer;
-
-            font-weight: bold;
-
-            transition: .2s;
-        }
-
-
-        .logout-btn:hover {
-
-            background: #dc3545;
-
-            color: white;
-        }
-
-
-        /* =====================================================
-           MAIN
-        ====================================================== */
-
-        .main {
-
-            margin-left: 255px;
-
             min-height: 100vh;
         }
 
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
 
-        /* =====================================================
+        .sidebar {
+            width: 275px;
+            min-width: 275px;
+            min-height: 100vh;
+            background: #12345b;
+            color: #ffffff;
+            padding: 28px 18px 24px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .brand {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 4px 6px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+        }
+
+        .brand-logo {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #12345b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .brand-text {
+            padding-top: 1px;
+        }
+
+        .brand-text h2 {
+            font-size: 20px;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+        }
+
+        .brand-text span {
+            display: block;
+            margin-top: 7px;
+            font-size: 8px;
+            line-height: 1.4;
+            font-weight: 700;
+            letter-spacing: 1.15px;
+            color: rgba(255, 255, 255, 0.86);
+        }
+
+        /* =========================================================
+           MENU
+        ========================================================= */
+
+        .menu-title {
+            padding: 0 9px;
+            margin-top: 22px;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .menu a {
+            min-height: 40px;
+            padding: 0 13px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            color: rgba(255, 255, 255, 0.94);
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .menu a:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .menu a.active {
+            background: #1779c9;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .menu-icon {
+            width: 16px;
+            min-width: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           LOGOUT
+        ========================================================= */
+
+        .logout-area {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .logout-area form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            width: 100%;
+            min-height: 38px;
+            border: none;
+            border-radius: 7px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .main {
+            margin-left: 275px;
+            width: calc(100% - 275px);
+            min-height: 100vh;
+        }
+
+        /* =========================================================
            TOPBAR
-        ====================================================== */
+        ========================================================= */
 
         .topbar {
-
-            height: 75px;
-
-            background: white;
-
+            height: 64px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5ebf2;
             display: flex;
-
             align-items: center;
-
             justify-content: space-between;
-
-            padding: 0 35px;
-
-            border-bottom:
-                1px solid #e6ebf2;
+            padding: 0 28px;
         }
-
 
         .page-title h1 {
-
-            font-size: 22px;
-
-            color: #173b68;
-
-            margin-bottom: 4px;
+            color: #12345b;
+            font-size: 19px;
+            line-height: 1.2;
+            font-weight: 700;
         }
-
 
         .page-title p {
-
-            font-size: 13px;
-
-            color: #7b8794;
+            color: #73849a;
+            font-size: 11px;
+            margin-top: 4px;
         }
-
 
         .admin-profile {
-
             display: flex;
-
             align-items: center;
-
-            gap: 11px;
+            gap: 10px;
         }
-
-
-        .avatar {
-
-            width: 38px;
-            height: 38px;
-
-            border-radius: 50%;
-
-            background: #e7f2fc;
-
-            color: #1769aa;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-weight: bold;
-        }
-
 
         .admin-text {
-
             text-align: right;
         }
 
-
         .admin-text strong {
-
             display: block;
-
-            color: #173b68;
-
-            font-size: 14px;
+            color: #12345b;
+            font-size: 11px;
+            font-weight: 700;
         }
-
 
         .admin-text span {
-
-            font-size: 11px;
-
-            color: #8995a5;
+            display: block;
+            color: #73849a;
+            font-size: 9px;
+            margin-top: 3px;
         }
 
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #eaf3fc;
+            color: #1269aa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+        }
 
-        /* =====================================================
+        /* =========================================================
            CONTENT
-        ====================================================== */
+        ========================================================= */
 
         .content {
-
-            padding: 30px 35px 45px;
+            padding: 28px 30px 40px;
         }
 
+        .content-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
 
-        /* =====================================================
+        /* =========================================================
            WELCOME
-        ====================================================== */
+        ========================================================= */
 
         .welcome {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #1769aa,
-                    #0f4c81
-                );
-
-            color: white;
-
-            border-radius: 16px;
-
-            padding: 28px 30px;
-
-            margin-bottom: 25px;
-
+            background: linear-gradient(
+                135deg,
+                #2177b8,
+                #124e86
+            );
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 22px;
             position: relative;
-
             overflow: hidden;
+            box-shadow: 0 5px 16px rgba(18, 52, 91, 0.08);
         }
-
 
         .welcome::after {
-
             content: "";
-
             position: absolute;
-
-            width: 180px;
-            height: 180px;
-
+            width: 170px;
+            height: 170px;
+            border: 18px solid rgba(255, 255, 255, 0.06);
             border-radius: 50%;
-
-            border:
-                25px solid rgba(255,255,255,.06);
-
-            right: -60px;
-            top: -70px;
+            right: -40px;
+            top: -60px;
         }
-
 
         .welcome h2 {
-
-            font-size: 23px;
-
-            margin-bottom: 9px;
-        }
-
-
-        .welcome p {
-
-            color: #dcecff;
-
-            font-size: 14px;
-
-            line-height: 1.6;
-
-            max-width: 700px;
-        }
-
-
-        /* =====================================================
-           STATISTICS
-        ====================================================== */
-
-        .statistics {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 18px;
-
-            margin-bottom: 28px;
-        }
-
-
-        .stat-card {
-
-            background: white;
-
-            border:
-                1px solid #e8edf3;
-
-            border-radius: 14px;
-
-            padding: 22px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            box-shadow:
-                0 4px 15px rgba(23,59,104,.04);
-        }
-
-
-        .stat-info h3 {
-
-            font-size: 12px;
-
-            color: #7c8795;
-
-            font-weight: normal;
-
+            font-size: 20px;
+            line-height: 1.3;
             margin-bottom: 8px;
         }
 
-
-        .stat-number {
-
-            font-size: 29px;
-
-            font-weight: bold;
-
-            color: #173b68;
+        .welcome p {
+            max-width: 700px;
+            font-size: 11px;
+            line-height: 1.7;
+            color: #eaf4ff;
         }
 
+        /* =========================================================
+           SECTION TITLE
+        ========================================================= */
 
-        .stat-icon {
-
-            width: 50px;
-            height: 50px;
-
-            border-radius: 12px;
-
-            background: #eaf4fc;
-
-            color: #1769aa;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 21px;
+        .section-title {
+            margin-bottom: 12px;
         }
 
-
-        /* =====================================================
-           SECTION HEADER
-        ====================================================== */
-
-        .section-header {
-
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            margin-bottom: 16px;
+        .section-title h2 {
+            color: #12345b;
+            font-size: 15px;
+            font-weight: 700;
         }
 
-
-        .section-header h2 {
-
-            font-size: 18px;
-
-            color: #173b68;
+        .section-title p {
+            color: #7c8da1;
+            font-size: 10px;
+            margin-top: 4px;
         }
 
-
-        .section-header p {
-
-            color: #8995a5;
-
-            font-size: 12px;
-        }
-
-
-        /* =====================================================
-           QUICK ACTIONS
-        ====================================================== */
+        /* =========================================================
+           QUICK ACTION
+        ========================================================= */
 
         .action-grid {
-
             display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 17px;
-
-            margin-bottom: 28px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 22px;
         }
-
 
         .action {
-
-            background: white;
-
-            border:
-                1px solid #e7edf4;
-
-            border-radius: 14px;
-
-            padding: 21px;
-
-            transition: .2s;
-
+            background: #ffffff;
+            border: 1px solid #e2e9f1;
+            border-radius: 10px;
+            padding: 17px;
+            min-height: 120px;
             position: relative;
+            transition: 0.2s ease;
+            box-shadow: 0 3px 12px rgba(18, 52, 91, 0.03);
         }
-
 
         .action:hover {
-
-            border-color: #1976c9;
-
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 8px 22px rgba(23,105,170,.09);
+            border-color: #b9d4ef;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(18, 52, 91, 0.07);
         }
-
 
         .action-icon {
-
-            width: 43px;
-            height: 43px;
-
-            border-radius: 10px;
-
+            width: 34px;
+            height: 34px;
             background: #edf6fd;
-
-            color: #1769aa;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            margin-bottom: 15px;
-
-            font-size: 18px;
-        }
-
-
-        .action h3 {
-
-            color: #173b68;
-
-            font-size: 15px;
-
-            margin-bottom: 7px;
-        }
-
-
-        .action p {
-
-            color: #7b8794;
-
-            font-size: 12px;
-
-            line-height: 1.6;
-        }
-
-
-        .arrow {
-
-            position: absolute;
-
-            right: 18px;
-            top: 18px;
-
-            color: #a8b5c4;
-
-            font-size: 17px;
-        }
-
-
-        /* =====================================================
-           INFORMATION
-        ====================================================== */
-
-        .info-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                1.4fr 1fr;
-
-            gap: 18px;
-        }
-
-
-        .info-card {
-
-            background: white;
-
-            border:
-                1px solid #e7edf4;
-
-            border-radius: 14px;
-
-            padding: 23px;
-
-            box-shadow:
-                0 4px 15px rgba(23,59,104,.04);
-        }
-
-
-        .info-card h2 {
-
-            font-size: 16px;
-
-            color: #173b68;
-
-            margin-bottom: 17px;
-        }
-
-
-        .info-item {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            padding: 12px 0;
-
-            border-bottom:
-                1px solid #eef2f6;
-        }
-
-
-        .info-item:last-child {
-
-            border-bottom: none;
-        }
-
-
-        .info-item-icon {
-
-            width: 35px;
-            height: 35px;
-
+            border: 1px solid #dceefa;
+            color: #1675b8;
             border-radius: 8px;
-
-            background: #edf6fd;
-
-            color: #1769aa;
-
             display: flex;
-
             align-items: center;
-
             justify-content: center;
+            margin-bottom: 11px;
+            font-size: 14px;
+            font-weight: 700;
+        }
 
+        .action-arrow {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            color: #a7b5c5;
             font-size: 14px;
         }
 
+        .action h3 {
+            color: #173c65;
+            font-size: 12px;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
 
-        .info-item strong {
+        .action p {
+            color: #7b899a;
+            font-size: 10px;
+            line-height: 1.55;
+            max-width: 290px;
+        }
 
-            display: block;
+        /* =========================================================
+           BOTTOM GRID
+        ========================================================= */
 
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 14px;
+        }
+
+        .info-card {
+            background: #ffffff;
+            border: 1px solid #e2e9f1;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 3px 12px rgba(18, 52, 91, 0.03);
+        }
+
+        .info-card h2 {
+            color: #12345b;
             font-size: 13px;
+            margin-bottom: 13px;
+            font-weight: 700;
+        }
 
-            color: #334155;
+        /* =========================================================
+           FLOW
+        ========================================================= */
 
+        .flow-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            padding: 10px 0;
+            border-bottom: 1px solid #edf1f5;
+        }
+
+        .flow-item:first-child {
+            padding-top: 2px;
+        }
+
+        .flow-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .flow-number {
+            width: 27px;
+            height: 27px;
+            min-width: 27px;
+            background: #edf6fd;
+            color: #1768b0;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .flow-text strong {
+            display: block;
+            color: #243b5a;
+            font-size: 10px;
             margin-bottom: 3px;
         }
 
-
-        .info-item span {
-
-            font-size: 11px;
-
-            color: #8995a5;
+        .flow-text span {
+            display: block;
+            color: #8996a7;
+            font-size: 9px;
+            line-height: 1.55;
         }
 
+        /* =========================================================
+           SYSTEM INFO
+        ========================================================= */
 
-        /* =====================================================
-           BUTTON
-        ====================================================== */
-
-        .btn {
-
-            display: inline-block;
-
-            background: #1769aa;
-
-            color: white;
-
-            padding: 9px 15px;
-
-            border-radius: 8px;
-
-            font-size: 12px;
-
-            font-weight: bold;
+        .system-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 0;
+            border-bottom: 1px solid #edf1f5;
         }
 
-
-        .btn:hover {
-
-            background: #0f4c81;
+        .system-item:first-child {
+            padding-top: 2px;
         }
 
+        .system-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
 
-        /* =====================================================
+        .system-icon {
+            width: 27px;
+            height: 27px;
+            min-width: 27px;
+            background: #edf6fd;
+            color: #1768b0;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .system-text strong {
+            display: block;
+            color: #243b5a;
+            font-size: 10px;
+            margin-bottom: 2px;
+        }
+
+        .system-text span {
+            display: block;
+            color: #8996a7;
+            font-size: 9px;
+            line-height: 1.45;
+        }
+
+        /* =========================================================
            RESPONSIVE
-        ====================================================== */
+        ========================================================= */
 
-        @media (max-width: 1100px) {
-
-            .statistics {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-
-            .action-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-            }
-
-
-            .info-grid {
-
-                grid-template-columns: 1fr;
-            }
-        }
-
-
-        @media (max-width: 800px) {
+        @media (max-width: 1050px) {
 
             .sidebar {
-
-                position: relative;
-
-                width: 100%;
-
-                height: auto;
+                width: 240px;
+                min-width: 240px;
             }
-
 
             .main {
-
-                margin-left: 0;
+                margin-left: 240px;
+                width: calc(100% - 240px);
             }
 
-
-            .topbar {
-
-                height: auto;
-
-                padding: 18px 20px;
-
-                gap: 15px;
-
-                flex-direction: column;
-
-                align-items: flex-start;
-            }
-
-
-            .admin-profile {
-
-                width: 100%;
-
-                justify-content: flex-start;
-            }
-
-
-            .admin-text {
-
-                text-align: left;
-            }
-
-
-            .content {
-
-                padding: 22px 18px;
-            }
-
-
-            .statistics,
             .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
 
+            .bottom-grid {
                 grid-template-columns: 1fr;
             }
         }
 
+        @media (max-width: 760px) {
+
+            .layout {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-width: 0;
+                min-height: auto;
+                padding: 20px 16px;
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .logout-area {
+                margin-top: 18px;
+            }
+
+            .topbar {
+                height: auto;
+                min-height: 70px;
+                padding: 14px 18px;
+            }
+
+            .admin-profile {
+                display: none;
+            }
+
+            .content {
+                padding: 20px 15px 30px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-
 </head>
-
 
 <body>
 
+<div class="layout">
 
     <!-- =====================================================
          SIDEBAR
@@ -864,6 +607,7 @@
 
     <aside class="sidebar">
 
+        <!-- BRAND -->
 
         <div class="brand">
 
@@ -873,7 +617,9 @@
 
             <div class="brand-text">
 
-                <h2>MAGENTA</h2>
+                <h2>
+                    MAGENTA
+                </h2>
 
                 <span>
                     SISTEM INFORMASI MAGANG
@@ -884,18 +630,13 @@
         </div>
 
 
-        <div class="sidebar-line"></div>
+        <!-- UTAMA -->
 
+        <div class="menu-title">
+            UTAMA
+        </div>
 
         <div class="menu">
-
-
-            <!-- UTAMA -->
-
-            <div class="menu-title">
-                Utama
-            </div>
-
 
             <a
                 href="{{ route('superadmin.dashboard') }}"
@@ -903,60 +644,27 @@
             >
 
                 <span class="menu-icon">
-                    ▣
+                    ⌂
                 </span>
 
-                Dashboard
+                <span>
+                    Dashboard
+                </span>
 
             </a>
 
-
-            <!-- PENDAFTARAN -->
-
-            <div class="menu-title">
-                Pendaftaran
-            </div>
+        </div>
 
 
-            <a href="#">
+        <!-- SISTEM -->
 
-                <span class="menu-icon">
-                    ♙
-                </span>
+        <div class="menu-title">
+            SISTEM
+        </div>
 
-                Data Mahasiswa
+        <div class="menu">
 
-            </a>
-
-
-            <a href="{{ route('admin.pengajuan.index') }}">
-
-                <span class="menu-icon">
-                    ▤
-                </span>
-
-                Pengajuan Magang
-
-            </a>
-
-
-            <a href="#">
-
-                <span class="menu-icon">
-                    ✓
-                </span>
-
-                Cek Status Pengajuan
-
-            </a>
-
-
-            <!-- SISTEM -->
-
-            <div class="menu-title">
-                Sistem
-            </div>
-
+            <!-- PROFIL PERUSAHAAN -->
 
             <a
                 href="{{ route('superadmin.perusahaan.index') }}"
@@ -966,23 +674,31 @@
                     ▰
                 </span>
 
-                Profil Perusahaan
+                <span>
+                    Profil Perusahaan
+                </span>
 
             </a>
 
 
+            <!-- KELOLA BANNER -->
+
             <a
-                href="{{ route('superadmin.banners.create') }}"
+                href="{{ route('superadmin.banners.index') }}"
             >
 
                 <span class="menu-icon">
                     ▧
                 </span>
 
-                Kelola Banner
+                <span>
+                    Kelola Banner
+                </span>
 
             </a>
 
+
+            <!-- KELOLA KONTEN -->
 
             <a
                 href="{{ route('superadmin.pengaturan.index') }}"
@@ -992,21 +708,28 @@
                     ⚙
                 </span>
 
-                Pengaturan Website
-
-            </a>
-
-
-            <a href="#">
-
-                <span class="menu-icon">
-                    ◷
+                <span>
+                    Kelola Konten
                 </span>
 
-                Riwayat Aktivitas
-
             </a>
 
+
+            <!-- KELOLA PENGGUNA -->
+
+            <a
+                href="{{ route('superadmin.pengguna.index') }}"
+            >
+
+                <span class="menu-icon">
+                    ♟
+                </span>
+
+                <span>
+                    Kelola Pengguna
+                </span>
+
+            </a>
 
         </div>
 
@@ -1027,7 +750,13 @@
                     class="logout-btn"
                 >
 
-                    ⇥ &nbsp; Logout
+                    <span class="menu-icon">
+                        ↪
+                    </span>
+
+                    <span>
+                        Logout
+                    </span>
 
                 </button>
 
@@ -1035,9 +764,7 @@
 
         </div>
 
-
     </aside>
-
 
 
     <!-- =====================================================
@@ -1046,11 +773,9 @@
 
     <main class="main">
 
-
         <!-- TOPBAR -->
 
         <header class="topbar">
-
 
             <div class="page-title">
 
@@ -1059,7 +784,7 @@
                 </h1>
 
                 <p>
-                    Kelola pendaftaran magang perusahaan
+                    Kelola informasi dan website MAGENTA
                 </p>
 
             </div>
@@ -1067,11 +792,10 @@
 
             <div class="admin-profile">
 
-
                 <div class="admin-text">
 
                     <strong>
-                        {{ auth()->user()->name }}
+                        {{ auth()->user()->name ?? 'Super Admin' }}
                     </strong>
 
                     <span>
@@ -1083,488 +807,365 @@
 
                 <div class="avatar">
 
-                    {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    {{ strtoupper(
+                        substr(
+                            auth()->user()->name ?? 'S',
+                            0,
+                            1
+                        )
+                    ) }}
 
                 </div>
 
-
             </div>
-
 
         </header>
 
 
-
-        <!-- CONTENT -->
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
 
         <div class="content">
 
-
-            <!-- WELCOME -->
-
-            <div class="welcome">
-
-                <h2>
-                    Selamat datang di MAGENTA 👋
-                </h2>
-
-                <p>
-                    Kelola proses pendaftaran magang,
-                    data mahasiswa, pengajuan, dan
-                    informasi website perusahaan
-                    melalui dashboard ini.
-                </p>
-
-            </div>
+            <div class="content-container">
 
 
+                <!-- WELCOME -->
 
-            <!-- STATISTICS -->
+                <div class="welcome">
 
-            <div class="statistics">
+                    <h2>
+                        Selamat datang di MAGENTA 👋
+                    </h2>
 
-
-                <div class="stat-card">
-
-                    <div class="stat-info">
-
-                        <h3>
-                            Total Mahasiswa
-                        </h3>
-
-                        <div class="stat-number">
-                            0
-                        </div>
-
-                    </div>
-
-                    <div class="stat-icon">
-                        ♙
-                    </div>
+                    <p>
+                        Kelola informasi perusahaan, banner, dan konten
+                        website MAGENTA melalui dashboard Super Admin.
+                        Pendaftaran magang dilakukan melalui Google Form
+                        yang tersedia pada website.
+                    </p>
 
                 </div>
 
 
-                <div class="stat-card">
+                <!-- =================================================
+                     AKSES CEPAT
+                ================================================== -->
 
-                    <div class="stat-info">
-
-                        <h3>
-                            Pengajuan Menunggu
-                        </h3>
-
-                        <div class="stat-number">
-                            0
-                        </div>
-
-                    </div>
-
-                    <div class="stat-icon">
-                        ▤
-                    </div>
-
-                </div>
-
-
-                <div class="stat-card">
-
-                    <div class="stat-info">
-
-                        <h3>
-                            Pengajuan Disetujui
-                        </h3>
-
-                        <div class="stat-number">
-                            0
-                        </div>
-
-                    </div>
-
-                    <div class="stat-icon">
-                        ✓
-                    </div>
-
-                </div>
-
-
-            </div>
-
-
-
-            <!-- AKSES CEPAT -->
-
-            <div class="section-header">
-
-                <div>
+                <div class="section-title">
 
                     <h2>
                         Akses Cepat
                     </h2>
 
                     <p>
-                        Menu yang sering digunakan
+                        Menu pengelolaan website MAGENTA
                     </p>
 
                 </div>
 
-            </div>
+
+                <div class="action-grid">
 
 
-            <div class="action-grid">
+                    <!-- PROFIL PERUSAHAAN -->
 
+                    <a
+                        href="{{ route('superadmin.perusahaan.index') }}"
+                        class="action"
+                    >
 
-                <!-- PENGAJUAN -->
-
-                <a
-                    href="{{ route('admin.pengajuan.index') }}"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ▤
-                    </div>
-
-                    <h3>
-                        Pengajuan Magang
-                    </h3>
-
-                    <p>
-                        Lihat, periksa, dan proses
-                        pengajuan mahasiswa.
-                    </p>
-
-                </a>
-
-
-                <!-- MAHASISWA -->
-
-                <a
-                    href="#"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ♙
-                    </div>
-
-                    <h3>
-                        Data Mahasiswa
-                    </h3>
-
-                    <p>
-                        Lihat dan kelola data
-                        mahasiswa pendaftar.
-                    </p>
-
-                </a>
-
-
-                <!-- CEK STATUS -->
-
-                <a
-                    href="#"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ✓
-                    </div>
-
-                    <h3>
-                        Cek Status
-                    </h3>
-
-                    <p>
-                        Periksa status pengajuan
-                        mahasiswa.
-                    </p>
-
-                </a>
-
-
-                <!-- PROFIL -->
-
-                <a
-                    href="{{ route('superadmin.perusahaan.index') }}"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ▰
-                    </div>
-
-                    <h3>
-                        Profil Perusahaan
-                    </h3>
-
-                    <p>
-                        Kelola informasi perusahaan
-                        yang ditampilkan di website.
-                    </p>
-
-                </a>
-
-
-                <!-- BANNER -->
-
-                <a
-                    href="{{ route('superadmin.banners.create') }}"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ▧
-                    </div>
-
-                    <h3>
-                        Kelola Banner
-                    </h3>
-
-                    <p>
-                        Kelola banner dan informasi
-                        utama website.
-                    </p>
-
-                </a>
-
-
-                <!-- PENGATURAN -->
-
-                <a
-                    href="{{ route('superadmin.pengaturan.index') }}"
-                    class="action"
-                >
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                    <div class="action-icon">
-                        ⚙
-                    </div>
-
-                    <h3>
-                        Pengaturan Website
-                    </h3>
-
-                    <p>
-                        Atur konten informasi website
-                        MAGENTA.
-                    </p>
-
-                </a>
-
-
-            </div>
-
-
-
-            <!-- INFORMASI -->
-
-            <div class="info-grid">
-
-
-                <!-- ALUR PENGELOLAAN -->
-
-                <div class="info-card">
-
-                    <h2>
-                        Alur Pendaftaran Magang
-                    </h2>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            1
+                        <div class="action-icon">
+                            ▰
                         </div>
 
-                        <div>
-
-                            <strong>
-                                Mahasiswa mengajukan
-                            </strong>
-
-                            <span>
-                                Mahasiswa mengisi formulir pendaftaran.
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            2
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Admin melakukan verifikasi
-                            </strong>
-
-                            <span>
-                                Data dan dokumen diperiksa.
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            3
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Status diperbarui
-                            </strong>
-
-                            <span>
-                                Pengajuan diterima atau ditolak.
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            4
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Mahasiswa melihat status
-                            </strong>
-
-                            <span>
-                                Status dapat dicek melalui website.
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- INFORMASI SISTEM -->
-
-                <div class="info-card">
-
-                    <h2>
-                        Informasi Sistem
-                    </h2>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            M
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                MAGENTA
-                            </strong>
-
-                            <span>
-                                Sistem Informasi Magang
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
-                            ●
-                        </div>
-
-                        <div>
-
-                            <strong>
-                                Status Sistem
-                            </strong>
-
-                            <span>
-                                Sistem berjalan normal
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <div class="info-item-icon">
+                        <div class="action-arrow">
                             →
                         </div>
 
-                        <div>
+                        <h3>
+                            Profil Perusahaan
+                        </h3>
 
-                            <strong>
-                                Fokus Sistem
-                            </strong>
+                        <p>
+                            Kelola nama, alamat, kontak, website,
+                            dan informasi perusahaan.
+                        </p>
 
-                            <span>
-                                Pendaftaran & pengelolaan pengajuan
-                            </span>
+                    </a>
+
+
+                    <!-- BANNER -->
+
+                    <a
+                        href="{{ route('superadmin.banners.index') }}"
+                        class="action"
+                    >
+
+                        <div class="action-icon">
+                            ▧
+                        </div>
+
+                        <div class="action-arrow">
+                            →
+                        </div>
+
+                        <h3>
+                            Kelola Banner
+                        </h3>
+
+                        <p>
+                            Kelola banner utama yang ditampilkan
+                            pada halaman depan website.
+                        </p>
+
+                    </a>
+
+
+                    <!-- KELOLA KONTEN -->
+
+                    <a
+                        href="{{ route('superadmin.pengaturan.index') }}"
+                        class="action"
+                    >
+
+                        <div class="action-icon">
+                            ⚙
+                        </div>
+
+                        <div class="action-arrow">
+                            →
+                        </div>
+
+                        <h3>
+                            Kelola Konten
+                        </h3>
+
+                        <p>
+                            Kelola judul dan isi konten yang
+                            ditampilkan pada website MAGENTA.
+                        </p>
+
+                    </a>
+
+                </div>
+
+
+                <!-- =================================================
+                     BOTTOM CONTENT
+                ================================================== -->
+
+                <div class="bottom-grid">
+
+
+                    <!-- ALUR -->
+
+                    <div class="info-card">
+
+                        <h2>
+                            Alur Pendaftaran Magang
+                        </h2>
+
+
+                        <div class="flow-item">
+
+                            <div class="flow-number">
+                                1
+                            </div>
+
+                            <div class="flow-text">
+
+                                <strong>
+                                    Mahasiswa melihat informasi
+                                </strong>
+
+                                <span>
+                                    Mahasiswa membaca persyaratan
+                                    dan alur pendaftaran magang
+                                    pada website MAGENTA.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flow-item">
+
+                            <div class="flow-number">
+                                2
+                            </div>
+
+                            <div class="flow-text">
+
+                                <strong>
+                                    Mahasiswa mengisi Google Form
+                                </strong>
+
+                                <span>
+                                    Pendaftaran dilakukan melalui
+                                    Google Form yang disediakan
+                                    oleh perusahaan.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flow-item">
+
+                            <div class="flow-number">
+                                3
+                            </div>
+
+                            <div class="flow-text">
+
+                                <strong>
+                                    Data pendaftaran diterima
+                                </strong>
+
+                                <span>
+                                    Data yang dikirim melalui
+                                    Google Form diterima sesuai
+                                    mekanisme perusahaan.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="flow-item">
+
+                            <div class="flow-number">
+                                4
+                            </div>
+
+                            <div class="flow-text">
+
+                                <strong>
+                                    Proses selanjutnya
+                                </strong>
+
+                                <span>
+                                    Pihak perusahaan melakukan
+                                    proses selanjutnya sesuai
+                                    kebutuhan pendaftaran magang.
+                                </span>
+
+                            </div>
 
                         </div>
 
                     </div>
 
 
-                </div>
+                    <!-- INFORMASI SISTEM -->
 
+                    <div class="info-card">
+
+                        <h2>
+                            Informasi Sistem
+                        </h2>
+
+
+                        <div class="system-item">
+
+                            <div class="system-icon">
+                                M
+                            </div>
+
+                            <div class="system-text">
+
+                                <strong>
+                                    MAGENTA
+                                </strong>
+
+                                <span>
+                                    Sistem Informasi Magang
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="system-item">
+
+                            <div class="system-icon">
+                                ●
+                            </div>
+
+                            <div class="system-text">
+
+                                <strong>
+                                    Status Sistem
+                                </strong>
+
+                                <span>
+                                    Sistem berjalan normal
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="system-item">
+
+                            <div class="system-icon">
+                                →
+                            </div>
+
+                            <div class="system-text">
+
+                                <strong>
+                                    Metode Pendaftaran
+                                </strong>
+
+                                <span>
+                                    Google Form
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="system-item">
+
+                            <div class="system-icon">
+                                ✓
+                            </div>
+
+                            <div class="system-text">
+
+                                <strong>
+                                    Fokus Sistem
+                                </strong>
+
+                                <span>
+                                    Informasi magang dan pengelolaan
+                                    website perusahaan
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
-
         </div>
-
 
     </main>
 
+</div>
 
 </body>
-
 </html>
