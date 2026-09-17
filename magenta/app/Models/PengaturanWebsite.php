@@ -103,5 +103,14 @@ class PengaturanWebsite extends Model
 
         'pendaftaran_judul',
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENDAFTARAN GOOGLE FORM
+        |--------------------------------------------------------------------------
+        */
+
+        'google_form_url',
+
     ];
 }

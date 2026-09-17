@@ -2324,6 +2324,71 @@
 
 
                 {{-- =================================================
+                     5. PENDAFTARAN GOOGLE FORM
+                ================================================== --}}
+
+                <div class="section-card">
+
+                    <div class="section-header">
+
+                        <div class="section-number">
+                            5
+                        </div>
+
+                        <div>
+
+                            <div class="section-title">
+                                Pendaftaran Google Form
+                            </div>
+
+                            <div class="section-description">
+                                Atur link Google Form yang digunakan mahasiswa
+                                untuk melakukan pendaftaran magang.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="section-body">
+
+                        <div class="field">
+
+                            <label for="google_form_url">
+                                Link Google Form Pendaftaran
+                            </label>
+
+                            <input
+                                type="url"
+                                id="google_form_url"
+                                name="google_form_url"
+                                value="{{ old(
+                                    'google_form_url',
+                                    $pengaturan?->google_form_url ?? ''
+                                ) }}"
+                                placeholder="https://docs.google.com/forms/..."
+                            >
+
+                            @error('google_form_url')
+                                <div class="field-help" style="color:#b42318;">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+
+                            <div class="field-help">
+                                Masukkan URL Google Form resmi yang digunakan untuk
+                                pendaftaran mahasiswa magang.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                                {{-- =================================================
                      SAVE
                 ================================================== --}}
 

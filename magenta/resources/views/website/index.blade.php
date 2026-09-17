@@ -1,11 +1,23 @@
+{{-- resources/views/website/index.blade.php --}}
+
 @php
+
     /*
     |--------------------------------------------------------------------------
     | LINK GOOGLE FORM
     |--------------------------------------------------------------------------
+    |
+    | Mengambil link Google Form dari database melalui
+    | menu Kelola Konten.
+    |
+    | Jika database belum memiliki link, maka menggunakan
+    | placeholder sementara.
+    |
     */
 
-    $googleFormUrl = 'ISI_LINK_GOOGLE_FORM_DI_SINI';
+    $googleFormUrl =
+        $pengaturan?->google_form_url
+        ?: 'ISI_LINK_GOOGLE_FORM_DI_SINI';
 
 
     /*
@@ -25,16 +37,15 @@
     |--------------------------------------------------------------------------
     */
 
-    $namaPerusahaan = $perusahaan?->nama ?? 'MAGENTA';
+    $namaPerusahaan = $perusahaan?->nama
+        ?: $perusahaan?->nama_perusahaan
+        ?: 'MAGENTA';
 
 
     /*
     |--------------------------------------------------------------------------
     | DATA PENGATURAN WEBSITE
     |--------------------------------------------------------------------------
-    |
-    | Data ini berasal dari Kelola Konten.
-    |
     */
 
     $informasiTerbaruJudul =
@@ -45,6 +56,12 @@
         $pengaturan?->informasi_terbaru_deskripsi
         ?? 'Informasi terbaru mengenai kegiatan dan penerimaan mahasiswa magang.';
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | PENGUMUMAN
+    |--------------------------------------------------------------------------
+    */
 
     $pengumumanJudul =
         $pengaturan?->pengumuman_judul
@@ -174,6 +191,27 @@
         $pengaturan?->alur4_deskripsi
         ?? 'Mahasiswa melaksanakan kegiatan magang sesuai ketentuan perusahaan.';
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | URL WEBSITE PERUSAHAAN
+    |--------------------------------------------------------------------------
+    */
+
+    $websiteUrl = null;
+
+    if ($perusahaan?->website) {
+
+        $websiteUrl = $perusahaan->website;
+
+        if (
+            !str_starts_with($websiteUrl, 'http://') &&
+            !str_starts_with($websiteUrl, 'https://')
+        ) {
+            $websiteUrl = 'https://' . $websiteUrl;
+        }
+    }
+
 @endphp
 
 
@@ -187,6 +225,11 @@
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Sistem Informasi Magang {{ $namaPerusahaan }}"
     >
 
     <title>
@@ -218,12 +261,15 @@
 
         a {
             text-decoration: none;
+            color: inherit;
         }
 
 
         :root {
+
             --primary: #0878a8;
             --primary-dark: #075d83;
+
             --secondary: #f47b20;
             --secondary-dark: #d96512;
 
@@ -237,6 +283,7 @@
 
             --shadow:
                 0 10px 35px rgba(0, 72, 100, 0.08);
+
         }
 
 
@@ -245,6 +292,7 @@
         ====================================================== */
 
         .navbar {
+
             position: sticky;
             top: 0;
             z-index: 9999;
@@ -256,10 +304,12 @@
 
             box-shadow:
                 0 2px 12px rgba(0, 0, 0, 0.04);
+
         }
 
 
         .nav-container {
+
             width: 90%;
             max-width: 1250px;
 
@@ -272,10 +322,12 @@
             justify-content: space-between;
 
             gap: 30px;
+
         }
 
 
         .logo {
+
             display: flex;
             align-items: center;
 
@@ -287,10 +339,14 @@
             font-weight: 800;
 
             letter-spacing: -0.5px;
+
+            flex-shrink: 0;
+
         }
 
 
         .logo-mark {
+
             width: 40px;
             height: 40px;
 
@@ -311,28 +367,32 @@
 
             font-size: 18px;
             font-weight: bold;
+
         }
 
 
         .nav-menu {
-            display: flex;
 
+            display: flex;
             align-items: center;
 
             gap: 28px;
 
             list-style: none;
+
         }
 
 
         .nav-menu a {
+
             color: #455a64;
 
             font-size: 14px;
 
             font-weight: 600;
 
-            transition: 0.2s;
+            transition: 0.2s ease;
+
         }
 
 
@@ -342,6 +402,7 @@
 
 
         .nav-admin {
+
             background: var(--primary);
 
             color: white !important;
@@ -350,13 +411,16 @@
                 11px 18px;
 
             border-radius: 7px;
+
         }
 
 
         .nav-admin:hover {
+
             background: var(--primary-dark);
 
             color: white !important;
+
         }
 
 
@@ -365,6 +429,7 @@
         ====================================================== */
 
         .hero {
+
             min-height: 560px;
 
             background:
@@ -377,10 +442,12 @@
 
             display: flex;
             align-items: center;
+
         }
 
 
         .hero-container {
+
             width: 90%;
             max-width: 1250px;
 
@@ -397,6 +464,7 @@
             align-items: center;
 
             gap: 70px;
+
         }
 
 
@@ -406,6 +474,7 @@
 
 
         .hero-label {
+
             display: inline-block;
 
             padding:
@@ -423,10 +492,12 @@
             font-weight: 700;
 
             margin-bottom: 20px;
+
         }
 
 
         .hero-content h1 {
+
             font-size: 52px;
 
             line-height: 1.12;
@@ -436,6 +507,7 @@
             margin-bottom: 20px;
 
             letter-spacing: -1.5px;
+
         }
 
 
@@ -445,6 +517,7 @@
 
 
         .hero-content p {
+
             color: var(--muted);
 
             font-size: 17px;
@@ -452,19 +525,23 @@
             max-width: 600px;
 
             margin-bottom: 30px;
+
         }
 
 
         .hero-buttons {
+
             display: flex;
 
             gap: 12px;
 
             flex-wrap: wrap;
+
         }
 
 
         .btn {
+
             display: inline-flex;
 
             align-items: center;
@@ -479,56 +556,69 @@
 
             font-size: 14px;
 
-            transition: 0.2s;
+            transition: 0.2s ease;
 
             border: none;
 
             cursor: pointer;
+
         }
 
 
         .btn-primary {
+
             background: var(--primary);
 
             color: white;
+
         }
 
 
         .btn-primary:hover {
+
             background: var(--primary-dark);
 
             transform: translateY(-1px);
+
         }
 
 
         .btn-orange {
+
             background: var(--secondary);
 
             color: white;
+
         }
 
 
         .btn-orange:hover {
+
             background: var(--secondary-dark);
 
             transform: translateY(-1px);
+
         }
 
 
         .btn-outline {
+
             background: white;
 
             color: var(--primary);
 
             border:
                 1px solid var(--primary);
+
         }
 
 
         .btn-outline:hover {
+
             background: var(--primary);
 
             color: white;
+
         }
 
 
@@ -537,6 +627,7 @@
         ====================================================== */
 
         .hero-image-box {
+
             position: relative;
 
             min-height: 350px;
@@ -555,10 +646,12 @@
             box-shadow:
                 0 25px 60px
                 rgba(8, 120, 168, 0.18);
+
         }
 
 
         .hero-image {
+
             width: 100%;
             height: 100%;
 
@@ -567,10 +660,12 @@
             object-fit: cover;
 
             display: block;
+
         }
 
 
         .hero-placeholder {
+
             min-height: 350px;
 
             display: flex;
@@ -583,6 +678,9 @@
             font-size: 35px;
 
             font-weight: 800;
+
+            letter-spacing: 1px;
+
         }
 
 
@@ -591,14 +689,17 @@
         ====================================================== */
 
         .quick-section {
+
             background: white;
 
             padding:
                 0 0 55px;
+
         }
 
 
         .quick-container {
+
             width: 90%;
             max-width: 1050px;
 
@@ -608,20 +709,24 @@
             position: relative;
 
             z-index: 10;
+
         }
 
 
         .quick-grid {
+
             display: grid;
 
             grid-template-columns:
                 repeat(3, 1fr);
 
             gap: 16px;
+
         }
 
 
         .quick-card {
+
             background: white;
 
             border:
@@ -635,20 +740,24 @@
                 0 10px 30px
                 rgba(0, 70, 100, 0.08);
 
-            transition: 0.2s;
+            transition: 0.2s ease;
+
         }
 
 
         .quick-card:hover {
+
             transform: translateY(-5px);
 
             box-shadow:
                 0 16px 35px
                 rgba(0, 70, 100, 0.13);
+
         }
 
 
         .quick-icon {
+
             width: 45px;
             height: 45px;
 
@@ -667,33 +776,42 @@
             font-size: 21px;
 
             margin-bottom: 15px;
+
         }
 
 
         .quick-card h3 {
+
             color: #263238;
 
             font-size: 17px;
 
             margin-bottom: 7px;
+
         }
 
 
         .quick-card p {
+
             color: var(--muted);
 
             font-size: 13px;
 
             margin-bottom: 14px;
+
+            line-height: 1.7;
+
         }
 
 
         .quick-link {
+
             color: var(--primary);
 
             font-size: 13px;
 
             font-weight: 700;
+
         }
 
 
@@ -707,8 +825,10 @@
         ====================================================== */
 
         .section {
+
             padding:
                 80px 0;
+
         }
 
 
@@ -718,24 +838,29 @@
 
 
         .container {
+
             width: 90%;
             max-width: 1150px;
 
             margin: auto;
+
         }
 
 
         .section-heading {
+
             text-align: center;
 
             max-width: 700px;
 
             margin:
                 0 auto 45px;
+
         }
 
 
         .section-heading .label {
+
             color: var(--secondary);
 
             text-transform: uppercase;
@@ -747,22 +872,27 @@
             letter-spacing: 1px;
 
             margin-bottom: 8px;
+
         }
 
 
         .section-heading h2 {
+
             font-size: 34px;
 
             color: #20343d;
 
             margin-bottom: 12px;
+
         }
 
 
         .section-heading p {
+
             color: var(--muted);
 
             font-size: 15px;
+
         }
 
 
@@ -771,16 +901,19 @@
         ====================================================== */
 
         .announcement-grid {
+
             display: grid;
 
             grid-template-columns:
                 1.4fr 0.8fr;
 
             gap: 25px;
+
         }
 
 
         .announcement-main {
+
             background: white;
 
             border-radius: 15px;
@@ -791,10 +924,12 @@
                 1px solid var(--border);
 
             box-shadow: var(--shadow);
+
         }
 
 
         .announcement-badge {
+
             display: inline-block;
 
             background:
@@ -813,35 +948,43 @@
             font-weight: 800;
 
             margin-bottom: 15px;
+
         }
 
 
         .announcement-main h3 {
+
             color: #20343d;
 
             font-size: 24px;
 
             margin-bottom: 12px;
+
         }
 
 
         .announcement-main p {
+
             color: var(--muted);
 
             font-size: 15px;
 
             line-height: 1.8;
+
         }
 
 
         .announcement-side {
+
             display: grid;
 
             gap: 15px;
+
         }
 
 
         .announcement-item {
+
             background: white;
 
             border:
@@ -850,22 +993,29 @@
             border-radius: 12px;
 
             padding: 22px;
+
         }
 
 
         .announcement-item h4 {
+
             color: var(--primary);
 
             font-size: 16px;
 
             margin-bottom: 6px;
+
         }
 
 
         .announcement-item p {
+
             color: var(--muted);
 
             font-size: 13px;
+
+            line-height: 1.7;
+
         }
 
 
@@ -874,16 +1024,19 @@
         ====================================================== */
 
         .requirements-grid {
+
             display: grid;
 
             grid-template-columns:
                 repeat(3, 1fr);
 
             gap: 20px;
+
         }
 
 
         .requirement-card {
+
             background: white;
 
             border:
@@ -894,10 +1047,12 @@
             padding: 28px;
 
             box-shadow: var(--shadow);
+
         }
 
 
         .requirement-number {
+
             width: 42px;
             height: 42px;
 
@@ -915,24 +1070,29 @@
             font-weight: 800;
 
             margin-bottom: 16px;
+
         }
 
 
         .requirement-card h3 {
+
             color: #20343d;
 
             font-size: 18px;
 
             margin-bottom: 8px;
+
         }
 
 
         .requirement-card p {
+
             color: var(--muted);
 
             font-size: 14px;
 
             line-height: 1.7;
+
         }
 
 
@@ -941,6 +1101,7 @@
         ====================================================== */
 
         .flow-grid {
+
             display: grid;
 
             grid-template-columns:
@@ -949,10 +1110,12 @@
             gap: 20px;
 
             position: relative;
+
         }
 
 
         .flow-card {
+
             background: white;
 
             border:
@@ -967,10 +1130,12 @@
             box-shadow: var(--shadow);
 
             position: relative;
+
         }
 
 
         .flow-number {
+
             width: 48px;
             height: 48px;
 
@@ -991,32 +1156,38 @@
             font-weight: 800;
 
             font-size: 18px;
+
         }
 
 
         .flow-card h3 {
+
             color: #20343d;
 
             font-size: 17px;
 
             margin-bottom: 8px;
+
         }
 
 
         .flow-card p {
+
             color: var(--muted);
 
             font-size: 13px;
 
             line-height: 1.7;
+
         }
 
 
         /* =====================================================
-           CTA
+           CTA PENDAFTARAN
         ====================================================== */
 
         .registration-box {
+
             background:
                 linear-gradient(
                     135deg,
@@ -1035,17 +1206,21 @@
             box-shadow:
                 0 20px 45px
                 rgba(8, 120, 168, 0.16);
+
         }
 
 
         .registration-box h2 {
+
             font-size: 32px;
 
             margin-bottom: 12px;
+
         }
 
 
         .registration-box p {
+
             max-width: 650px;
 
             margin:
@@ -1055,6 +1230,7 @@
                 rgba(255,255,255,0.85);
 
             font-size: 15px;
+
         }
 
 
@@ -1063,6 +1239,7 @@
         ====================================================== */
 
         .company-box {
+
             background:
                 linear-gradient(
                     135deg,
@@ -1084,32 +1261,40 @@
             gap: 40px;
 
             align-items: center;
+
         }
 
 
         .company-box h2 {
+
             font-size: 32px;
 
             margin-bottom: 15px;
+
         }
 
 
         .company-box p {
+
             color:
                 rgba(255,255,255,0.85);
 
             line-height: 1.8;
+
         }
 
 
         .company-contact {
+
             display: grid;
 
             gap: 12px;
+
         }
 
 
         .company-contact-item {
+
             background:
                 rgba(255,255,255,0.10);
 
@@ -1119,6 +1304,20 @@
             border-radius: 9px;
 
             font-size: 14px;
+
+            word-break: break-word;
+
+        }
+
+
+        .company-contact-item a {
+            color: inherit;
+        }
+
+
+        .company-contact-item a:hover {
+            color: #ffffff;
+            text-decoration: underline;
         }
 
 
@@ -1127,16 +1326,19 @@
         ====================================================== */
 
         footer {
+
             background: #17313d;
 
             color: white;
 
             padding:
                 35px 0;
+
         }
 
 
         .footer-container {
+
             width: 90%;
             max-width: 1150px;
 
@@ -1149,23 +1351,28 @@
             align-items: center;
 
             gap: 20px;
+
         }
 
 
         .footer-logo {
+
             font-size: 22px;
 
             font-weight: 800;
 
             color: white;
+
         }
 
 
         .footer-text {
+
             color:
                 rgba(255,255,255,0.65);
 
             font-size: 13px;
+
         }
 
 
@@ -1186,18 +1393,22 @@
 
 
             .hero-container {
+
                 grid-template-columns: 1fr;
 
                 gap: 40px;
+
             }
 
 
             .hero-content {
+
                 max-width: 800px;
 
                 text-align: center;
 
                 margin: auto;
+
             }
 
 
@@ -1207,17 +1418,21 @@
 
 
             .hero-image-box {
+
                 max-width: 600px;
 
                 width: 100%;
 
                 margin: auto;
+
             }
 
 
             .quick-grid {
+
                 grid-template-columns:
                     repeat(3, 1fr);
+
             }
 
 
@@ -1232,14 +1447,18 @@
 
 
             .requirements-grid {
+
                 grid-template-columns:
                     repeat(2, 1fr);
+
             }
 
 
             .flow-grid {
+
                 grid-template-columns:
                     repeat(2, 1fr);
+
             }
 
         }
@@ -1248,17 +1467,21 @@
         @media (max-width: 700px) {
 
             .nav-container {
+
                 flex-direction: column;
 
                 padding:
                     15px 0;
+
             }
 
 
             .nav-menu {
+
                 flex-wrap: wrap;
 
                 justify-content: center;
+
             }
 
 
@@ -1293,8 +1516,10 @@
 
 
             .company-box {
+
                 padding:
                     30px 25px;
+
             }
 
 
@@ -1304,8 +1529,10 @@
 
 
             .registration-box {
+
                 padding:
                     35px 25px;
+
             }
 
 
@@ -1315,9 +1542,11 @@
 
 
             .footer-container {
+
                 flex-direction: column;
 
                 text-align: center;
+
             }
 
         }
@@ -1338,6 +1567,7 @@
 
         <div class="nav-container">
 
+
             <a
                 href="{{ route('home') }}"
                 class="logo"
@@ -1355,50 +1585,63 @@
             <ul class="nav-menu">
 
                 <li>
+
                     <a href="{{ route('home') }}">
                         Beranda
                     </a>
+
                 </li>
 
 
                 <li>
+
                     <a href="#pengumuman">
                         Pengumuman
                     </a>
+
                 </li>
 
 
                 <li>
+
                     <a href="#persyaratan">
                         Persyaratan
                     </a>
+
                 </li>
 
 
                 <li>
+
                     <a href="#alur">
                         Alur
                     </a>
+
                 </li>
 
 
                 <li>
+
                     <a href="#kontak">
                         Kontak
                     </a>
+
                 </li>
 
 
                 <li>
+
                     <a
                         href="{{ route('login') }}"
                         class="nav-admin"
                     >
                         Login Admin
                     </a>
+
                 </li>
 
             </ul>
+
 
         </div>
 
@@ -1469,6 +1712,7 @@
 
                 <div class="hero-buttons">
 
+
                     <a
                         href="{{ $googleFormUrl }}"
                         target="_blank"
@@ -1485,6 +1729,7 @@
                     >
                         Lihat Persyaratan
                     </a>
+
 
                 </div>
 
@@ -1511,6 +1756,7 @@
                 @endif
 
             </div>
+
 
         </div>
 
@@ -1556,7 +1802,7 @@
 
 
 
-                {{-- DAFTAR MAGANG --}}
+                {{-- PENDAFTARAN --}}
 
                 <div class="quick-card">
 
@@ -1631,6 +1877,7 @@
 
         <div class="container">
 
+
             <div class="section-heading">
 
                 <div class="label">
@@ -1673,7 +1920,7 @@
 
 
 
-                {{-- 3 INFORMASI PENGUMUMAN --}}
+                {{-- INFORMASI TAMBAHAN --}}
 
                 <div class="announcement-side">
 
@@ -1737,6 +1984,7 @@
     >
 
         <div class="container">
+
 
             <div class="section-heading">
 
@@ -1829,6 +2077,7 @@
     >
 
         <div class="container">
+
 
             <div class="section-heading">
 
@@ -1982,7 +2231,6 @@
 
             @if($perusahaan)
 
-
                 <div class="company-box">
 
 
@@ -2002,7 +2250,7 @@
 
 
                         <h2>
-                            {{ $perusahaan->nama ?: 'Perusahaan' }}
+                            {{ $perusahaan->nama ?: $perusahaan->nama_perusahaan ?: 'Perusahaan' }}
                         </h2>
 
 
@@ -2018,7 +2266,7 @@
                                 Informasi profil perusahaan
                                 dapat ditambahkan melalui
                                 menu Profil Perusahaan
-                                pada halaman Super Admin.
+                                pada halaman administrasi.
                             </p>
 
                         @endif
@@ -2082,7 +2330,13 @@
 
                                 🌐
 
-                                {{ $perusahaan->website }}
+                                <a
+                                    href="{{ $websiteUrl }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {{ $perusahaan->website }}
+                                </a>
 
                             </div>
 
@@ -2101,6 +2355,18 @@
 
                     <div>
 
+                        <div
+                            style="
+                                color:#f47b20;
+                                font-size:13px;
+                                font-weight:800;
+                                margin-bottom:10px;
+                                text-transform:uppercase;
+                            "
+                        >
+                            Informasi Perusahaan
+                        </div>
+
                         <h2>
                             Profil Perusahaan
                         </h2>
@@ -2116,6 +2382,7 @@
 
 
             @endif
+
 
         </div>
 
@@ -2147,7 +2414,7 @@
 
             <div class="footer-text">
 
-                © 2026
+                © {{ date('Y') }}
 
                 {{ $namaPerusahaan }}
 

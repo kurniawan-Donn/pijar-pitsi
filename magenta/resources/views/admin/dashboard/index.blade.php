@@ -224,7 +224,7 @@
         ========================================================== */
 
         .topbar {
-            height: 76px;
+            min-height: 76px;
 
             padding: 0 32px;
 
@@ -299,7 +299,7 @@
         }
 
         /* =========================================================
-           WELCOME
+           WELCOME CARD
         ========================================================== */
 
         .welcome-card {
@@ -321,34 +321,68 @@
             box-shadow: 0 8px 24px rgba(18, 52, 91, .10);
         }
 
+        .welcome-card::before {
+            content: "";
+
+            position: absolute;
+
+            right: -35px;
+            bottom: -90px;
+
+            width: 220px;
+            height: 220px;
+
+            border-radius: 50%;
+
+            border: 35px solid rgba(255, 255, 255, .04);
+        }
+
         .welcome-card::after {
             content: "";
 
             position: absolute;
 
-            right: -70px;
-            top: -90px;
+            right: 90px;
+            top: -100px;
 
-            width: 250px;
-            height: 250px;
+            width: 170px;
+            height: 170px;
 
             border-radius: 50%;
 
-            border: 45px solid rgba(255, 255, 255, .05);
+            background: rgba(255, 255, 255, .035);
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-label {
+            display: inline-flex;
+            align-items: center;
+
+            padding: 6px 10px;
+
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, .10);
+            color: #dbeaf8;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .5px;
+            text-transform: uppercase;
         }
 
         .welcome-card h2 {
-            position: relative;
-            z-index: 2;
+            margin-top: 12px;
 
             font-size: 25px;
             font-weight: 750;
         }
 
         .welcome-card p {
-            position: relative;
-            z-index: 2;
-
             max-width: 760px;
 
             margin-top: 9px;
@@ -394,7 +428,7 @@
         }
 
         .quick-card {
-            min-height: 165px;
+            min-height: 175px;
 
             padding: 22px;
 
@@ -416,6 +450,13 @@
             box-shadow: 0 8px 22px rgba(15, 40, 65, .07);
         }
 
+        .quick-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
         .quick-card-icon {
             width: 43px;
             height: 43px;
@@ -430,6 +471,35 @@
             justify-content: center;
 
             font-size: 19px;
+        }
+
+        .quick-card-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            background: #f1f8f4;
+            color: #2f7b50;
+
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .3px;
+            text-transform: uppercase;
+        }
+
+        .quick-card-status::before {
+            content: "";
+
+            width: 6px;
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #49a56d;
         }
 
         .quick-card h4 {
@@ -466,7 +536,7 @@
 
         .lower-grid {
             display: grid;
-            grid-template-columns: 1.4fr .9fr;
+            grid-template-columns: 1.35fr .9fr;
 
             gap: 18px;
 
@@ -506,78 +576,102 @@
         }
 
         /* =========================================================
-           FLOW
+           SYSTEM STATUS
         ========================================================== */
 
-        .flow-list {
+        .status-list {
             display: flex;
             flex-direction: column;
 
             margin-top: 5px;
         }
 
-        .flow-item {
-            position: relative;
-
+        .status-item {
             display: flex;
-            gap: 14px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
 
             padding: 15px 0;
         }
 
-        .flow-item:not(:last-child)::after {
-            content: "";
-
-            position: absolute;
-
-            left: 18px;
-            top: 48px;
-
-            width: 2px;
-            height: calc(100% - 25px);
-
-            background: #dce8f2;
+        .status-item + .status-item {
+            border-top: 1px solid #edf1f5;
         }
 
-        .flow-number {
-            position: relative;
-            z-index: 2;
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
 
+            min-width: 0;
+        }
+
+        .status-icon {
             width: 37px;
             height: 37px;
 
             flex-shrink: 0;
 
-            border-radius: 50%;
+            border-radius: 9px;
 
-            background: #eaf3fb;
+            background: #f4f8fb;
             color: #1779c9;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
+            font-size: 16px;
+        }
+
+        .status-info {
+            min-width: 0;
+        }
+
+        .status-info h4 {
+            color: #25415b;
+
             font-size: 13px;
+            font-weight: 750;
+        }
+
+        .status-info p {
+            margin-top: 4px;
+
+            color: #86919e;
+
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+
+            flex-shrink: 0;
+
+            padding: 5px 9px;
+
+            border-radius: 999px;
+
+            background: #f1f8f4;
+            color: #2f7b50;
+
+            font-size: 9px;
             font-weight: 800;
         }
 
-        .flow-content {
-            padding-top: 1px;
-        }
+        .status-badge::before {
+            content: "";
 
-        .flow-content h4 {
-            font-size: 13px;
-            font-weight: 750;
-            color: #25415b;
-        }
+            width: 6px;
+            height: 6px;
 
-        .flow-content p {
-            margin-top: 5px;
+            border-radius: 50%;
 
-            color: #7a8794;
-
-            font-size: 12px;
-            line-height: 1.6;
+            background: #49a56d;
         }
 
         /* =========================================================
@@ -599,6 +693,8 @@
             align-items: center;
             justify-content: space-between;
 
+            gap: 15px;
+
             padding: 9px 0;
         }
 
@@ -617,6 +713,7 @@
             font-weight: 700;
 
             text-align: right;
+            word-break: break-word;
         }
 
         .role-badge {
@@ -739,6 +836,14 @@
 
             .welcome-card h2 {
                 font-size: 21px;
+            }
+
+            .status-item {
+                align-items: flex-start;
+            }
+
+            .status-badge {
+                margin-top: 2px;
             }
         }
     </style>
@@ -907,7 +1012,7 @@
                     </div>
 
                     <div class="user-role">
-                        Administrator
+                        Admin
                     </div>
 
                 </div>
@@ -928,15 +1033,23 @@
             ================================================== --}}
             <section class="welcome-card">
 
-                <h2>
-                    Selamat Datang, {{ auth()->user()->name ?? 'Administrator' }}
-                </h2>
+                <div class="welcome-content">
 
-                <p>
-                    Selamat datang di panel administrasi MAGENTA.
-                    Gunakan menu Sistem untuk mengelola profil perusahaan,
-                    banner, dan konten website.
-                </p>
+                    <span class="welcome-label">
+                        Panel Admin
+                    </span>
+
+                    <h2>
+                        Selamat Datang, {{ auth()->user()->name ?? 'Administrator' }}
+                    </h2>
+
+                    <p>
+                        Kelola informasi website MAGENTA melalui panel administrasi.
+                        Gunakan menu yang tersedia untuk memperbarui profil perusahaan,
+                        banner, dan konten website.
+                    </p>
+
+                </div>
 
             </section>
 
@@ -951,7 +1064,7 @@
                 </h3>
 
                 <span>
-                    Administrasi Sistem
+                    Fitur yang dapat dikelola
                 </span>
 
             </div>
@@ -966,8 +1079,16 @@
                     class="quick-card"
                 >
 
-                    <div class="quick-card-icon">
-                        ▤
+                    <div class="quick-card-top">
+
+                        <div class="quick-card-icon">
+                            ▤
+                        </div>
+
+                        <span class="quick-card-status">
+                            Aktif
+                        </span>
+
                     </div>
 
                     <h4>
@@ -975,8 +1096,9 @@
                     </h4>
 
                     <p>
-                        Kelola informasi identitas dan informasi kontak
-                        perusahaan yang ditampilkan pada website.
+                        Kelola identitas, alamat, kontak, website,
+                        dan informasi perusahaan yang ditampilkan
+                        pada website MAGENTA.
                     </p>
 
                     <span class="quick-card-arrow">
@@ -992,8 +1114,16 @@
                     class="quick-card"
                 >
 
-                    <div class="quick-card-icon">
-                        ▣
+                    <div class="quick-card-top">
+
+                        <div class="quick-card-icon">
+                            ▣
+                        </div>
+
+                        <span class="quick-card-status">
+                            Aktif
+                        </span>
+
                     </div>
 
                     <h4>
@@ -1001,8 +1131,8 @@
                     </h4>
 
                     <p>
-                        Kelola banner utama yang ditampilkan pada
-                        halaman website MAGENTA.
+                        Kelola banner utama yang digunakan sebagai
+                        tampilan informasi utama pada halaman website.
                     </p>
 
                     <span class="quick-card-arrow">
@@ -1018,8 +1148,16 @@
                     class="quick-card"
                 >
 
-                    <div class="quick-card-icon">
-                        ⚙
+                    <div class="quick-card-top">
+
+                        <div class="quick-card-icon">
+                            ⚙
+                        </div>
+
+                        <span class="quick-card-status">
+                            Aktif
+                        </span>
+
                     </div>
 
                     <h4>
@@ -1027,8 +1165,8 @@
                     </h4>
 
                     <p>
-                        Perbarui informasi, pengumuman, persyaratan,
-                        dan alur magang pada website.
+                        Perbarui pengumuman, persyaratan,
+                        alur magang, dan informasi website MAGENTA.
                     </p>
 
                     <span class="quick-card-arrow">
@@ -1047,132 +1185,115 @@
 
 
                 {{-- =================================================
-                     ALUR WEBSITE
+                     STATUS SISTEM
                 ================================================== --}}
                 <section class="panel">
 
                     <div class="panel-title">
 
                         <h3>
-                            Alur Informasi MAGENTA
+                            Status Sistem
                         </h3>
 
                         <span>
-                            Alur website
+                            Kondisi fitur
                         </span>
 
                     </div>
 
 
-                    <div class="flow-list">
+                    <div class="status-list">
 
 
-                        <div class="flow-item">
+                        {{-- PROFIL --}}
+                        <div class="status-item">
 
-                            <div class="flow-number">
-                                1
+                            <div class="status-left">
+
+                                <div class="status-icon">
+                                    ▤
+                                </div>
+
+                                <div class="status-info">
+
+                                    <h4>
+                                        Profil Perusahaan
+                                    </h4>
+
+                                    <p>
+                                        Informasi identitas dan kontak perusahaan
+                                        tersedia untuk dikelola.
+                                    </p>
+
+                                </div>
+
                             </div>
 
-                            <div class="flow-content">
-
-                                <h4>
-                                    Informasi Magang
-                                </h4>
-
-                                <p>
-                                    Informasi mengenai program magang
-                                    ditampilkan pada website MAGENTA.
-                                </p>
-
-                            </div>
+                            <span class="status-badge">
+                                Tersedia
+                            </span>
 
                         </div>
 
 
-                        <div class="flow-item">
+                        {{-- BANNER --}}
+                        <div class="status-item">
 
-                            <div class="flow-number">
-                                2
+                            <div class="status-left">
+
+                                <div class="status-icon">
+                                    ▣
+                                </div>
+
+                                <div class="status-info">
+
+                                    <h4>
+                                        Banner Website
+                                    </h4>
+
+                                    <p>
+                                        Banner utama website dapat diperbarui
+                                        melalui panel administrasi.
+                                    </p>
+
+                                </div>
+
                             </div>
 
-                            <div class="flow-content">
-
-                                <h4>
-                                    Persyaratan
-                                </h4>
-
-                                <p>
-                                    Mahasiswa dapat melihat berbagai
-                                    persyaratan yang harus dipersiapkan.
-                                </p>
-
-                            </div>
+                            <span class="status-badge">
+                                Tersedia
+                            </span>
 
                         </div>
 
 
-                        <div class="flow-item">
+                        {{-- KONTEN --}}
+                        <div class="status-item">
 
-                            <div class="flow-number">
-                                3
-                            </div>
+                            <div class="status-left">
 
-                            <div class="flow-content">
+                                <div class="status-icon">
+                                    ⚙
+                                </div>
 
-                                <h4>
-                                    Alur Pendaftaran
-                                </h4>
+                                <div class="status-info">
 
-                                <p>
-                                    Tahapan pendaftaran dan informasi
-                                    proses magang dapat dilihat pada website.
-                                </p>
+                                    <h4>
+                                        Konten Website
+                                    </h4>
 
-                            </div>
+                                    <p>
+                                        Informasi website dapat diperbarui
+                                        tanpa mengubah struktur halaman.
+                                    </p>
 
-                        </div>
-
-
-                        <div class="flow-item">
-
-                            <div class="flow-number">
-                                4
-                            </div>
-
-                            <div class="flow-content">
-
-                                <h4>
-                                    Pendaftaran
-                                </h4>
-
-                                <p>
-                                    Mahasiswa melakukan pendaftaran melalui
-                                    Google Form yang disediakan.
-                                </p>
+                                </div>
 
                             </div>
 
-                        </div>
-
-
-                        <div class="flow-item">
-
-                            <div class="flow-number">
-                                5
-                            </div>
-
-                            <div class="flow-content">
-
-                                <h4>
-                                    Pelaksanaan Magang
-                                </h4>
-
-                                <p>
-                                    Mahasiswa menjalankan kegiatan magang
-                                    sesuai ketentuan yang berlaku.
-                                </p>
-
-                            </div>
+                            <span class="status-badge">
+                                Tersedia
+                            </span>
 
                         </div>
 
@@ -1237,7 +1358,7 @@
                             <span class="account-value">
 
                                 <span class="role-badge">
-                                    ADMINISTRATOR
+                                    ADMIN
                                 </span>
 
                             </span>
@@ -1254,7 +1375,7 @@
                         </strong>
 
                         <p>
-                            Admin dapat mengelola Profil Perusahaan,
+                            Akun Admin dapat mengelola Profil Perusahaan,
                             Banner, dan Konten Website.
                             Pengelolaan pengguna tetap menjadi hak
                             khusus Super Admin.

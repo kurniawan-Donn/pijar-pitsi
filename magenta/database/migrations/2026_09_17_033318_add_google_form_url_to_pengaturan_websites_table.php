@@ -1,0 +1,24 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::table('pengaturan_websites', function (Blueprint $table) {
+            $table->text('google_form_url')
+                ->nullable()
+                ->after('pendaftaran_judul');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('pengaturan_websites', function (Blueprint $table) {
+            $table->dropColumn('google_form_url');
+        });
+    }
+};
