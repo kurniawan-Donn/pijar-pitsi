@@ -12,6 +12,7 @@ use App\Http\Controllers\PengajuanMagangController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
+use App\Http\Controllers\SuperAdmin\PesertaMagangController;
 use App\Http\Controllers\SuperAdmin\UserController;
 
 
@@ -81,6 +82,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     |--------------------------------------------------------------------------
     | PENGAJUAN MAGANG
     |--------------------------------------------------------------------------
+    |
+    | Route lama tetap dipertahankan.
+    |
     */
 
     Route::get('/pengajuan', [PengajuanMagangController::class, 'index'])
@@ -110,9 +114,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 |--------------------------------------------------------------------------
 |
 | Admin dan Super Admin dapat mengakses:
+|
 | - Profil Perusahaan
 | - Kelola Banner
 | - Kelola Konten
+| - Data Peserta Magang
 |
 */
 
@@ -152,6 +158,31 @@ Route::middleware(['auth', 'admin.superadmin'])->group(function () {
 
     Route::put('/superadmin/pengaturan', [PengaturanWebsiteController::class, 'update'])
         ->name('superadmin.pengaturan.update');
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DATA PESERTA MAGANG
+    |--------------------------------------------------------------------------
+    |
+    | Admin dan Super Admin dapat:
+    |
+    | - Melihat peserta
+    | - Menambah peserta
+    | - Melihat detail peserta
+    | - Mengedit peserta
+    | - Menghapus peserta
+    |
+    */
+
+    Route::resource(
+        '/superadmin/peserta-magang',
+        PesertaMagangController::class
+    )
+        ->parameters([
+            'peserta-magang' => 'pesertaMagang',
+        ])
+        ->names('superadmin.peserta-magang');
 
 });
 
