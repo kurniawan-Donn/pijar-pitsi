@@ -16,7 +16,6 @@
         Detail Peserta Magang - MAGENTA
     </title>
 
-
     <style>
 
         * {
@@ -25,7 +24,6 @@
             box-sizing: border-box;
         }
 
-
         body {
             font-family: Arial, Helvetica, sans-serif;
             background: #f4f7fb;
@@ -33,13 +31,12 @@
             min-height: 100vh;
         }
 
-
         a {
             text-decoration: none;
         }
 
-
-        button {
+        button,
+        input {
             font-family: inherit;
         }
 
@@ -49,9 +46,7 @@
         ====================================================== */
 
         .sidebar {
-
             position: fixed;
-
             top: 0;
             left: 0;
             bottom: 0;
@@ -59,7 +54,6 @@
             width: 275px;
 
             background: #12345b;
-
             color: white;
 
             padding: 24px 18px;
@@ -67,16 +61,11 @@
             overflow-y: auto;
 
             z-index: 1000;
-
         }
 
-
         .main-wrapper {
-
             margin-left: 275px;
-
             min-height: 100vh;
-
         }
 
 
@@ -85,70 +74,51 @@
         ====================================================== */
 
         .brand {
-
             display: flex;
-
             align-items: center;
 
             gap: 12px;
 
-            padding:
-                4px 8px 28px;
+            padding: 4px 8px 28px;
 
             border-bottom:
                 1px solid rgba(255,255,255,0.12);
 
             margin-bottom: 25px;
-
         }
 
-
         .brand-mark {
-
             width: 44px;
             height: 44px;
 
             background: white;
-
             color: #12345b;
 
             border-radius: 10px;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
             font-size: 20px;
-
             font-weight: 800;
 
             flex-shrink: 0;
-
         }
-
 
         .brand-name {
-
             font-size: 18px;
-
             font-weight: 800;
-
             line-height: 1.2;
-
         }
 
-
         .brand-subtitle {
-
             margin-top: 3px;
 
             font-size: 11px;
 
             color:
                 rgba(255,255,255,0.65);
-
         }
 
 
@@ -157,14 +127,10 @@
         ====================================================== */
 
         .menu-section {
-
             margin-bottom: 25px;
-
         }
 
-
         .menu-title {
-
             color:
                 rgba(255,255,255,0.45);
 
@@ -178,23 +144,15 @@
                 0 10px 9px;
 
             text-transform: uppercase;
-
         }
-
 
         .menu {
-
             display: grid;
-
             gap: 5px;
-
         }
 
-
         .menu-link {
-
             display: flex;
-
             align-items: center;
 
             gap: 11px;
@@ -212,22 +170,16 @@
             font-weight: 600;
 
             transition: 0.2s ease;
-
         }
 
-
         .menu-link:hover {
-
             background:
                 rgba(255,255,255,0.08);
 
             color: white;
-
         }
 
-
         .menu-link.active {
-
             background:
                 rgba(255,255,255,0.14);
 
@@ -235,12 +187,9 @@
 
             box-shadow:
                 inset 3px 0 0 #f47b20;
-
         }
 
-
         .menu-icon {
-
             width: 20px;
 
             text-align: center;
@@ -248,7 +197,6 @@
             font-size: 15px;
 
             flex-shrink: 0;
-
         }
 
 
@@ -257,23 +205,18 @@
         ====================================================== */
 
         .sidebar-bottom {
-
             margin-top: 35px;
 
             padding-top: 20px;
 
             border-top:
                 1px solid rgba(255,255,255,0.12);
-
         }
 
-
         .logout-button {
-
             width: 100%;
 
             display: flex;
-
             align-items: center;
 
             gap: 11px;
@@ -297,17 +240,13 @@
             font-weight: 600;
 
             text-align: left;
-
         }
 
-
         .logout-button:hover {
-
             background:
                 rgba(255,255,255,0.08);
 
             color: white;
-
         }
 
 
@@ -316,7 +255,6 @@
         ====================================================== */
 
         .topbar {
-
             min-height: 78px;
 
             background: white;
@@ -332,45 +270,33 @@
 
             padding:
                 16px 32px;
-
         }
 
-
         .page-title {
-
             font-size: 20px;
 
             font-weight: 800;
 
             color: #17313d;
-
         }
 
-
         .page-subtitle {
-
             margin-top: 4px;
 
             color: #7b8b96;
 
             font-size: 12px;
-
         }
 
-
         .user-info {
-
             display: flex;
 
             align-items: center;
 
             gap: 12px;
-
         }
 
-
         .user-avatar {
-
             width: 40px;
             height: 40px;
 
@@ -389,29 +315,22 @@
             font-weight: 800;
 
             font-size: 14px;
-
         }
 
-
         .user-name {
-
             font-size: 13px;
 
             font-weight: 700;
 
             color: #263238;
-
         }
 
-
         .user-role {
-
             margin-top: 3px;
 
             font-size: 11px;
 
             color: #7b8b96;
-
         }
 
 
@@ -420,14 +339,10 @@
         ====================================================== */
 
         .content {
-
             padding: 32px;
-
         }
 
-
         .content-header {
-
             display: flex;
 
             align-items: flex-start;
@@ -437,29 +352,22 @@
             gap: 20px;
 
             margin-bottom: 25px;
-
         }
 
-
         .heading {
-
             font-size: 26px;
 
             color: #17313d;
 
             font-weight: 800;
-
         }
 
-
         .heading-description {
-
             color: #7b8b96;
 
             font-size: 13px;
 
             margin-top: 7px;
-
         }
 
 
@@ -468,7 +376,6 @@
         ====================================================== */
 
         .btn {
-
             display: inline-flex;
 
             align-items: center;
@@ -493,81 +400,53 @@
             cursor: pointer;
 
             transition: 0.2s ease;
-
         }
-
 
         .btn-primary {
-
             background: #0878a8;
-
             color: white;
-
         }
-
 
         .btn-primary:hover {
-
             background: #075d83;
-
             transform: translateY(-1px);
-
         }
 
-
         .btn-secondary {
-
             background: white;
 
             color: #52646e;
 
             border:
                 1px solid #dce5ea;
-
         }
-
 
         .btn-secondary:hover {
-
             background: #f7fafc;
-
         }
-
 
         .btn-orange {
-
             background: #f47b20;
-
             color: white;
-
         }
 
-
         .btn-orange:hover {
-
             background: #d96512;
 
             transform: translateY(-1px);
-
         }
 
-
         .btn-danger {
-
             background: #fff0f0;
 
             color: #c62828;
 
             border:
                 1px solid #ffd1d1;
-
         }
 
-
         .btn-danger:hover {
-
             background: #ffe1e1;
-
         }
 
 
@@ -576,7 +455,6 @@
         ====================================================== */
 
         .dashboard-grid {
-
             display: grid;
 
             grid-template-columns:
@@ -585,7 +463,6 @@
             gap: 20px;
 
             margin-bottom: 20px;
-
         }
 
 
@@ -594,7 +471,6 @@
         ====================================================== */
 
         .card {
-
             background: white;
 
             border:
@@ -606,48 +482,35 @@
                 0 8px 28px rgba(31, 77, 102, 0.06);
 
             overflow: hidden;
-
         }
 
-
         .card-header {
-
             padding:
                 21px 23px;
 
             border-bottom:
                 1px solid #edf1f4;
-
         }
 
-
         .card-title {
-
             font-size: 15px;
 
             font-weight: 800;
 
             color: #263238;
-
         }
 
-
         .card-description {
-
             margin-top: 4px;
 
             color: #8a99a3;
 
             font-size: 11px;
-
         }
 
-
         .card-body {
-
             padding:
                 23px;
-
         }
 
 
@@ -656,7 +519,6 @@
         ====================================================== */
 
         .profile-top {
-
             display: flex;
 
             align-items: center;
@@ -664,12 +526,9 @@
             gap: 15px;
 
             margin-bottom: 24px;
-
         }
 
-
         .profile-avatar {
-
             width: 62px;
             height: 62px;
 
@@ -695,29 +554,22 @@
             font-weight: 800;
 
             flex-shrink: 0;
-
         }
 
-
         .profile-name {
-
             font-size: 21px;
 
             font-weight: 800;
 
             color: #17313d;
-
         }
 
-
         .profile-nim {
-
             margin-top: 4px;
 
             font-size: 12px;
 
             color: #7b8b96;
-
         }
 
 
@@ -726,7 +578,6 @@
         ====================================================== */
 
         .info-grid {
-
             display: grid;
 
             grid-template-columns:
@@ -734,19 +585,13 @@
 
             gap:
                 17px 25px;
-
         }
-
 
         .info-item {
-
             min-width: 0;
-
         }
 
-
         .info-label {
-
             color: #8a99a3;
 
             font-size: 10px;
@@ -758,12 +603,9 @@
             letter-spacing: 0.7px;
 
             margin-bottom: 5px;
-
         }
 
-
         .info-value {
-
             color: #34454f;
 
             font-size: 13px;
@@ -773,14 +615,10 @@
             line-height: 1.5;
 
             word-break: break-word;
-
         }
 
-
         .info-value.normal {
-
             font-weight: 500;
-
         }
 
 
@@ -789,7 +627,6 @@
         ====================================================== */
 
         .status-badge {
-
             display: inline-flex;
 
             align-items: center;
@@ -806,34 +643,26 @@
             font-weight: 800;
 
             text-transform: uppercase;
-
         }
 
-
         .status-aktif {
-
             background: #eaf8f0;
 
             color: #16834b;
-
         }
 
-
         .status-selesai {
-
             background: #eef1f4;
 
             color: #667781;
-
         }
 
 
         /* =====================================================
-           SHEETS BOX
+           GOOGLE SHEETS
         ====================================================== */
 
         .sheets-card {
-
             background:
                 linear-gradient(
                     135deg,
@@ -847,12 +676,9 @@
             border-radius: 12px;
 
             padding: 20px;
-
         }
 
-
         .sheets-icon {
-
             width: 48px;
             height: 48px;
 
@@ -871,12 +697,9 @@
             font-size: 20px;
 
             margin-bottom: 13px;
-
         }
 
-
         .sheets-title {
-
             font-size: 15px;
 
             font-weight: 800;
@@ -884,12 +707,9 @@
             color: #263238;
 
             margin-bottom: 7px;
-
         }
 
-
         .sheets-description {
-
             color: #71818b;
 
             font-size: 11px;
@@ -897,12 +717,9 @@
             line-height: 1.7;
 
             margin-bottom: 16px;
-
         }
 
-
         .sheets-url {
-
             display: block;
 
             background: white;
@@ -924,19 +741,13 @@
             word-break: break-all;
 
             margin-bottom: 12px;
-
         }
-
 
         .sheets-url:hover {
-
             border-color: #b9d8e4;
-
         }
 
-
         .sheets-missing {
-
             padding:
                 13px;
 
@@ -952,7 +763,6 @@
             font-size: 11px;
 
             line-height: 1.6;
-
         }
 
 
@@ -961,16 +771,12 @@
         ====================================================== */
 
         .action-list {
-
             display: grid;
 
             gap: 10px;
-
         }
 
-
         .action-item {
-
             display: flex;
 
             align-items: center;
@@ -991,20 +797,16 @@
 
             font-weight: 700;
 
+            transition: 0.2s ease;
         }
 
-
         .action-item:hover {
-
             background: #f8fbfd;
 
             border-color: #cfe0e8;
-
         }
 
-
         .action-icon {
-
             width: 34px;
             height: 34px;
 
@@ -1021,34 +823,90 @@
             justify-content: center;
 
             flex-shrink: 0;
-
         }
 
 
         /* =====================================================
-           ABSENSI PREVIEW
+           REKAP ABSENSI
         ====================================================== */
 
-        .absensi-table-wrapper {
+        .attendance-summary {
+            display: grid;
 
-            overflow-x: auto;
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
 
+            gap: 14px;
+
+            margin-bottom: 20px;
+        }
+
+        .summary-card {
+            background: white;
+
+            border:
+                1px solid #e2eaf0;
+
+            border-radius: 12px;
+
+            padding: 18px;
+
+            box-shadow:
+                0 5px 18px rgba(31, 77, 102, 0.04);
+        }
+
+        .summary-label {
+            color: #7b8b96;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.6px;
+        }
+
+        .summary-value {
+            margin-top: 6px;
+
+            color: #17313d;
+
+            font-size: 28px;
+
+            font-weight: 800;
+
+            line-height: 1;
+        }
+
+        .summary-description {
+            margin-top: 7px;
+
+            color: #8a99a3;
+
+            font-size: 10px;
+
+            line-height: 1.5;
         }
 
 
-        .absensi-table {
+        /* =====================================================
+           ABSENSI TABLE
+        ====================================================== */
 
+        .absensi-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .absensi-table {
             width: 100%;
 
             border-collapse: collapse;
 
-            min-width: 650px;
-
+            min-width: 1280px;
         }
 
-
         .absensi-table th {
-
             text-align: left;
 
             background: #f8fafc;
@@ -1068,12 +926,9 @@
                 1px solid #e7edf1;
 
             white-space: nowrap;
-
         }
 
-
         .absensi-table td {
-
             padding:
                 13px 14px;
 
@@ -1084,74 +939,134 @@
             border-bottom:
                 1px solid #edf2f5;
 
-            white-space: nowrap;
-
+            vertical-align: top;
         }
-
 
         .absensi-table tr:last-child td {
-
             border-bottom: none;
-
         }
 
+        .attendance-input {
+            width: 92px;
 
-        .absensi-status {
-
-            display: inline-flex;
+            min-height: 34px;
 
             padding:
-                5px 8px;
+                0 9px;
 
-            border-radius: 15px;
+            border:
+                1px solid #d7e2e8;
 
-            font-size: 9px;
+            border-radius: 7px;
+
+            background: white;
+
+            color: #34454f;
+
+            font-size: 11px;
+
+            outline: none;
+        }
+
+        .attendance-input:focus {
+            border-color: #0878a8;
+
+            box-shadow:
+                0 0 0 3px rgba(8,120,168,0.08);
+        }
+
+        .attendance-save {
+            min-height: 34px;
+
+            padding:
+                0 11px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            background: #f47b20;
+
+            color: white;
+
+            font-size: 10px;
 
             font-weight: 800;
 
-            text-transform: uppercase;
+            cursor: pointer;
 
+            white-space: nowrap;
         }
 
+        .attendance-save:hover {
+            background: #d96512;
+        }
 
-        .absensi-hadir {
+        .attendance-edit-form {
+            margin: 0;
+        }
+
+        .sheet-note {
+            padding:
+                14px 16px;
+
+            margin-bottom: 16px;
+
+            border-radius: 9px;
+
+            background: #f7fafc;
+
+            border:
+                1px solid #e3ebf0;
+
+            color: #667781;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+        .sheet-alert-success {
+            padding:
+                12px 15px;
+
+            margin-bottom: 15px;
+
+            border-radius: 8px;
 
             background: #eaf8f0;
 
+            border:
+                1px solid #ccebd9;
+
             color: #16834b;
 
+            font-size: 11px;
+
+            font-weight: 700;
         }
 
+        .sheet-alert-error {
+            padding:
+                12px 15px;
 
-        .absensi-izin {
+            margin-bottom: 15px;
 
-            background: #fff5e9;
-
-            color: #b86618;
-
-        }
-
-
-        .absensi-sakit {
-
-            background: #eef4ff;
-
-            color: #3867ad;
-
-        }
-
-
-        .absensi-alpa {
+            border-radius: 8px;
 
             background: #fff0f0;
 
+            border:
+                1px solid #ffd1d1;
+
             color: #c62828;
 
+            font-size: 11px;
+
+            font-weight: 700;
         }
 
-
         .empty-absensi {
-
             text-align: center;
 
             padding:
@@ -1161,6 +1076,7 @@
 
             font-size: 12px;
 
+            line-height: 1.7;
         }
 
 
@@ -1169,7 +1085,6 @@
         ====================================================== */
 
         .bottom-actions {
-
             display: flex;
 
             align-items: center;
@@ -1181,12 +1096,9 @@
             flex-wrap: wrap;
 
             margin-top: 20px;
-
         }
 
-
         .bottom-left {
-
             display: flex;
 
             align-items: center;
@@ -1194,7 +1106,6 @@
             gap: 9px;
 
             flex-wrap: wrap;
-
         }
 
 
@@ -1202,127 +1113,90 @@
            RESPONSIVE
         ====================================================== */
 
-        @media (max-width: 1000px) {
+        @media (max-width: 1100px) {
 
             .sidebar {
-
                 width: 230px;
-
             }
-
 
             .main-wrapper {
-
                 margin-left: 230px;
-
             }
-
 
             .content {
-
                 padding: 22px;
-
             }
-
 
             .topbar {
-
                 padding:
                     16px 22px;
-
             }
-
 
             .dashboard-grid {
-
                 grid-template-columns: 1fr;
-
             }
 
+            .attendance-summary {
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
         }
-
 
         @media (max-width: 700px) {
 
             .sidebar {
-
                 position: static;
 
                 width: 100%;
 
                 min-height: auto;
-
             }
-
 
             .main-wrapper {
-
                 margin-left: 0;
-
             }
 
-
             .topbar {
-
                 min-height: 78px;
 
                 padding:
                     15px 20px;
-
             }
-
 
             .content {
-
                 padding: 18px;
-
             }
-
 
             .content-header {
-
                 flex-direction: column;
-
             }
-
 
             .user-info {
-
                 display: none;
-
             }
-
 
             .info-grid {
-
                 grid-template-columns: 1fr;
-
             }
-
 
             .card-body {
-
                 padding: 20px;
-
             }
-
 
             .card-header {
-
                 padding:
                     20px;
-
             }
 
-
             .bottom-actions {
-
                 align-items: flex-start;
 
                 flex-direction: column;
-
             }
 
+            .attendance-summary {
+                grid-template-columns: 1fr;
+            }
         }
 
     </style>
@@ -1332,30 +1206,43 @@
 
 <body>
 
-
     @php
 
         $role = auth()->user()->role;
 
-        $isSuperAdmin = $role === 'super_admin';
+        $isSuperAdmin =
+            $role === 'super_admin';
 
-        $dashboardRoute = $isSuperAdmin
-            ? route('superadmin.dashboard')
-            : route('admin.dashboard');
+        $dashboardRoute =
+            $isSuperAdmin
+                ? route('superadmin.dashboard')
+                : route('admin.dashboard');
 
-        $roleLabel = $isSuperAdmin
-            ? 'Super Admin'
-            : 'Admin';
+        $roleLabel =
+            $isSuperAdmin
+                ? 'Super Admin'
+                : 'Admin';
 
-        $userName = auth()->user()->name;
+        $userName =
+            auth()->user()->name;
 
-        $userInitial = strtoupper(
-            substr($userName, 0, 1)
-        );
+        $userInitial =
+            strtoupper(
+                substr(
+                    $userName,
+                    0,
+                    1
+                )
+            );
 
-        $pesertaInitial = strtoupper(
-            substr($pesertaMagang->nama, 0, 1)
-        );
+        $pesertaInitial =
+            strtoupper(
+                substr(
+                    $pesertaMagang->nama,
+                    0,
+                    1
+                )
+            );
 
     @endphp
 
@@ -1365,7 +1252,6 @@
     ====================================================== --}}
 
     <aside class="sidebar">
-
 
         <div class="brand">
 
@@ -1425,7 +1311,6 @@
             </div>
 
             <nav class="menu">
-
 
                 <a
                     href="{{ route('superadmin.perusahaan.index') }}"
@@ -1500,7 +1385,6 @@
 
                 @endif
 
-
             </nav>
 
         </div>
@@ -1534,7 +1418,6 @@
 
         </div>
 
-
     </aside>
 
 
@@ -1548,7 +1431,6 @@
         {{-- TOPBAR --}}
 
         <header class="topbar">
-
 
             <div>
 
@@ -1582,7 +1464,6 @@
                 </div>
 
             </div>
-
 
         </header>
 
@@ -1619,17 +1500,16 @@
             </div>
 
 
-            {{-- MAIN GRID --}}
+            {{-- =================================================
+                 INFORMASI PESERTA + GOOGLE SHEETS
+            ================================================== --}}
 
             <div class="dashboard-grid">
 
 
-                {{-- =================================================
-                     INFORMASI PESERTA
-                ================================================== --}}
+                {{-- INFORMASI PESERTA --}}
 
                 <section class="card">
-
 
                     <div class="card-header">
 
@@ -1646,14 +1526,11 @@
 
                     <div class="card-body">
 
-
                         <div class="profile-top">
-
 
                             <div class="profile-avatar">
                                 {{ $pesertaInitial }}
                             </div>
-
 
                             <div>
 
@@ -1667,7 +1544,6 @@
                                 </div>
 
                             </div>
-
 
                         </div>
 
@@ -1831,19 +1707,14 @@
 
                         </div>
 
-
                     </div>
-
 
                 </section>
 
 
-                {{-- =================================================
-                     GOOGLE SHEETS
-                ================================================== --}}
+                {{-- GOOGLE SHEETS --}}
 
                 <section class="card">
-
 
                     <div class="card-header">
 
@@ -1860,19 +1731,15 @@
 
                     <div class="card-body">
 
-
                         <div class="sheets-card">
-
 
                             <div class="sheets-icon">
                                 ▣
                             </div>
 
-
                             <div class="sheets-title">
                                 Google Sheets Absensi
                             </div>
-
 
                             <div class="sheets-description">
                                 Spreadsheet ini menjadi tempat pencatatan absensi dan Daily Activity peserta.
@@ -1889,7 +1756,6 @@
                                 >
                                     {{ $pesertaMagang->google_sheet_url }}
                                 </a>
-
 
                                 <a
                                     href="{{ $pesertaMagang->google_sheet_url }}"
@@ -1909,12 +1775,9 @@
 
                             @endif
 
-
                         </div>
 
-
                     </div>
-
 
                 </section>
 
@@ -1923,11 +1786,10 @@
 
 
             {{-- =================================================
-                 AKSI
+                 AKSI PESERTA
             ================================================== --}}
 
             <section class="card">
-
 
                 <div class="card-header">
 
@@ -1944,11 +1806,10 @@
 
                 <div class="card-body">
 
-
                     <div class="action-list">
 
 
-                        {{-- EDIT --}}
+                        {{-- EDIT DATA PESERTA --}}
 
                         <a
                             href="{{ route(
@@ -1995,15 +1856,13 @@
 
                     </div>
 
-
                 </div>
-
 
             </section>
 
 
             {{-- =================================================
-                 RIWAYAT ABSENSI
+                 RIWAYAT ABSENSI & DAILY ACTIVITY
             ================================================== --}}
 
             <section
@@ -2011,150 +1870,540 @@
                 style="margin-top:20px;"
             >
 
-
                 <div class="card-header">
 
                     <div class="card-title">
-                        Riwayat Absensi
+                        Riwayat Absensi & Daily Activity
                     </div>
 
                     <div class="card-description">
-                        Data absensi yang tersimpan pada database MAGENTA.
+                        Data dibaca langsung dari Google Sheets peserta melalui koneksi MAGENTA.
                     </div>
 
                 </div>
 
 
-                @if($pesertaMagang->absensis->count() > 0)
+                <div class="card-body">
 
 
-                    <div class="absensi-table-wrapper">
+                    {{-- SUCCESS --}}
 
-                        <table class="absensi-table">
+                    @if(session('success'))
 
-                            <thead>
+                        <div class="sheet-alert-success">
+                            {{ session('success') }}
+                        </div>
 
-                                <tr>
-
-                                    <th>
-                                        Tanggal
-                                    </th>
-
-                                    <th>
-                                        Jam Masuk
-                                    </th>
-
-                                    <th>
-                                        Jam Pulang
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Keterangan
-                                    </th>
-
-                                </tr>
-
-                            </thead>
+                    @endif
 
 
-                            <tbody>
+                    {{-- ERROR --}}
 
-                                @foreach($pesertaMagang->absensis as $absensi)
+                    @if(session('error'))
+
+                        <div class="sheet-alert-error">
+                            {{ session('error') }}
+                        </div>
+
+                    @endif
+
+
+                    {{-- GOOGLE SHEETS ERROR --}}
+
+                    @if($sheetError)
+
+                        <div class="sheet-alert-error">
+                            {{ $sheetError }}
+                        </div>
+
+                    @endif
+
+
+                    {{-- NOTE --}}
+
+                    <div class="sheet-note">
+
+                        Periode aktif:
+
+                        <strong>
+                            {{ $currentMonthTitle }}
+                        </strong>.
+
+                        Kolom
+
+                        <strong>
+                            Activity, Output, Lokasi, dan Action
+                        </strong>
+
+                        tetap diisi oleh mahasiswa melalui Google Sheets.
+
+                        Admin dapat mengubah empat waktu absensi melalui MAGENTA.
+
+                    </div>
+
+
+                    @if(count($sheetRows) > 0)
+
+
+                        {{-- =================================================
+                             REKAP ABSENSI
+                        ================================================== --}}
+
+                        @php
+
+                            $totalTercatat =
+                                count($sheetRows);
+
+                            $totalHadir = 0;
+
+                            $totalIzinSakit = 0;
+
+                            foreach ($sheetRows as $rekapRow) {
+
+                                $activity =
+                                    strtolower(
+                                        trim(
+                                            (string)
+                                            ($rekapRow['activity'] ?? '')
+                                        )
+                                    );
+
+                                $pagiMasuk =
+                                    trim(
+                                        (string)
+                                        ($rekapRow['pagi_masuk'] ?? '')
+                                    );
+
+                                $pagiKeluar =
+                                    trim(
+                                        (string)
+                                        ($rekapRow['pagi_keluar'] ?? '')
+                                    );
+
+                                $siangMasuk =
+                                    trim(
+                                        (string)
+                                        ($rekapRow['siang_masuk'] ?? '')
+                                    );
+
+                                $siangKeluar =
+                                    trim(
+                                        (string)
+                                        ($rekapRow['siang_keluar'] ?? '')
+                                    );
+
+                                $adaAbsensi =
+                                    $pagiMasuk !== '' ||
+                                    $pagiKeluar !== '' ||
+                                    $siangMasuk !== '' ||
+                                    $siangKeluar !== '';
+
+                                $isIzinSakit =
+                                    str_contains(
+                                        $activity,
+                                        'izin'
+                                    ) ||
+                                    str_contains(
+                                        $activity,
+                                        'ijin'
+                                    ) ||
+                                    str_contains(
+                                        $activity,
+                                        'sakit'
+                                    );
+
+                                if ($isIzinSakit) {
+
+                                    $totalIzinSakit++;
+
+                                } elseif ($adaAbsensi) {
+
+                                    $totalHadir++;
+
+                                }
+
+                            }
+
+                        @endphp
+
+
+                        <div class="attendance-summary">
+
+
+                            {{-- HARI TERCATAT --}}
+
+                            <div class="summary-card">
+
+                                <div class="summary-label">
+                                    Hari Tercatat
+                                </div>
+
+                                <div class="summary-value">
+                                    {{ $totalTercatat }}
+                                </div>
+
+                                <div class="summary-description">
+                                    Data yang tersedia pada Google Sheets.
+                                </div>
+
+                            </div>
+
+
+                            {{-- HADIR --}}
+
+                            <div class="summary-card">
+
+                                <div class="summary-label">
+                                    Hadir
+                                </div>
+
+                                <div class="summary-value">
+                                    {{ $totalHadir }}
+                                </div>
+
+                                <div class="summary-description">
+                                    Memiliki data waktu absensi.
+                                </div>
+
+                            </div>
+
+
+                            {{-- IZIN / SAKIT --}}
+
+                            <div class="summary-card">
+
+                                <div class="summary-label">
+                                    Izin / Sakit
+                                </div>
+
+                                <div class="summary-value">
+                                    {{ $totalIzinSakit }}
+                                </div>
+
+                                <div class="summary-description">
+                                    Berdasarkan keterangan Activity.
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+                        {{-- =================================================
+                             NORMALISASI JAM
+                        ================================================== --}}
+
+                        @php
+
+                            $normalizeTime = function ($value) {
+
+                                $value =
+                                    trim(
+                                        (string) $value
+                                    );
+
+                                if ($value === '') {
+                                    return '';
+                                }
+
+                                $value =
+                                    str_replace(
+                                        '.',
+                                        ':',
+                                        $value
+                                    );
+
+                                if (
+                                    preg_match(
+                                        '/^(\d{1,2}):(\d{2})$/',
+                                        $value,
+                                        $matches
+                                    )
+                                ) {
+
+                                    $hour =
+                                        (int) $matches[1];
+
+                                    $minute =
+                                        (int) $matches[2];
+
+                                    if (
+                                        $hour >= 0 &&
+                                        $hour <= 23 &&
+                                        $minute >= 0 &&
+                                        $minute <= 59
+                                    ) {
+
+                                        return sprintf(
+                                            '%02d:%02d',
+                                            $hour,
+                                            $minute
+                                        );
+
+                                    }
+
+                                }
+
+                                return '';
+
+                            };
+
+                        @endphp
+
+
+                        {{-- =================================================
+                             TABEL ABSENSI
+                        ================================================== --}}
+
+                        <div class="absensi-table-wrapper">
+
+                            <table class="absensi-table">
+
+                                <thead>
 
                                     <tr>
 
-                                        <td>
+                                        <th>
+                                            No
+                                        </th>
 
-                                            {{ $absensi->tanggal
-                                                ? $absensi->tanggal->format('d F Y')
-                                                : '-'
-                                            }}
+                                        <th>
+                                            Tanggal
+                                        </th>
 
-                                        </td>
+                                        <th>
+                                            Pagi Masuk
+                                        </th>
 
+                                        <th>
+                                            Pagi Keluar
+                                        </th>
 
-                                        <td>
+                                        <th>
+                                            Siang Masuk
+                                        </th>
 
-                                            {{ $absensi->jam_masuk ?: '-' }}
+                                        <th>
+                                            Siang Keluar
+                                        </th>
 
-                                        </td>
+                                        <th>
+                                            Activity
+                                        </th>
 
+                                        <th>
+                                            Output
+                                        </th>
 
-                                        <td>
+                                        <th>
+                                            Lokasi
+                                        </th>
 
-                                            {{ $absensi->jam_pulang ?: '-' }}
+                                        <th>
+                                            Action
+                                        </th>
 
-                                        </td>
-
-
-                                        <td>
-
-                                            @if($absensi->status === 'hadir')
-
-                                                <span class="absensi-status absensi-hadir">
-                                                    Hadir
-                                                </span>
-
-                                            @elseif($absensi->status === 'izin')
-
-                                                <span class="absensi-status absensi-izin">
-                                                    Izin
-                                                </span>
-
-                                            @elseif($absensi->status === 'sakit')
-
-                                                <span class="absensi-status absensi-sakit">
-                                                    Sakit
-                                                </span>
-
-                                            @else
-
-                                                <span class="absensi-status absensi-alpa">
-                                                    Alpa
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-
-
-                                        <td>
-
-                                            {{ $absensi->keterangan ?: '-' }}
-
-                                        </td>
+                                        <th>
+                                            Simpan
+                                        </th>
 
                                     </tr>
 
-                                @endforeach
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
+                                </thead>
 
 
-                @else
+                                <tbody>
 
 
-                    <div class="empty-absensi">
+                                    @foreach($sheetRows as $row)
 
-                        Belum ada data absensi yang tersimpan di database MAGENTA.
+                                        @php
 
-                        <br>
+                                            $formId =
+                                                'attendance-form-'
+                                                . $row['sheet_row'];
 
-                        Data absensi peserta saat ini dapat dibuka melalui Google Sheets.
-
-                    </div>
+                                        @endphp
 
 
-                @endif
+                                        <tr>
 
+
+                                            {{-- NO --}}
+
+                                            <td>
+                                                {{ $row['no'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- TANGGAL --}}
+
+                                            <td>
+                                                {{ $row['tanggal'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- PAGI MASUK --}}
+
+                                            <td>
+
+                                                <input
+                                                    type="time"
+                                                    name="pagi_masuk"
+                                                    form="{{ $formId }}"
+                                                    class="attendance-input"
+                                                    value="{{ $normalizeTime($row['pagi_masuk']) }}"
+                                                >
+
+                                            </td>
+
+
+                                            {{-- PAGI KELUAR --}}
+
+                                            <td>
+
+                                                <input
+                                                    type="time"
+                                                    name="pagi_keluar"
+                                                    form="{{ $formId }}"
+                                                    class="attendance-input"
+                                                    value="{{ $normalizeTime($row['pagi_keluar']) }}"
+                                                >
+
+                                            </td>
+
+
+                                            {{-- SIANG MASUK --}}
+
+                                            <td>
+
+                                                <input
+                                                    type="time"
+                                                    name="siang_masuk"
+                                                    form="{{ $formId }}"
+                                                    class="attendance-input"
+                                                    value="{{ $normalizeTime($row['siang_masuk']) }}"
+                                                >
+
+                                            </td>
+
+
+                                            {{-- SIANG KELUAR --}}
+
+                                            <td>
+
+                                                <input
+                                                    type="time"
+                                                    name="siang_keluar"
+                                                    form="{{ $formId }}"
+                                                    class="attendance-input"
+                                                    value="{{ $normalizeTime($row['siang_keluar']) }}"
+                                                >
+
+                                            </td>
+
+
+                                            {{-- ACTIVITY --}}
+
+                                            <td>
+                                                {{ $row['activity'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- OUTPUT --}}
+
+                                            <td>
+                                                {{ $row['output'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- LOKASI --}}
+
+                                            <td>
+                                                {{ $row['lokasi'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- ACTION --}}
+
+                                            <td>
+                                                {{ $row['action'] ?: '-' }}
+                                            </td>
+
+
+                                            {{-- SIMPAN --}}
+
+                                            <td>
+
+                                                <form
+                                                    id="{{ $formId }}"
+                                                    action="{{ route(
+                                                        'superadmin.peserta-magang.absensi.update',
+                                                        $pesertaMagang
+                                                    ) }}"
+                                                    method="POST"
+                                                    class="attendance-edit-form"
+                                                >
+
+                                                    @csrf
+
+                                                    @method('PUT')
+
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="sheet_row"
+                                                        value="{{ $row['sheet_row'] }}"
+                                                    >
+
+
+                                                    <button
+                                                        type="submit"
+                                                        class="attendance-save"
+                                                    >
+                                                        Simpan
+                                                    </button>
+
+                                                </form>
+
+                                            </td>
+
+
+                                        </tr>
+
+                                    @endforeach
+
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                    @else
+
+
+                        <div class="empty-absensi">
+
+                            Belum ada data absensi dari Google Sheets untuk periode
+
+                            <strong>
+                                {{ $currentMonthTitle }}
+                            </strong>.
+
+                            <br>
+
+                            Pastikan tab bulan tersebut tersedia di Google Sheets peserta.
+
+                        </div>
+
+
+                    @endif
+
+
+                </div>
 
             </section>
 
@@ -2168,6 +2417,9 @@
 
                 <div class="bottom-left">
 
+
+                    {{-- EDIT PESERTA --}}
+
                     <a
                         href="{{ route(
                             'superadmin.peserta-magang.edit',
@@ -2178,6 +2430,8 @@
                         ✎ Edit Peserta
                     </a>
 
+
+                    {{-- GOOGLE SHEETS --}}
 
                     @if($pesertaMagang->google_sheet_url)
 
@@ -2192,8 +2446,11 @@
 
                     @endif
 
+
                 </div>
 
+
+                {{-- HAPUS PESERTA --}}
 
                 <form
                     action="{{ route(
@@ -2202,7 +2459,7 @@
                     ) }}"
                     method="POST"
                     onsubmit="return confirm(
-                        'Yakin ingin menghapus peserta ini? Data absensinya juga akan ikut terhapus.'
+                        'Yakin ingin menghapus peserta ini? Data absensi lokal peserta juga akan ikut terhapus.'
                     );"
                 >
 

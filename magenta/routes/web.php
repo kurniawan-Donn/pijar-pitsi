@@ -87,23 +87,35 @@ Route::middleware(['auth', 'admin'])->group(function () {
     |
     */
 
-    Route::get('/pengajuan', [PengajuanMagangController::class, 'index'])
-        ->name('admin.pengajuan.index');
+    Route::get(
+        '/pengajuan',
+        [PengajuanMagangController::class, 'index']
+    )->name('admin.pengajuan.index');
 
-    Route::get('/pengajuan/create', [PengajuanMagangController::class, 'create'])
-        ->name('admin.pengajuan.create');
+    Route::get(
+        '/pengajuan/create',
+        [PengajuanMagangController::class, 'create']
+    )->name('admin.pengajuan.create');
 
-    Route::post('/pengajuan', [PengajuanMagangController::class, 'store'])
-        ->name('admin.pengajuan.store');
+    Route::post(
+        '/pengajuan',
+        [PengajuanMagangController::class, 'store']
+    )->name('admin.pengajuan.store');
 
-    Route::get('/pengajuan/{pengajuanMagang}', [PengajuanMagangController::class, 'show'])
-        ->name('admin.pengajuan.show');
+    Route::get(
+        '/pengajuan/{pengajuanMagang}',
+        [PengajuanMagangController::class, 'show']
+    )->name('admin.pengajuan.show');
 
-    Route::put('/pengajuan/{pengajuanMagang}/status', [PengajuanMagangController::class, 'updateStatus'])
-        ->name('admin.pengajuan.status');
+    Route::put(
+        '/pengajuan/{pengajuanMagang}/status',
+        [PengajuanMagangController::class, 'updateStatus']
+    )->name('admin.pengajuan.status');
 
-    Route::delete('/pengajuan/{pengajuanMagang}', [PengajuanMagangController::class, 'destroy'])
-        ->name('admin.pengajuan.destroy');
+    Route::delete(
+        '/pengajuan/{pengajuanMagang}',
+        [PengajuanMagangController::class, 'destroy']
+    )->name('admin.pengajuan.destroy');
 
 });
 
@@ -119,6 +131,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 | - Kelola Banner
 | - Kelola Konten
 | - Data Peserta Magang
+| - Absensi Google Sheets
 |
 */
 
@@ -130,11 +143,15 @@ Route::middleware(['auth', 'admin.superadmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/superadmin/perusahaan', [PerusahaanController::class, 'index'])
-        ->name('superadmin.perusahaan.index');
+    Route::get(
+        '/superadmin/perusahaan',
+        [PerusahaanController::class, 'index']
+    )->name('superadmin.perusahaan.index');
 
-    Route::put('/superadmin/perusahaan', [PerusahaanController::class, 'update'])
-        ->name('superadmin.perusahaan.update');
+    Route::put(
+        '/superadmin/perusahaan',
+        [PerusahaanController::class, 'update']
+    )->name('superadmin.perusahaan.update');
 
 
     /*
@@ -143,8 +160,10 @@ Route::middleware(['auth', 'admin.superadmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('/superadmin/banners', BannerController::class)
-        ->names('superadmin.banners');
+    Route::resource(
+        '/superadmin/banners',
+        BannerController::class
+    )->names('superadmin.banners');
 
 
     /*
@@ -153,11 +172,15 @@ Route::middleware(['auth', 'admin.superadmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/superadmin/pengaturan', [PengaturanWebsiteController::class, 'index'])
-        ->name('superadmin.pengaturan.index');
+    Route::get(
+        '/superadmin/pengaturan',
+        [PengaturanWebsiteController::class, 'index']
+    )->name('superadmin.pengaturan.index');
 
-    Route::put('/superadmin/pengaturan', [PengaturanWebsiteController::class, 'update'])
-        ->name('superadmin.pengaturan.update');
+    Route::put(
+        '/superadmin/pengaturan',
+        [PengaturanWebsiteController::class, 'update']
+    )->name('superadmin.pengaturan.update');
 
 
     /*
@@ -184,6 +207,29 @@ Route::middleware(['auth', 'admin.superadmin'])->group(function () {
         ])
         ->names('superadmin.peserta-magang');
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE ABSENSI GOOGLE SHEETS
+    |--------------------------------------------------------------------------
+    |
+    | Admin dan Super Admin dapat mengubah:
+    |
+    | - Pagi Masuk
+    | - Pagi Keluar
+    | - Siang Masuk
+    | - Siang Keluar
+    |
+    | Perubahan nantinya dikirim oleh MAGENTA
+    | langsung ke Google Sheets peserta.
+    |
+    */
+
+    Route::put(
+        '/superadmin/peserta-magang/{pesertaMagang}/absensi',
+        [PesertaMagangController::class, 'updateAbsensi']
+    )->name('superadmin.peserta-magang.absensi.update');
+
 });
 
 
@@ -204,9 +250,12 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/superadmin/dashboard', function () {
-        return view('superadmin.dashboard.index');
-    })->name('superadmin.dashboard');
+    Route::get(
+        '/superadmin/dashboard',
+        function () {
+            return view('superadmin.dashboard.index');
+        }
+    )->name('superadmin.dashboard');
 
 
     /*
@@ -215,7 +264,10 @@ Route::middleware(['auth', 'superadmin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('/superadmin/pengguna', UserController::class)
+    Route::resource(
+        '/superadmin/pengguna',
+        UserController::class
+    )
         ->parameters([
             'pengguna' => 'user',
         ])
