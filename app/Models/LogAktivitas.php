@@ -42,6 +42,7 @@ class LogAktivitas extends Model
         'buka_kunci_logbook' => 'Buka kunci logbook',
         'impor_logbook' => 'Impor riwayat logbook',
         'hapus_impor_logbook' => 'Hapus hasil impor logbook',
+        'kirim_feedback' => 'Kirim feedback magang',
         'hapus_pengguna' => 'Hapus pengguna',
         'ubah_pengguna' => 'Ubah pengguna',
         'hapus_banner' => 'Hapus banner',
