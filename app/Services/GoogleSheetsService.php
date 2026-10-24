@@ -59,10 +59,12 @@ class GoogleSheetsService
 
     /**
      * Membaca data dari Google Sheets.
+     *
+     * @param  array<string, string>  $opsi  mis. ['valueRenderOption' => 'UNFORMATTED_VALUE']
      */
-    public function getValues(string $spreadsheetId, string $range = 'A1:Z100'): array
+    public function getValues(string $spreadsheetId, string $range = 'A1:Z100', array $opsi = []): array
     {
-        $response = $this->sheets()->spreadsheets_values->get($spreadsheetId, $range);
+        $response = $this->sheets()->spreadsheets_values->get($spreadsheetId, $range, $opsi);
 
         return $response->getValues() ?? [];
     }
@@ -70,9 +72,9 @@ class GoogleSheetsService
     /**
      * Membaca data langsung menggunakan URL Google Sheets.
      */
-    public function getValuesFromUrl(string $url, string $range = 'A1:Z100'): array
+    public function getValuesFromUrl(string $url, string $range = 'A1:Z100', array $opsi = []): array
     {
-        return $this->getValues($this->extractSpreadsheetId($url), $range);
+        return $this->getValues($this->extractSpreadsheetId($url), $range, $opsi);
     }
 
     /**

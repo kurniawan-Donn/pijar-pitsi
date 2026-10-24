@@ -123,13 +123,33 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **335 test** (1614 assertion). Setiap route aplikasi (94 route) punya test
+- **349 test** (1698 assertion). Setiap route aplikasi (97 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 13 (impor riwayat sheet lama)
+
+- `App\Services\ParserSheetLogbook` membaca satu tab bulanan; posisi kolom
+  dicari dari baris judul, jadi format lama (Keterangan + Paraf) dan format
+  baru (Activity, Output, Lokasi, Action) sama-sama terbaca. Tab lain
+  (profil, penilaian, feedback) dilewati.
+- Pembersihan jam: "08.00", "07:56", "8;10", sel waktu Excel, pecahan hari
+  dari Google Sheets. Jam bertitik yang diubah Excel menjadi tanggal
+  (mis. "08.04" → 8 April) ditafsirkan kembali menjadi jam dan diberi
+  peringatan; isi yang tidak terbaca ("??") dikosongkan dan dilaporkan.
+- `App\Services\ImporRiwayatLogbook`: impor dari Google Sheets peserta
+  (`UNFORMATTED_VALUE` + `SERIAL_NUMBER`) atau upload `.xlsx` (OpenSpout),
+  `sumber = impor`. Tanggal yang sudah ada tidak ditimpa; hanya masa magang.
+  "Hapus hasil impor" menghapus hari impor tanpa bukti (untuk impor ulang).
+- Panel impor + laporan hasil (per tab, dilewati, peringatan) di halaman
+  logbook harian admin.
+- Diuji dengan buku kerja contoh: rekap Juni Rp850.000, Juli Rp1.000.000,
+  September Rp1.000.000 sama dengan footer Excel; Agustus berkurang 2 hari
+  karena jamnya "??" di sheet (perlu dikoreksi admin).
 
 ## Catatan Fase 12 (logbook harian, kehadiran, izin, uang saku)
 
@@ -296,7 +316,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | selesai |
 | 11 | Biodata peserta | selesai |
 | 12 | Logbook harian, kehadiran, izin, uang saku | selesai |
-| 13 | Impor riwayat sheet lama | belum |
+| 13 | Impor riwayat sheet lama | selesai |
 | 14 | Dashboard monitoring | belum |
 | 15 | Feedback magang | belum |
 | 16 | Penyesuaian penilaian | belum |
