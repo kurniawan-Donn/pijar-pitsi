@@ -45,6 +45,7 @@ class LogbookHarianController extends Controller
             'tarif' => $periode ? $this->kalender->tarifPeriode($periode) : null,
             'biodata' => BiodataPeserta::untuk($pesertaMagang),
             'penempatan' => $periode ? $pesertaMagang->penempatanUntuk($periode['kunci']) : null,
+            'jumlahImpor' => LogbookHarian::where('peserta_magang_id', $pesertaMagang->id)->where('sumber', 'impor')->count(),
             'izins' => $periode
                 ? IzinPeserta::where('peserta_magang_id', $pesertaMagang->id)
                     ->whereDate('tanggal_mulai', '<=', $periode['selesai']->toDateString())

@@ -40,6 +40,8 @@ class LogAktivitas extends Model
         'verifikasi_logbook_harian' => 'Verifikasi logbook harian',
         'verifikasi_izin' => 'Verifikasi izin/sakit',
         'buka_kunci_logbook' => 'Buka kunci logbook',
+        'impor_logbook' => 'Impor riwayat logbook',
+        'hapus_impor_logbook' => 'Hapus hasil impor logbook',
         'hapus_pengguna' => 'Hapus pengguna',
         'ubah_pengguna' => 'Ubah pengguna',
         'hapus_banner' => 'Hapus banner',

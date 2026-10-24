@@ -175,6 +175,70 @@
         min-height: 34px;
     }
 
+    .impor-note {
+        margin: -6px 0 14px;
+
+        color: #7b8794;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .impor-hasil {
+        margin-bottom: 14px;
+        padding: 14px 16px;
+
+        border: 1px solid #e5eaf0;
+        border-radius: 10px;
+
+        background: #fbfcfe;
+
+        font-size: 13px;
+    }
+
+    .impor-hasil table {
+        width: 100%;
+        margin-bottom: 10px;
+
+        border-collapse: collapse;
+    }
+
+    .impor-hasil th,
+    .impor-hasil td {
+        padding: 6px 8px;
+
+        border-bottom: 1px solid #edf1f5;
+
+        text-align: left;
+    }
+
+    .impor-hasil th {
+        color: #6b7c8d;
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+
+    .impor-aksi {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .impor-aksi form {
+        margin: 0;
+    }
+
+    .impor-xlsx {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .impor-xlsx input[type="file"] {
+        max-width: 280px;
+    }
+
     .empty {
         padding: 30px;
 
@@ -309,6 +373,75 @@
         </section>
 
     @endif
+
+    {{-- IMPOR RIWAYAT DARI BUKU KERJA LAMA --}}
+    <section class="panel" id="impor">
+        <h3>Impor Riwayat dari Buku Kerja Lama</h3>
+        <p class="impor-note">
+            Membaca tab bulanan format lama (Keterangan + Paraf) maupun format baru (Activity, Output, Lokasi, Action).
+            Tanggal yang sudah ada di website tidak ditimpa; hanya tanggal dalam masa magang yang disimpan.
+            Jam yang tidak terbaca dikosongkan dan dicantumkan di laporan untuk dicek.
+        </p>
+
+        @if (session('hasil_impor'))
+            @php
+                $hasil = session('hasil_impor');
+            @endphp
+            <div class="impor-hasil">
+                <table>
+                    <thead>
+                        <tr><th>Tab</th><th>Format</th><th>Baris terbaca</th><th>Ditambahkan</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($hasil['tab'] as $tab)
+                            <tr>
+                                <td>{{ $tab['nama'] }}</td>
+                                <td>{{ $tab['format'] === 'baru' ? 'Baru (Activity)' : 'Lama (Keterangan)' }}</td>
+                                <td>{{ $tab['baris'] }}</td>
+                                <td>{{ $tab['dibuat'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p>
+                    Total ditambahkan <strong>{{ $hasil['dibuat'] }}</strong> hari ·
+                    sudah ada (dilewati) {{ $hasil['sudah_ada'] }} ·
+                    di luar masa magang {{ $hasil['di_luar'] }}
+                    @if ($hasil['dilewati'])
+                        · tab lain dilewati: {{ implode(', ', $hasil['dilewati']) }}
+                    @endif
+                </p>
+                @if ($hasil['peringatan'])
+                    <x-alert type="warning" :title="count($hasil['peringatan']).' catatan perlu dicek:'" :messages="array_slice($hasil['peringatan'], 0, 50)" />
+                @endif
+            </div>
+        @endif
+
+        <x-alert type="error" :messages="$errors->impor->all()" />
+
+        <div class="impor-aksi">
+            @if ($pesertaMagang->google_sheet_url)
+                <form method="POST" action="{{ route('superadmin.peserta-magang.impor-logbook.sheets', $pesertaMagang) }}" onsubmit="return confirm('Impor semua tab bulanan dari Google Sheets peserta?')">
+                    @csrf
+                    <x-button variant="secondary">Impor dari Google Sheets Peserta</x-button>
+                </form>
+            @endif
+
+            <form method="POST" action="{{ route('superadmin.peserta-magang.impor-logbook.xlsx', $pesertaMagang) }}" enctype="multipart/form-data" class="impor-xlsx">
+                @csrf
+                <input type="file" name="berkas" accept=".xlsx" required class="x-form-control" aria-label="File buku kerja .xlsx">
+                <x-button variant="secondary">Impor dari File .xlsx</x-button>
+            </form>
+
+            @if ($jumlahImpor > 0)
+                <form method="POST" action="{{ route('superadmin.peserta-magang.impor-logbook.hapus', $pesertaMagang) }}" onsubmit="return confirm('Hapus semua hari hasil impor yang belum punya bukti?')">
+                    @csrf
+                    @method('DELETE')
+                    <x-button variant="danger">Hapus Hasil Impor ({{ $jumlahImpor }} hari)</x-button>
+                </form>
+            @endif
+        </div>
+    </section>
 
 </div>
 

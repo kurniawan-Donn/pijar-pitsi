@@ -14,6 +14,7 @@ use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
+use App\Http\Controllers\SuperAdmin\ImporLogbookController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
@@ -233,6 +234,16 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             Route::get('/logbook-bukti/{logbookBukti}', 'bukti')->name('logbook-bukti.show');
             Route::get('/izin-bukti/{izinPeserta}', 'buktiIzin')->name('izin-bukti.show');
         });
+
+        // Impor riwayat logbook dari buku kerja lama
+        Route::controller(ImporLogbookController::class)
+            ->prefix('/peserta-magang/{pesertaMagang}/impor-logbook')
+            ->name('peserta-magang.impor-logbook.')
+            ->group(function () {
+                Route::post('/sheets', 'dariGoogleSheets')->name('sheets');
+                Route::post('/xlsx', 'dariXlsx')->name('xlsx');
+                Route::delete('/', 'hapus')->name('hapus');
+            });
 
         // Akun login peserta
         Route::controller(AkunPesertaController::class)
