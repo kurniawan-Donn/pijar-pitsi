@@ -116,11 +116,11 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - ~~Super admin dapat menurunkan role akunnya sendiri~~ — **diperbaiki di
   Fase 6**; Super Admin terakhir juga tidak bisa diturunkan/dihapus.
 - Password akun awal di-hardcode di `UserSeeder`.
-- ~~Belum ada log aktivitas & fitur ubah password sendiri~~ — **ada di
-  Fase 6**. Policy/Gate menunggu keputusan (lihat Catatan Fase 6).
+- ~~Belum ada log aktivitas, ubah password sendiri, maupun Gate~~ — **ada di
+  Fase 6**.
 
 ### Test
-- **193 test** (827 assertion). Setiap route aplikasi (56 route) punya test
+- **200 test** (848 assertion). Setiap route aplikasi (56 route) punya test
   akses untuk tamu, admin, dan super admin (`AksesRouteTest`); route baru yang
   belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
@@ -149,8 +149,13 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Pesan validasi bawaan Laravel kini berbahasa Indonesia (`lang/id/validation.php`).
 - Seluruh kode dirapikan dengan Pint (commit terpisah).
 - Rate limiting login sudah ada sejak sebelum Fase 2.
-- **Belum**: Policy/Gate (menunggu persetujuan), password seeder masih
-  hard-code (Fase 7).
+- **Gate** (bukan Policy per model, karena aturan akses murni berbasis role):
+  `kelola-pengguna`, `kelola-aspek-penilaian`, `lihat-log-aktivitas` di
+  `AppServiceProvider::configureGates()`. Dipakai di route (`can:`) sebagai
+  lapisan kedua di samping `role:super_admin`, dan di sidebar (kunci `can`).
+  Policy per model baru diperlukan bila ada aturan per data, misalnya admin
+  hanya boleh mengelola peserta bimbingannya.
+- **Belum**: password akun awal di seeder masih hard-code (Fase 7).
 
 ## Catatan Fase 1 (layout & komponen)
 
@@ -178,5 +183,5 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 3 | Penguatan Absensi Google Sheets | selesai |
 | 4 | Logbook kegiatan & Penilaian peserta | selesai |
 | 5 | Dashboard statistik, Laporan & Export | selesai |
-| 6 | Keamanan, otorisasi & test | selesai (Policy/Gate menunggu keputusan) |
+| 6 | Keamanan, otorisasi & test | selesai |
 | 7 | Persiapan deploy | belum |

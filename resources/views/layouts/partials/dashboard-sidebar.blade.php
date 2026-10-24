@@ -1,6 +1,7 @@
 {{--
     Sidebar dashboard. Menu ditampilkan sesuai role pengguna yang login.
-    Item "roles" kosong berarti tampil untuk semua role.
+    Item tanpa "can" tampil untuk semua pengguna login; "can" berisi nama Gate
+    (lihat AppServiceProvider::configureGates()).
 --}}
 @php
     $isSuperAdmin = auth()->user()?->role === 'super_admin';
@@ -57,21 +58,21 @@
                 'icon' => '★',
                 'route' => 'superadmin.aspek-penilaian.index',
                 'active' => ['superadmin.aspek-penilaian.*'],
-                'roles' => ['super_admin'],
+                'can' => 'kelola-aspek-penilaian',
             ],
             [
                 'label' => 'Log Aktivitas',
                 'icon' => '☰',
                 'route' => 'superadmin.log-aktivitas.index',
                 'active' => ['superadmin.log-aktivitas.*'],
-                'roles' => ['super_admin'],
+                'can' => 'lihat-log-aktivitas',
             ],
             [
                 'label' => 'Kelola Pengguna',
                 'icon' => '♟',
                 'route' => 'superadmin.pengguna.index',
                 'active' => ['superadmin.pengguna.*'],
-                'roles' => ['super_admin'],
+                'can' => 'kelola-pengguna',
             ],
         ],
     ];
@@ -99,7 +100,7 @@
 
             <nav class="dash-sidebar-menu">
                 @foreach ($menuItems as $item)
-                    @continue(! empty($item['roles']) && ! in_array(auth()->user()?->role, $item['roles'], true))
+                    @continue(! empty($item['can']) && auth()->user()?->cannot($item['can']))
 
                     <a
                         href="{{ route($item['route']) }}"

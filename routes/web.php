@@ -197,16 +197,20 @@ Route::middleware(['auth', 'role:super_admin'])
         // Kelola pengguna
         Route::resource('pengguna', UserController::class)
             ->parameters(['pengguna' => 'user'])
-            ->except('show');
+            ->except('show')
+            ->middleware('can:kelola-pengguna');
 
         // Aspek & bobot penilaian
         Route::get('/aspek-penilaian', [AspekPenilaianController::class, 'index'])
+            ->can('kelola-aspek-penilaian')
             ->name('aspek-penilaian.index');
         Route::put('/aspek-penilaian', [AspekPenilaianController::class, 'update'])
+            ->can('kelola-aspek-penilaian')
             ->name('aspek-penilaian.update');
 
         // Log aktivitas
         Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])
+            ->can('lihat-log-aktivitas')
             ->name('log-aktivitas.index');
 
     });
