@@ -43,6 +43,8 @@ class LogAktivitas extends Model
         'impor_logbook' => 'Impor riwayat logbook',
         'hapus_impor_logbook' => 'Hapus hasil impor logbook',
         'kirim_feedback' => 'Kirim feedback magang',
+        'terbitkan_surat' => 'Terbitkan surat keterangan',
+        'terbitkan_ulang_surat' => 'Terbitkan ulang surat keterangan',
         'hapus_pengguna' => 'Hapus pengguna',
         'ubah_pengguna' => 'Ubah pengguna',
         'hapus_banner' => 'Hapus banner',

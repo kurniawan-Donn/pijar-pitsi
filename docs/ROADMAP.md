@@ -123,13 +123,36 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **378 test** (1892 assertion). Setiap route aplikasi (104 route) punya test
+- **394 test** (1991 assertion). Setiap route aplikasi (110 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 17 (surat keterangan magang)
+
+- Tabel `surat_keterangans` (satu per peserta): status draft/terbit, nomor
+  unik, urut per tahun, tanggal surat, opsi cantumkan nilai, salinan data
+  (JSON) saat terbit.
+- **Draft otomatis** saat status peserta berubah menjadi `selesai` (event
+  `saved` di `PesertaMagang`); peserta yang sudah selesai sebelumnya bisa
+  dibuatkan draft dari halaman surat.
+- **Syarat terbit**: status selesai, biodata disetujui, penilaian diisi,
+  feedback dikirim (`SuratKeterangan::syaratBelumTerpenuhi()`).
+- **Nomor** dari format Pengaturan Magang (`{urut}`, `{bulan_romawi}`,
+  `{bulan}`, `{tahun}`), urut 3 digit per tahun tanggal surat, diberikan sekali;
+  terbit ulang memakai nomor yang sama dengan data terbaru.
+- PDF (`surat/cetak`, `App\Services\CetakSuratKeterangan`): kop perusahaan,
+  data peserta, periode, divisi yang pernah ditempati, nilai & predikat
+  (opsional), kota/tanggal, penanda tangan "Menyetujui". Draft diberi tanda
+  DRAFT dan memakai data terkini.
+- Admin: `superadmin.peserta-magang.surat*`. Peserta: menu Surat Keterangan
+  (`peserta.surat.*`), unduh hanya setelah terbit.
+- Setelah terbit, **feedback peserta terkunci**.
+- Kop surat memakai Profil Perusahaan; halaman surat memberi peringatan bila
+  nama perusahaan / penanda tangan / kota surat belum diisi.
 
 ## Catatan Fase 16 (penyesuaian penilaian)
 
@@ -376,5 +399,5 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 14 | Dashboard monitoring | selesai |
 | 15 | Feedback magang | selesai |
 | 16 | Penyesuaian penilaian | selesai |
-| 17 | Surat keterangan magang | belum |
+| 17 | Surat keterangan magang | selesai |
 | 18 | Laporan dari database | belum |

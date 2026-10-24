@@ -9,6 +9,7 @@ use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardControll
 use App\Http\Controllers\Peserta\FeedbackController as PesertaFeedbackController;
 use App\Http\Controllers\Peserta\IzinController as PesertaIzinController;
 use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
+use App\Http\Controllers\Peserta\SuratController as PesertaSuratController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PenilaianController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PesertaMagangController;
+use App\Http\Controllers\SuperAdmin\SuratKeteranganController;
 use App\Http\Controllers\SuperAdmin\UserController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\PendaftaranController;
@@ -109,6 +111,10 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
         // Feedback program magang (dibuka sebulan sebelum selesai)
         Route::get('/feedback', [PesertaFeedbackController::class, 'edit'])->name('feedback.edit');
         Route::put('/feedback', [PesertaFeedbackController::class, 'update'])->name('feedback.update');
+
+        // Surat keterangan magang (setelah diterbitkan admin)
+        Route::get('/surat-keterangan', [PesertaSuratController::class, 'show'])->name('surat.show');
+        Route::get('/surat-keterangan/unduh', [PesertaSuratController::class, 'unduh'])->name('surat.unduh');
 
         // Izin / sakit beberapa hari
         Route::controller(PesertaIzinController::class)
@@ -289,6 +295,16 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         // Feedback peserta: rekap & detail
         Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
         Route::get('/peserta-magang/{pesertaMagang}/feedback', [FeedbackController::class, 'show'])->name('peserta-magang.feedback');
+
+        // Surat keterangan magang
+        Route::controller(SuratKeteranganController::class)
+            ->prefix('/peserta-magang/{pesertaMagang}/surat-keterangan')
+            ->group(function () {
+                Route::get('/', 'show')->name('peserta-magang.surat');
+                Route::post('/draft', 'buatDraft')->name('peserta-magang.surat.draft');
+                Route::put('/terbitkan', 'terbitkan')->name('peserta-magang.surat.terbitkan');
+                Route::get('/pdf', 'pdf')->name('peserta-magang.surat.pdf');
+            });
 
         // Monitoring peserta (biodata, logbook, verifikasi)
         Route::get('/monitoring', MonitoringController::class)->name('monitoring.index');

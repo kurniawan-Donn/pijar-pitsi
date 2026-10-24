@@ -39,6 +39,13 @@ class PesertaMagang extends Model
         static::creating(function (PesertaMagang $peserta) {
             $peserta->nomor_peserta ??= self::nomorPesertaBaru($peserta->periode_mulai ?? now());
         });
+
+        // Draft surat keterangan dibuat otomatis saat magang selesai.
+        static::saved(function (PesertaMagang $peserta) {
+            if ($peserta->status === 'selesai' && ($peserta->wasRecentlyCreated || $peserta->wasChanged('status'))) {
+                SuratKeterangan::firstOrCreate(['peserta_magang_id' => $peserta->id]);
+            }
+        });
     }
 
     /**
@@ -62,6 +69,11 @@ class PesertaMagang extends Model
     public function biodata(): HasOne
     {
         return $this->hasOne(BiodataPeserta::class);
+    }
+
+    public function suratKeterangan(): HasOne
+    {
+        return $this->hasOne(SuratKeterangan::class);
     }
 
     public function feedback(): HasOne

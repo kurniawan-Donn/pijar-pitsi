@@ -12,7 +12,8 @@ use Illuminate\View\View;
 
 /**
  * Feedback program magang oleh peserta, dibuka sebulan sebelum selesai.
- * Bisa diedit dan dikirim ulang, termasuk setelah status magang selesai.
+ * Bisa diedit dan dikirim ulang, termasuk setelah status magang selesai,
+ * sampai surat keterangan diterbitkan.
  */
 class FeedbackController extends Controller
 {
@@ -24,6 +25,7 @@ class FeedbackController extends Controller
             'peserta' => $peserta,
             'feedback' => $peserta->feedback ?? new FeedbackPeserta(['skor' => []]),
             'dibuka' => FeedbackPeserta::sudahDibuka($peserta),
+            'terkunci' => FeedbackPeserta::terkunci($peserta),
             'dibukaPada' => FeedbackPeserta::dibukaPada($peserta),
         ]);
     }
@@ -34,6 +36,10 @@ class FeedbackController extends Controller
 
         if (! FeedbackPeserta::sudahDibuka($peserta)) {
             return redirect()->route('peserta.feedback.edit')->with('error', 'Feedback belum dibuka.');
+        }
+
+        if (FeedbackPeserta::terkunci($peserta)) {
+            return redirect()->route('peserta.feedback.edit')->with('error', 'Feedback sudah dikunci karena surat keterangan telah diterbitkan.');
         }
 
         $feedback = $peserta->feedback ?? new FeedbackPeserta(['peserta_magang_id' => $peserta->id]);
