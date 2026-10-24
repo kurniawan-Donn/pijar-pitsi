@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Database\Factories\MahasiswaFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Mahasiswa extends Model
 {
+    /** @use HasFactory<MahasiswaFactory> */
+    use HasFactory;
+
     protected $table = 'mahasiswas';
 
     protected $fillable = [

@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
+use Database\Factories\PengajuanMagangFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PengajuanMagang extends Model
 {
+    /** @use HasFactory<PengajuanMagangFactory> */
+    use HasFactory;
+
     public const STATUS_MENUNGGU = 'menunggu';
 
     public const STATUS_DISETUJUI = 'disetujui';
