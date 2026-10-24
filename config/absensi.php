@@ -36,7 +36,9 @@ return [
 
     'first_data_row' => (int) env('ABSENSI_FIRST_DATA_ROW', 13),
 
-    'last_row' => (int) env('ABSENSI_LAST_ROW', 100),
+    // Baris 13–43 = tanggal 1–31. Di bawahnya ada footer total & uang saku
+    // yang tidak boleh ikut terbaca sebagai data.
+    'last_row' => (int) env('ABSENSI_LAST_ROW', 43),
 
     'first_column' => env('ABSENSI_FIRST_COLUMN', 'B'),
 
@@ -61,6 +63,32 @@ return [
         'siang_masuk',
         'siang_keluar',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Uang saku (upah kedatangan)
+    |--------------------------------------------------------------------------
+    |
+    | Mengikuti footer template sheet: hari penuh = sesi pagi & siang lengkap,
+    | setengah hari = hanya satu sesi lengkap. Nilai dalam rupiah.
+    |
+    */
+
+    'uang_saku' => [
+        'hari_penuh' => (int) env('UANG_SAKU_HARI_PENUH', 50000),
+        'setengah_hari' => (int) env('UANG_SAKU_SETENGAH_HARI', 25000),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nilai kolom Action (verifikasi logbook)
+    |--------------------------------------------------------------------------
+    |
+    | Harus sama persis dengan pilihan dropdown di sheet.
+    |
+    */
+
+    'action_options' => ['Diterima', 'Ditolak', 'Review'],
 
     /*
     |--------------------------------------------------------------------------

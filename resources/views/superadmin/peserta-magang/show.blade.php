@@ -894,6 +894,72 @@
         color: #8a99a3;
     }
 
+    .allowance-box {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        margin-bottom: 20px;
+
+        border: 1px solid #e2eaf0;
+        border-radius: 12px;
+
+        background: #f8fbfd;
+
+        overflow: hidden;
+    }
+
+    .allowance-item {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        padding: 14px 16px;
+    }
+
+    .allowance-item + .allowance-item {
+        border-left: 1px solid #e2eaf0;
+    }
+
+    .allowance-item span {
+        color: #7b8b96;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+    }
+
+    .allowance-item strong {
+        color: #17313d;
+        font-size: 17px;
+    }
+
+    .allowance-item small {
+        color: #8a99a3;
+        font-size: 10px;
+    }
+
+    .allowance-total {
+        background: #fff6ee;
+    }
+
+    .allowance-total strong {
+        color: #d96512;
+    }
+
+    @media (max-width: 1100px) {
+        .allowance-box {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .allowance-item:nth-child(3) {
+            border-left: 0;
+        }
+
+        .allowance-item:nth-child(n + 3) {
+            border-top: 1px solid #e2eaf0;
+        }
+    }
+
     .row-status {
         display: inline-block;
 
@@ -1409,6 +1475,38 @@
                                 <div class="summary-description">{{ $keterangan }}</div>
                             </div>
                         @endforeach
+
+                    </div>
+
+                    {{-- REKAP KEHADIRAN & UANG SAKU (mengikuti footer template sheet) --}}
+
+                    <div class="allowance-box">
+
+                        <div class="allowance-item">
+                            <span>Masuk penuh</span>
+                            <strong>{{ $rekap['hari_penuh'] }} hari</strong>
+                            <small>× Rp {{ number_format(config('absensi.uang_saku.hari_penuh'), 0, ',', '.') }}</small>
+                        </div>
+
+                        <div class="allowance-item">
+                            <span>Masuk setengah hari</span>
+                            <strong>{{ $rekap['setengah_hari'] }} hari</strong>
+                            <small>× Rp {{ number_format(config('absensi.uang_saku.setengah_hari'), 0, ',', '.') }}</small>
+                        </div>
+
+                        <div class="allowance-item">
+                            <span>Absen / izin / sakit</span>
+                            <strong>{{ $rekap['izin'] + $rekap['sakit'] }} hari</strong>
+                            @if($rekap['tidak_lengkap'])
+                                <small>{{ $rekap['tidak_lengkap'] }} hari jam belum lengkap</small>
+                            @endif
+                        </div>
+
+                        <div class="allowance-item allowance-total">
+                            <span>Total uang saku</span>
+                            <strong>Rp {{ number_format($uangSaku, 0, ',', '.') }}</strong>
+                            <small>{{ $bulanDipilih->translatedFormat('F Y') }}</small>
+                        </div>
 
                     </div>
 

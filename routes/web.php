@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\SuperAdmin\BannerController;
+use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PesertaMagangController;
@@ -129,6 +130,17 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             '/peserta-magang/{pesertaMagang}/absensi/muat-ulang',
             [PesertaMagangController::class, 'muatUlangAbsensi']
         )->name('peserta-magang.absensi.refresh');
+
+        // Logbook kegiatan (dibaca dari sheet, verifikasi ke kolom Action)
+        Route::get(
+            '/peserta-magang/{pesertaMagang}/logbook',
+            [LogbookController::class, 'show']
+        )->name('peserta-magang.logbook');
+
+        Route::put(
+            '/peserta-magang/{pesertaMagang}/logbook',
+            [LogbookController::class, 'update']
+        )->name('peserta-magang.logbook.update');
 
     });
 

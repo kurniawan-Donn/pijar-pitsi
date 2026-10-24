@@ -8,32 +8,49 @@ use PHPUnit\Framework\TestCase;
 
 class RekapAbsensiTest extends TestCase
 {
-    public function test_rekap_menghitung_hadir_izin_sakit_dan_belum_diisi(): void
+    public function test_rekap_menghitung_status_dan_jenis_kehadiran(): void
     {
         $rows = [
-            ['pagi_masuk' => '08:00', 'activity' => 'Membuat laporan'],
-            ['pagi_masuk' => '', 'siang_keluar' => '16.00', 'activity' => ''],
+            // Hari penuh: pagi & siang lengkap.
+            ['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00', 'siang_masuk' => '13:00', 'siang_keluar' => '16.00'],
+            // Setengah hari: hanya pagi lengkap.
+            ['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00', 'activity' => 'Rapat'],
+            // Setengah hari: hanya siang lengkap.
+            ['siang_masuk' => '13:00', 'siang_keluar' => '16:00'],
+            // Tidak lengkap: hanya jam masuk.
+            ['pagi_masuk' => '08:00'],
             ['activity' => 'Izin acara keluarga'],
             ['activity' => 'IJIN kampus'],
-            ['activity' => 'Sakit demam', 'pagi_masuk' => '08:00'],
+            // Sakit tetap sakit walau ada jam.
+            ['activity' => 'Sakit demam', 'pagi_masuk' => '08:00', 'pagi_keluar' => '09:00'],
             ['tanggal' => '2026-10-20', 'activity' => ''],
         ];
 
         $this->assertSame([
-            'tercatat' => 6,
-            'hadir' => 2,
+            'tercatat' => 8,
+            'hadir' => 4,
             'izin' => 2,
             'sakit' => 1,
             'belum_diisi' => 1,
+            'hari_penuh' => 1,
+            'setengah_hari' => 2,
+            'tidak_lengkap' => 1,
         ], RekapAbsensi::hitung($rows));
+    }
+
+    public function test_uang_saku_dari_hari_penuh_dan_setengah_hari(): void
+    {
+        $rekap = ['hari_penuh' => 10, 'setengah_hari' => 3];
+
+        $this->assertSame(575000, RekapAbsensi::uangSaku($rekap, 50000, 25000));
     }
 
     public function test_rekap_kosong(): void
     {
-        $this->assertSame(
-            ['tercatat' => 0, 'hadir' => 0, 'izin' => 0, 'sakit' => 0, 'belum_diisi' => 0],
-            RekapAbsensi::hitung([])
-        );
+        $rekap = RekapAbsensi::hitung([]);
+
+        $this->assertSame(0, $rekap['tercatat']);
+        $this->assertSame(0, RekapAbsensi::uangSaku($rekap, 50000, 25000));
     }
 
     /**

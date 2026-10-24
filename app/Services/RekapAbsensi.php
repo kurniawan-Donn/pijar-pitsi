@@ -5,11 +5,16 @@ namespace App\Services;
 /**
  * Perhitungan rekap absensi dari baris Google Sheets.
  *
- * Aturan:
+ * Status baris:
  * - Activity mengandung "sakit"           → sakit
  * - Activity mengandung "izin" / "ijin"   → izin
  * - Ada minimal satu waktu absensi terisi → hadir
  * - Selain itu                            → belum diisi
+ *
+ * Kehadiran (hanya untuk baris hadir), mengikuti footer template sheet:
+ * - Hari penuh     : sesi pagi (masuk + keluar) dan sesi siang lengkap
+ * - Setengah hari  : hanya satu sesi yang lengkap
+ * - Tidak lengkap  : ada waktu terisi, tapi tidak ada sesi yang lengkap
  */
 class RekapAbsensi
 {
@@ -17,17 +22,42 @@ class RekapAbsensi
 
     /**
      * @param  array<int, array<string, mixed>>  $rows
-     * @return array{tercatat: int, hadir: int, izin: int, sakit: int, belum_diisi: int}
+     * @return array{tercatat: int, hadir: int, izin: int, sakit: int, belum_diisi: int, hari_penuh: int, setengah_hari: int, tidak_lengkap: int}
      */
     public static function hitung(array $rows): array
     {
-        $rekap = ['tercatat' => count($rows), 'hadir' => 0, 'izin' => 0, 'sakit' => 0, 'belum_diisi' => 0];
+        $rekap = [
+            'tercatat' => count($rows),
+            'hadir' => 0,
+            'izin' => 0,
+            'sakit' => 0,
+            'belum_diisi' => 0,
+            'hari_penuh' => 0,
+            'setengah_hari' => 0,
+            'tidak_lengkap' => 0,
+        ];
 
         foreach ($rows as $row) {
-            $rekap[self::statusBaris($row)]++;
+            $status = self::statusBaris($row);
+            $rekap[$status]++;
+
+            if ($status === 'hadir') {
+                $rekap[self::jenisKehadiran($row)]++;
+            }
         }
 
         return $rekap;
+    }
+
+    /**
+     * Total uang saku dari rekap: hari penuh × tarif penuh + setengah hari × tarif setengah.
+     *
+     * @param  array{hari_penuh: int, setengah_hari: int}  $rekap
+     */
+    public static function uangSaku(array $rekap, int $tarifHariPenuh, int $tarifSetengahHari): int
+    {
+        return $rekap['hari_penuh'] * $tarifHariPenuh
+            + $rekap['setengah_hari'] * $tarifSetengahHari;
     }
 
     /**
@@ -48,12 +78,29 @@ class RekapAbsensi
         }
 
         foreach (self::KOLOM_WAKTU as $kolom) {
-            if (trim((string) ($row[$kolom] ?? '')) !== '') {
+            if (self::terisi($row, $kolom)) {
                 return 'hadir';
             }
         }
 
         return 'belum_diisi';
+    }
+
+    /**
+     * Jenis kehadiran: hari_penuh, setengah_hari, atau tidak_lengkap.
+     *
+     * @param  array<string, mixed>  $row
+     */
+    public static function jenisKehadiran(array $row): string
+    {
+        $sesiPagi = self::terisi($row, 'pagi_masuk') && self::terisi($row, 'pagi_keluar');
+        $sesiSiang = self::terisi($row, 'siang_masuk') && self::terisi($row, 'siang_keluar');
+
+        return match (true) {
+            $sesiPagi && $sesiSiang => 'hari_penuh',
+            $sesiPagi || $sesiSiang => 'setengah_hari',
+            default => 'tidak_lengkap',
+        };
     }
 
     /**
@@ -75,5 +122,13 @@ class RekapAbsensi
         }
 
         return sprintf('%02d:%02d', $jam, $menit);
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     */
+    private static function terisi(array $row, string $kolom): bool
+    {
+        return trim((string) ($row[$kolom] ?? '')) !== '';
     }
 }
