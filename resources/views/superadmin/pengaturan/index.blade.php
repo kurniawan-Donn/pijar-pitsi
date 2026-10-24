@@ -1,2421 +1,1436 @@
-<!DOCTYPE html>
-<html lang="id">
+{{-- resources/views/superadmin/pengaturan/index.blade.php --}}
 
-<head>
+@extends('layouts.dashboard')
 
-    <meta charset="UTF-8">
+@section('title', 'Kelola Konten')
+@section('page_title', 'Kelola Konten')
+@section('page_subtitle', 'Edit seluruh konten yang tampil pada halaman utama MAGENTA')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@push('styles')
+<style>
+    body {
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
 
-    <title>
-        Kelola Konten - MAGENTA
-    </title>
+        background: #f4f7fb;
 
+        color: #173f70;
+    }
 
-    <style>
+    /* =====================================================
+       CONTENT
+    ===================================================== */
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    .content {
+        padding:
+            28px 32px 50px;
+    }
 
+    /* =====================================================
+       INTRO
+    ===================================================== */
 
-        body {
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
+    .intro-card {
+        background: #ffffff;
 
-            background: #f4f7fb;
+        border-left:
+            4px solid #1779c9;
 
-            color: #173f70;
-        }
+        border-radius: 12px;
 
+        padding:
+            22px 24px;
 
-        a {
-            text-decoration: none;
-        }
+        margin-bottom: 20px;
 
+        box-shadow:
+            0 3px 14px
+            rgba(24, 61, 105, .05);
+    }
 
-        /* =====================================================
-           LAYOUT
-        ===================================================== */
+    .intro-line {
+        width: 40px;
 
-        .layout {
-            display: flex;
+        height: 3px;
 
-            min-height: 100vh;
-        }
+        background: #f47b20;
 
+        margin-bottom: 12px;
+    }
 
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
+    .intro-title {
+        font-size: 22px;
 
-        .sidebar {
-            width: 275px;
+        font-weight: 800;
 
-            min-height: 100vh;
+        color: #245b9d;
 
-            background: #12345b;
+        margin-bottom: 7px;
+    }
 
-            color: #ffffff;
+    .intro-description {
+        font-size: 13px;
 
-            padding: 24px 18px 20px;
+        line-height: 1.7;
 
-            display: flex;
+        color: #71849c;
+    }
 
-            flex-direction: column;
+    /* =====================================================
+       SECTION CARD
+    ===================================================== */
 
-            position: fixed;
+    .section-card {
+        background: #ffffff;
 
-            left: 0;
+        border-radius: 12px;
 
-            top: 0;
+        margin-bottom: 20px;
 
-            bottom: 0;
+        box-shadow:
+            0 3px 15px
+            rgba(24, 61, 105, .055);
 
-            overflow-y: auto;
-        }
+        overflow: hidden;
+    }
 
+    /* =====================================================
+       SECTION HEADER
+    ===================================================== */
 
-        /* =====================================================
-           BRAND
-        ===================================================== */
+    .section-header {
+        padding:
+            18px 22px;
 
-        .brand {
-            display: flex;
+        border-bottom:
+            1px solid #e8edf4;
 
-            align-items: center;
+        display: flex;
 
-            gap: 13px;
+        align-items: center;
 
-            padding:
-                0 8px 22px;
+        gap: 13px;
+    }
 
-            border-bottom:
-                1px solid
-                rgba(255, 255, 255, .18);
-        }
+    .section-number {
+        width: 40px;
 
+        height: 40px;
 
-        .brand-logo {
-            width: 46px;
+        min-width: 40px;
 
-            height: 46px;
+        border-radius: 9px;
 
-            min-width: 46px;
+        background: #edf5ff;
 
-            border-radius: 10px;
+        color: #2470b8;
 
-            background: #ffffff;
+        display: flex;
 
-            color: #1779c9;
+        align-items: center;
 
-            display: flex;
+        justify-content: center;
 
-            align-items: center;
+        font-size: 16px;
 
-            justify-content: center;
+        font-weight: 800;
+    }
 
-            font-size: 21px;
+    .section-title {
+        font-size: 17px;
 
-            font-weight: 800;
-        }
+        font-weight: 800;
 
+        color: #173f70;
+    }
 
-        .brand-title {
-            font-size: 22px;
+    .section-description {
+        margin-top: 4px;
 
-            line-height: 1.1;
+        font-size: 12px;
 
-            font-weight: 800;
+        color: #8092a9;
+    }
 
-            color: #ffffff;
-        }
+    /* =====================================================
+       SECTION BODY
+    ===================================================== */
 
+    .section-body {
+        padding:
+            22px;
+    }
 
-        .brand-subtitle {
-            margin-top: 5px;
+    /* =====================================================
+       FIELD
+    ===================================================== */
 
-            font-size: 10px;
+    .field {
+        margin-bottom: 17px;
+    }
 
-            line-height: 1.4;
+    .field:last-child {
+        margin-bottom: 0;
+    }
 
-            letter-spacing: .5px;
+    .field label {
+        display: block;
 
-            color:
-                rgba(255, 255, 255, .78);
-        }
+        margin-bottom: 7px;
 
+        font-size: 13px;
 
-        /* =====================================================
-           MENU
-        ===================================================== */
+        font-weight: 700;
 
-        .menu-area {
-            margin-top: 24px;
-        }
+        color: #173f70;
+    }
 
+    .required {
+        color: #ef4f42;
+    }
 
-        .menu-title {
-            font-size: 11px;
+    input,
+    textarea {
+        width: 100%;
 
-            font-weight: 700;
+        border:
+            1px solid #d6dfeb;
 
-            letter-spacing: 1px;
+        border-radius: 8px;
 
-            color:
-                rgba(255, 255, 255, .58);
+        background: #ffffff;
 
-            margin:
-                0 10px 10px;
-        }
+        color: #284765;
 
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
 
-        .menu-list {
-            display: flex;
+        font-size: 13px;
 
-            flex-direction: column;
+        outline: none;
 
-            gap: 4px;
-        }
+        transition:
+            border-color .2s ease,
+            box-shadow .2s ease;
+    }
 
+    input {
+        height: 43px;
 
-        .menu-item {
-            min-height: 44px;
+        padding:
+            0 13px;
+    }
 
-            padding:
-                0 13px;
+    textarea {
+        min-height: 105px;
 
-            border-radius: 9px;
+        padding:
+            11px 13px;
 
-            display: flex;
+        resize: vertical;
 
-            align-items: center;
+        line-height: 1.65;
+    }
 
-            gap: 12px;
+    input::placeholder,
+    textarea::placeholder {
+        color: #a1afbf;
+    }
 
-            color: #ffffff;
+    input:focus,
+    textarea:focus {
+        border-color: #3579c6;
 
-            font-size: 14px;
+        box-shadow:
+            0 0 0 3px
+            rgba(53, 121, 198, .09);
+    }
 
-            transition:
-                background .2s ease,
-                transform .2s ease;
-        }
+    .field-help {
+        margin-top: 5px;
 
+        font-size: 11px;
 
-        .menu-item:hover {
-            background:
-                rgba(255, 255, 255, .08);
-        }
+        color: #8498b0;
+    }
 
+    /* =====================================================
+       SUB CARD
+    ===================================================== */
 
-        .menu-item.active {
-            background: #1779c9;
+    .sub-card {
+        background: #f8fafc;
 
-            color: #ffffff;
+        border:
+            1px solid #e4eaf2;
 
-            font-weight: 700;
-        }
+        border-radius: 10px;
 
+        padding:
+            17px;
 
-        .menu-icon {
-            width: 20px;
+        margin-top: 16px;
+    }
 
-            min-width: 20px;
+    .sub-card:first-child {
+        margin-top: 0;
+    }
 
-            text-align: center;
+    .sub-card-title {
+        display: flex;
 
-            font-size: 16px;
-        }
+        align-items: center;
 
+        font-size: 13px;
 
-        /* =====================================================
-           SIDEBAR DIVIDER
-        ===================================================== */
+        font-weight: 800;
 
-        .sidebar-divider {
-            height: 1px;
+        color: #23568f;
 
-            background:
-                rgba(255, 255, 255, .18);
+        margin-bottom: 14px;
+    }
 
-            margin:
-                auto 0 18px;
-        }
+    /* =====================================================
+       GRID
+    ===================================================== */
 
+    .grid-2 {
+        display: grid;
 
-        /* =====================================================
-           LOGOUT
-        ===================================================== */
+        grid-template-columns:
+            1fr 1fr;
 
-        .logout-btn {
-            width: 100%;
+        gap: 18px;
+    }
 
-            min-height: 44px;
+    /* =====================================================
+       STEP NUMBER
+    ===================================================== */
 
-            border: 0;
+    .step-number {
+        display: inline-flex;
 
-            border-radius: 8px;
+        width: 28px;
 
-            background:
-                rgba(255, 255, 255, .10);
+        height: 28px;
 
-            color: #ffffff;
+        min-width: 28px;
 
-            font-size: 13px;
+        border-radius: 50%;
 
-            font-weight: 600;
+        background: #177eb7;
 
-            cursor: pointer;
+        color: #ffffff;
 
-            display: flex;
+        align-items: center;
 
-            align-items: center;
+        justify-content: center;
 
-            justify-content: center;
+        margin-right: 8px;
 
-            gap: 10px;
+        font-size: 12px;
 
-            transition:
-                background .2s ease;
-        }
+        font-weight: 800;
+    }
 
+    /* =====================================================
+       SAVE AREA
+    ===================================================== */
 
-        .logout-btn:hover {
-            background:
-                rgba(255, 255, 255, .16);
-        }
+    .save-area {
+        display: flex;
 
+        justify-content: flex-end;
 
-        /* =====================================================
-           MAIN
-        ===================================================== */
+        padding-top: 2px;
+    }
 
-        .main {
-            width:
-                calc(100% - 275px);
+    .save-btn {
+        min-width: 210px;
 
-            margin-left: 275px;
+        height: 46px;
 
-            min-height: 100vh;
-        }
+        border: 0;
 
+        border-radius: 8px;
 
-        /* =====================================================
-           TOPBAR
-        ===================================================== */
+        background: #f47b20;
 
-        .topbar {
-            height: 64px;
+        color: #ffffff;
 
-            background: #ffffff;
+        font-size: 13px;
 
-            border-bottom:
-                1px solid #e5eaf1;
+        font-weight: 700;
 
-            display: flex;
+        cursor: pointer;
 
-            align-items: center;
+        transition:
+            background .2s ease,
+            transform .2s ease;
+    }
 
-            justify-content: space-between;
+    .save-btn:hover {
+        background: #e96c12;
 
-            padding:
-                0 32px;
-        }
+        transform: translateY(-1px);
+    }
 
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
 
-        .page-title {
-            font-size: 20px;
-
-            font-weight: 800;
-
-            color: #173f70;
-        }
-
-
-        .page-subtitle {
-            margin-top: 3px;
-
-            font-size: 12px;
-
-            color: #8193a9;
-        }
-
-
-        /* =====================================================
-           ADMIN PROFILE
-        ===================================================== */
-
-        .admin-profile {
-            display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-        }
-
-
-        .admin-info {
-            text-align: right;
-        }
-
-
-        .admin-name {
-            font-size: 13px;
-
-            font-weight: 700;
-
-            color: #173f70;
-        }
-
-
-        .admin-role {
-            margin-top: 2px;
-
-            font-size: 11px;
-
-            color: #8b9caf;
-        }
-
-
-        .admin-avatar {
-            width: 36px;
-
-            height: 36px;
-
-            border-radius: 50%;
-
-            background: #eaf3fc;
-
-            color: #1779c9;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 14px;
-
-            font-weight: 800;
-        }
-
-
-        /* =====================================================
-           CONTENT
-        ===================================================== */
+    @media (max-width: 1050px) {
 
         .content {
             padding:
-                28px 32px 50px;
+                24px;
         }
 
+    }
 
-        /* =====================================================
-           INTRO
-        ===================================================== */
+    @media (max-width: 850px) {
+
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+    @media (max-width: 760px) {
+
+        .content {
+            padding:
+                20px 16px 40px;
+        }
 
         .intro-card {
-            background: #ffffff;
-
-            border-left:
-                4px solid #1779c9;
-
-            border-radius: 12px;
-
             padding:
-                22px 24px;
-
-            margin-bottom: 20px;
-
-            box-shadow:
-                0 3px 14px
-                rgba(24, 61, 105, .05);
+                20px;
         }
-
-
-        .intro-line {
-            width: 40px;
-
-            height: 3px;
-
-            background: #f47b20;
-
-            margin-bottom: 12px;
-        }
-
 
         .intro-title {
-            font-size: 22px;
-
-            font-weight: 800;
-
-            color: #245b9d;
-
-            margin-bottom: 7px;
+            font-size: 20px;
         }
-
-
-        .intro-description {
-            font-size: 13px;
-
-            line-height: 1.7;
-
-            color: #71849c;
-        }
-
-
-        /* =====================================================
-           ALERT
-        ===================================================== */
-
-        .alert-success {
-            background: #ecfdf3;
-
-            border:
-                1px solid #b8efcc;
-
-            color: #18753d;
-
-            border-radius: 9px;
-
-            padding:
-                12px 16px;
-
-            margin-bottom: 18px;
-
-            font-size: 13px;
-        }
-
-
-        .alert-error {
-            background: #fff1f1;
-
-            border:
-                1px solid #f2c3c3;
-
-            color: #b42318;
-
-            border-radius: 9px;
-
-            padding:
-                12px 16px;
-
-            margin-bottom: 18px;
-
-            font-size: 13px;
-        }
-
-
-        .alert-error ul {
-            margin-top: 7px;
-
-            margin-left: 18px;
-        }
-
-
-        .alert-error li {
-            margin-bottom: 3px;
-        }
-
-
-        /* =====================================================
-           SECTION CARD
-        ===================================================== */
-
-        .section-card {
-            background: #ffffff;
-
-            border-radius: 12px;
-
-            margin-bottom: 20px;
-
-            box-shadow:
-                0 3px 15px
-                rgba(24, 61, 105, .055);
-
-            overflow: hidden;
-        }
-
-
-        /* =====================================================
-           SECTION HEADER
-        ===================================================== */
 
         .section-header {
             padding:
-                18px 22px;
-
-            border-bottom:
-                1px solid #e8edf4;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 13px;
+                17px;
         }
-
-
-        .section-number {
-            width: 40px;
-
-            height: 40px;
-
-            min-width: 40px;
-
-            border-radius: 9px;
-
-            background: #edf5ff;
-
-            color: #2470b8;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 16px;
-
-            font-weight: 800;
-        }
-
-
-        .section-title {
-            font-size: 17px;
-
-            font-weight: 800;
-
-            color: #173f70;
-        }
-
-
-        .section-description {
-            margin-top: 4px;
-
-            font-size: 12px;
-
-            color: #8092a9;
-        }
-
-
-        /* =====================================================
-           SECTION BODY
-        ===================================================== */
 
         .section-body {
             padding:
-                22px;
+                17px;
         }
-
-
-        /* =====================================================
-           FIELD
-        ===================================================== */
-
-        .field {
-            margin-bottom: 17px;
-        }
-
-
-        .field:last-child {
-            margin-bottom: 0;
-        }
-
-
-        .field label {
-            display: block;
-
-            margin-bottom: 7px;
-
-            font-size: 13px;
-
-            font-weight: 700;
-
-            color: #173f70;
-        }
-
-
-        .required {
-            color: #ef4f42;
-        }
-
-
-        input,
-        textarea {
-            width: 100%;
-
-            border:
-                1px solid #d6dfeb;
-
-            border-radius: 8px;
-
-            background: #ffffff;
-
-            color: #284765;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            font-size: 13px;
-
-            outline: none;
-
-            transition:
-                border-color .2s ease,
-                box-shadow .2s ease;
-        }
-
-
-        input {
-            height: 43px;
-
-            padding:
-                0 13px;
-        }
-
-
-        textarea {
-            min-height: 105px;
-
-            padding:
-                11px 13px;
-
-            resize: vertical;
-
-            line-height: 1.65;
-        }
-
-
-        input::placeholder,
-        textarea::placeholder {
-            color: #a1afbf;
-        }
-
-
-        input:focus,
-        textarea:focus {
-            border-color: #3579c6;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(53, 121, 198, .09);
-        }
-
-
-        .field-help {
-            margin-top: 5px;
-
-            font-size: 11px;
-
-            color: #8498b0;
-        }
-
-
-        /* =====================================================
-           SUB CARD
-        ===================================================== */
 
         .sub-card {
-            background: #f8fafc;
-
-            border:
-                1px solid #e4eaf2;
-
-            border-radius: 10px;
-
             padding:
-                17px;
-
-            margin-top: 16px;
+                15px;
         }
-
-
-        .sub-card:first-child {
-            margin-top: 0;
-        }
-
-
-        .sub-card-title {
-            display: flex;
-
-            align-items: center;
-
-            font-size: 13px;
-
-            font-weight: 800;
-
-            color: #23568f;
-
-            margin-bottom: 14px;
-        }
-
-
-        /* =====================================================
-           GRID
-        ===================================================== */
-
-        .grid-2 {
-            display: grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap: 18px;
-        }
-
-
-        /* =====================================================
-           STEP NUMBER
-        ===================================================== */
-
-        .step-number {
-            display: inline-flex;
-
-            width: 28px;
-
-            height: 28px;
-
-            min-width: 28px;
-
-            border-radius: 50%;
-
-            background: #177eb7;
-
-            color: #ffffff;
-
-            align-items: center;
-
-            justify-content: center;
-
-            margin-right: 8px;
-
-            font-size: 12px;
-
-            font-weight: 800;
-        }
-
-
-        /* =====================================================
-           SAVE AREA
-        ===================================================== */
 
         .save-area {
-            display: flex;
-
-            justify-content: flex-end;
-
-            padding-top: 2px;
+            justify-content: stretch;
         }
-
 
         .save-btn {
-            min-width: 210px;
-
-            height: 46px;
-
-            border: 0;
-
-            border-radius: 8px;
-
-            background: #f47b20;
-
-            color: #ffffff;
-
-            font-size: 13px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition:
-                background .2s ease,
-                transform .2s ease;
+            width: 100%;
         }
 
+    }
 
-        .save-btn:hover {
-            background: #e96c12;
+</style>
+@endpush
 
-            transform: translateY(-1px);
-        }
+@section('content')
 
+{{-- =================================================
+     CONTENT
+================================================== --}}
 
-        /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+<section class="content">
 
-        @media (max-width: 1050px) {
+    {{-- =================================================
+         INTRO
+    ================================================== --}}
 
-            .sidebar {
-                width: 245px;
-            }
+    <div class="intro-card">
 
+        <div class="intro-line"></div>
 
-            .main {
-                width:
-                    calc(100% - 245px);
+        <div class="intro-title">
+            Edit Konten Website
+        </div>
 
-                margin-left: 245px;
-            }
+        <div class="intro-description">
 
+            Semua teks pada halaman utama dapat diedit
+            dari halaman ini. Ubah isi yang diperlukan,
+            kemudian klik <strong>Simpan Semua Perubahan</strong>.
 
-            .topbar {
-                padding:
-                    0 24px;
-            }
+        </div>
 
+    </div>
 
-            .content {
-                padding:
-                    24px;
-            }
+    {{-- =================================================
+         SUCCESS
+    ================================================== --}}
 
-        }
+    <x-alert type="success" :message="session('success')" />
 
+    {{-- =================================================
+         ERROR
+    ================================================== --}}
 
-        @media (max-width: 850px) {
+    <x-alert
+        type="error"
+        title="Ada data yang belum benar."
+        :messages="$errors->all()"
+    />
 
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
+    {{-- =================================================
+         FORM UTAMA
+    ================================================== --}}
 
-        }
+    <form
+        action="{{ route('superadmin.pengaturan.update') }}"
+        method="POST"
+    >
 
+        @csrf
 
-        @media (max-width: 760px) {
+        @method('PUT')
 
-            .layout {
-                display: block;
-            }
+        {{-- =================================================
+             1. INFORMASI TERBARU
+        ================================================== --}}
 
+        <div class="section-card">
 
-            .sidebar {
-                position: relative;
+            <div class="section-header">
 
-                width: 100%;
-
-                min-height: auto;
-
-                padding:
-                    20px 16px;
-            }
-
-
-            .main {
-                width: 100%;
-
-                margin-left: 0;
-            }
-
-
-            .topbar {
-                height: auto;
-
-                min-height: 64px;
-
-                padding:
-                    17px 20px;
-
-                align-items: flex-start;
-            }
-
-
-            .admin-profile {
-                display: none;
-            }
-
-
-            .content {
-                padding:
-                    20px 16px 40px;
-            }
-
-
-            .intro-card {
-                padding:
-                    20px;
-            }
-
-
-            .intro-title {
-                font-size: 20px;
-            }
-
-
-            .section-header {
-                padding:
-                    17px;
-            }
-
-
-            .section-body {
-                padding:
-                    17px;
-            }
-
-
-            .sub-card {
-                padding:
-                    15px;
-            }
-
-
-            .save-area {
-                justify-content: stretch;
-            }
-
-
-            .save-btn {
-                width: 100%;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-<div class="layout">
-
-
-    {{-- =====================================================
-         SIDEBAR
-    ====================================================== --}}
-
-    <aside class="sidebar">
-
-
-        {{-- BRAND --}}
-
-        <div class="brand">
-
-            <div class="brand-logo">
-                M
-            </div>
-
-
-            <div>
-
-                <div class="brand-title">
-                    MAGENTA
+                <div class="section-number">
+                    1
                 </div>
 
-                <div class="brand-subtitle">
-                    SISTEM INFORMASI MAGANG
+                <div>
+
+                    <div class="section-title">
+                        Informasi Terbaru
+                    </div>
+
+                    <div class="section-description">
+                        Edit bagian informasi terbaru pada halaman utama.
+                    </div>
+
                 </div>
 
             </div>
 
-        </div>
+            <div class="section-body">
 
+                <div class="field">
 
-        {{-- =================================================
-             UTAMA
-        ================================================== --}}
+                    <label for="informasi_terbaru_judul">
 
-        <div class="menu-area">
+                        Judul
 
-            <div class="menu-title">
-                UTAMA
-            </div>
+                        <span class="required">
+                            *
+                        </span>
 
+                    </label>
 
-            <div class="menu-list">
-
-                {{-- DASHBOARD MENYESUAIKAN ROLE --}}
-
-                <a
-                    href="{{ auth()->user()->role === 'super_admin'
-                        ? route('superadmin.dashboard')
-                        : route('admin.dashboard') }}"
-                    class="menu-item"
-                >
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    <span>
-                        Dashboard
-                    </span>
-
-                </a>
-
-            </div>
-
-        </div>
-
-
-        {{-- =================================================
-             SISTEM
-        ================================================== --}}
-
-        <div class="menu-area">
-
-            <div class="menu-title">
-                SISTEM
-            </div>
-
-
-            <div class="menu-list">
-
-
-                {{-- PROFIL PERUSAHAAN --}}
-
-                <a
-                    href="{{ route('superadmin.perusahaan.index') }}"
-                    class="menu-item"
-                >
-
-                    <span class="menu-icon">
-                        ▰
-                    </span>
-
-                    <span>
-                        Profil Perusahaan
-                    </span>
-
-                </a>
-
-
-                {{-- KELOLA BANNER --}}
-
-                <a
-                    href="{{ route('superadmin.banners.index') }}"
-                    class="menu-item"
-                >
-
-                    <span class="menu-icon">
-                        ▧
-                    </span>
-
-                    <span>
-                        Kelola Banner
-                    </span>
-
-                </a>
-
-
-                {{-- KELOLA KONTEN --}}
-
-                <a
-                    href="{{ route('superadmin.pengaturan.index') }}"
-                    class="menu-item active"
-                >
-
-                    <span class="menu-icon">
-                        ⚙
-                    </span>
-
-                    <span>
-                        Kelola Konten
-                    </span>
-
-                </a>
-
-
-                {{-- KELOLA PENGGUNA
-                     HANYA SUPER ADMIN --}}
-
-                @if(auth()->user()->role === 'super_admin')
-
-                    <a
-                        href="{{ route('superadmin.pengguna.index') }}"
-                        class="menu-item"
+                    <input
+                        type="text"
+                        id="informasi_terbaru_judul"
+                        name="informasi_terbaru_judul"
+                        value="{{ old(
+                            'informasi_terbaru_judul',
+                            $pengaturan?->informasi_terbaru_judul
+                            ?? 'Informasi Terbaru'
+                        ) }}"
+                        required
                     >
 
-                        <span class="menu-icon">
-                            ◉
-                        </span>
+                </div>
 
-                        <span>
-                            Kelola Pengguna
-                        </span>
+                <div class="field">
 
-                    </a>
+                    <label for="informasi_terbaru_deskripsi">
+                        Deskripsi
+                    </label>
 
-                @endif
+                    <textarea
+                        id="informasi_terbaru_deskripsi"
+                        name="informasi_terbaru_deskripsi"
+                        placeholder="Masukkan informasi terbaru..."
+                    >{{ old(
+                        'informasi_terbaru_deskripsi',
+                        $pengaturan?->informasi_terbaru_deskripsi
+                        ?? ''
+                    ) }}</textarea>
 
+                </div>
 
             </div>
 
         </div>
 
-
-        <div class="sidebar-divider"></div>
-
-
         {{-- =================================================
-             LOGOUT
+             2. PENGUMUMAN
         ================================================== --}}
 
-        <form
-            action="{{ route('logout') }}"
-            method="POST"
-        >
+        <div class="section-card">
 
-            @csrf
+            <div class="section-header">
 
+                <div class="section-number">
+                    2
+                </div>
+
+                <div>
+
+                    <div class="section-title">
+                        Pengumuman
+                    </div>
+
+                    <div class="section-description">
+                        Edit pengumuman dan tiga kartu informasi.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section-body">
+
+                <div class="field">
+
+                    <label for="pengumuman_judul">
+
+                        Judul Pengumuman
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pengumuman_judul"
+                        name="pengumuman_judul"
+                        value="{{ old(
+                            'pengumuman_judul',
+                            $pengaturan?->pengumuman_judul
+                            ?? 'Pengumuman'
+                        ) }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label for="pengumuman_deskripsi">
+                        Isi Pengumuman
+                    </label>
+
+                    <textarea
+                        id="pengumuman_deskripsi"
+                        name="pengumuman_deskripsi"
+                        placeholder="Masukkan isi pengumuman..."
+                    >{{ old(
+                        'pengumuman_deskripsi',
+                        $pengaturan?->pengumuman_deskripsi
+                        ?? ''
+                    ) }}</textarea>
+
+                </div>
+
+                {{-- CARD 1 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Kartu Informasi 1
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="pengumuman_card1_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pengumuman_card1_judul"
+                                name="pengumuman_card1_judul"
+                                value="{{ old(
+                                    'pengumuman_card1_judul',
+                                    $pengaturan?->pengumuman_card1_judul
+                                    ?? 'Persiapkan Dokumen'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="pengumuman_card1_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="pengumuman_card1_deskripsi"
+                                name="pengumuman_card1_deskripsi"
+                                placeholder="Isi kartu informasi..."
+                            >{{ old(
+                                'pengumuman_card1_deskripsi',
+                                $pengaturan?->pengumuman_card1_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- CARD 2 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Kartu Informasi 2
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="pengumuman_card2_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pengumuman_card2_judul"
+                                name="pengumuman_card2_judul"
+                                value="{{ old(
+                                    'pengumuman_card2_judul',
+                                    $pengaturan?->pengumuman_card2_judul
+                                    ?? 'Pendaftaran Online'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="pengumuman_card2_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="pengumuman_card2_deskripsi"
+                                name="pengumuman_card2_deskripsi"
+                                placeholder="Isi kartu informasi..."
+                            >{{ old(
+                                'pengumuman_card2_deskripsi',
+                                $pengaturan?->pengumuman_card2_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- CARD 3 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Kartu Informasi 3
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="pengumuman_card3_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pengumuman_card3_judul"
+                                name="pengumuman_card3_judul"
+                                value="{{ old(
+                                    'pengumuman_card3_judul',
+                                    $pengaturan?->pengumuman_card3_judul
+                                    ?? 'Informasi Perusahaan'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="pengumuman_card3_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="pengumuman_card3_deskripsi"
+                                name="pengumuman_card3_deskripsi"
+                                placeholder="Isi kartu informasi..."
+                            >{{ old(
+                                'pengumuman_card3_deskripsi',
+                                $pengaturan?->pengumuman_card3_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- =================================================
+             3. PERSYARATAN MAGANG
+        ================================================== --}}
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    3
+                </div>
+
+                <div>
+
+                    <div class="section-title">
+                        Persyaratan Magang
+                    </div>
+
+                    <div class="section-description">
+                        Edit judul, deskripsi, dan tiga persyaratan.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section-body">
+
+                <div class="field">
+
+                    <label for="persyaratan_judul">
+
+                        Judul
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="persyaratan_judul"
+                        name="persyaratan_judul"
+                        value="{{ old(
+                            'persyaratan_judul',
+                            $pengaturan?->persyaratan_judul
+                            ?? 'Persyaratan Magang'
+                        ) }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label for="persyaratan_deskripsi">
+                        Deskripsi
+                    </label>
+
+                    <textarea
+                        id="persyaratan_deskripsi"
+                        name="persyaratan_deskripsi"
+                        placeholder="Masukkan deskripsi persyaratan..."
+                    >{{ old(
+                        'persyaratan_deskripsi',
+                        $pengaturan?->persyaratan_deskripsi
+                        ?? ''
+                    ) }}</textarea>
+
+                </div>
+
+                {{-- PERSYARATAN 1 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Persyaratan 1
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="persyaratan1_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="persyaratan1_judul"
+                                name="persyaratan1_judul"
+                                value="{{ old(
+                                    'persyaratan1_judul',
+                                    $pengaturan?->persyaratan1_judul
+                                    ?? 'Surat Pengantar'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="persyaratan1_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="persyaratan1_deskripsi"
+                                name="persyaratan1_deskripsi"
+                                placeholder="Isi persyaratan..."
+                            >{{ old(
+                                'persyaratan1_deskripsi',
+                                $pengaturan?->persyaratan1_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- PERSYARATAN 2 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Persyaratan 2
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="persyaratan2_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="persyaratan2_judul"
+                                name="persyaratan2_judul"
+                                value="{{ old(
+                                    'persyaratan2_judul',
+                                    $pengaturan?->persyaratan2_judul
+                                    ?? 'Data Mahasiswa'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="persyaratan2_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="persyaratan2_deskripsi"
+                                name="persyaratan2_deskripsi"
+                                placeholder="Isi persyaratan..."
+                            >{{ old(
+                                'persyaratan2_deskripsi',
+                                $pengaturan?->persyaratan2_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- PERSYARATAN 3 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+                        Persyaratan 3
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="persyaratan3_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="persyaratan3_judul"
+                                name="persyaratan3_judul"
+                                value="{{ old(
+                                    'persyaratan3_judul',
+                                    $pengaturan?->persyaratan3_judul
+                                    ?? 'Dokumen Pendukung'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="persyaratan3_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="persyaratan3_deskripsi"
+                                name="persyaratan3_deskripsi"
+                                placeholder="Isi persyaratan..."
+                            >{{ old(
+                                'persyaratan3_deskripsi',
+                                $pengaturan?->persyaratan3_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- =================================================
+             4. ALUR MAGANG
+        ================================================== --}}
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    4
+                </div>
+
+                <div>
+
+                    <div class="section-title">
+                        Alur Magang
+                    </div>
+
+                    <div class="section-description">
+                        Edit judul, deskripsi, dan empat tahapan alur magang.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section-body">
+
+                <div class="field">
+
+                    <label for="alur_judul">
+
+                        Judul
+
+                        <span class="required">
+                            *
+                        </span>
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="alur_judul"
+                        name="alur_judul"
+                        value="{{ old(
+                            'alur_judul',
+                            $pengaturan?->alur_judul
+                            ?? 'Alur Magang'
+                        ) }}"
+                        required
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label for="alur_deskripsi">
+                        Deskripsi
+                    </label>
+
+                    <textarea
+                        id="alur_deskripsi"
+                        name="alur_deskripsi"
+                        placeholder="Masukkan deskripsi alur magang..."
+                    >{{ old(
+                        'alur_deskripsi',
+                        $pengaturan?->alur_deskripsi
+                        ?? ''
+                    ) }}</textarea>
+
+                </div>
+
+                {{-- LANGKAH 1 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+
+                        <span class="step-number">
+                            1
+                        </span>
+
+                        Langkah Pertama
+
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="alur1_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alur1_judul"
+                                name="alur1_judul"
+                                value="{{ old(
+                                    'alur1_judul',
+                                    $pengaturan?->alur1_judul
+                                    ?? 'Persiapkan'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="alur1_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="alur1_deskripsi"
+                                name="alur1_deskripsi"
+                                placeholder="Isi langkah pertama..."
+                            >{{ old(
+                                'alur1_deskripsi',
+                                $pengaturan?->alur1_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- LANGKAH 2 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+
+                        <span class="step-number">
+                            2
+                        </span>
+
+                        Langkah Kedua
+
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="alur2_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alur2_judul"
+                                name="alur2_judul"
+                                value="{{ old(
+                                    'alur2_judul',
+                                    $pengaturan?->alur2_judul
+                                    ?? 'Daftar'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="alur2_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="alur2_deskripsi"
+                                name="alur2_deskripsi"
+                                placeholder="Isi langkah kedua..."
+                            >{{ old(
+                                'alur2_deskripsi',
+                                $pengaturan?->alur2_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- LANGKAH 3 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+
+                        <span class="step-number">
+                            3
+                        </span>
+
+                        Langkah Ketiga
+
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="alur3_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alur3_judul"
+                                name="alur3_judul"
+                                value="{{ old(
+                                    'alur3_judul',
+                                    $pengaturan?->alur3_judul
+                                    ?? 'Verifikasi'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="alur3_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="alur3_deskripsi"
+                                name="alur3_deskripsi"
+                                placeholder="Isi langkah ketiga..."
+                            >{{ old(
+                                'alur3_deskripsi',
+                                $pengaturan?->alur3_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- LANGKAH 4 --}}
+
+                <div class="sub-card">
+
+                    <div class="sub-card-title">
+
+                        <span class="step-number">
+                            4
+                        </span>
+
+                        Langkah Keempat
+
+                    </div>
+
+                    <div class="grid-2">
+
+                        <div class="field">
+
+                            <label for="alur4_judul">
+                                Judul
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alur4_judul"
+                                name="alur4_judul"
+                                value="{{ old(
+                                    'alur4_judul',
+                                    $pengaturan?->alur4_judul
+                                    ?? 'Pelaksanaan'
+                                ) }}"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="field">
+
+                            <label for="alur4_deskripsi">
+                                Isi
+                            </label>
+
+                            <textarea
+                                id="alur4_deskripsi"
+                                name="alur4_deskripsi"
+                                placeholder="Isi langkah keempat..."
+                            >{{ old(
+                                'alur4_deskripsi',
+                                $pengaturan?->alur4_deskripsi
+                                ?? ''
+                            ) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {{-- =================================================
+             5. PENDAFTARAN GOOGLE FORM
+        ================================================== --}}
+
+        <div class="section-card">
+
+            <div class="section-header">
+
+                <div class="section-number">
+                    5
+                </div>
+
+                <div>
+
+                    <div class="section-title">
+                        Pendaftaran Google Form
+                    </div>
+
+                    <div class="section-description">
+                        Atur link Google Form yang digunakan mahasiswa
+                        untuk melakukan pendaftaran magang.
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="section-body">
+
+                <div class="field">
+
+                    <label for="google_form_url">
+                        Link Google Form Pendaftaran
+                    </label>
+
+                    <input
+                        type="url"
+                        id="google_form_url"
+                        name="google_form_url"
+                        value="{{ old(
+                            'google_form_url',
+                            $pengaturan?->google_form_url ?? ''
+                        ) }}"
+                        placeholder="https://docs.google.com/forms/..."
+                    >
+
+                    @error('google_form_url')
+                        <div class="field-help" style="color:#b42318;">
+                            {{ $message }}
+                        </div>
+                    @enderror
+
+                    <div class="field-help">
+                        Masukkan URL Google Form resmi yang digunakan untuk
+                        pendaftaran mahasiswa magang.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+                        {{-- =================================================
+             SAVE
+        ================================================== --}}
+
+        <div class="save-area">
 
             <button
                 type="submit"
-                class="logout-btn"
+                class="save-btn"
             >
-
-                <span>
-                    ↪
-                </span>
-
-                <span>
-                    Logout
-                </span>
-
+                Simpan Semua Perubahan
             </button>
 
-        </form>
+        </div>
 
+    </form>
 
-    </aside>
+</section>
 
-
-
-    {{-- =====================================================
-         MAIN
-    ====================================================== --}}
-
-    <main class="main">
-
-
-        {{-- =================================================
-             TOPBAR
-        ================================================== --}}
-
-        <header class="topbar">
-
-
-            <div>
-
-                <div class="page-title">
-                    Kelola Konten
-                </div>
-
-                <div class="page-subtitle">
-                    Edit seluruh konten yang tampil pada halaman utama MAGENTA
-                </div>
-
-            </div>
-
-
-            <div class="admin-profile">
-
-                <div class="admin-info">
-
-                    <div class="admin-name">
-                        {{ auth()->user()->name }}
-                    </div>
-
-
-                    <div class="admin-role">
-
-                        {{ auth()->user()->role === 'super_admin'
-                            ? 'Super Admin'
-                            : 'Admin' }}
-
-                    </div>
-
-                </div>
-
-
-                <div class="admin-avatar">
-
-                    {{ strtoupper(
-                        substr(
-                            auth()->user()->name,
-                            0,
-                            1
-                        )
-                    ) }}
-
-                </div>
-
-            </div>
-
-
-        </header>
-
-
-
-        {{-- =================================================
-             CONTENT
-        ================================================== --}}
-
-        <section class="content">
-
-
-            {{-- =================================================
-                 INTRO
-            ================================================== --}}
-
-            <div class="intro-card">
-
-                <div class="intro-line"></div>
-
-
-                <div class="intro-title">
-                    Edit Konten Website
-                </div>
-
-
-                <div class="intro-description">
-
-                    Semua teks pada halaman utama dapat diedit
-                    dari halaman ini. Ubah isi yang diperlukan,
-                    kemudian klik <strong>Simpan Semua Perubahan</strong>.
-
-                </div>
-
-            </div>
-
-
-
-            {{-- =================================================
-                 SUCCESS
-            ================================================== --}}
-
-            @if(session('success'))
-
-                <div class="alert-success">
-
-                    {{ session('success') }}
-
-                </div>
-
-            @endif
-
-
-
-            {{-- =================================================
-                 ERROR
-            ================================================== --}}
-
-            @if($errors->any())
-
-                <div class="alert-error">
-
-                    <strong>
-                        Ada data yang belum benar.
-                    </strong>
-
-
-                    <ul>
-
-                        @foreach($errors->all() as $error)
-
-                            <li>
-                                {{ $error }}
-                            </li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
-
-
-
-            {{-- =================================================
-                 FORM UTAMA
-            ================================================== --}}
-
-            <form
-                action="{{ route('superadmin.pengaturan.update') }}"
-                method="POST"
-            >
-
-                @csrf
-
-                @method('PUT')
-
-
-
-                {{-- =================================================
-                     1. INFORMASI TERBARU
-                ================================================== --}}
-
-                <div class="section-card">
-
-
-                    <div class="section-header">
-
-                        <div class="section-number">
-                            1
-                        </div>
-
-
-                        <div>
-
-                            <div class="section-title">
-                                Informasi Terbaru
-                            </div>
-
-                            <div class="section-description">
-                                Edit bagian informasi terbaru pada halaman utama.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="section-body">
-
-
-                        <div class="field">
-
-                            <label for="informasi_terbaru_judul">
-
-                                Judul
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <input
-                                type="text"
-                                id="informasi_terbaru_judul"
-                                name="informasi_terbaru_judul"
-                                value="{{ old(
-                                    'informasi_terbaru_judul',
-                                    $pengaturan?->informasi_terbaru_judul
-                                    ?? 'Informasi Terbaru'
-                                ) }}"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label for="informasi_terbaru_deskripsi">
-                                Deskripsi
-                            </label>
-
-
-                            <textarea
-                                id="informasi_terbaru_deskripsi"
-                                name="informasi_terbaru_deskripsi"
-                                placeholder="Masukkan informasi terbaru..."
-                            >{{ old(
-                                'informasi_terbaru_deskripsi',
-                                $pengaturan?->informasi_terbaru_deskripsi
-                                ?? ''
-                            ) }}</textarea>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-
-                {{-- =================================================
-                     2. PENGUMUMAN
-                ================================================== --}}
-
-                <div class="section-card">
-
-
-                    <div class="section-header">
-
-                        <div class="section-number">
-                            2
-                        </div>
-
-
-                        <div>
-
-                            <div class="section-title">
-                                Pengumuman
-                            </div>
-
-                            <div class="section-description">
-                                Edit pengumuman dan tiga kartu informasi.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="section-body">
-
-
-                        <div class="field">
-
-                            <label for="pengumuman_judul">
-
-                                Judul Pengumuman
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <input
-                                type="text"
-                                id="pengumuman_judul"
-                                name="pengumuman_judul"
-                                value="{{ old(
-                                    'pengumuman_judul',
-                                    $pengaturan?->pengumuman_judul
-                                    ?? 'Pengumuman'
-                                ) }}"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label for="pengumuman_deskripsi">
-                                Isi Pengumuman
-                            </label>
-
-
-                            <textarea
-                                id="pengumuman_deskripsi"
-                                name="pengumuman_deskripsi"
-                                placeholder="Masukkan isi pengumuman..."
-                            >{{ old(
-                                'pengumuman_deskripsi',
-                                $pengaturan?->pengumuman_deskripsi
-                                ?? ''
-                            ) }}</textarea>
-
-                        </div>
-
-
-
-                        {{-- CARD 1 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Kartu Informasi 1
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card1_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="pengumuman_card1_judul"
-                                        name="pengumuman_card1_judul"
-                                        value="{{ old(
-                                            'pengumuman_card1_judul',
-                                            $pengaturan?->pengumuman_card1_judul
-                                            ?? 'Persiapkan Dokumen'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card1_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="pengumuman_card1_deskripsi"
-                                        name="pengumuman_card1_deskripsi"
-                                        placeholder="Isi kartu informasi..."
-                                    >{{ old(
-                                        'pengumuman_card1_deskripsi',
-                                        $pengaturan?->pengumuman_card1_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- CARD 2 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Kartu Informasi 2
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card2_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="pengumuman_card2_judul"
-                                        name="pengumuman_card2_judul"
-                                        value="{{ old(
-                                            'pengumuman_card2_judul',
-                                            $pengaturan?->pengumuman_card2_judul
-                                            ?? 'Pendaftaran Online'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card2_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="pengumuman_card2_deskripsi"
-                                        name="pengumuman_card2_deskripsi"
-                                        placeholder="Isi kartu informasi..."
-                                    >{{ old(
-                                        'pengumuman_card2_deskripsi',
-                                        $pengaturan?->pengumuman_card2_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- CARD 3 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Kartu Informasi 3
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card3_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="pengumuman_card3_judul"
-                                        name="pengumuman_card3_judul"
-                                        value="{{ old(
-                                            'pengumuman_card3_judul',
-                                            $pengaturan?->pengumuman_card3_judul
-                                            ?? 'Informasi Perusahaan'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="pengumuman_card3_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="pengumuman_card3_deskripsi"
-                                        name="pengumuman_card3_deskripsi"
-                                        placeholder="Isi kartu informasi..."
-                                    >{{ old(
-                                        'pengumuman_card3_deskripsi',
-                                        $pengaturan?->pengumuman_card3_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-
-                {{-- =================================================
-                     3. PERSYARATAN MAGANG
-                ================================================== --}}
-
-                <div class="section-card">
-
-
-                    <div class="section-header">
-
-                        <div class="section-number">
-                            3
-                        </div>
-
-
-                        <div>
-
-                            <div class="section-title">
-                                Persyaratan Magang
-                            </div>
-
-                            <div class="section-description">
-                                Edit judul, deskripsi, dan tiga persyaratan.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="section-body">
-
-
-                        <div class="field">
-
-                            <label for="persyaratan_judul">
-
-                                Judul
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <input
-                                type="text"
-                                id="persyaratan_judul"
-                                name="persyaratan_judul"
-                                value="{{ old(
-                                    'persyaratan_judul',
-                                    $pengaturan?->persyaratan_judul
-                                    ?? 'Persyaratan Magang'
-                                ) }}"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label for="persyaratan_deskripsi">
-                                Deskripsi
-                            </label>
-
-
-                            <textarea
-                                id="persyaratan_deskripsi"
-                                name="persyaratan_deskripsi"
-                                placeholder="Masukkan deskripsi persyaratan..."
-                            >{{ old(
-                                'persyaratan_deskripsi',
-                                $pengaturan?->persyaratan_deskripsi
-                                ?? ''
-                            ) }}</textarea>
-
-                        </div>
-
-
-
-                        {{-- PERSYARATAN 1 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Persyaratan 1
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan1_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="persyaratan1_judul"
-                                        name="persyaratan1_judul"
-                                        value="{{ old(
-                                            'persyaratan1_judul',
-                                            $pengaturan?->persyaratan1_judul
-                                            ?? 'Surat Pengantar'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan1_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="persyaratan1_deskripsi"
-                                        name="persyaratan1_deskripsi"
-                                        placeholder="Isi persyaratan..."
-                                    >{{ old(
-                                        'persyaratan1_deskripsi',
-                                        $pengaturan?->persyaratan1_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- PERSYARATAN 2 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Persyaratan 2
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan2_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="persyaratan2_judul"
-                                        name="persyaratan2_judul"
-                                        value="{{ old(
-                                            'persyaratan2_judul',
-                                            $pengaturan?->persyaratan2_judul
-                                            ?? 'Data Mahasiswa'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan2_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="persyaratan2_deskripsi"
-                                        name="persyaratan2_deskripsi"
-                                        placeholder="Isi persyaratan..."
-                                    >{{ old(
-                                        'persyaratan2_deskripsi',
-                                        $pengaturan?->persyaratan2_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- PERSYARATAN 3 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-                                Persyaratan 3
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan3_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="persyaratan3_judul"
-                                        name="persyaratan3_judul"
-                                        value="{{ old(
-                                            'persyaratan3_judul',
-                                            $pengaturan?->persyaratan3_judul
-                                            ?? 'Dokumen Pendukung'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="persyaratan3_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="persyaratan3_deskripsi"
-                                        name="persyaratan3_deskripsi"
-                                        placeholder="Isi persyaratan..."
-                                    >{{ old(
-                                        'persyaratan3_deskripsi',
-                                        $pengaturan?->persyaratan3_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-
-                {{-- =================================================
-                     4. ALUR MAGANG
-                ================================================== --}}
-
-                <div class="section-card">
-
-
-                    <div class="section-header">
-
-                        <div class="section-number">
-                            4
-                        </div>
-
-
-                        <div>
-
-                            <div class="section-title">
-                                Alur Magang
-                            </div>
-
-                            <div class="section-description">
-                                Edit judul, deskripsi, dan empat tahapan alur magang.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="section-body">
-
-
-                        <div class="field">
-
-                            <label for="alur_judul">
-
-                                Judul
-
-                                <span class="required">
-                                    *
-                                </span>
-
-                            </label>
-
-
-                            <input
-                                type="text"
-                                id="alur_judul"
-                                name="alur_judul"
-                                value="{{ old(
-                                    'alur_judul',
-                                    $pengaturan?->alur_judul
-                                    ?? 'Alur Magang'
-                                ) }}"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="field">
-
-                            <label for="alur_deskripsi">
-                                Deskripsi
-                            </label>
-
-
-                            <textarea
-                                id="alur_deskripsi"
-                                name="alur_deskripsi"
-                                placeholder="Masukkan deskripsi alur magang..."
-                            >{{ old(
-                                'alur_deskripsi',
-                                $pengaturan?->alur_deskripsi
-                                ?? ''
-                            ) }}</textarea>
-
-                        </div>
-
-
-
-                        {{-- LANGKAH 1 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-
-                                <span class="step-number">
-                                    1
-                                </span>
-
-                                Langkah Pertama
-
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="alur1_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="alur1_judul"
-                                        name="alur1_judul"
-                                        value="{{ old(
-                                            'alur1_judul',
-                                            $pengaturan?->alur1_judul
-                                            ?? 'Persiapkan'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="alur1_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="alur1_deskripsi"
-                                        name="alur1_deskripsi"
-                                        placeholder="Isi langkah pertama..."
-                                    >{{ old(
-                                        'alur1_deskripsi',
-                                        $pengaturan?->alur1_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- LANGKAH 2 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-
-                                <span class="step-number">
-                                    2
-                                </span>
-
-                                Langkah Kedua
-
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="alur2_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="alur2_judul"
-                                        name="alur2_judul"
-                                        value="{{ old(
-                                            'alur2_judul',
-                                            $pengaturan?->alur2_judul
-                                            ?? 'Daftar'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="alur2_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="alur2_deskripsi"
-                                        name="alur2_deskripsi"
-                                        placeholder="Isi langkah kedua..."
-                                    >{{ old(
-                                        'alur2_deskripsi',
-                                        $pengaturan?->alur2_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- LANGKAH 3 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-
-                                <span class="step-number">
-                                    3
-                                </span>
-
-                                Langkah Ketiga
-
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="alur3_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="alur3_judul"
-                                        name="alur3_judul"
-                                        value="{{ old(
-                                            'alur3_judul',
-                                            $pengaturan?->alur3_judul
-                                            ?? 'Verifikasi'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="alur3_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="alur3_deskripsi"
-                                        name="alur3_deskripsi"
-                                        placeholder="Isi langkah ketiga..."
-                                    >{{ old(
-                                        'alur3_deskripsi',
-                                        $pengaturan?->alur3_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-
-                        {{-- LANGKAH 4 --}}
-
-                        <div class="sub-card">
-
-                            <div class="sub-card-title">
-
-                                <span class="step-number">
-                                    4
-                                </span>
-
-                                Langkah Keempat
-
-                            </div>
-
-
-                            <div class="grid-2">
-
-
-                                <div class="field">
-
-                                    <label for="alur4_judul">
-                                        Judul
-                                    </label>
-
-
-                                    <input
-                                        type="text"
-                                        id="alur4_judul"
-                                        name="alur4_judul"
-                                        value="{{ old(
-                                            'alur4_judul',
-                                            $pengaturan?->alur4_judul
-                                            ?? 'Pelaksanaan'
-                                        ) }}"
-                                        required
-                                    >
-
-                                </div>
-
-
-                                <div class="field">
-
-                                    <label for="alur4_deskripsi">
-                                        Isi
-                                    </label>
-
-
-                                    <textarea
-                                        id="alur4_deskripsi"
-                                        name="alur4_deskripsi"
-                                        placeholder="Isi langkah keempat..."
-                                    >{{ old(
-                                        'alur4_deskripsi',
-                                        $pengaturan?->alur4_deskripsi
-                                        ?? ''
-                                    ) }}</textarea>
-
-                                </div>
-
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-
-
-                {{-- =================================================
-                     5. PENDAFTARAN GOOGLE FORM
-                ================================================== --}}
-
-                <div class="section-card">
-
-                    <div class="section-header">
-
-                        <div class="section-number">
-                            5
-                        </div>
-
-                        <div>
-
-                            <div class="section-title">
-                                Pendaftaran Google Form
-                            </div>
-
-                            <div class="section-description">
-                                Atur link Google Form yang digunakan mahasiswa
-                                untuk melakukan pendaftaran magang.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="section-body">
-
-                        <div class="field">
-
-                            <label for="google_form_url">
-                                Link Google Form Pendaftaran
-                            </label>
-
-                            <input
-                                type="url"
-                                id="google_form_url"
-                                name="google_form_url"
-                                value="{{ old(
-                                    'google_form_url',
-                                    $pengaturan?->google_form_url ?? ''
-                                ) }}"
-                                placeholder="https://docs.google.com/forms/..."
-                            >
-
-                            @error('google_form_url')
-                                <div class="field-help" style="color:#b42318;">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-
-                            <div class="field-help">
-                                Masukkan URL Google Form resmi yang digunakan untuk
-                                pendaftaran mahasiswa magang.
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                                {{-- =================================================
-                     SAVE
-                ================================================== --}}
-
-                <div class="save-area">
-
-                    <button
-                        type="submit"
-                        class="save-btn"
-                    >
-                        Simpan Semua Perubahan
-                    </button>
-
-                </div>
-
-
-            </form>
-
-
-        </section>
-
-
-    </main>
-
-
-</div>
-
-
-</body>
-
-</html>
+@endsection
