@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfilController;
 use App\Http\Controllers\Peserta\BiodataController as PesertaBiodataController;
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
+use App\Http\Controllers\Peserta\FeedbackController as PesertaFeedbackController;
 use App\Http\Controllers\Peserta\IzinController as PesertaIzinController;
 use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
+use App\Http\Controllers\SuperAdmin\FeedbackController;
 use App\Http\Controllers\SuperAdmin\ImporLogbookController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
@@ -103,6 +105,10 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
                 Route::put('/{tanggal}', 'update')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('update');
                 Route::delete('/{tanggal}', 'destroy')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('destroy');
             });
+
+        // Feedback program magang (dibuka sebulan sebelum selesai)
+        Route::get('/feedback', [PesertaFeedbackController::class, 'edit'])->name('feedback.edit');
+        Route::put('/feedback', [PesertaFeedbackController::class, 'update'])->name('feedback.update');
 
         // Izin / sakit beberapa hari
         Route::controller(PesertaIzinController::class)
@@ -279,6 +285,10 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             '/peserta-magang/{pesertaMagang}/logbook',
             [LogbookController::class, 'update']
         )->name('peserta-magang.logbook.update');
+
+        // Feedback peserta: rekap & detail
+        Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+        Route::get('/peserta-magang/{pesertaMagang}/feedback', [FeedbackController::class, 'show'])->name('peserta-magang.feedback');
 
         // Monitoring peserta (biodata, logbook, verifikasi)
         Route::get('/monitoring', MonitoringController::class)->name('monitoring.index');

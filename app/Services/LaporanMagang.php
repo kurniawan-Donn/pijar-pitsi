@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\FeedbackPeserta;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\TarifUangSaku;
@@ -24,6 +25,7 @@ class LaporanMagang
         'peserta' => 'Rekap Peserta',
         'absensi' => 'Rekap Absensi',
         'nilai' => 'Nilai Akhir',
+        'feedback' => 'Feedback Magang',
     ];
 
     public function __construct(
@@ -39,6 +41,7 @@ class LaporanMagang
         return match ($jenis) {
             'absensi' => $this->absensi($filter),
             'nilai' => $this->nilai($filter),
+            'feedback' => $this->feedback($filter),
             default => $this->peserta($filter),
         };
     }
@@ -198,6 +201,43 @@ class LaporanMagang
                 'Jumlah dinilai' => $penilaian->count(),
                 'Rata-rata' => $penilaian->isEmpty() ? '-' : number_format($penilaian->avg('nilai_akhir'), 2, ',', '.'),
                 'Tertinggi' => $penilaian->isEmpty() ? '-' : number_format($penilaian->max('nilai_akhir'), 2, ',', '.'),
+            ],
+        ];
+    }
+
+    /**
+     * Skor feedback per peserta (filter tanggal selesai magang).
+     *
+     * @param  array{dari?: ?string, sampai?: ?string}  $filter
+     */
+    private function feedback(array $filter): array
+    {
+        $rekap = app(RekapFeedback::class);
+        $daftar = $rekap->daftar($filter['dari'] ?? null, $filter['sampai'] ?? null);
+        $hasil = $rekap->hitung($daftar);
+        $nomor = array_keys(config('feedback.pertanyaan_skala'));
+        $angka = fn (float $nilai) => number_format($nilai, 2, ',', '');
+
+        $baris = $daftar->values()->map(fn (FeedbackPeserta $feedback, int $i) => [
+            $i + 1,
+            $feedback->pesertaMagang->nama,
+            $feedback->pesertaMagang->asal_kampus ?: '-',
+            $feedback->pesertaMagang->periode_selesai?->format('d/m/Y') ?? '-',
+            ...array_map(fn (int $n) => (int) ($feedback->skor[$n] ?? 0), $nomor),
+            $angka($feedback->rataRata()),
+            $feedback->labelRekomendasi(),
+        ])->all();
+
+        return [
+            'judul' => 'Rekap Feedback Magang',
+            'keterangan' => 'Selesai magang: '.mb_strtolower($this->labelPeriode($filter['dari'] ?? null, $filter['sampai'] ?? null))
+                .' · skor 1–5 untuk pertanyaan P1–P'.count($nomor),
+            'kolom' => ['No', 'Nama', 'Asal Kampus', 'Selesai', ...array_map(fn (int $n) => 'P'.$n, $nomor), 'Rata-rata', 'Rekomendasi'],
+            'baris' => $baris,
+            'ringkasan' => [
+                'Jumlah feedback' => $hasil['jumlah'],
+                'Rata-rata kepuasan' => $angka($hasil['rata_rata']).' / 5',
+                'Bersedia merekomendasikan' => ($hasil['rekomendasi']['sangat_bersedia'] + $hasil['rekomendasi']['bersedia']).' peserta',
             ],
         ];
     }

@@ -1612,6 +1612,21 @@
                         </span>
                     </a>
 
+                    {{-- FEEDBACK --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.feedback', $pesertaMagang) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">✎</span>
+                        <span>
+                            Feedback Magang
+                            <small class="action-meta">
+                                {{ $pesertaMagang->feedback ? 'Sudah dikirim · rata-rata '.number_format($pesertaMagang->feedback->rataRata(), 2, ',', '.') : 'Belum dikirim' }}
+                            </small>
+                        </span>
+                    </a>
+
                     {{-- LOGBOOK HARIAN (DATABASE) --}}
 
                     <a

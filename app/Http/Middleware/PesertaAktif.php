@@ -11,7 +11,8 @@ class PesertaAktif
 {
     /**
      * Area peserta hanya untuk akun aktif yang terhubung ke data peserta.
-     * Peserta yang magangnya sudah selesai hanya boleh membaca (GET).
+     * Peserta yang magangnya sudah selesai hanya boleh membaca (GET),
+     * kecuali mengisi feedback.
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -33,7 +34,8 @@ class PesertaAktif
             abort(403, 'Akun ini belum terhubung dengan data peserta magang.');
         }
 
-        if ($peserta->status === 'selesai' && ! $request->isMethodSafe()) {
+        // Feedback tetap boleh dikirim/diubah setelah magang selesai.
+        if ($peserta->status === 'selesai' && ! $request->isMethodSafe() && ! $request->routeIs('peserta.feedback.*')) {
             return back()->with('error', 'Masa magang Anda sudah selesai. Data hanya dapat dilihat.');
         }
 

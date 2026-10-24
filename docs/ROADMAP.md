@@ -123,13 +123,31 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **357 test** (1748 assertion). Setiap route aplikasi (98 route) punya test
+- **368 test** (1832 assertion). Setiap route aplikasi (102 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 15 (feedback magang)
+
+- Pertanyaan mengikuti sheet FEEDBACK MHS MAGANG dan disimpan di
+  `config/feedback.php`: 10 skala 1–5, 4 pertanyaan terbuka, kesediaan
+  merekomendasikan (4 pilihan), evaluasi keseluruhan, pernyataan kejujuran.
+  Jangan mengubah urutan/jumlah pertanyaan skala setelah ada jawaban.
+- Tabel `feedback_pesertas` (satu per peserta, skor JSON, `jumlah_kirim`).
+- Peserta (`peserta.feedback.*`): menu setelah Logbook, tampil 🔒 dan
+  terkunci sampai sebulan sebelum tanggal selesai magang; semua pertanyaan
+  wajib; bisa diedit & dikirim ulang. Peserta berstatus selesai tetap boleh
+  mengirim feedback (pengecualian di middleware `PesertaAktif`). Penguncian
+  setelah surat keterangan terbit menyusul di Fase 17.
+- Admin: menu **Feedback Magang** (`superadmin.feedback.index`) berisi rata-rata
+  per pertanyaan, sebaran rekomendasi, daftar per peserta, dan jawaban
+  terbuka (filter tanggal selesai magang); detail per peserta
+  (`superadmin.peserta-magang.feedback`); jenis laporan `feedback` untuk
+  export CSV/XLSX/PDF/cetak.
 
 ## Catatan Fase 14 (dashboard monitoring)
 
@@ -336,7 +354,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 12 | Logbook harian, kehadiran, izin, uang saku | selesai |
 | 13 | Impor riwayat sheet lama | selesai |
 | 14 | Dashboard monitoring | selesai |
-| 15 | Feedback magang | belum |
+| 15 | Feedback magang | selesai |
 | 16 | Penyesuaian penilaian | belum |
 | 17 | Surat keterangan magang | belum |
 | 18 | Laporan dari database | belum |

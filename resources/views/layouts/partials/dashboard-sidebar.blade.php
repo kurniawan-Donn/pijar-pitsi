@@ -28,6 +28,13 @@
                 'active' => ['peserta.logbook.*', 'peserta.izin.*'],
             ],
             [
+                // Tampil terkunci (🔒) sampai sebulan sebelum magang selesai.
+                'label' => \App\Models\FeedbackPeserta::sudahDibuka(auth()->user()->pesertaMagang ?? new \App\Models\PesertaMagang) ? 'Feedback' : 'Feedback 🔒',
+                'icon' => '✎',
+                'route' => 'peserta.feedback.edit',
+                'active' => ['peserta.feedback.*'],
+            ],
+            [
                 'label' => 'Profil & Password',
                 'icon' => '♙',
                 'route' => 'profil.edit',
@@ -54,6 +61,12 @@
                 'icon' => '◉',
                 'route' => 'superadmin.monitoring.index',
                 'active' => ['superadmin.monitoring.*'],
+            ],
+            [
+                'label' => 'Feedback Magang',
+                'icon' => '✎',
+                'route' => 'superadmin.feedback.index',
+                'active' => ['superadmin.feedback.*', 'superadmin.peserta-magang.feedback'],
             ],
             [
                 'label' => 'Laporan',
