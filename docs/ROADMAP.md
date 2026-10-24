@@ -53,14 +53,14 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 ## 2. Utang Teknis
 
 ### Database / migration
-- **Kolom tidak pernah dibuat:** `persyaratan_judul`, `alur_judul`,
-  `pendaftaran_judul`, dan `tentang_section_judul` dipakai di
-  `PengaturanWebsite`/controller/komentar migration, tetapi tidak ada migration
-  yang membuatnya. Di database baru (`migrate:fresh`), menyimpan halaman Kelola
-  Konten akan gagal karena kolom tidak ada.
-- Migration memakai `->after('pendaftaran_judul')` dan `->after('status')` pada
-  kolom yang belum ada saat migration dijalankan. SQLite mengabaikan `after()`,
-  tetapi di **MySQL migration ini akan gagal** (penting untuk Fase 7).
+- ~~Kolom `persyaratan_judul` dan `alur_judul` tidak pernah dibuat~~ —
+  **diperbaiki** di migration `2026_10_24_084105_add_section_titles_to_pengaturan_websites_table`
+  (dengan test `PengaturanWebsiteTest`). `pendaftaran_judul` dan
+  `tentang_section_judul` hanya ada di `$fillable` model dan tidak dipakai view;
+  bisa dibersihkan di Fase 1/2.
+- ~~`->after()` ke kolom yang belum ada (gagal di MySQL)~~ — **diperbaiki**
+  dengan menghapus `after()` dari migration `google_form_url` dan
+  `google_sheet_url`.
 - `peserta_magangs` dibuat kosong lalu dilengkapi di migration terpisah dengan
   semua kolom `nullable` (termasuk `nama`), dan `google_sheet_url` ditambahkan
   dua kali (dengan guard).
@@ -94,14 +94,14 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   error 500. Perlu `->except('show')` atau method redirect (Fase 6).
 
 ### Dependensi & tooling
-- `composer audit` melaporkan 4 advisory pada 3 paket: `laravel/framework`
-  (<13.30, XSS di halaman debug), `league/commonmark` (≤2.10.1, 2 advisory), dan
-  `symfony/http-foundation` (ReDoS header Cache-Control). Perlu
-  `composer update` terarah (Fase 6/7).
-- `.mcp.json` dari Laravel Boost memanggil `php` dari PATH (masih 8.3); bila MCP
-  Boost bermasalah, arahkan ke PHP 8.4 Laragon.
-- `AGENTS.md` masih berisi instruksi bootstrap Boost lama (Boost hanya
-  dipasang untuk Claude Code).
+- ~~`composer audit` melaporkan 4 advisory~~ — **diperbaiki** dengan update
+  terarah `laravel/framework`, `league/commonmark`, `symfony/http-foundation`.
+- `.mcp.json` dari Laravel Boost memanggil `php` dari PATH. PHP default terminal
+  masih 8.3 sehingga MCP Boost gagal (dependensi butuh PHP ≥ 8.4.1).
+  Solusi yang dipilih: ubah versi PHP default Laragon ke 8.4
+  (menu Laragon → PHP → Version), bukan menulis path absolut di `.mcp.json`.
+- ~~`AGENTS.md` berisi instruksi bootstrap Boost lama~~ — **diganti** ringkasan
+  yang merujuk ke `CLAUDE.md`.
 
 ### Keamanan
 - Tidak ada rate limiting pada login.
