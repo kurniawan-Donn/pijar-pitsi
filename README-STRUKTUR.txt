@@ -26,6 +26,8 @@ app/Services/
   AbsensiSheetService  -> baca/tulis absensi per bulan + cache
   RekapAbsensi         -> hitung hadir/izin/sakit, hari penuh/setengah, uang saku
   Logbook              -> ringkasan verifikasi logbook (kolom Action sheet)
+  StatistikMagang      -> angka-angka dashboard
+  LaporanMagang        -> isi laporan (tampilan, CSV, versi cetak)
 
 config/absensi.php     -> layout sheet absensi, path credential, lama cache
 

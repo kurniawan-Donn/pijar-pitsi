@@ -84,6 +84,16 @@ class AbsensiSheetService
     }
 
     /**
+     * Baris absensi dari cache saja (tanpa memanggil Google), null bila belum ada.
+     *
+     * @return array{tab: string, rows: array<int, array<string, mixed>>, diambil_pada: string}|null
+     */
+    public function dariCache(string $url, CarbonInterface $bulan): ?array
+    {
+        return Cache::get($this->cacheKey('baris', $url, $bulan->format('Y-m')));
+    }
+
+    /**
      * Ubah waktu absensi (pagi/siang masuk-keluar) pada satu baris sheet.
      *
      * @param  array<string, string|null>  $waktu
