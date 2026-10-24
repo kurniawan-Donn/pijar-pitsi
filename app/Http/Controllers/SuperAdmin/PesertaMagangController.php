@@ -64,7 +64,7 @@ class PesertaMagangController extends Controller
      */
     public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi, PeriodeMagang $periode): View
     {
-        $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa', 'penempatans.divisi']);
+        $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa', 'penempatans.divisi', 'biodata']);
 
         $bulan = $this->bulanDariRequest($request);
         $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);

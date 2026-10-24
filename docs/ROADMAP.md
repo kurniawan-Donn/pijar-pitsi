@@ -123,13 +123,31 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **265 test** (1226 assertion). Setiap route aplikasi (72 route) punya test
+- **283 test** (1343 assertion). Setiap route aplikasi (77 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 11 (biodata peserta)
+
+- Tabel `biodata_pesertas` mengikuti sheet PROFIL MAHASISWA + rekening uang
+  saku. NIK, nomor rekening, dan riwayat kesehatan memakai cast `encrypted`
+  (**`APP_KEY` di server tidak boleh diganti** setelah ada data, catat di
+  DEPLOY). Keterampilan, bahasa, dan riwayat kesehatan berupa daftar (JSON).
+- Peserta (`peserta.biodata.*`): form 6 bagian, simpan draft kapan saja,
+  kirim bila semua field wajib (`BiodataPeserta::FIELD_WAJIB`) terisi dan
+  pernyataan dicentang. Form terisi otomatis dari data pendaftaran.
+- Alur status: draft → diajukan → disetujui / perlu_revisi. Biodata terkunci
+  saat diajukan & disetujui; admin bisa membuka kembali dengan meminta revisi.
+- Admin (`superadmin.peserta-magang.biodata*`): lihat biodata (NIK
+  disamarkan, klik untuk tampilkan), isi detail program (posisi, jenis
+  program, durasi, mentor; terkunci untuk peserta), setujui/minta revisi.
+  Saat disetujui, nama, NIM, dan asal kampus peserta disalin dari biodata.
+- Progres biodata (persen field wajib) tampil di dashboard peserta, detail
+  peserta, dan halaman biodata admin.
 
 ## Catatan Fase 10 (pengaturan magang)
 
@@ -248,7 +266,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 8 | Aktor peserta: role, akun, middleware | selesai |
 | 9 | Kelola akun peserta oleh admin | selesai |
 | 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | selesai |
-| 11 | Biodata peserta | belum |
+| 11 | Biodata peserta | selesai |
 | 12 | Logbook harian, kehadiran, izin, uang saku | belum |
 | 13 | Impor riwayat sheet lama | belum |
 | 14 | Dashboard monitoring | belum |

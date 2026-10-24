@@ -69,6 +69,46 @@
         line-height: 1.7;
     }
 
+    .panel-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .panel-row > div {
+        flex: 1 1 320px;
+    }
+
+    .progress-track {
+        height: 8px;
+        margin-top: 12px;
+
+        border-radius: 999px;
+
+        background: #edf1f5;
+
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+
+        border-radius: 999px;
+
+        background: linear-gradient(90deg, #1779c9, #19a974);
+    }
+
+    .progress-text {
+        display: block;
+
+        margin-top: 6px;
+
+        color: #7b8794;
+        font-size: 12px;
+    }
+
     @media (max-width: 900px) {
         .stat-grid {
             grid-template-columns: 1fr;
@@ -109,11 +149,40 @@
         <x-stat-card label="Status" :value="ucfirst($peserta->status ?? 'aktif')" icon="✓" />
     </div>
 
+    @php
+        $progres = $biodata->progres();
+    @endphp
+
+    <section class="panel">
+        <div class="panel-row">
+            <div>
+                <h3>Biodata · {{ $biodata->labelStatus() }}</h3>
+                <p>
+                    @if ($biodata->status === 'perlu_revisi')
+                        Admin meminta perbaikan biodata. Buka biodata untuk melihat catatannya.
+                    @elseif ($biodata->status === 'disetujui')
+                        Biodata Anda sudah disetujui admin.
+                    @elseif ($biodata->status === 'diajukan')
+                        Biodata sudah dikirim dan sedang ditinjau admin.
+                    @else
+                        Lengkapi biodata Anda, lalu kirim untuk ditinjau admin.
+                    @endif
+                </p>
+                <div class="progress-track" aria-label="Progres biodata {{ $progres['persen'] }}%">
+                    <div class="progress-fill" style="width: {{ $progres['persen'] }}%"></div>
+                </div>
+                <small class="progress-text">{{ $progres['terisi'] }} dari {{ $progres['total'] }} data wajib terisi ({{ $progres['persen'] }}%)</small>
+            </div>
+            <x-button :href="route('peserta.biodata.edit')" :variant="$biodata->bisaDiubahPeserta() ? 'primary' : 'secondary'">
+                {{ $biodata->bisaDiubahPeserta() ? 'Isi Biodata' : 'Lihat Biodata' }}
+            </x-button>
+        </div>
+    </section>
+
     <section class="panel">
         <h3>Segera hadir</h3>
         <p>
-            Menu Biodata, Logbook Harian, Rekap Uang Saku, dan Feedback akan muncul di sidebar
-            setelah diaktifkan oleh admin.
+            Menu Logbook Harian, Rekap Uang Saku, dan Feedback akan muncul di sidebar pada tahap berikutnya.
         </p>
     </section>
 

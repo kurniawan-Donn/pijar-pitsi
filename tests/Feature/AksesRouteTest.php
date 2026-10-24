@@ -58,6 +58,8 @@ class AksesRouteTest extends TestCase
 
         // Khusus peserta
         'peserta.dashboard' => self::PESERTA,
+        'peserta.biodata.edit' => self::PESERTA,
+        'peserta.biodata.update' => self::PESERTA,
 
         // Khusus admin
         'admin.dashboard' => self::ADMIN,
@@ -99,6 +101,9 @@ class AksesRouteTest extends TestCase
         'superadmin.divisi.update' => self::LOGIN,
         'superadmin.divisi.destroy' => self::LOGIN,
         'superadmin.peserta-magang.penempatan.update' => self::LOGIN,
+        'superadmin.peserta-magang.biodata' => self::LOGIN,
+        'superadmin.peserta-magang.biodata.program' => self::LOGIN,
+        'superadmin.peserta-magang.biodata.tinjau' => self::LOGIN,
         'superadmin.peserta-magang.akun.store' => self::LOGIN,
         'superadmin.peserta-magang.akun.reset' => self::LOGIN,
         'superadmin.peserta-magang.akun.status' => self::LOGIN,
