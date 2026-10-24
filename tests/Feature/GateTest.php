@@ -32,6 +32,7 @@ class GateTest extends TestCase
             'kelola-aspek-penilaian' => ['kelola-aspek-penilaian', [
                 'superadmin.aspek-penilaian.index',
                 'superadmin.aspek-penilaian.update',
+                'superadmin.aspek-penilaian.predikat',
             ]],
             'lihat-log-aktivitas' => ['lihat-log-aktivitas', [
                 'superadmin.log-aktivitas.index',

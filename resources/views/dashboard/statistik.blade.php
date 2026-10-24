@@ -278,7 +278,7 @@
 
     .predikat-bar {
         display: grid;
-        grid-template-columns: 22px 1fr 28px;
+        grid-template-columns: 120px 1fr 28px;
         align-items: center;
         gap: 10px;
 
@@ -286,7 +286,12 @@
     }
 
     .predikat-bar b {
+        overflow: hidden;
+
         color: #17324d;
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .predikat-track {

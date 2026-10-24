@@ -4,7 +4,7 @@
 
 @section('title', 'Aspek Penilaian')
 @section('page_title', 'Aspek Penilaian')
-@section('page_subtitle', 'Atur aspek dan bobot penilaian akhir peserta magang')
+@section('page_subtitle', 'Kelompok, aspek, dan predikat penilaian akhir peserta magang')
 
 @push('styles')
 <style>
@@ -13,8 +13,9 @@
     }
 
     .panel {
-        max-width: 860px;
+        max-width: 980px;
 
+        margin-bottom: 18px;
         padding: 22px;
 
         background: #ffffff;
@@ -23,6 +24,15 @@
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
+
+        scroll-margin-top: 20px;
+    }
+
+    .panel h3 {
+        margin-bottom: 6px;
+
+        color: #17324d;
+        font-size: 16px;
     }
 
     .panel > p {
@@ -33,15 +43,46 @@
         line-height: 1.6;
     }
 
+    .kelompok {
+        margin-bottom: 16px;
+        padding: 16px;
+
+        border: 1px solid #e5eaf0;
+        border-radius: 11px;
+
+        background: #fbfcfe;
+    }
+
+    .kelompok-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 12px;
+    }
+
+    .kelompok-head input[type="text"] {
+        flex: 1 1 220px;
+
+        font-weight: 800;
+    }
+
+    .kelompok-head label {
+        color: #52646e;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
     table {
         width: 100%;
         border-collapse: collapse;
     }
 
     th {
-        padding: 10px 12px;
+        padding: 8px 10px;
 
-        background: #f8fafc;
+        background: #f2f6fa;
         color: #6b7c8d;
 
         font-size: 11px;
@@ -52,7 +93,7 @@
     }
 
     td {
-        padding: 10px 12px;
+        padding: 8px 10px;
 
         border-top: 1px solid #edf1f5;
 
@@ -63,27 +104,38 @@
         opacity: .5;
     }
 
-    td input[type="text"],
-    td input[type="number"] {
+    input[type="text"],
+    input[type="number"],
+    textarea {
         width: 100%;
-        height: 40px;
+        height: 38px;
 
-        padding: 0 11px;
+        padding: 0 10px;
 
         border: 1px solid #d7e0eb;
         border-radius: 7px;
+
+        background: #ffffff;
 
         font-family: inherit;
         font-size: 13px;
     }
 
-    td input[type="number"] {
-        max-width: 90px;
+    textarea {
+        height: 56px;
+        padding: 8px 10px;
+
+        resize: vertical;
+    }
+
+    input[type="number"] {
+        width: 90px;
+
         text-align: center;
         font-weight: 800;
     }
 
-    td input[type="checkbox"] {
+    input[type="checkbox"] {
         width: 18px;
         height: 18px;
 
@@ -91,7 +143,7 @@
     }
 
     .row-new td {
-        background: #f8fbfe;
+        background: #f5f9fd;
     }
 
     .total {
@@ -101,7 +153,7 @@
         flex-wrap: wrap;
         gap: 12px;
 
-        margin-top: 18px;
+        margin-top: 6px;
         padding: 14px 16px;
 
         border-radius: 10px;
@@ -122,6 +174,38 @@
     .total.salah strong {
         color: #b42318;
     }
+
+    .kelompok-baru {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 14px;
+
+        font-size: 13px;
+    }
+
+    .kelompok-baru input[type="text"] {
+        flex: 1 1 240px;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: flex-end;
+
+        margin-top: 14px;
+    }
+
+    @media (max-width: 800px) {
+        .content {
+            padding: 22px 16px 30px;
+        }
+
+        .tabel-scroll {
+            overflow-x: auto;
+        }
+    }
 </style>
 @endpush
 
@@ -135,61 +219,130 @@
         <x-alert type="error" :message="$message" />
     @enderror
 
-    @if ($errors->hasAny(['aspek.*.nama', 'aspek.*.bobot', 'baru.nama', 'baru.bobot']))
-        <x-alert type="error" title="Periksa kembali data aspek:" :messages="$errors->all()" />
+    @if ($errors->any() && ! $errors->has('total_bobot'))
+        <x-alert type="error" title="Periksa kembali data penilaian:" :messages="$errors->all()" />
     @endif
 
+    {{-- KELOMPOK & ASPEK --}}
     <section class="panel">
+        <h3>Kelompok &amp; Aspek</h3>
         <p>
-            Total bobot aspek yang aktif harus <strong>100%</strong>. Aspek yang tidak dipakai cukup
-            dinonaktifkan; nilai lama tetap memakai nama dan bobot saat peserta dinilai.
+            Nilai kelompok = rata-rata aspek aktif di dalamnya (skala 1–100). Nilai akhir = jumlah (rata-rata kelompok × bobot kelompok),
+            mis. (Hard Skill × 60%) + (Soft Skill × 40%). Total bobot kelompok harus <strong>100%</strong>.
+            Aspek yang tidak dipakai cukup dinonaktifkan; nilai lama tidak berubah.
         </p>
 
         <form method="POST" action="{{ route('superadmin.aspek-penilaian.update') }}" id="form-aspek">
             @csrf
             @method('PUT')
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Aspek</th>
-                        <th style="width: 120px;">Bobot (%)</th>
-                        <th style="width: 70px;">Aktif</th>
-                    </tr>
-                </thead>
+            @foreach ($kelompoks as $kelompok)
+                <div class="kelompok">
+                    <div class="kelompok-head">
+                        <input type="text" name="kelompok[{{ $kelompok->id }}][nama]" value="{{ old("kelompok.{$kelompok->id}.nama", $kelompok->nama) }}" maxlength="100" required aria-label="Nama kelompok">
+                        <label>
+                            Bobot
+                            <input type="number" name="kelompok[{{ $kelompok->id }}][bobot]" value="{{ old("kelompok.{$kelompok->id}.bobot", $kelompok->bobot) }}" min="0" max="100" required data-bobot aria-label="Bobot {{ $kelompok->nama }}"> %
+                        </label>
+                    </div>
 
-                <tbody>
-                    @foreach ($aspeks as $aspek)
-                        @php($aktif = (bool) old("aspek.{$aspek->id}.aktif", $aspek->aktif))
-                        <tr @class(['nonaktif' => ! $aktif])>
-                            <td>
-                                <input type="text" name="aspek[{{ $aspek->id }}][nama]" value="{{ old("aspek.{$aspek->id}.nama", $aspek->nama) }}" maxlength="100" required aria-label="Nama aspek">
-                            </td>
-                            <td>
-                                <input type="number" name="aspek[{{ $aspek->id }}][bobot]" value="{{ old("aspek.{$aspek->id}.bobot", $aspek->bobot) }}" min="1" max="100" required data-bobot aria-label="Bobot {{ $aspek->nama }}">
-                            </td>
-                            <td>
-                                <input type="hidden" name="aspek[{{ $aspek->id }}][aktif]" value="0">
-                                <input type="checkbox" name="aspek[{{ $aspek->id }}][aktif]" value="1" @checked($aktif) data-aktif aria-label="Aktifkan {{ $aspek->nama }}">
-                            </td>
-                        </tr>
-                    @endforeach
+                    <div class="tabel-scroll">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width: 40px;">No</th>
+                                    <th>Aspek</th>
+                                    <th style="width: 70px;">Aktif</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($kelompok->aspeks as $aspek)
+                                    @php
+                                        $aktif = (bool) old("aspek.{$aspek->id}.aktif", $aspek->aktif);
+                                    @endphp
+                                    <tr @class(['nonaktif' => ! $aktif])>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            <input type="text" name="aspek[{{ $aspek->id }}][nama]" value="{{ old("aspek.{$aspek->id}.nama", $aspek->nama) }}" maxlength="255" required aria-label="Nama aspek">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="aspek[{{ $aspek->id }}][aktif]" value="0">
+                                            <input type="checkbox" name="aspek[{{ $aspek->id }}][aktif]" value="1" @checked($aktif) data-aktif aria-label="Aktifkan {{ $aspek->nama }}">
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                <tr class="row-new">
+                                    <td>+</td>
+                                    <td colspan="2">
+                                        <input type="text" name="baru[{{ $kelompok->id }}]" value="{{ old("baru.{$kelompok->id}") }}" maxlength="255" placeholder="Tambah aspek {{ $kelompok->nama }} (opsional)" aria-label="Aspek baru {{ $kelompok->nama }}">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
 
-                    <tr class="row-new">
-                        <td>
-                            <input type="text" name="baru[nama]" value="{{ old('baru.nama') }}" maxlength="100" placeholder="+ Tambah aspek baru (opsional)" aria-label="Nama aspek baru">
-                        </td>
-                        <td>
-                            <input type="number" name="baru[bobot]" value="{{ old('baru.bobot') }}" min="1" max="100" data-bobot-baru aria-label="Bobot aspek baru">
-                        </td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="kelompok-baru">
+                <span>Kelompok baru (opsional):</span>
+                <input type="text" name="kelompok_baru[nama]" value="{{ old('kelompok_baru.nama') }}" maxlength="100" placeholder="Nama kelompok" aria-label="Nama kelompok baru">
+                <input type="number" name="kelompok_baru[bobot]" value="{{ old('kelompok_baru.bobot') }}" min="1" max="100" placeholder="%" data-bobot aria-label="Bobot kelompok baru">
+            </div>
 
             <div class="total" id="total-box">
-                <span>Total bobot aktif: <strong id="total-bobot">0</strong><strong>%</strong></span>
-                <x-button>Simpan Aspek</x-button>
+                <span>Total bobot kelompok: <strong id="total-bobot">0</strong><strong>%</strong></span>
+                <x-button>Simpan Kelompok &amp; Aspek</x-button>
+            </div>
+        </form>
+    </section>
+
+    {{-- PREDIKAT --}}
+    <section class="panel" id="predikat">
+        <h3>Tabel Predikat</h3>
+        <p>
+            Predikat berlaku untuk nilai akhir sama dengan atau di atas batas bawah. Harus ada predikat dengan batas bawah 0.
+            Keterangan dicantumkan di lembar penilaian.
+        </p>
+
+        <x-alert type="error" :messages="$errors->predikat->all()" />
+
+        <form method="POST" action="{{ route('superadmin.aspek-penilaian.predikat') }}">
+            @csrf
+            @method('PUT')
+
+            <div class="tabel-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 110px;">Batas Bawah</th>
+                            <th style="width: 190px;">Predikat</th>
+                            <th>Keterangan</th>
+                            <th style="width: 60px;">Hapus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($predikats as $predikat)
+                            <tr>
+                                <td><input type="number" name="predikat[{{ $predikat->id }}][batas_bawah]" value="{{ old("predikat.{$predikat->id}.batas_bawah", $predikat->batas_bawah) }}" min="0" max="100" step="0.01" required aria-label="Batas bawah {{ $predikat->nama }}"></td>
+                                <td><input type="text" name="predikat[{{ $predikat->id }}][nama]" value="{{ old("predikat.{$predikat->id}.nama", $predikat->nama) }}" maxlength="50" required aria-label="Nama predikat"></td>
+                                <td><textarea name="predikat[{{ $predikat->id }}][keterangan]" maxlength="500" aria-label="Keterangan {{ $predikat->nama }}">{{ old("predikat.{$predikat->id}.keterangan", $predikat->keterangan) }}</textarea></td>
+                                <td>
+                                    <input type="hidden" name="predikat[{{ $predikat->id }}][hapus]" value="0">
+                                    <input type="checkbox" name="predikat[{{ $predikat->id }}][hapus]" value="1" aria-label="Hapus {{ $predikat->nama }}">
+                                </td>
+                            </tr>
+                        @endforeach
+                        <tr class="row-new">
+                            <td><input type="number" name="baru[batas_bawah]" value="{{ old('baru.batas_bawah') }}" min="0" max="100" step="0.01" placeholder="+" aria-label="Batas bawah predikat baru"></td>
+                            <td><input type="text" name="baru[nama]" value="{{ old('baru.nama') }}" maxlength="50" placeholder="Predikat baru (opsional)" aria-label="Nama predikat baru"></td>
+                            <td colspan="2"><textarea name="baru[keterangan]" maxlength="500" aria-label="Keterangan predikat baru">{{ old('baru.keterangan') }}</textarea></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="actions">
+                <x-button>Simpan Predikat</x-button>
             </div>
         </form>
     </section>
@@ -208,17 +361,17 @@
     const hitung = () => {
         let total = 0;
 
-        form.querySelectorAll('tbody tr').forEach((row) => {
-            const bobot = row.querySelector('[data-bobot]');
-            const aktif = row.querySelector('[data-aktif]');
-
-            if (bobot && aktif) {
-                row.classList.toggle('nonaktif', !aktif.checked);
-                total += aktif.checked ? Number(bobot.value || 0) : 0;
-            }
+        form.querySelectorAll('[data-bobot]').forEach((input) => {
+            total += Number(input.value || 0);
         });
 
-        total += Number(form.querySelector('[data-bobot-baru]').value || 0);
+        form.querySelectorAll('tbody tr').forEach((row) => {
+            const aktif = row.querySelector('[data-aktif]');
+
+            if (aktif) {
+                row.classList.toggle('nonaktif', !aktif.checked);
+            }
+        });
 
         totalEl.textContent = total;
         box.classList.toggle('ok', total === 100);

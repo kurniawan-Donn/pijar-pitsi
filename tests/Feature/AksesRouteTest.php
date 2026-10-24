@@ -138,6 +138,7 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.logbook.update' => self::LOGIN,
         'superadmin.peserta-magang.penilaian' => self::LOGIN,
         'superadmin.peserta-magang.penilaian.update' => self::LOGIN,
+        'superadmin.peserta-magang.penilaian.cetak' => self::LOGIN,
         'superadmin.monitoring.index' => self::LOGIN,
         'superadmin.feedback.index' => self::LOGIN,
         'superadmin.peserta-magang.feedback' => self::LOGIN,
@@ -157,6 +158,7 @@ class AksesRouteTest extends TestCase
         'superadmin.pengguna.destroy' => self::SUPER_ADMIN,
         'superadmin.aspek-penilaian.index' => self::SUPER_ADMIN,
         'superadmin.aspek-penilaian.update' => self::SUPER_ADMIN,
+        'superadmin.aspek-penilaian.predikat' => self::SUPER_ADMIN,
         'superadmin.log-aktivitas.index' => self::SUPER_ADMIN,
     ];
 

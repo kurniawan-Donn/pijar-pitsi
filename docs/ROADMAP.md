@@ -123,13 +123,33 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **368 test** (1832 assertion). Setiap route aplikasi (102 route) punya test
+- **378 test** (1892 assertion). Setiap route aplikasi (104 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 16 (penyesuaian penilaian)
+
+- Struktur mengikuti sheet PENILAIAN MHS MAGANG dan bisa diatur Super Admin
+  (menu Aspek Penilaian):
+  - `kelompok_penilaians` (bawaan Hard Skill 60%, Soft Skill 40%; total 100%);
+  - aspek per kelompok (7 Hard Skill + 8 Soft Skill dari buku kerja); aspek
+    lama 6 buah dinonaktifkan, tidak dihapus;
+  - `predikat_penilaians` (Perlu Pembinaan ≥0, Cukup ≥20,01, Baik ≥40,01,
+    Memuaskan ≥60,01, Sangat Memuaskan ≥80,01) beserta keterangannya.
+- Rumus: nilai kelompok = rata-rata aspeknya; nilai akhir =
+  Σ(rata-rata kelompok × bobot) ÷ Σbobot. Skala 1–100.
+- `penilaian_pesertas.predikat` kini teks; kolom kesimpulan `kekuatan`,
+  `aspek_perbaikan`, `langkah_perbaikan`. `penilaian_details` menyalin nama
+  kelompok & bobotnya. Penilaian lama (huruf A–E, catatan pembimbing) tetap
+  tampil apa adanya.
+- Lembar penilaian PDF (`superadmin.peserta-magang.penilaian.cetak`, view
+  `penilaian/cetak`): identitas, bobot, tabel predikat, indikator per
+  kelompok, grand total, kesimpulan, kalimat hasil, tanda tangan.
+- Sebaran predikat di dashboard mengikuti tabel predikat.
 
 ## Catatan Fase 15 (feedback magang)
 
@@ -355,6 +375,6 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 13 | Impor riwayat sheet lama | selesai |
 | 14 | Dashboard monitoring | selesai |
 | 15 | Feedback magang | selesai |
-| 16 | Penyesuaian penilaian | belum |
+| 16 | Penyesuaian penilaian | selesai |
 | 17 | Surat keterangan magang | belum |
 | 18 | Laporan dari database | belum |

@@ -311,6 +311,11 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             [PenilaianController::class, 'update']
         )->name('peserta-magang.penilaian.update');
 
+        Route::get(
+            '/peserta-magang/{pesertaMagang}/penilaian/cetak',
+            [PenilaianController::class, 'cetak']
+        )->name('peserta-magang.penilaian.cetak');
+
     });
 
 /*
@@ -340,6 +345,9 @@ Route::middleware(['auth', 'role:super_admin'])
         Route::put('/aspek-penilaian', [AspekPenilaianController::class, 'update'])
             ->can('kelola-aspek-penilaian')
             ->name('aspek-penilaian.update');
+        Route::put('/aspek-penilaian/predikat', [AspekPenilaianController::class, 'updatePredikat'])
+            ->can('kelola-aspek-penilaian')
+            ->name('aspek-penilaian.predikat');
 
         // Log aktivitas
         Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])

@@ -25,8 +25,10 @@ class SimpanPenilaianRequest extends FormRequest
     {
         return [
             'nilai' => ['required', 'array'],
-            'nilai.*' => ['required', 'integer', 'min:0', 'max:100'],
-            'catatan_pembimbing' => ['nullable', 'string', 'max:2000'],
+            'nilai.*' => ['required', 'integer', 'min:1', 'max:100'],
+            'kekuatan' => ['nullable', 'string', 'max:2000'],
+            'aspek_perbaikan' => ['nullable', 'string', 'max:2000'],
+            'langkah_perbaikan' => ['nullable', 'string', 'max:2000'],
         ];
     }
 
@@ -41,7 +43,7 @@ class SimpanPenilaianRequest extends FormRequest
             function (Validator $validator) {
                 $dinilai = array_map('intval', array_keys((array) $this->input('nilai', [])));
 
-                foreach (AspekPenilaian::aktif()->get() as $aspek) {
+                foreach (AspekPenilaian::aktif()->whereNotNull('kelompok_penilaian_id')->get() as $aspek) {
                     if (! in_array($aspek->id, $dinilai, true)) {
                         $validator->errors()->add("nilai.{$aspek->id}", "Nilai {$aspek->nama} wajib diisi.");
                     }
@@ -61,9 +63,9 @@ class SimpanPenilaianRequest extends FormRequest
             'nilai.required' => 'Nilai aspek wajib diisi.',
             'nilai.*.required' => 'Nilai wajib diisi.',
             'nilai.*.integer' => 'Nilai harus berupa angka bulat.',
-            'nilai.*.min' => 'Nilai minimal 0.',
+            'nilai.*.min' => 'Nilai minimal 1.',
             'nilai.*.max' => 'Nilai maksimal 100.',
-            'catatan_pembimbing.max' => 'Catatan maksimal 2000 karakter.',
+            '*.max' => 'Isian maksimal :max karakter.',
         ];
     }
 }

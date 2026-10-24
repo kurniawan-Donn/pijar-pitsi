@@ -140,34 +140,69 @@
     }
 
     .result-predikat {
-        display: inline-grid;
-        place-items: center;
-
-        width: 54px;
-        height: 54px;
+        display: inline-block;
 
         margin-top: 14px;
+        padding: 8px 16px;
 
-        border-radius: 14px;
+        border-radius: 999px;
 
         background: #1779c9;
         color: #ffffff;
 
-        font-size: 26px;
+        font-size: 15px;
         font-weight: 800;
-
-        transition: background .25s ease;
     }
 
-    .result-predikat[data-predikat="C"] { background: #d99a0b; }
-    .result-predikat[data-predikat="D"] { background: #e07b20; }
-    .result-predikat[data-predikat="E"] { background: #c62828; }
+    .kelompok-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+
+        margin: 18px 0 2px;
+        padding-bottom: 6px;
+
+        border-bottom: 2px solid #e8f0f8;
+    }
+
+    .kelompok-head h4 {
+        color: #17324d;
+        font-size: 14px;
+    }
+
+    .kelompok-head span {
+        color: #52646e;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .kelompok-rata {
+        display: grid;
+        gap: 6px;
+
+        margin-top: 18px;
+
+        font-size: 12.5px;
+        text-align: left;
+    }
+
+    .kelompok-rata div {
+        display: flex;
+        justify-content: space-between;
+
+        padding: 6px 10px;
+
+        border-radius: 7px;
+
+        background: #f7f9fc;
+    }
 
     .scale {
         display: grid;
         gap: 6px;
 
-        margin-top: 20px;
+        margin-top: 18px;
 
         font-size: 12px;
         text-align: left;
@@ -176,6 +211,7 @@
     .scale div {
         display: flex;
         justify-content: space-between;
+        gap: 10px;
 
         padding: 6px 10px;
 
@@ -201,6 +237,7 @@
 
     .form-actions {
         display: flex;
+        flex-wrap: wrap;
         justify-content: flex-end;
         gap: 10px;
 
@@ -219,7 +256,7 @@
 
     @media (max-width: 600px) {
         .content {
-            padding: 22px 20px 30px;
+            padding: 22px 16px 30px;
         }
 
         .aspek-row {
@@ -234,6 +271,10 @@
 </style>
 @endpush
 
+@php
+    $predikatJs = $predikats->map(fn ($predikat) => ['batas' => $predikat->batas_bawah, 'nama' => $predikat->nama])->values();
+@endphp
+
 @section('content')
 
 <div class="content">
@@ -242,7 +283,7 @@
 
     <x-flash-messages :validation="false" />
 
-    @if ($aspeks->isEmpty())
+    @if ($kelompoks->isEmpty())
         <x-alert type="warning" message="Belum ada aspek penilaian aktif. Super Admin perlu mengatur aspek penilaian terlebih dahulu." />
     @else
         <form method="POST" action="{{ route('superadmin.peserta-magang.penilaian.update', $pesertaMagang) }}" id="form-penilaian">
@@ -253,61 +294,74 @@
 
                 <div>
                     <section class="panel">
-                        <h3>Nilai per Aspek</h3>
-                        <p>Isi nilai 0–100 untuk setiap aspek. Nilai akhir dihitung otomatis berdasarkan bobot.</p>
+                        <h3>Indikator Penilaian</h3>
+                        <p>
+                            Skala 1–100. Nilai kelompok = rata-rata aspeknya; nilai akhir =
+                            {{ $kelompoks->map(fn ($kelompok) => '(rata-rata '.$kelompok->nama.' × '.$kelompok->bobot.'%)')->implode(' + ') }}.
+                        </p>
 
-                        @foreach ($aspeks as $aspek)
-                            @php($nilai = old('nilai.' . $aspek->id, $nilaiTersimpan[$aspek->id] ?? ''))
-                            <div class="aspek-row">
-                                <div>
-                                    <div class="aspek-nama">{{ $aspek->nama }}</div>
-                                    <div class="aspek-bobot">Bobot {{ $aspek->bobot }}%</div>
-                                </div>
-
-                                <input
-                                    type="range"
-                                    min="0"
-                                    max="100"
-                                    value="{{ $nilai === '' ? 0 : $nilai }}"
-                                    data-range-for="nilai-{{ $aspek->id }}"
-                                    aria-label="Geser nilai {{ $aspek->nama }}"
-                                    tabindex="-1"
-                                >
-
-                                <input
-                                    type="number"
-                                    id="nilai-{{ $aspek->id }}"
-                                    name="nilai[{{ $aspek->id }}]"
-                                    value="{{ $nilai }}"
-                                    min="0"
-                                    max="100"
-                                    step="1"
-                                    required
-                                    data-bobot="{{ $aspek->bobot }}"
-                                    aria-label="Nilai {{ $aspek->nama }}"
-                                    @class(['is-invalid' => $errors->has('nilai.' . $aspek->id)])
-                                >
-
-                                @error('nilai.' . $aspek->id)
-                                    <div class="aspek-error">{{ $message }}</div>
-                                @enderror
+                        @foreach ($kelompoks as $kelompok)
+                            <div class="kelompok-head">
+                                <h4>{{ $kelompok->nama }}</h4>
+                                <span>Bobot {{ $kelompok->bobot }}%</span>
                             </div>
+
+                            @foreach ($kelompok->aspekAktif as $aspek)
+                                @php
+                                    $nilai = old('nilai.'.$aspek->id, $nilaiTersimpan[$aspek->id] ?? '');
+                                @endphp
+                                <div class="aspek-row">
+                                    <div class="aspek-nama">{{ $loop->iteration }}. {{ $aspek->nama }}</div>
+
+                                    <input
+                                        type="range"
+                                        min="1"
+                                        max="100"
+                                        value="{{ $nilai === '' ? 1 : $nilai }}"
+                                        data-range-for="nilai-{{ $aspek->id }}"
+                                        aria-label="Geser nilai {{ $aspek->nama }}"
+                                        tabindex="-1"
+                                    >
+
+                                    <input
+                                        type="number"
+                                        id="nilai-{{ $aspek->id }}"
+                                        name="nilai[{{ $aspek->id }}]"
+                                        value="{{ $nilai }}"
+                                        min="1"
+                                        max="100"
+                                        step="1"
+                                        required
+                                        data-kelompok="{{ $kelompok->id }}"
+                                        aria-label="Nilai {{ $aspek->nama }}"
+                                        @class(['is-invalid' => $errors->has('nilai.'.$aspek->id)])
+                                    >
+
+                                    @error('nilai.'.$aspek->id)
+                                        <div class="aspek-error">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endforeach
                         @endforeach
                     </section>
 
                     <section class="panel">
-                        <x-form.input
-                            name="catatan_pembimbing"
-                            type="textarea"
-                            label="Catatan Pembimbing"
-                            :value="$penilaian?->catatan_pembimbing"
-                            rows="5"
-                            maxlength="2000"
-                            placeholder="Kelebihan, hal yang perlu ditingkatkan, dan rekomendasi untuk peserta."
-                        />
+                        <h3>Kesimpulan Penilaian</h3>
+                        <p>Mengikuti bagian kesimpulan pada lembar penilaian.</p>
+
+                        <x-form.input name="kekuatan" type="textarea" label="Kekuatan dan keunggulan mahasiswa magang" :value="$penilaian?->kekuatan" rows="3" maxlength="2000" />
+                        <x-form.input name="aspek_perbaikan" type="textarea" label="Aspek utama yang diperlukan untuk perbaikan" :value="$penilaian?->aspek_perbaikan" rows="3" maxlength="2000" />
+                        <x-form.input name="langkah_perbaikan" type="textarea" label="Langkah penting yang harus diambil untuk perbaikan" :value="$penilaian?->langkah_perbaikan" rows="3" maxlength="2000" />
+
+                        @if ($penilaian?->catatan_pembimbing)
+                            <x-alert type="info" title="Catatan pembimbing (format lama):" :message="$penilaian->catatan_pembimbing" />
+                        @endif
 
                         <div class="form-actions">
                             <x-button variant="secondary" :href="route('superadmin.peserta-magang.show', $pesertaMagang)">Batal</x-button>
+                            @if ($penilaian)
+                                <x-button variant="secondary" :href="route('superadmin.peserta-magang.penilaian.cetak', $pesertaMagang)">⬇ Lembar Penilaian (PDF)</x-button>
+                            @endif
                             <x-button>Simpan Penilaian</x-button>
                         </div>
                     </section>
@@ -316,13 +370,22 @@
                 <aside class="panel result" aria-live="polite">
                     <div class="result-label">Nilai Akhir</div>
                     <div class="result-nilai" id="nilai-akhir">{{ $penilaian ? number_format($penilaian->nilai_akhir, 2, ',', '.') : '–' }}</div>
-                    <div class="result-predikat" id="predikat" data-predikat="{{ $penilaian?->predikat ?? '' }}">{{ $penilaian?->predikat ?? '–' }}</div>
+                    <div class="result-predikat" id="predikat">{{ $penilaian?->predikat ?? '–' }}</div>
+
+                    <div class="kelompok-rata">
+                        @foreach ($kelompoks as $kelompok)
+                            <div>
+                                <span>Rata-rata {{ $kelompok->nama }} ({{ $kelompok->bobot }}%)</span>
+                                <strong data-rata-kelompok="{{ $kelompok->id }}">–</strong>
+                            </div>
+                        @endforeach
+                    </div>
 
                     <div class="scale" id="skala">
-                        @foreach ($predikat as $huruf => $batas)
-                            <div data-huruf="{{ $huruf }}" @class(['active' => $penilaian?->predikat === $huruf])>
-                                <span>{{ $huruf }}</span>
-                                <span>{{ $batas > 0 ? '≥ ' . $batas : '< ' . $predikat['D'] }}</span>
+                        @foreach ($predikats->sortByDesc('batas_bawah') as $predikat)
+                            <div data-predikat="{{ $predikat->nama }}" @class(['active' => $penilaian?->predikat === $predikat->nama])>
+                                <span>{{ $predikat->nama }}</span>
+                                <span>≥ {{ rtrim(rtrim(number_format($predikat->batas_bawah, 2, ',', ''), '0'), ',') }}</span>
                             </div>
                         @endforeach
                     </div>
@@ -354,45 +417,63 @@
         return;
     }
 
-    const inputs = [...form.querySelectorAll('input[type="number"][data-bobot]')];
+    const inputs = [...form.querySelectorAll('input[type="number"][data-kelompok]')];
     const output = document.getElementById('nilai-akhir');
     const badge = document.getElementById('predikat');
-    const batas = @json($predikat);
+    const bobot = @json($kelompoks->pluck('bobot', 'id'));
+    const predikat = @json($predikatJs);
+    const angka = (nilai) => nilai.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    const predikatUntuk = (nilai) => Object.keys(batas).find((huruf) => nilai >= batas[huruf]) ?? 'E';
+    const predikatUntuk = (nilai) => [...predikat].reverse().find((item) => nilai >= item.batas)?.nama ?? '–';
 
     const hitung = () => {
-        let totalBobot = 0;
-        let totalNilai = 0;
+        const kelompok = {};
         let lengkap = true;
 
         inputs.forEach((input) => {
-            const bobot = Number(input.dataset.bobot);
-            totalBobot += bobot;
+            const id = input.dataset.kelompok;
+            kelompok[id] ??= { total: 0, jumlah: 0, kosong: false };
 
             if (input.value === '') {
+                kelompok[id].kosong = true;
                 lengkap = false;
+
                 return;
             }
 
-            totalNilai += Math.min(100, Math.max(0, Number(input.value))) * bobot;
+            kelompok[id].total += Math.min(100, Math.max(1, Number(input.value)));
+            kelompok[id].jumlah++;
+        });
+
+        let totalBobot = 0;
+        let totalNilai = 0;
+
+        Object.entries(kelompok).forEach(([id, data]) => {
+            const rata = data.jumlah ? data.total / data.jumlah : 0;
+            const sel = document.querySelector(`[data-rata-kelompok="${id}"]`);
+
+            if (sel) {
+                sel.textContent = data.kosong ? '–' : angka(Math.round(rata * 100) / 100);
+            }
+
+            totalBobot += Number(bobot[id] ?? 0);
+            totalNilai += rata * Number(bobot[id] ?? 0);
         });
 
         if (!lengkap || totalBobot === 0) {
             output.textContent = '–';
             badge.textContent = '–';
-            badge.dataset.predikat = '';
             document.querySelectorAll('#skala div').forEach((row) => row.classList.remove('active'));
+
             return;
         }
 
         const nilai = Math.round((totalNilai / totalBobot) * 100) / 100;
-        const huruf = predikatUntuk(nilai);
+        const nama = predikatUntuk(nilai);
 
-        output.textContent = nilai.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        badge.textContent = huruf;
-        badge.dataset.predikat = huruf;
-        document.querySelectorAll('#skala div').forEach((row) => row.classList.toggle('active', row.dataset.huruf === huruf));
+        output.textContent = angka(nilai);
+        badge.textContent = nama;
+        document.querySelectorAll('#skala div').forEach((row) => row.classList.toggle('active', row.dataset.predikat === nama));
     };
 
     // Slider dan kotak angka saling sinkron.
@@ -405,7 +486,7 @@
         });
 
         input.addEventListener('input', () => {
-            range.value = input.value || 0;
+            range.value = input.value || 1;
             hitung();
         });
     });

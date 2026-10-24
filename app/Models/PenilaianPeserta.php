@@ -8,19 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PenilaianPeserta extends Model
 {
-    /**
-     * Batas bawah nilai untuk setiap predikat.
-     *
-     * @var array<string, int>
-     */
-    public const PREDIKAT = [
-        'A' => 85,
-        'B' => 75,
-        'C' => 65,
-        'D' => 50,
-        'E' => 0,
-    ];
-
     protected $table = 'penilaian_pesertas';
 
     protected $fillable = [
@@ -28,6 +15,9 @@ class PenilaianPeserta extends Model
         'nilai_akhir',
         'predikat',
         'catatan_pembimbing',
+        'kekuatan',
+        'aspek_perbaikan',
+        'langkah_perbaikan',
         'dinilai_oleh',
         'dinilai_pada',
     ];
@@ -53,34 +43,68 @@ class PenilaianPeserta extends Model
     }
 
     /**
-     * Nilai akhir = Σ(nilai × bobot) ÷ Σbobot, dibulatkan 2 desimal.
+     * Rata-rata nilai per kelompok (sheet PENILAIAN MHS MAGANG).
      *
-     * @param  iterable<array{nilai: int|float, bobot: int|float}>  $nilaiAspek
+     * @param  iterable<array{kelompok: string, bobot_kelompok: int|float, nilai: int|float}>  $nilaiAspek
+     * @return array<string, array{rata_rata: float, total: int|float, jumlah: int, bobot: int|float}>
+     */
+    public static function rataPerKelompok(iterable $nilaiAspek): array
+    {
+        $kelompok = [];
+
+        foreach ($nilaiAspek as $aspek) {
+            $nama = $aspek['kelompok'];
+            $kelompok[$nama] ??= ['total' => 0, 'jumlah' => 0, 'bobot' => $aspek['bobot_kelompok']];
+            $kelompok[$nama]['total'] += $aspek['nilai'];
+            $kelompok[$nama]['jumlah']++;
+        }
+
+        foreach ($kelompok as $nama => $data) {
+            $kelompok[$nama]['rata_rata'] = round($data['total'] / $data['jumlah'], 2);
+        }
+
+        return $kelompok;
+    }
+
+    /**
+     * Nilai akhir = Σ(rata-rata kelompok × bobot kelompok) ÷ Σbobot,
+     * mis. (rata-rata Hard Skill × 60%) + (rata-rata Soft Skill × 40%).
+     *
+     * @param  iterable<array{kelompok: string, bobot_kelompok: int|float, nilai: int|float}>  $nilaiAspek
      */
     public static function hitungNilaiAkhir(iterable $nilaiAspek): float
     {
         $totalBobot = 0;
         $totalNilai = 0;
 
-        foreach ($nilaiAspek as $aspek) {
-            $totalBobot += $aspek['bobot'];
-            $totalNilai += $aspek['nilai'] * $aspek['bobot'];
+        foreach (self::rataPerKelompok($nilaiAspek) as $kelompok) {
+            $totalBobot += $kelompok['bobot'];
+            $totalNilai += ($kelompok['total'] / $kelompok['jumlah']) * $kelompok['bobot'];
         }
 
         return $totalBobot > 0 ? round($totalNilai / $totalBobot, 2) : 0.0;
     }
 
     /**
-     * Predikat huruf untuk sebuah nilai akhir.
+     * Nama predikat untuk sebuah nilai akhir (tabel predikat_penilaians).
      */
     public static function predikatUntuk(float $nilai): string
     {
-        foreach (self::PREDIKAT as $predikat => $batasBawah) {
-            if ($nilai >= $batasBawah) {
-                return $predikat;
-            }
-        }
+        return PredikatPenilaian::untuk($nilai)?->nama ?? '-';
+    }
 
-        return 'E';
+    /**
+     * Nilai per kelompok dari detail yang tersimpan; detail lama tanpa
+     * kelompok dikumpulkan sebagai "Aspek".
+     *
+     * @return array<string, array{rata_rata: float, total: int|float, jumlah: int, bobot: int|float}>
+     */
+    public function nilaiPerKelompok(): array
+    {
+        return self::rataPerKelompok($this->details->map(fn (PenilaianDetail $detail) => [
+            'kelompok' => $detail->kelompok ?? 'Aspek',
+            'bobot_kelompok' => $detail->bobot_kelompok ?? 100,
+            'nilai' => $detail->nilai,
+        ]));
     }
 }

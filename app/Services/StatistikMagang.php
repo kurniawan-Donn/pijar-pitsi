@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\PengajuanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
+use App\Models\PredikatPenilaian;
 use App\Models\TarifUangSaku;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
@@ -109,7 +110,8 @@ class StatistikMagang
     }
 
     /**
-     * Sebaran predikat nilai akhir.
+     * Sebaran predikat nilai akhir, urut dari predikat tertinggi. Predikat
+     * yang tidak ada lagi di tabel (mis. huruf A–E lama) ditampilkan di akhir.
      *
      * @return array<string, int>
      */
@@ -120,7 +122,10 @@ class StatistikMagang
             ->groupBy('predikat')
             ->pluck('jumlah', 'predikat');
 
-        return collect(array_keys(PenilaianPeserta::PREDIKAT))
+        $urutan = PredikatPenilaian::orderByDesc('batas_bawah')->pluck('nama');
+
+        return $urutan
+            ->merge($jumlah->keys()->diff($urutan))
             ->mapWithKeys(fn (string $predikat) => [$predikat => (int) ($jumlah[$predikat] ?? 0)])
             ->all();
     }
