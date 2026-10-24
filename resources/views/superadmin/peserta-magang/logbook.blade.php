@@ -2,7 +2,7 @@
 
 @extends('layouts.dashboard')
 
-@use('App\Http\Controllers\SuperAdmin\LogbookController')
+@use('App\Services\Logbook')
 
 @section('title', 'Logbook ' . $pesertaMagang->nama)
 @section('page_title', 'Logbook Kegiatan')
@@ -362,7 +362,7 @@
 
                         <tbody>
                             @foreach ($logbook as $row)
-                                @php($action = LogbookController::actionBaku($row['action']))
+                                @php($action = Logbook::actionBaku($row['action']))
                                 <tr data-belum="{{ $action ? '0' : '1' }}">
                                     <td>
                                         <input

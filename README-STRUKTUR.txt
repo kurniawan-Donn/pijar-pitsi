@@ -24,7 +24,8 @@ app/Services/
   GoogleSheetsService  -> koneksi API Google Sheets
                           (credential: storage/app/google/service-account.json)
   AbsensiSheetService  -> baca/tulis absensi per bulan + cache
-  RekapAbsensi         -> hitung hadir/izin/sakit/belum diisi
+  RekapAbsensi         -> hitung hadir/izin/sakit, hari penuh/setengah, uang saku
+  Logbook              -> ringkasan verifikasi logbook (kolom Action sheet)
 
 config/absensi.php     -> layout sheet absensi, path credential, lama cache
 

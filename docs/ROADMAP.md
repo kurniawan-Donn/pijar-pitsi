@@ -116,8 +116,8 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 
 ### Test
 - Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
-  publik, kelola pengajuan, dan absensi Google Sheets (69 test). Belum dites:
-  banner, profil perusahaan, CRUD peserta & pengguna.
+  publik, kelola pengajuan, absensi Google Sheets, logbook, dan penilaian
+  (95 test). Belum dites: banner, profil perusahaan, CRUD peserta & pengguna.
 
 ## Catatan Fase 3 (absensi Google Sheets)
 
@@ -138,6 +138,32 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   di-mock di test; credential hilang memberi pesan khusus.
 - Belum diuji dengan spreadsheet asli (credential tidak ada di lingkungan
   pengembangan ini).
+- **Koreksi di Fase 4** setelah melihat template asli: baris yang dibaca
+  dibatasi 13–43 (tanggal 1–31; footer total/uang saku tidak ikut terbaca),
+  dan baris yang hanya berisi nomor + placeholder Action "......" dianggap kosong.
+
+## Catatan Fase 4 (logbook & penilaian)
+
+- **Logbook** dibaca dari Google Sheets (Tanggal, Activity, Output, Lokasi) —
+  peserta tidak punya akun login, jadi tidak ada input ganda. Verifikasi
+  pembimbing ditulis ke **kolom Action** sheet (Diterima / Ditolak / Review,
+  `config('absensi.action_options')`), bisa beberapa hari sekaligus (satu
+  panggilan batch API). Tidak ada tabel database untuk logbook. Halaman:
+  `superadmin.peserta-magang.logbook`.
+- Alasan penolakan belum tersimpan (sheet tidak punya kolom catatan); jejak
+  siapa mengubah apa akan dicatat di log aktivitas Fase 6.
+- **Rekap kehadiran & uang saku** mengikuti footer template: hari penuh = sesi
+  pagi dan siang lengkap, setengah hari = satu sesi lengkap. Tarif dari `.env`
+  (`UANG_SAKU_HARI_PENUH=50000`, `UANG_SAKU_SETENGAH_HARI=25000`).
+- **Penilaian akhir**: tabel `aspek_penilaians` (6 aspek bawaan, total bobot
+  100, diisi oleh migration), `penilaian_pesertas` (satu per peserta) dan
+  `penilaian_details` (nama & bobot aspek disalin saat dinilai). Nilai akhir =
+  Σ(nilai × bobot) ÷ Σbobot; predikat A ≥ 85, B ≥ 75, C ≥ 65, D ≥ 50, E.
+- Admin & Super Admin dapat memverifikasi logbook dan mengisi nilai; hanya
+  Super Admin yang mengatur aspek & bobot (menu **Aspek Penilaian**; aspek
+  dinonaktifkan, tidak dihapus).
+- Detail peserta menampilkan ringkasan logbook bulan terpilih dan nilai akhir;
+  daftar peserta punya kolom Nilai Akhir.
 
 ## Catatan Fase 2 (pengajuan magang & website)
 
@@ -190,7 +216,7 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 1 | Refactor tampilan: layout & komponen Blade bersama | selesai |
 | 2 | Modul Pengajuan Magang lengkap (+ redesain website) | selesai |
 | 3 | Penguatan Absensi Google Sheets | selesai |
-| 4 | Logbook kegiatan & Penilaian peserta | belum |
+| 4 | Logbook kegiatan & Penilaian peserta | selesai |
 | 5 | Dashboard statistik, Laporan & Export | belum |
 | 6 | Keamanan, otorisasi & test | belum |
 | 7 | Persiapan deploy | belum |

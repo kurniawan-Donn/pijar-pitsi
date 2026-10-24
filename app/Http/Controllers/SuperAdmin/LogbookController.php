@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VerifikasiLogbookRequest;
 use App\Models\PesertaMagang;
 use App\Services\AbsensiSheetService;
+use App\Services\Logbook;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -30,16 +31,12 @@ class LogbookController extends Controller
         $bulan = $this->bulanDariRequest($request);
         $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);
 
-        // Logbook hanya berisi hari yang punya catatan kegiatan / output.
-        $logbook = array_values(array_filter(
-            $sheet['rows'],
-            fn (array $row) => trim($row['activity'].$row['output'].$row['lokasi']) !== ''
-        ));
+        $logbook = Logbook::baris($sheet['rows']);
 
         return view('superadmin.peserta-magang.logbook', [
             'pesertaMagang' => $pesertaMagang,
             'logbook' => $logbook,
-            'ringkasan' => self::ringkasan($logbook),
+            'ringkasan' => Logbook::ringkasan($logbook),
             'sheetError' => $sheet['error'],
             'tabAktif' => $sheet['tab'],
             'bulanDipilih' => $bulan,
@@ -83,38 +80,5 @@ class LogbookController extends Controller
             'success',
             count($validated['baris']).' hari logbook ditandai "'.$validated['action'].'".'
         );
-    }
-
-    /**
-     * Jumlah hari per status verifikasi.
-     *
-     * @param  array<int, array<string, mixed>>  $logbook
-     * @return array{total: int, Diterima: int, Ditolak: int, Review: int, belum: int}
-     */
-    public static function ringkasan(array $logbook): array
-    {
-        $ringkasan = ['total' => count($logbook), 'belum' => 0]
-            + array_fill_keys(config('absensi.action_options'), 0);
-
-        foreach ($logbook as $row) {
-            $action = self::actionBaku($row['action'] ?? '');
-            $action === null ? $ringkasan['belum']++ : $ringkasan[$action]++;
-        }
-
-        return $ringkasan;
-    }
-
-    /**
-     * Cocokkan isi kolom Action dengan pilihan baku (tanpa membedakan huruf besar/kecil).
-     */
-    public static function actionBaku(?string $nilai): ?string
-    {
-        foreach (config('absensi.action_options') as $pilihan) {
-            if (strcasecmp(trim((string) $nilai), $pilihan) === 0) {
-                return $pilihan;
-            }
-        }
-
-        return null;
     }
 }

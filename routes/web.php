@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
+use App\Http\Controllers\SuperAdmin\PenilaianController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PesertaMagangController;
 use App\Http\Controllers\SuperAdmin\UserController;
@@ -142,6 +144,17 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             [LogbookController::class, 'update']
         )->name('peserta-magang.logbook.update');
 
+        // Penilaian akhir peserta
+        Route::get(
+            '/peserta-magang/{pesertaMagang}/penilaian',
+            [PenilaianController::class, 'edit']
+        )->name('peserta-magang.penilaian');
+
+        Route::put(
+            '/peserta-magang/{pesertaMagang}/penilaian',
+            [PenilaianController::class, 'update']
+        )->name('peserta-magang.penilaian.update');
+
     });
 
 /*
@@ -161,5 +174,11 @@ Route::middleware(['auth', 'role:super_admin'])
         // Kelola pengguna
         Route::resource('pengguna', UserController::class)
             ->parameters(['pengguna' => 'user']);
+
+        // Aspek & bobot penilaian
+        Route::get('/aspek-penilaian', [AspekPenilaianController::class, 'index'])
+            ->name('aspek-penilaian.index');
+        Route::put('/aspek-penilaian', [AspekPenilaianController::class, 'update'])
+            ->name('aspek-penilaian.update');
 
     });

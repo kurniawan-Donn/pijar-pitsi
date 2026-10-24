@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PesertaMagangRequest;
 use App\Models\PesertaMagang;
 use App\Services\AbsensiSheetService;
+use App\Services\Logbook;
 use App\Services\RekapAbsensi;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +23,8 @@ class PesertaMagangController extends Controller
      */
     public function index(): View
     {
-        $pesertaMagangs = PesertaMagang::orderBy('nama', 'asc')
+        $pesertaMagangs = PesertaMagang::with('penilaian')
+            ->orderBy('nama', 'asc')
             ->paginate(10);
 
         return view(
@@ -57,6 +59,8 @@ class PesertaMagangController extends Controller
      */
     public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi): View
     {
+        $pesertaMagang->load('penilaian');
+
         $bulan = $this->bulanDariRequest($request);
         $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);
         $sheetRows = $sheet['rows'];
@@ -75,6 +79,7 @@ class PesertaMagangController extends Controller
             ),
             'bulanDipilih' => $bulan,
             'pilihanBulan' => $this->pilihanBulan($pesertaMagang, $bulan),
+            'ringkasanLogbook' => Logbook::ringkasan(Logbook::baris($sheetRows)),
             'tabAktif' => $sheet['tab'],
             'diambilPada' => $sheet['diambil_pada'],
         ]);

@@ -894,6 +894,16 @@
         color: #8a99a3;
     }
 
+    .action-meta {
+        display: block;
+
+        margin-top: 2px;
+
+        color: #8a99a3;
+        font-size: 10px;
+        font-weight: 600;
+    }
+
     .allowance-box {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1363,6 +1373,46 @@
                         </a>
 
                     @endif
+
+                    {{-- LOGBOOK --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.logbook', ['pesertaMagang' => $pesertaMagang, 'bulan' => $bulanDipilih->format('Y-m')]) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">📒</span>
+                        <span>
+                            Logbook Kegiatan
+                            @if($ringkasanLogbook['total'] > 0)
+                                <small class="action-meta">
+                                    {{ $ringkasanLogbook['Diterima'] }}/{{ $ringkasanLogbook['total'] }} hari diterima
+                                    @if($ringkasanLogbook['belum'] > 0)
+                                        · {{ $ringkasanLogbook['belum'] }} belum diperiksa
+                                    @endif
+                                </small>
+                            @endif
+                        </span>
+                    </a>
+
+                    {{-- PENILAIAN --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.penilaian', $pesertaMagang) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">★</span>
+                        <span>
+                            Penilaian Akhir
+                            <small class="action-meta">
+                                @if($pesertaMagang->penilaian)
+                                    Nilai {{ number_format($pesertaMagang->penilaian->nilai_akhir, 2, ',', '.') }}
+                                    (predikat {{ $pesertaMagang->penilaian->predikat }})
+                                @else
+                                    Belum dinilai
+                                @endif
+                            </small>
+                        </span>
+                    </a>
 
                 </div>
 
