@@ -124,6 +124,12 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             [PesertaMagangController::class, 'updateAbsensi']
         )->name('peserta-magang.absensi.update');
 
+        // Hapus cache & baca ulang absensi dari Google Sheets
+        Route::post(
+            '/peserta-magang/{pesertaMagang}/absensi/muat-ulang',
+            [PesertaMagangController::class, 'muatUlangAbsensi']
+        )->name('peserta-magang.absensi.refresh');
+
     });
 
 /*

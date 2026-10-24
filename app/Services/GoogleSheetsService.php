@@ -9,36 +9,39 @@ use RuntimeException;
 
 class GoogleSheetsService
 {
-    protected Client $client;
+    protected ?Sheets $service = null;
 
-    protected Sheets $service;
+    /**
+     * Client Google baru dibuat saat pertama kali dipakai, sehingga
+     * service ini aman di-resolve (dan di-mock) walau credential belum ada.
+     */
+    public function __construct(
+        protected ?string $credentialsPath = null,
+    ) {
+        $this->credentialsPath ??= config('absensi.credentials_path');
+    }
 
-    public function __construct()
+    /**
+     * Inisialisasi koneksi Google Sheets.
+     */
+    protected function sheets(): Sheets
     {
-        $credentialsPath = storage_path(
-            'app/google/service-account.json'
-        );
+        if ($this->service) {
+            return $this->service;
+        }
 
-        if (!file_exists($credentialsPath)) {
-            throw new RuntimeException(
-                'File credential Google Sheets tidak ditemukan: '
-                . $credentialsPath
+        if (! $this->credentialsPath || ! file_exists($this->credentialsPath)) {
+            throw new CredentialTidakDitemukanException(
+                'File credential Google Sheets tidak ditemukan: '.$this->credentialsPath
             );
         }
 
-        $this->client = new Client();
+        $client = new Client;
+        $client->setApplicationName(config('app.name', 'MAGENTA'));
+        $client->setAuthConfig($this->credentialsPath);
+        $client->setScopes([Sheets::SPREADSHEETS]);
 
-        $this->client->setApplicationName(
-            config('app.name', 'MAGENTA')
-        );
-
-        $this->client->setAuthConfig($credentialsPath);
-
-        $this->client->setScopes([
-            Sheets::SPREADSHEETS,
-        ]);
-
-        $this->service = new Sheets($this->client);
+        return $this->service = new Sheets($client);
     }
 
     /**
@@ -46,12 +49,8 @@ class GoogleSheetsService
      */
     public function extractSpreadsheetId(string $url): string
     {
-        $pattern = '/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/';
-
-        if (!preg_match($pattern, $url, $matches)) {
-            throw new RuntimeException(
-                'URL Google Sheets tidak valid.'
-            );
+        if (! preg_match('/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/', $url, $matches)) {
+            throw new RuntimeException('URL Google Sheets tidak valid.');
         }
 
         return $matches[1];
@@ -60,16 +59,9 @@ class GoogleSheetsService
     /**
      * Membaca data dari Google Sheets.
      */
-    public function getValues(
-        string $spreadsheetId,
-        string $range = 'A1:Z100'
-    ): array {
-        $response = $this->service
-            ->spreadsheets_values
-            ->get(
-                $spreadsheetId,
-                $range
-            );
+    public function getValues(string $spreadsheetId, string $range = 'A1:Z100'): array
+    {
+        $response = $this->sheets()->spreadsheets_values->get($spreadsheetId, $range);
 
         return $response->getValues() ?? [];
     }
@@ -77,65 +69,47 @@ class GoogleSheetsService
     /**
      * Membaca data langsung menggunakan URL Google Sheets.
      */
-    public function getValuesFromUrl(
-        string $url,
-        string $range = 'A1:Z100'
-    ): array {
-        $spreadsheetId = $this->extractSpreadsheetId($url);
-
-        return $this->getValues(
-            $spreadsheetId,
-            $range
-        );
+    public function getValuesFromUrl(string $url, string $range = 'A1:Z100'): array
+    {
+        return $this->getValues($this->extractSpreadsheetId($url), $range);
     }
 
     /**
-     * Mendapatkan daftar nama tab/sheet
-     * di dalam satu spreadsheet.
+     * Daftar nama tab/sheet di dalam satu spreadsheet.
+     *
+     * @return array<int, string>
      */
-    public function getSheetTitles(
-        string $spreadsheetId
-    ): array {
-        $spreadsheet = $this->service
-            ->spreadsheets
-            ->get($spreadsheetId);
+    public function getSheetTitles(string $spreadsheetId): array
+    {
+        $spreadsheet = $this->sheets()->spreadsheets->get($spreadsheetId);
 
-        $sheets = $spreadsheet->getSheets();
-
-        return collect($sheets)
-            ->map(function ($sheet) {
-                return $sheet
-                    ->getProperties()
-                    ->getTitle();
-            })
+        return collect($spreadsheet->getSheets())
+            ->map(fn ($sheet) => $sheet->getProperties()->getTitle())
             ->values()
             ->all();
     }
 
     /**
+     * Daftar nama tab menggunakan URL Google Sheets.
+     *
+     * @return array<int, string>
+     */
+    public function getSheetTitlesFromUrl(string $url): array
+    {
+        return $this->getSheetTitles($this->extractSpreadsheetId($url));
+    }
+
+    /**
      * Mengubah / menulis data ke Google Sheets.
      */
-    public function updateValues(
-        string $spreadsheetId,
-        string $range,
-        array $values
-    ): int {
-        $body = new ValueRange([
-            'values' => $values,
-        ]);
-
-        $params = [
-            'valueInputOption' => 'USER_ENTERED',
-        ];
-
-        $response = $this->service
-            ->spreadsheets_values
-            ->update(
-                $spreadsheetId,
-                $range,
-                $body,
-                $params
-            );
+    public function updateValues(string $spreadsheetId, string $range, array $values): int
+    {
+        $response = $this->sheets()->spreadsheets_values->update(
+            $spreadsheetId,
+            $range,
+            new ValueRange(['values' => $values]),
+            ['valueInputOption' => 'USER_ENTERED']
+        );
 
         return (int) $response->getUpdatedCells();
     }
@@ -143,17 +117,8 @@ class GoogleSheetsService
     /**
      * Mengubah / menulis data menggunakan URL Google Sheets.
      */
-    public function updateValuesFromUrl(
-        string $url,
-        string $range,
-        array $values
-    ): int {
-        $spreadsheetId = $this->extractSpreadsheetId($url);
-
-        return $this->updateValues(
-            $spreadsheetId,
-            $range,
-            $values
-        );
+    public function updateValuesFromUrl(string $url, string $range, array $values): int
+    {
+        return $this->updateValues($this->extractSpreadsheetId($url), $range, $values);
     }
 }

@@ -87,11 +87,9 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Validasi masih di controller (kecuali `PesertaMagangRequest`); logika
   validasi banner duplikat di `store` dan `update`.
 - `PengaturanWebsiteController@update` meng-assign 30+ field satu per satu.
-- Layout Google Sheets di-hardcode sebagai konstanta controller; nama tab bulan
-  memakai `now()->format('F Y')` (bahasa Inggris) dan hanya bulan berjalan;
-  rekap absensi dihitung di Blade; tidak ada cache.
-- `GoogleSheetsService` melempar exception di constructor bila credential tidak
-  ada sehingga sulit di-mock/di-test.
+- ~~Layout sheet di-hardcode, tab bulan hanya bahasa Inggris & bulan berjalan,
+  rekap di Blade, tanpa cache, `GoogleSheetsService` sulit di-mock~~ —
+  **diperbaiki di Fase 3**.
 - Dashboard admin & super admin hanya `Route::view` tanpa data.
 - Route `superadmin.pengguna.show` terdaftar (dari `Route::resource`) tetapi
   `UserController` tidak punya method `show` → membuka URL tersebut menghasilkan
@@ -118,8 +116,28 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 
 ### Test
 - Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
-  publik, dan kelola pengajuan (50 test). Belum dites: banner, profil
-  perusahaan, CRUD peserta & pengguna, absensi Google Sheets.
+  publik, kelola pengajuan, dan absensi Google Sheets (69 test). Belum dites:
+  banner, profil perusahaan, CRUD peserta & pengguna.
+
+## Catatan Fase 3 (absensi Google Sheets)
+
+- Nama tab bulan **dicocokkan otomatis**: `OKTOBER 2026` (Indonesia) atau
+  `OCTOBER 2026` (Inggris), tanpa membedakan huruf besar/kecil. Bila tidak
+  ada, halaman menampilkan daftar tab yang tersedia.
+- Halaman detail peserta punya **pilihan bulan** (sepanjang periode magang,
+  maks. 24 bulan; 6 bulan terakhir bila periode kosong) dan tombol
+  **Muat ulang data**. Simpan absensi menulis ke tab bulan yang sedang dipilih.
+- Konfigurasi layout sheet, path credential, dan lama cache ada di
+  `config/absensi.php` (nilai dari `.env`, lihat `.env.example`).
+- Hasil baca di-cache 5 menit (`ABSENSI_CACHE_SECONDS`); cache bulan itu
+  dihapus otomatis setelah admin menyimpan absensi.
+- Logika ada di `App\Services\AbsensiSheetService` (baca/tulis/cache) dan
+  `App\Services\RekapAbsensi` (rekap hadir / izin / sakit / belum diisi —
+  izin & sakit sekarang dihitung terpisah).
+- `GoogleSheetsService` baru membuat koneksi saat dipakai, sehingga bisa
+  di-mock di test; credential hilang memberi pesan khusus.
+- Belum diuji dengan spreadsheet asli (credential tidak ada di lingkungan
+  pengembangan ini).
 
 ## Catatan Fase 2 (pengajuan magang & website)
 
@@ -171,7 +189,7 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 0 | Persiapan & dokumentasi proyek | selesai |
 | 1 | Refactor tampilan: layout & komponen Blade bersama | selesai |
 | 2 | Modul Pengajuan Magang lengkap (+ redesain website) | selesai |
-| 3 | Penguatan Absensi Google Sheets | belum |
+| 3 | Penguatan Absensi Google Sheets | selesai |
 | 4 | Logbook kegiatan & Penilaian peserta | belum |
 | 5 | Dashboard statistik, Laporan & Export | belum |
 | 6 | Keamanan, otorisasi & test | belum |

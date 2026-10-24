@@ -807,6 +807,126 @@
         }
     }
 
+
+    /* =====================================================
+       TOOLBAR BULAN & STATUS BARIS (Fase 3)
+    ====================================================== */
+
+    .absensi-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        margin-bottom: 14px;
+    }
+
+    .month-form {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .month-form label {
+        color: #4b5d70;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .month-form select {
+        min-width: 190px;
+        height: 38px;
+
+        padding: 0 12px;
+
+        border: 1px solid #d7e0eb;
+        border-radius: 8px;
+
+        background: white;
+        color: #17313d;
+
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
+    .toolbar-button {
+        height: 38px;
+
+        padding: 0 14px;
+
+        border: 1px solid #d7e0eb;
+        border-radius: 8px;
+
+        background: white;
+        color: #0878a8;
+
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 800;
+
+        cursor: pointer;
+
+        transition: .2s ease;
+    }
+
+    .toolbar-button:hover {
+        border-color: #0878a8;
+        background: #f1f8fc;
+    }
+
+    .attendance-summary {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+
+    .summary-izin .summary-value {
+        color: #b4630c;
+    }
+
+    .summary-sakit .summary-value {
+        color: #c62828;
+    }
+
+    .summary-belum_diisi .summary-value {
+        color: #8a99a3;
+    }
+
+    .row-status {
+        display: inline-block;
+
+        margin-top: 4px;
+        padding: 2px 8px;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+        font-weight: 800;
+    }
+
+    .row-status-izin {
+        background: #fff6e8;
+        color: #b4630c;
+    }
+
+    .row-status-sakit {
+        background: #fff0f0;
+        color: #c62828;
+    }
+
+    @media (max-width: 1100px) {
+        .attendance-summary {
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .attendance-summary {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+    }
 </style>
 @endpush
 
@@ -1225,24 +1345,44 @@
 
                 @endif
 
-                {{-- NOTE --}}
+                {{-- PILIH BULAN & MUAT ULANG --}}
+
+                <div class="absensi-toolbar">
+
+                    <form method="GET" action="{{ route('superadmin.peserta-magang.show', $pesertaMagang) }}" class="month-form">
+                        <label for="bulan">Bulan</label>
+                        <select id="bulan" name="bulan" onchange="this.form.submit()">
+                            @foreach($pilihanBulan as $nilai => $label)
+                                <option value="{{ $nilai }}" @selected($nilai === $bulanDipilih->format('Y-m'))>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <noscript><button type="submit" class="toolbar-button">Tampilkan</button></noscript>
+                    </form>
+
+                    @if($pesertaMagang->google_sheet_url)
+                        <form method="POST" action="{{ route('superadmin.peserta-magang.absensi.refresh', $pesertaMagang) }}">
+                            @csrf
+                            <input type="hidden" name="bulan" value="{{ $bulanDipilih->format('Y-m') }}">
+                            <button type="submit" class="toolbar-button">⟳ Muat ulang data</button>
+                        </form>
+                    @endif
+
+                </div>
 
                 <div class="sheet-note">
 
-                    Periode aktif:
-
-                    <strong>
-                        {{ $currentMonthTitle }}
-                    </strong>.
+                    @if($tabAktif)
+                        Tab <strong>{{ $tabAktif }}</strong>
+                        @if($diambilPada)
+                            · data diambil {{ $diambilPada->diffForHumans() }}
+                            (disimpan sementara {{ intdiv(config('absensi.cache_seconds'), 60) }} menit).
+                        @endif
+                        <br>
+                    @endif
 
                     Kolom
-
-                    <strong>
-                        Activity, Output, Lokasi, dan Action
-                    </strong>
-
+                    <strong>Activity, Output, Lokasi, dan Action</strong>
                     tetap diisi oleh mahasiswa melalui Google Sheets.
-
                     Admin dapat mengubah empat waktu absensi melalui MAGENTA.
 
                 </div>
@@ -1253,201 +1393,25 @@
                          REKAP ABSENSI
                     ================================================== --}}
 
-                    @php
-
-                        $totalTercatat =
-                            count($sheetRows);
-
-                        $totalHadir = 0;
-
-                        $totalIzinSakit = 0;
-
-                        foreach ($sheetRows as $rekapRow) {
-
-                            $activity =
-                                strtolower(
-                                    trim(
-                                        (string)
-                                        ($rekapRow['activity'] ?? '')
-                                    )
-                                );
-
-                            $pagiMasuk =
-                                trim(
-                                    (string)
-                                    ($rekapRow['pagi_masuk'] ?? '')
-                                );
-
-                            $pagiKeluar =
-                                trim(
-                                    (string)
-                                    ($rekapRow['pagi_keluar'] ?? '')
-                                );
-
-                            $siangMasuk =
-                                trim(
-                                    (string)
-                                    ($rekapRow['siang_masuk'] ?? '')
-                                );
-
-                            $siangKeluar =
-                                trim(
-                                    (string)
-                                    ($rekapRow['siang_keluar'] ?? '')
-                                );
-
-                            $adaAbsensi =
-                                $pagiMasuk !== '' ||
-                                $pagiKeluar !== '' ||
-                                $siangMasuk !== '' ||
-                                $siangKeluar !== '';
-
-                            $isIzinSakit =
-                                str_contains(
-                                    $activity,
-                                    'izin'
-                                ) ||
-                                str_contains(
-                                    $activity,
-                                    'ijin'
-                                ) ||
-                                str_contains(
-                                    $activity,
-                                    'sakit'
-                                );
-
-                            if ($isIzinSakit) {
-
-                                $totalIzinSakit++;
-
-                            } elseif ($adaAbsensi) {
-
-                                $totalHadir++;
-
-                            }
-
-                        }
-
-                    @endphp
 
                     <div class="attendance-summary">
 
-                        {{-- HARI TERCATAT --}}
-
-                        <div class="summary-card">
-
-                            <div class="summary-label">
-                                Hari Tercatat
+                        @foreach([
+                            'tercatat' => ['Hari Tercatat', 'Baris yang terisi di Google Sheets.'],
+                            'hadir' => ['Hadir', 'Memiliki data waktu absensi.'],
+                            'izin' => ['Izin', 'Activity berisi "izin".'],
+                            'sakit' => ['Sakit', 'Activity berisi "sakit".'],
+                            'belum_diisi' => ['Belum Diisi', 'Tanpa waktu & keterangan.'],
+                        ] as $kunci => [$label, $keterangan])
+                            <div class="summary-card summary-{{ $kunci }}">
+                                <div class="summary-label">{{ $label }}</div>
+                                <div class="summary-value">{{ $rekap[$kunci] }}</div>
+                                <div class="summary-description">{{ $keterangan }}</div>
                             </div>
-
-                            <div class="summary-value">
-                                {{ $totalTercatat }}
-                            </div>
-
-                            <div class="summary-description">
-                                Data yang tersedia pada Google Sheets.
-                            </div>
-
-                        </div>
-
-                        {{-- HADIR --}}
-
-                        <div class="summary-card">
-
-                            <div class="summary-label">
-                                Hadir
-                            </div>
-
-                            <div class="summary-value">
-                                {{ $totalHadir }}
-                            </div>
-
-                            <div class="summary-description">
-                                Memiliki data waktu absensi.
-                            </div>
-
-                        </div>
-
-                        {{-- IZIN / SAKIT --}}
-
-                        <div class="summary-card">
-
-                            <div class="summary-label">
-                                Izin / Sakit
-                            </div>
-
-                            <div class="summary-value">
-                                {{ $totalIzinSakit }}
-                            </div>
-
-                            <div class="summary-description">
-                                Berdasarkan keterangan Activity.
-                            </div>
-
-                        </div>
+                        @endforeach
 
                     </div>
 
-                    {{-- =================================================
-                         NORMALISASI JAM
-                    ================================================== --}}
-
-                    @php
-
-                        $normalizeTime = function ($value) {
-
-                            $value =
-                                trim(
-                                    (string) $value
-                                );
-
-                            if ($value === '') {
-                                return '';
-                            }
-
-                            $value =
-                                str_replace(
-                                    '.',
-                                    ':',
-                                    $value
-                                );
-
-                            if (
-                                preg_match(
-                                    '/^(\d{1,2}):(\d{2})$/',
-                                    $value,
-                                    $matches
-                                )
-                            ) {
-
-                                $hour =
-                                    (int) $matches[1];
-
-                                $minute =
-                                    (int) $matches[2];
-
-                                if (
-                                    $hour >= 0 &&
-                                    $hour <= 23 &&
-                                    $minute >= 0 &&
-                                    $minute <= 59
-                                ) {
-
-                                    return sprintf(
-                                        '%02d:%02d',
-                                        $hour,
-                                        $minute
-                                    );
-
-                                }
-
-                            }
-
-                            return '';
-
-                        };
-
-                    @endphp
 
                     {{-- =================================================
                          TABEL ABSENSI
@@ -1533,6 +1497,11 @@
 
                                         <td>
                                             {{ $row['tanggal'] ?: '-' }}
+
+                                            @php($statusBaris = \App\Services\RekapAbsensi::statusBaris($row))
+                                            @if(in_array($statusBaris, ['izin', 'sakit'], true))
+                                                <span class="row-status row-status-{{ $statusBaris }}">{{ ucfirst($statusBaris) }}</span>
+                                            @endif
                                         </td>
 
                                         {{-- PAGI MASUK --}}
@@ -1544,7 +1513,7 @@
                                                 name="pagi_masuk"
                                                 form="{{ $formId }}"
                                                 class="attendance-input"
-                                                value="{{ $normalizeTime($row['pagi_masuk']) }}"
+                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['pagi_masuk']) }}"
                                             >
 
                                         </td>
@@ -1558,7 +1527,7 @@
                                                 name="pagi_keluar"
                                                 form="{{ $formId }}"
                                                 class="attendance-input"
-                                                value="{{ $normalizeTime($row['pagi_keluar']) }}"
+                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['pagi_keluar']) }}"
                                             >
 
                                         </td>
@@ -1572,7 +1541,7 @@
                                                 name="siang_masuk"
                                                 form="{{ $formId }}"
                                                 class="attendance-input"
-                                                value="{{ $normalizeTime($row['siang_masuk']) }}"
+                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['siang_masuk']) }}"
                                             >
 
                                         </td>
@@ -1586,7 +1555,7 @@
                                                 name="siang_keluar"
                                                 form="{{ $formId }}"
                                                 class="attendance-input"
-                                                value="{{ $normalizeTime($row['siang_keluar']) }}"
+                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['siang_keluar']) }}"
                                             >
 
                                         </td>
@@ -1635,6 +1604,12 @@
 
                                                 <input
                                                     type="hidden"
+                                                    name="bulan"
+                                                    value="{{ $bulanDipilih->format('Y-m') }}"
+                                                >
+
+                                                <input
+                                                    type="hidden"
                                                     name="sheet_row"
                                                     value="{{ $row['sheet_row'] }}"
                                                 >
@@ -1667,7 +1642,7 @@
                         Belum ada data absensi dari Google Sheets untuk periode
 
                         <strong>
-                            {{ $currentMonthTitle }}
+                            {{ $bulanDipilih->translatedFormat('F Y') }}
                         </strong>.
 
                         <br>
