@@ -180,10 +180,16 @@
     </section>
 
     <section class="panel">
-        <h3>Segera hadir</h3>
-        <p>
-            Menu Logbook Harian, Rekap Uang Saku, dan Feedback akan muncul di sidebar pada tahap berikutnya.
-        </p>
+        <div class="panel-row">
+            <div>
+                <h3>Logbook Harian</h3>
+                <p>
+                    Isi jam kerja dan kegiatan setiap hari. Izin atau sakit beberapa hari cukup diajukan sekali
+                    dengan satu bukti. Rekap uang saku per periode (28 s.d. 27) ada di halaman logbook.
+                </p>
+            </div>
+            <x-button :href="route('peserta.logbook.index')">Buka Logbook</x-button>
+        </div>
     </section>
 
 </div>

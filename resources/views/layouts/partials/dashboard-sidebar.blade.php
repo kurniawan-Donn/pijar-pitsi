@@ -22,6 +22,12 @@
                 'active' => ['peserta.biodata.*'],
             ],
             [
+                'label' => 'Logbook Harian',
+                'icon' => '📒',
+                'route' => 'peserta.logbook.index',
+                'active' => ['peserta.logbook.*', 'peserta.izin.*'],
+            ],
+            [
                 'label' => 'Profil & Password',
                 'icon' => '♙',
                 'route' => 'profil.edit',

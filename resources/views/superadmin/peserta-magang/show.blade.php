@@ -1612,7 +1612,20 @@
                         </span>
                     </a>
 
-                    {{-- LOGBOOK --}}
+                    {{-- LOGBOOK HARIAN (DATABASE) --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.logbook-harian', $pesertaMagang) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">✓</span>
+                        <span>
+                            Logbook Harian & Izin
+                            <small class="action-meta">Verifikasi, rekap uang saku, dan cetak per periode</small>
+                        </span>
+                    </a>
+
+                    {{-- LOGBOOK (GOOGLE SHEETS, RIWAYAT) --}}
 
                     <a
                         href="{{ route('superadmin.peserta-magang.logbook', ['pesertaMagang' => $pesertaMagang, 'bulan' => $bulanDipilih->format('Y-m')]) }}"
@@ -1620,7 +1633,7 @@
                     >
                         <span class="action-icon">📒</span>
                         <span>
-                            Logbook Kegiatan
+                            Logbook Google Sheets (riwayat)
                             @if($ringkasanLogbook['total'] > 0)
                                 <small class="action-meta">
                                     {{ $ringkasanLogbook['Diterima'] }}/{{ $ringkasanLogbook['total'] }} hari diterima

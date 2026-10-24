@@ -123,13 +123,41 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **283 test** (1343 assertion). Setiap route aplikasi (77 route) punya test
+- **335 test** (1614 assertion). Setiap route aplikasi (94 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 12 (logbook harian, kehadiran, izin, uang saku)
+
+- **Aturan jam kerja baru** (`RekapAbsensi::jenisKehadiran`, juga untuk
+  sheet lama): hari penuh = pagi masuk + siang keluar (jam istirahat boleh
+  kosong); setengah hari = hanya sesi pagi atau hanya sesi siang lengkap.
+- Tabel `logbook_harians` (format sheet September + kehadiran
+  hadir/izin/sakit/libur + status verifikasi), `logbook_buktis` (maks. 3 file
+  per hari, disk privat `local`), `izin_pesertas` (satu bukti untuk satu
+  rentang), `buka_kunci_logbooks`.
+- `App\Services\KalenderLogbook`: tabel per periode 28–27, akses tanggal
+  (hari ini & mundur sesuai batas di Pengaturan Magang; belum tiba terkunci;
+  tanggal yang dibuka admin), libur otomatis (Sabtu/Minggu + `hari_liburs`),
+  rekap (penuh, setengah, izin, sakit, libur, belum diisi, ditolak) dan uang
+  saku per hari dengan tarif yang berlaku di tanggal itu. Hari hadir yang
+  `ditolak` tidak dibayar; `menunggu`/`review` tetap dihitung.
+- Peserta (`peserta.logbook.*`, `peserta.izin.*`): isi/ubah/hapus per hari,
+  upload bukti, ajukan izin/sakit beberapa hari (hanya hari kerja; hari yang
+  sudah diisi hadir tidak ditimpa; bukti wajib untuk sakit), batalkan izin
+  yang belum diverifikasi, unduh PDF rekap periode.
+- Admin (`superadmin.peserta-magang.logbook-harian*`): verifikasi beberapa
+  hari sekaligus (Diterima/Review/Ditolak + catatan), terima/tolak izin
+  (diteruskan ke semua harinya), buka kunci tanggal, unduh PDF format sheet
+  bulanan (`App\Services\CetakLogbook`, view `logbook/cetak`).
+- Bukti hanya bisa dibuka pemiliknya dan admin (`LogbookHarianPolicy`,
+  `IzinPesertaPolicy`).
+- Halaman logbook Google Sheets lama tetap ada sebagai riwayat sampai impor
+  (Fase 13).
 
 ## Catatan Fase 11 (biodata peserta)
 
@@ -267,7 +295,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 9 | Kelola akun peserta oleh admin | selesai |
 | 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | selesai |
 | 11 | Biodata peserta | selesai |
-| 12 | Logbook harian, kehadiran, izin, uang saku | belum |
+| 12 | Logbook harian, kehadiran, izin, uang saku | selesai |
 | 13 | Impor riwayat sheet lama | belum |
 | 14 | Dashboard monitoring | belum |
 | 15 | Feedback magang | belum |
