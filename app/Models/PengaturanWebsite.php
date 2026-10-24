@@ -19,7 +19,6 @@ class PengaturanWebsite extends Model
         'informasi_terbaru_judul',
         'informasi_terbaru_deskripsi',
 
-
         /*
         |--------------------------------------------------------------------------
         | PENGUMUMAN
@@ -38,7 +37,6 @@ class PengaturanWebsite extends Model
         'pengumuman_card3_judul',
         'pengumuman_card3_deskripsi',
 
-
         /*
         |--------------------------------------------------------------------------
         | PERSYARATAN MAGANG
@@ -56,7 +54,6 @@ class PengaturanWebsite extends Model
 
         'persyaratan3_judul',
         'persyaratan3_deskripsi',
-
 
         /*
         |--------------------------------------------------------------------------
@@ -78,7 +75,6 @@ class PengaturanWebsite extends Model
 
         'alur4_judul',
         'alur4_deskripsi',
-
 
         /*
         |--------------------------------------------------------------------------
@@ -102,7 +98,6 @@ class PengaturanWebsite extends Model
         'tentang_card3_deskripsi',
 
         'pendaftaran_judul',
-
 
         /*
         |--------------------------------------------------------------------------

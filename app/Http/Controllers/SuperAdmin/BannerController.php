@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BannerRequest;
 use App\Models\Banner;
 use App\Models\LogAktivitas;
-use App\Http\Requests\BannerRequest;
 use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller

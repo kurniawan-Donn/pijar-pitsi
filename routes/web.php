@@ -60,7 +60,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         Route::put('/password', 'updatePassword')->name('password');
     });
 
-
 /*
 |--------------------------------------------------------------------------
 | AREA ADMIN

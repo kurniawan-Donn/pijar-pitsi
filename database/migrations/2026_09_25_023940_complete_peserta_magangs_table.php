@@ -13,42 +13,42 @@ return new class extends Migration
     {
         Schema::table('peserta_magangs', function (Blueprint $table) {
 
-            if (!Schema::hasColumn('peserta_magangs', 'nama')) {
+            if (! Schema::hasColumn('peserta_magangs', 'nama')) {
                 $table->string('nama')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'nim')) {
+            if (! Schema::hasColumn('peserta_magangs', 'nim')) {
                 $table->string('nim')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'asal_kampus')) {
+            if (! Schema::hasColumn('peserta_magangs', 'asal_kampus')) {
                 $table->string('asal_kampus')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'program_studi')) {
+            if (! Schema::hasColumn('peserta_magangs', 'program_studi')) {
                 $table->string('program_studi')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'periode_mulai')) {
+            if (! Schema::hasColumn('peserta_magangs', 'periode_mulai')) {
                 $table->date('periode_mulai')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'periode_selesai')) {
+            if (! Schema::hasColumn('peserta_magangs', 'periode_selesai')) {
                 $table->date('periode_selesai')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'pembimbing')) {
+            if (! Schema::hasColumn('peserta_magangs', 'pembimbing')) {
                 $table->string('pembimbing')->nullable();
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'status')) {
+            if (! Schema::hasColumn('peserta_magangs', 'status')) {
                 $table->enum('status', [
                     'aktif',
                     'selesai',
                 ])->default('aktif');
             }
 
-            if (!Schema::hasColumn('peserta_magangs', 'google_sheet_url')) {
+            if (! Schema::hasColumn('peserta_magangs', 'google_sheet_url')) {
                 $table->text('google_sheet_url')->nullable();
             }
         });

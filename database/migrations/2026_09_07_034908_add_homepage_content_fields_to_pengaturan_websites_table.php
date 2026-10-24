@@ -14,20 +14,19 @@ return new class extends Migration
         |--------------------------------------------------------------------------
         */
 
-        if (!Schema::hasColumn('pengaturan_websites', 'informasi_terbaru_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'informasi_terbaru_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('informasi_terbaru_judul')
                     ->default('Informasi Terbaru');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'informasi_terbaru_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'informasi_terbaru_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('informasi_terbaru_deskripsi')
                     ->nullable();
             });
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -35,62 +34,61 @@ return new class extends Migration
         |--------------------------------------------------------------------------
         */
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('pengumuman_judul')
                     ->default('Pengumuman');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('pengumuman_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card1_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card1_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('pengumuman_card1_judul')
                     ->default('Persiapkan Dokumen');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card1_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card1_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('pengumuman_card1_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card2_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card2_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('pengumuman_card2_judul')
                     ->default('Pendaftaran Online');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card2_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card2_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('pengumuman_card2_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card3_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card3_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('pengumuman_card3_judul')
                     ->default('Informasi Perusahaan');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'pengumuman_card3_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'pengumuman_card3_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('pengumuman_card3_deskripsi')
                     ->nullable();
             });
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -101,55 +99,54 @@ return new class extends Migration
         |
         */
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('persyaratan_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan1_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan1_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('persyaratan1_judul')
                     ->default('Surat Pengantar');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan1_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan1_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('persyaratan1_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan2_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan2_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('persyaratan2_judul')
                     ->default('Data Mahasiswa');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan2_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan2_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('persyaratan2_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan3_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan3_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('persyaratan3_judul')
                     ->default('Dokumen Pendukung');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'persyaratan3_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'persyaratan3_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('persyaratan3_deskripsi')
                     ->nullable();
             });
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -160,70 +157,69 @@ return new class extends Migration
         |
         */
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('alur_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur1_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur1_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('alur1_judul')
                     ->default('Persiapkan');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur1_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur1_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('alur1_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur2_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur2_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('alur2_judul')
                     ->default('Daftar');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur2_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur2_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('alur2_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur3_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur3_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('alur3_judul')
                     ->default('Verifikasi');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur3_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur3_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('alur3_deskripsi')
                     ->nullable();
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur4_judul')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur4_judul')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->string('alur4_judul')
                     ->default('Pelaksanaan');
             });
         }
 
-        if (!Schema::hasColumn('pengaturan_websites', 'alur4_deskripsi')) {
+        if (! Schema::hasColumn('pengaturan_websites', 'alur4_deskripsi')) {
             Schema::table('pengaturan_websites', function (Blueprint $table) {
                 $table->text('alur4_deskripsi')
                     ->nullable();
             });
         }
     }
-
 
     public function down(): void
     {
@@ -283,7 +279,7 @@ return new class extends Migration
             }
         }
 
-        if (!empty($existingColumns)) {
+        if (! empty($existingColumns)) {
             Schema::table('pengaturan_websites', function (Blueprint $table) use ($existingColumns) {
                 $table->dropColumn($existingColumns);
             });
