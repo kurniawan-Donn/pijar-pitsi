@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateStatusPengajuanRequest;
+use App\Models\LogAktivitas;
 use App\Models\PengajuanMagang;
 use App\Models\PesertaMagang;
 use Illuminate\Http\RedirectResponse;
@@ -87,7 +88,16 @@ class PengajuanMagangController extends Controller
         UpdateStatusPengajuanRequest $request,
         PengajuanMagang $pengajuanMagang
     ): RedirectResponse {
+        $statusLama = $pengajuanMagang->status;
+
         $pengajuanMagang->update($request->validated());
+
+        LogAktivitas::catat(
+            'ubah_status_pengajuan',
+            $pengajuanMagang,
+            "Status {$pengajuanMagang->nomor()} diubah dari {$statusLama} menjadi {$pengajuanMagang->status}",
+            ['dari' => $statusLama, 'ke' => $pengajuanMagang->status, 'catatan_admin' => $pengajuanMagang->catatan_admin]
+        );
 
         return redirect()
             ->route('admin.pengajuan.show', $pengajuanMagang)
@@ -124,6 +134,8 @@ class PengajuanMagangController extends Controller
             'status' => 'aktif',
         ]);
 
+        LogAktivitas::catat('buat_peserta', $peserta, "Peserta {$peserta->nama} dibuat dari pengajuan {$pengajuanMagang->nomor()}");
+
         return redirect()
             ->route('superadmin.peserta-magang.edit', $peserta)
             ->with('success', 'Data peserta berhasil dibuat dari pengajuan. Lengkapi pembimbing dan link Google Sheets absensi.');
@@ -137,6 +149,15 @@ class PengajuanMagangController extends Controller
         if ($pengajuanMagang->dokumen_path) {
             Storage::disk('local')->delete($pengajuanMagang->dokumen_path);
         }
+
+        $pengajuanMagang->load('mahasiswa');
+
+        LogAktivitas::catat(
+            'hapus_pengajuan',
+            $pengajuanMagang,
+            "Pengajuan {$pengajuanMagang->nomor()} ({$pengajuanMagang->mahasiswa?->nama}) dihapus",
+            ['status' => $pengajuanMagang->status, 'nim' => $pengajuanMagang->mahasiswa?->nim, 'posisi' => $pengajuanMagang->posisi]
+        );
 
         $pengajuanMagang->delete();
 

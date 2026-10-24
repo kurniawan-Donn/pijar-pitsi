@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SimpanPenilaianRequest;
 use App\Models\AspekPenilaian;
+use App\Models\LogAktivitas;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use Illuminate\Http\RedirectResponse;
@@ -65,6 +66,13 @@ class PenilaianController extends Controller
             $penilaian->details()->delete();
             $penilaian->details()->createMany($details->all());
         });
+
+        LogAktivitas::catat(
+            'simpan_penilaian',
+            $pesertaMagang,
+            "Penilaian {$pesertaMagang->nama} disimpan: ".number_format($nilaiAkhir, 2, ',', '.'),
+            ['nilai' => $details->pluck('nilai', 'nama_aspek')->all(), 'nilai_akhir' => $nilaiAkhir]
+        );
 
         return redirect()
             ->route('superadmin.peserta-magang.penilaian', $pesertaMagang)

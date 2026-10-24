@@ -60,6 +60,13 @@
                 'roles' => ['super_admin'],
             ],
             [
+                'label' => 'Log Aktivitas',
+                'icon' => '☰',
+                'route' => 'superadmin.log-aktivitas.index',
+                'active' => ['superadmin.log-aktivitas.*'],
+                'roles' => ['super_admin'],
+            ],
+            [
                 'label' => 'Kelola Pengguna',
                 'icon' => '♟',
                 'route' => 'superadmin.pengguna.index',

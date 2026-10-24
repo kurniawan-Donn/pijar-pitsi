@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Concerns\MemilihBulanAbsensi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VerifikasiLogbookRequest;
+use App\Models\LogAktivitas;
 use App\Models\PesertaMagang;
 use App\Services\AbsensiSheetService;
 use App\Services\Logbook;
@@ -75,6 +76,13 @@ class LogbookController extends Controller
 
             return $redirect->with('error', 'Verifikasi logbook gagal disimpan. Periksa koneksi dan izin Google Sheets.');
         }
+
+        LogAktivitas::catat(
+            'verifikasi_logbook',
+            $pesertaMagang,
+            count($validated['baris'])." hari logbook {$pesertaMagang->nama} ({$validated['bulan']}) ditandai {$validated['action']}",
+            ['bulan' => $validated['bulan'], 'baris' => $validated['baris'], 'action' => $validated['action']]
+        );
 
         return $redirect->with(
             'success',

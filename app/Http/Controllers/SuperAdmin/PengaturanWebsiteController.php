@@ -219,7 +219,7 @@ class PengaturanWebsiteController extends Controller
 
             'google_form_url' => [
                 'nullable',
-                'url',
+                'url:http,https',
                 'max:2048',
             ],
 

@@ -28,7 +28,7 @@ class PesertaMagangRequest extends FormRequest
             'periode_selesai' => ['nullable', 'date', 'after_or_equal:periode_mulai'],
             'pembimbing' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'in:aktif,selesai'],
-            'google_sheet_url' => ['nullable', 'url', 'max:2048'],
+            'google_sheet_url' => ['nullable', 'url:https', 'max:2048', 'regex:#^https://docs\.google\.com/spreadsheets/d/[A-Za-z0-9_-]+#'],
         ];
     }
 
@@ -42,6 +42,7 @@ class PesertaMagangRequest extends FormRequest
             'periode_selesai.after_or_equal' => 'Tanggal selesai harus sama atau setelah tanggal mulai.',
             'status.in' => 'Status peserta tidak valid.',
             'google_sheet_url.url' => 'Link Google Sheets tidak valid.',
+            'google_sheet_url.regex' => 'Gunakan link spreadsheet Google Sheets (https://docs.google.com/spreadsheets/d/...).',
         ];
     }
 }
