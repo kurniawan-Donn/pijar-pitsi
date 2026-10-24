@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Perusahaan extends Model
 {
@@ -21,4 +22,9 @@ class Perusahaan extends Model
         'jabatan_pembimbing',
         'deskripsi',
     ];
+
+    public function pengajuanMagangs(): HasMany
+    {
+        return $this->hasMany(PengajuanMagang::class);
+    }
 }

@@ -504,6 +504,10 @@
 
         </div>
 
+        {{-- PESAN --}}
+
+        <x-alert type="success" :message="session('success')" />
+
         {{-- ERROR --}}
 
         <x-alert

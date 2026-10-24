@@ -13,6 +13,13 @@
                 'route' => $isSuperAdmin ? 'superadmin.dashboard' : 'admin.dashboard',
                 'active' => ['superadmin.dashboard', 'admin.dashboard'],
             ],
+            [
+                'label' => 'Pengajuan Magang',
+                'icon' => '✉',
+                'route' => 'admin.pengajuan.index',
+                'active' => ['admin.pengajuan.*'],
+                'badge' => \App\Models\PengajuanMagang::where('status', \App\Models\PengajuanMagang::STATUS_MENUNGGU)->count(),
+            ],
         ],
         'Sistem' => [
             [
@@ -80,6 +87,10 @@
                     >
                         <span class="dash-sidebar-icon">{{ $item['icon'] }}</span>
                         <span>{{ $item['label'] }}</span>
+
+                        @if (! empty($item['badge']))
+                            <span class="dash-sidebar-badge" title="Pengajuan menunggu diproses">{{ $item['badge'] }}</span>
+                        @endif
                     </a>
                 @endforeach
             </nav>
