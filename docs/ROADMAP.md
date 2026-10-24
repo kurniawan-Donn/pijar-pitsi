@@ -95,9 +95,8 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - ~~Filter tanggal periode membandingkan teks `Y-m-d 00:00:00` dengan
   `Y-m-d` sehingga tanggal batas terlewat~~ — **diperbaiki di Fase 5**
   (`whereDate`). Perhatikan pola ini bila menambah query tanggal baru.
-- Route `superadmin.pengguna.show` terdaftar (dari `Route::resource`) tetapi
-  `UserController` tidak punya method `show` → membuka URL tersebut menghasilkan
-  error 500. Perlu `->except('show')` atau method redirect (Fase 6).
+- ~~Route `superadmin.pengguna.show` error 500~~ — **diperbaiki di Fase 6**
+  (`->except('show')`).
 
 ### Dependensi & tooling
 - ~~`composer audit` melaporkan 4 advisory~~ — **diperbaiki** dengan update
@@ -114,111 +113,44 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   gagal per email + IP, lalu dikunci 60 detik (`AuthController`, `LoginTest`).
 - Link "Login Admin" dihapus dari navbar website publik; admin masuk langsung
   lewat `/login`.
-- Super admin dapat menurunkan role akunnya sendiri (hanya hapus yang dicegah).
+- ~~Super admin dapat menurunkan role akunnya sendiri~~ — **diperbaiki di
+  Fase 6**; Super Admin terakhir juga tidak bisa diturunkan/dihapus.
 - Password akun awal di-hardcode di `UserSeeder`.
-- Belum ada Policy/Gate, log aktivitas, maupun fitur ubah password sendiri.
+- ~~Belum ada log aktivitas & fitur ubah password sendiri~~ — **ada di
+  Fase 6**. Policy/Gate menunggu keputusan (lihat Catatan Fase 6).
 
 ### Test
-- Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
-  publik, kelola pengajuan, absensi Google Sheets, logbook, penilaian,
-  statistik dashboard, dan laporan/export (110 test). Belum dites: banner,
-  profil perusahaan, CRUD peserta & pengguna.
+- **193 test** (827 assertion). Setiap route aplikasi (56 route) punya test
+  akses untuk tamu, admin, dan super admin (`AksesRouteTest`); route baru yang
+  belum dimasukkan ke matriks membuat test gagal.
+- Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
+  Coverage kasar per fitur: semua controller punya feature test; yang paling
+  tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
+  Banner (akses + validasi).
 
-## Catatan Fase 5 (dashboard, laporan, export)
+## Catatan Fase 6 (keamanan)
 
-- Dashboard Admin & Super Admin (`Admin\DashboardController`,
-  `SuperAdmin\DashboardController`, data dari `App\Services\StatistikMagang`):
-  peserta aktif/selesai/belum dinilai, pengajuan per status & per bulan
-  (grafik CSS tanpa library), peserta yang berakhir bulan ini, pengajuan
-  terbaru, sebaran predikat, dan ringkasan absensi.
-- Ringkasan absensi di dashboard **hanya memakai cache** (tidak memanggil API
-  Google) supaya dashboard tetap cepat; rekap lengkap ada di Laporan Absensi.
-- Halaman **Laporan** (`superadmin.laporan.index`, Admin & Super Admin):
-  rekap peserta per periode, rekap absensi & uang saku per peserta per bulan,
-  dan nilai akhir per aspek. Disusun oleh `App\Services\LaporanMagang`.
-- Export tersedia dalam 4 bentuk: **Excel (.xlsx)** lewat `openspout/openspout`
-  v5, **PDF** lewat `barryvdh/laravel-dompdf` v3 (A4 landscape, template
-  `superadmin/laporan/pdf.blade.php`, font DejaVu Sans), **CSV** (BOM UTF-8 +
-  pemisah `;`), dan **versi cetak** browser.
-- `maatwebsite/excel` tidak dipakai karena belum mendukung Laravel 13
-  (composer hanya menemukan v1.1.5 berbasis `phpoffice/phpexcel` yang sudah
-  ditinggalkan).
-- **Butuh ekstensi PHP `zip`** (untuk .xlsx). Di PHP 8.4 Laragon lokal sudah
-  diaktifkan (`extension=zip` di `php.ini`, cadangan `php.ini.bak-sebelum-zip`).
-  Pastikan server produksi juga mengaktifkannya (dicatat untuk Fase 7).
-
-## Catatan Fase 3 (absensi Google Sheets)
-
-- Nama tab bulan **dicocokkan otomatis**: `OKTOBER 2026` (Indonesia) atau
-  `OCTOBER 2026` (Inggris), tanpa membedakan huruf besar/kecil. Bila tidak
-  ada, halaman menampilkan daftar tab yang tersedia.
-- Halaman detail peserta punya **pilihan bulan** (sepanjang periode magang,
-  maks. 24 bulan; 6 bulan terakhir bila periode kosong) dan tombol
-  **Muat ulang data**. Simpan absensi menulis ke tab bulan yang sedang dipilih.
-- Konfigurasi layout sheet, path credential, dan lama cache ada di
-  `config/absensi.php` (nilai dari `.env`, lihat `.env.example`).
-- Hasil baca di-cache 5 menit (`ABSENSI_CACHE_SECONDS`); cache bulan itu
-  dihapus otomatis setelah admin menyimpan absensi.
-- Logika ada di `App\Services\AbsensiSheetService` (baca/tulis/cache) dan
-  `App\Services\RekapAbsensi` (rekap hadir / izin / sakit / belum diisi —
-  izin & sakit sekarang dihitung terpisah).
-- `GoogleSheetsService` baru membuat koneksi saat dipakai, sehingga bisa
-  di-mock di test; credential hilang memberi pesan khusus.
-- Belum diuji dengan spreadsheet asli (credential tidak ada di lingkungan
-  pengembangan ini).
-- **Koreksi di Fase 4** setelah melihat template asli: baris yang dibaca
-  dibatasi 13–43 (tanggal 1–31; footer total/uang saku tidak ikut terbaca),
-  dan baris yang hanya berisi nomor + placeholder Action "......" dianggap kosong.
-
-## Catatan Fase 4 (logbook & penilaian)
-
-- **Logbook** dibaca dari Google Sheets (Tanggal, Activity, Output, Lokasi) —
-  peserta tidak punya akun login, jadi tidak ada input ganda. Verifikasi
-  pembimbing ditulis ke **kolom Action** sheet (Diterima / Ditolak / Review,
-  `config('absensi.action_options')`), bisa beberapa hari sekaligus (satu
-  panggilan batch API). Tidak ada tabel database untuk logbook. Halaman:
-  `superadmin.peserta-magang.logbook`.
-- Alasan penolakan belum tersimpan (sheet tidak punya kolom catatan); jejak
-  siapa mengubah apa akan dicatat di log aktivitas Fase 6.
-- **Rekap kehadiran & uang saku** mengikuti footer template: hari penuh = sesi
-  pagi dan siang lengkap, setengah hari = satu sesi lengkap. Tarif dari `.env`
-  (`UANG_SAKU_HARI_PENUH=50000`, `UANG_SAKU_SETENGAH_HARI=25000`).
-- **Penilaian akhir**: tabel `aspek_penilaians` (6 aspek bawaan, total bobot
-  100, diisi oleh migration), `penilaian_pesertas` (satu per peserta) dan
-  `penilaian_details` (nama & bobot aspek disalin saat dinilai). Nilai akhir =
-  Σ(nilai × bobot) ÷ Σbobot; predikat A ≥ 85, B ≥ 75, C ≥ 65, D ≥ 50, E.
-- Admin & Super Admin dapat memverifikasi logbook dan mengisi nilai; hanya
-  Super Admin yang mengatur aspek & bobot (menu **Aspek Penilaian**; aspek
-  dinonaktifkan, tidak dihapus).
-- Detail peserta menampilkan ringkasan logbook bulan terpilih dan nilai akhir;
-  daftar peserta punya kolom Nilai Akhir.
-
-## Catatan Fase 2 (pengajuan magang & website)
-
-- Pendaftaran **dua jalur**: form website (utama) + Google Form (tombol hanya
-  muncul bila link diisi di Kelola Konten). Pengajuan via Google Form tidak
-  masuk database, jadi tidak bisa dicek statusnya di website.
-- Form website 3 langkah (data diri, akademik, rencana magang) + unggah surat
-  pengantar (PDF/JPG/PNG ≤ 2 MB, disimpan di disk privat
-  `storage/app/private/pengajuan`). Dibatasi 3 kiriman/menit per IP.
-- Satu NIM tidak bisa punya dua pengajuan berstatus menunggu.
-- Cek status publik dengan NIM + email (10 kali/menit per IP), menampilkan
-  catatan admin.
-- Route publik baru: `pengajuan.store` (dulu `admin.pengajuan.store`, diganti
-  karena form ini publik) dan `pengajuan.status`. Route `admin.pengajuan.*`
-  sekarang bisa diakses Admin **dan** Super Admin; tambahan `dokumen` dan
-  `peserta`.
-- Kolom baru: `mahasiswas.asal_kampus`, `pengajuan_magangs.dokumen_path`,
-  `pengajuan_magangs.catatan_admin` (catatan admin tidak lagi menimpa
-  keterangan pendaftar), `peserta_magangs.pengajuan_magang_id`.
-- Data peserta dibuat dari pengajuan **lewat tombol** "Buat Data Peserta" di
-  detail pengajuan yang disetujui (bukan otomatis), lalu admin diarahkan ke
-  form edit peserta untuk melengkapi pembimbing & link Google Sheets.
-- Website publik didesain ulang: navbar sticky + menu mobile, animasi scroll,
-  timeline alur, statistik peserta nyata, dan form multi-langkah. Dipecah ke
-  `website/partials/*` dan komponen `x-website.field`.
-- Zona waktu aplikasi diubah ke `Asia/Jakarta` dan locale ke `id`
-  (nama bulan berbahasa Indonesia).
+- **XSS ditutup**: link tombol banner (dipakai sebagai `href` di website)
+  hanya boleh `http(s)://`, path `/…`, atau `#anchor` (`BannerRequest`).
+  Link Google Sheets peserta wajib `https://docs.google.com/spreadsheets/d/…`;
+  link Google Form wajib http/https.
+- Upload banner: hanya JPG/PNG/WEBP ≤ 2 MB (SVG ditolak karena bisa berisi
+  script).
+- **Proteksi akun**: tidak bisa menurunkan role sendiri; Super Admin terakhir
+  tidak bisa diturunkan/dihapus. Password baru minimal 8 karakter berisi huruf
+  & angka.
+- **Profil Saya** (`profil.*`, klik nama di topbar): ubah nama/email dan ganti
+  password (wajib password lama).
+- **Log Aktivitas** (`superadmin.log-aktivitas.index`, khusus Super Admin):
+  ubah status/hapus pengajuan, buat/hapus peserta, ubah absensi, verifikasi
+  logbook, simpan penilaian, ubah aspek, ubah/hapus pengguna, hapus banner,
+  ganti password. Nama pelaku disalin supaya log tetap terbaca bila akun
+  dihapus.
+- Pesan validasi bawaan Laravel kini berbahasa Indonesia (`lang/id/validation.php`).
+- Seluruh kode dirapikan dengan Pint (commit terpisah).
+- Rate limiting login sudah ada sejak sebelum Fase 2.
+- **Belum**: Policy/Gate (menunggu persetujuan), password seeder masih
+  hard-code (Fase 7).
 
 ## Catatan Fase 1 (layout & komponen)
 
@@ -246,5 +178,5 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 3 | Penguatan Absensi Google Sheets | selesai |
 | 4 | Logbook kegiatan & Penilaian peserta | selesai |
 | 5 | Dashboard statistik, Laporan & Export | selesai |
-| 6 | Keamanan, otorisasi & test | belum |
+| 6 | Keamanan, otorisasi & test | selesai (Policy/Gate menunggu keputusan) |
 | 7 | Persiapan deploy | belum |
