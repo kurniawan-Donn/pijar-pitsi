@@ -349,6 +349,22 @@
     </a>
 </div>
 
+{{-- MONITORING PESERTA (logbook & biodata dari database) --}}
+<div class="stat-row">
+    <a href="{{ route('superadmin.monitoring.index', ['belum_hari_ini' => 1]) }}" class="stat-link">
+        <x-stat-card label="Logbook Hari Ini" :value="$monitoring['sudah_isi_hari_ini'].'/'.$monitoring['wajib_hari_ini']" icon="📒" :hint="$monitoring['wajib_hari_ini'] ? 'peserta sudah mengisi' : 'hari ini bukan hari kerja'" />
+    </a>
+    <a href="{{ route('superadmin.monitoring.index', ['urut' => 'menunggu']) }}" class="stat-link">
+        <x-stat-card label="Logbook Menunggu" :value="$monitoring['logbook_menunggu']" icon="✓" hint="Perlu diverifikasi" />
+    </a>
+    <a href="{{ route('superadmin.monitoring.index', ['urut' => 'menunggu']) }}" class="stat-link">
+        <x-stat-card label="Izin / Sakit Menunggu" :value="$monitoring['izin_menunggu']" icon="✚" hint="Perlu diverifikasi" />
+    </a>
+    <a href="{{ route('superadmin.monitoring.index', ['urut' => 'biodata']) }}" class="stat-link">
+        <x-stat-card label="Biodata Menunggu Tinjau" :value="$monitoring['biodata_diajukan']" icon="☷" :hint="$monitoring['biodata_disetujui'].'/'.$monitoring['peserta_aktif'].' peserta aktif disetujui'" />
+    </a>
+</div>
+
 {{-- GRAFIK --}}
 <div class="chart-grid">
 

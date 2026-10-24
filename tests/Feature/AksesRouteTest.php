@@ -136,6 +136,7 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.logbook.update' => self::LOGIN,
         'superadmin.peserta-magang.penilaian' => self::LOGIN,
         'superadmin.peserta-magang.penilaian.update' => self::LOGIN,
+        'superadmin.monitoring.index' => self::LOGIN,
         'superadmin.laporan.index' => self::LOGIN,
         'superadmin.laporan.cetak' => self::LOGIN,
         'superadmin.laporan.csv' => self::LOGIN,

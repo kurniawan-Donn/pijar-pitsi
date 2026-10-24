@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\MonitoringPeserta;
 use App\Services\StatistikMagang;
 use Illuminate\View\View;
 
@@ -31,6 +32,7 @@ class DashboardController extends Controller
             'pengajuanTerbaru' => $statistik->pengajuanTerbaru(),
             'sebaranPredikat' => $statistik->sebaranPredikat(),
             'absensi' => $statistik->absensiBulanIni(),
+            'monitoring' => app(MonitoringPeserta::class)->ringkasan(),
         ];
     }
 }

@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\LogbookHarianController;
+use App\Http\Controllers\SuperAdmin\MonitoringController;
 use App\Http\Controllers\SuperAdmin\PenempatanPesertaController;
 use App\Http\Controllers\SuperAdmin\PengaturanMagangController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
@@ -278,6 +279,9 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             '/peserta-magang/{pesertaMagang}/logbook',
             [LogbookController::class, 'update']
         )->name('peserta-magang.logbook.update');
+
+        // Monitoring peserta (biodata, logbook, verifikasi)
+        Route::get('/monitoring', MonitoringController::class)->name('monitoring.index');
 
         // Laporan & export
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');

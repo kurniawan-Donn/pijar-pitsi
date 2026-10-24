@@ -123,13 +123,31 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **349 test** (1698 assertion). Setiap route aplikasi (97 route) punya test
+- **357 test** (1748 assertion). Setiap route aplikasi (98 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 14 (dashboard monitoring)
+
+- `App\Services\MonitoringPeserta` (semua dari database): tabel per peserta
+  untuk periode berjalan (divisi & mentor, progres biodata, hari terisi,
+  hari kerja belum diisi, isi hari ini, penuh/setengah/izin/sakit, menunggu
+  verifikasi, uang saku sementara, tanggal terakhir isi), ringkasan peserta
+  aktif, dan riwayat logbook terbaru.
+- Halaman **Monitoring** (`superadmin.monitoring.index`, menu Utama, admin +
+  super admin): filter status, divisi periode ini, cari, "belum isi hari
+  ini", urutan (belum diisi / menunggu / progres biodata).
+- Kedua dashboard menampilkan 4 kartu monitoring (logbook hari ini,
+  logbook & izin menunggu, biodata menunggu tinjau) yang menaut ke halaman
+  Monitoring dengan filter yang sesuai.
+- Hari libur (Sabtu/Minggu/hari libur) dan hari di luar masa magang tidak
+  dihitung "wajib isi hari ini".
+- Monitoring menghitung rekap per peserta setiap kali dibuka; cukup untuk
+  puluhan peserta, perlu cache bila peserta aktif ratusan.
 
 ## Catatan Fase 13 (impor riwayat sheet lama)
 
@@ -317,7 +335,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 11 | Biodata peserta | selesai |
 | 12 | Logbook harian, kehadiran, izin, uang saku | selesai |
 | 13 | Impor riwayat sheet lama | selesai |
-| 14 | Dashboard monitoring | belum |
+| 14 | Dashboard monitoring | selesai |
 | 15 | Feedback magang | belum |
 | 16 | Penyesuaian penilaian | belum |
 | 17 | Surat keterangan magang | belum |
