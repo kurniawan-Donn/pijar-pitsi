@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfilController;
+use App\Http\Controllers\Peserta\BiodataController as PesertaBiodataController;
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
+use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
@@ -80,6 +82,9 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
     ->name('peserta.')
     ->group(function () {
         Route::get('/dashboard', PesertaDashboardController::class)->name('dashboard');
+
+        Route::get('/biodata', [PesertaBiodataController::class, 'edit'])->name('biodata.edit');
+        Route::put('/biodata', [PesertaBiodataController::class, 'update'])->name('biodata.update');
     });
 
 /*
@@ -181,6 +186,15 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             '/peserta-magang/{pesertaMagang}/penempatan',
             [PenempatanPesertaController::class, 'update']
         )->name('peserta-magang.penempatan.update');
+
+        // Biodata peserta: detail program & tinjau
+        Route::controller(BiodataPesertaController::class)
+            ->prefix('/peserta-magang/{pesertaMagang}/biodata')
+            ->group(function () {
+                Route::get('/', 'show')->name('peserta-magang.biodata');
+                Route::put('/program', 'updateProgram')->name('peserta-magang.biodata.program');
+                Route::put('/tinjau', 'tinjau')->name('peserta-magang.biodata.tinjau');
+            });
 
         // Akun login peserta
         Route::controller(AkunPesertaController::class)

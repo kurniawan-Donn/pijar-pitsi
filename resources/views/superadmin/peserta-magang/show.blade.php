@@ -1593,6 +1593,25 @@
 
                     @endif
 
+                    {{-- BIODATA --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.biodata', $pesertaMagang) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">☷</span>
+                        <span>
+                            Biodata Peserta
+                            <small class="action-meta">
+                                @if($pesertaMagang->biodata)
+                                    {{ $pesertaMagang->biodata->labelStatus() }} · {{ $pesertaMagang->biodata->progres()['persen'] }}% data wajib terisi
+                                @else
+                                    Belum diisi
+                                @endif
+                            </small>
+                        </span>
+                    </a>
+
                     {{-- LOGBOOK --}}
 
                     <a

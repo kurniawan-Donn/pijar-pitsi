@@ -16,6 +16,12 @@
                 'active' => ['peserta.dashboard'],
             ],
             [
+                'label' => 'Biodata',
+                'icon' => '☷',
+                'route' => 'peserta.biodata.edit',
+                'active' => ['peserta.biodata.*'],
+            ],
+            [
                 'label' => 'Profil & Password',
                 'icon' => '♙',
                 'route' => 'profil.edit',

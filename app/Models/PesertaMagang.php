@@ -59,6 +59,11 @@ class PesertaMagang extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function biodata(): HasOne
+    {
+        return $this->hasOne(BiodataPeserta::class);
+    }
+
     public function penempatans(): HasMany
     {
         return $this->hasMany(PenempatanPeserta::class);
