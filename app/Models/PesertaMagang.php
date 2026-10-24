@@ -59,6 +59,23 @@ class PesertaMagang extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function penempatans(): HasMany
+    {
+        return $this->hasMany(PenempatanPeserta::class);
+    }
+
+    /**
+     * Penempatan yang berlaku untuk suatu periode: baris periode itu, atau
+     * baris periode terakhir sebelumnya (rotasi berlanjut sampai diubah).
+     */
+    public function penempatanUntuk(string $kunciPeriode): ?PenempatanPeserta
+    {
+        return $this->penempatans
+            ->filter(fn (PenempatanPeserta $penempatan) => $penempatan->periode <= $kunciPeriode)
+            ->sortByDesc('periode')
+            ->first();
+    }
+
     public function penilaian(): HasOne
     {
         return $this->hasOne(PenilaianPeserta::class);

@@ -3,8 +3,11 @@
 namespace Tests\Feature;
 
 use App\Models\Banner;
+use App\Models\Divisi;
+use App\Models\HariLibur;
 use App\Models\PengajuanMagang;
 use App\Models\PesertaMagang;
+use App\Models\TarifUangSaku;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
@@ -85,6 +88,17 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.edit' => self::LOGIN,
         'superadmin.peserta-magang.update' => self::LOGIN,
         'superadmin.peserta-magang.destroy' => self::LOGIN,
+        'superadmin.pengaturan-magang.index' => self::LOGIN,
+        'superadmin.pengaturan-magang.update' => self::LOGIN,
+        'superadmin.pengaturan-magang.tarif.store' => self::LOGIN,
+        'superadmin.pengaturan-magang.tarif.destroy' => self::LOGIN,
+        'superadmin.pengaturan-magang.libur.store' => self::LOGIN,
+        'superadmin.pengaturan-magang.libur.destroy' => self::LOGIN,
+        'superadmin.divisi.index' => self::LOGIN,
+        'superadmin.divisi.store' => self::LOGIN,
+        'superadmin.divisi.update' => self::LOGIN,
+        'superadmin.divisi.destroy' => self::LOGIN,
+        'superadmin.peserta-magang.penempatan.update' => self::LOGIN,
         'superadmin.peserta-magang.akun.store' => self::LOGIN,
         'superadmin.peserta-magang.akun.reset' => self::LOGIN,
         'superadmin.peserta-magang.akun.status' => self::LOGIN,
@@ -233,6 +247,9 @@ class AksesRouteTest extends TestCase
                 'pesertaMagang' => PesertaMagang::create(['nama' => 'Peserta Akses', 'status' => 'aktif']),
                 'banner' => Banner::create(['judul' => 'Banner Akses', 'status' => 'aktif']),
                 'user' => User::factory()->create(['role' => 'admin']),
+                'tarifUangSaku' => TarifUangSaku::create(['berlaku_mulai' => fake()->unique()->date(), 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000]),
+                'hariLibur' => HariLibur::create(['tanggal' => fake()->unique()->date(), 'keterangan' => 'Libur Akses']),
+                'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
             };
         }
 

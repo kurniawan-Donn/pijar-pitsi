@@ -70,6 +70,18 @@
                 'active' => ['superadmin.peserta-magang.*'],
             ],
             [
+                'label' => 'Pengaturan Magang',
+                'icon' => '⚑',
+                'route' => 'superadmin.pengaturan-magang.index',
+                'active' => ['superadmin.pengaturan-magang.*'],
+            ],
+            [
+                'label' => 'Divisi',
+                'icon' => '◫',
+                'route' => 'superadmin.divisi.index',
+                'active' => ['superadmin.divisi.*'],
+            ],
+            [
                 'label' => 'Aspek Penilaian',
                 'icon' => '★',
                 'route' => 'superadmin.aspek-penilaian.index',

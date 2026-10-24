@@ -123,13 +123,36 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **226 test** (1043 assertion). Setiap route aplikasi (61 route) punya test
+- **265 test** (1226 assertion). Setiap route aplikasi (72 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 10 (pengaturan magang)
+
+- Halaman **Pengaturan Magang** (`superadmin.pengaturan-magang.*`, admin +
+  super admin): batas isi logbook mundur (bawaan 7 hari), tanggal awal
+  periode (bawaan 28), kota surat, penanda tangan Mengetahui/Menyetujui, dan
+  format nomor surat keterangan. Satu baris di tabel `pengaturan_magangs`.
+- **Tarif uang saku** pindah dari `.env` ke tabel `tarif_uang_sakus` (riwayat
+  dengan `berlaku_mulai`). `TarifUangSaku::berlakuPada($tanggal)` memilih tarif
+  yang berlaku; nilai `.env` hanya tarif awal saat migration. Detail peserta,
+  laporan, dan dashboard sudah memakai tarif dari database (untuk absensi
+  Google Sheets dipakai tarif yang berlaku di awal bulan). Tarif terakhir
+  tidak bisa dihapus.
+- **Hari libur** nasional/cuti bersama (`hari_liburs`), bisa ditambah per
+  rentang (maks. 31 hari); tanggal yang sudah ada dilewati.
+- `App\Services\PeriodeMagang`: periode 28–27 (kunci `Y-m` = bulan tanggal
+  akhir), dipotong di tanggal mulai/selesai magang; tanggal awal 1 = bulan
+  kalender. Di-bind di container dengan tanggal awal dari pengaturan.
+- **Divisi** (`divisis`, menu Divisi) dan **penempatan per periode**
+  (`penempatan_pesertas`) di detail peserta: divisi + mentor per periode,
+  periode kosong mengikuti periode sebelumnya (`PesertaMagang::penempatanUntuk()`).
+  Divisi yang sudah dipakai tidak bisa dihapus, hanya dinonaktifkan.
+- Semua perubahan tercatat di Log Aktivitas.
 
 ## Catatan Fase 9 (kelola akun peserta)
 
@@ -224,7 +247,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 7 | Persiapan deploy (dikerjakan setelah Fase 18) | belum |
 | 8 | Aktor peserta: role, akun, middleware | selesai |
 | 9 | Kelola akun peserta oleh admin | selesai |
-| 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | belum |
+| 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | selesai |
 | 11 | Biodata peserta | belum |
 | 12 | Logbook harian, kehadiran, izin, uang saku | belum |
 | 13 | Impor riwayat sheet lama | belum |
