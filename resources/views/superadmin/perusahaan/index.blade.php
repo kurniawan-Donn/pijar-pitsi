@@ -1,1735 +1,914 @@
-<!DOCTYPE html>
-<html lang="id">
+{{-- resources/views/superadmin/perusahaan/index.blade.php --}}
 
-<head>
-    <meta charset="UTF-8">
+@extends('layouts.dashboard')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+@section('title', 'Profil Perusahaan')
+@section('page_title', 'Profil Perusahaan')
+@section('page_subtitle', 'Kelola informasi perusahaan MAGENTA')
 
-    <title>
-        Profil Perusahaan - MAGENTA
-    </title>
+@push('styles')
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f7fb;
+        color: #243b5a;
+    }
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    button,
+    input,
+    textarea {
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #243b5a;
-        }
+    /* =====================================================
+       CONTENT
+    ====================================================== */
 
-        a {
-            text-decoration: none;
-        }
+    .content {
+        padding: 28px 30px 40px;
+    }
 
-        button,
-        input,
-        textarea {
-            font-family: Arial, Helvetica, sans-serif;
-        }
+    /* =====================================================
+       PAGE HEADER
+    ====================================================== */
 
-        /* =====================================================
-           LAYOUT
-        ====================================================== */
+    .page-header {
+        display: flex;
 
-        .layout {
-            min-height: 100vh;
-        }
+        align-items: center;
 
-        /* =====================================================
-           SIDEBAR
-        ====================================================== */
+        justify-content: space-between;
 
-        .sidebar {
-            width: 275px;
-            min-width: 275px;
+        margin-bottom: 18px;
+    }
 
-            background: #12345b;
-            color: white;
+    .page-header-left {
+        display: flex;
 
-            position: fixed;
+        align-items: center;
 
-            top: 0;
-            left: 0;
-            bottom: 0;
+        gap: 13px;
+    }
 
-            padding: 28px 18px 24px;
+    .page-header-icon {
+        width: 42px;
 
-            z-index: 1000;
+        height: 42px;
 
-            overflow-y: auto;
-        }
+        border-radius: 9px;
 
-        .brand {
-            display: flex;
-            align-items: flex-start;
+        background: #eaf4ff;
 
-            gap: 12px;
+        border:
+            1px solid #d8eafb;
 
-            padding: 4px 6px 25px;
+        color: #1779c9;
 
-            border-bottom:
-                1px solid rgba(255, 255, 255, .12);
-        }
+        display: flex;
 
-        .brand-logo {
-            width: 36px;
-            height: 36px;
+        align-items: center;
 
-            flex-shrink: 0;
+        justify-content: center;
 
-            border-radius: 8px;
+        font-size: 17px;
+    }
 
-            background: #ffffff;
-            color: #12345b;
+    .page-header h2 {
+        color: #17365d;
 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        font-size: 17px;
 
-            font-size: 17px;
-            font-weight: 700;
-        }
+        line-height: 1.2;
+    }
 
-        .brand-text h2 {
-            color: #ffffff;
+    .page-header p {
+        margin-top: 4px;
 
-            font-size: 17px;
+        color: #7c8da3;
 
-            line-height: 1.1;
+        font-size: 10px;
 
-            letter-spacing: .2px;
-        }
+        line-height: 1.5;
+    }
 
-        .brand-text span {
-            display: block;
+    /* =====================================================
+       NOTICE
+    ====================================================== */
 
-            margin-top: 4px;
+    .notice {
+        display: flex;
 
-            color:
-                rgba(255, 255, 255, .65);
+        align-items: flex-start;
 
-            font-size: 9px;
+        gap: 11px;
 
-            line-height: 1.35;
+        margin-bottom: 18px;
 
-            letter-spacing: .6px;
-        }
+        padding: 14px 16px;
 
-        /* =====================================================
-           MENU
-        ====================================================== */
+        border:
+            1px solid #f3dfb0;
 
-        .menu-title {
-            margin: 22px 8px 8px;
+        border-left:
+            4px solid #f59e0b;
 
-            color:
-                rgba(255, 255, 255, .62);
+        border-radius: 10px;
 
-            font-size: 9px;
+        background: linear-gradient(
+            135deg,
+            #fff8e8,
+            #fffdf7
+        );
+    }
 
-            font-weight: 700;
+    .notice-icon {
+        width: 27px;
 
-            text-transform: uppercase;
+        height: 27px;
 
-            letter-spacing: 1.2px;
-        }
+        min-width: 27px;
 
-        .menu {
-            display: flex;
+        border-radius: 7px;
 
-            flex-direction: column;
+        background: #fff0c7;
 
-            gap: 4px;
-        }
+        color: #c27a00;
 
-        .menu a {
-            display: flex;
+        display: flex;
 
-            align-items: center;
+        align-items: center;
 
-            gap: 10px;
+        justify-content: center;
 
-            min-height: 40px;
+        font-size: 12px;
 
-            padding: 0 13px;
+        font-weight: 700;
+    }
 
-            margin-bottom: 4px;
+    .notice strong {
+        display: block;
 
-            border-radius: 7px;
+        margin-bottom: 3px;
 
-            color: #e4edf7;
+        color: #7a5200;
 
-            font-size: 12px;
+        font-size: 11px;
+    }
 
-            font-weight: 600;
+    .notice p {
+        color: #8a6a2b;
 
-            transition: .2s ease;
-        }
+        font-size: 9px;
 
-        .menu a:hover {
-            background:
-                rgba(255, 255, 255, .08);
+        line-height: 1.6;
+    }
 
-            color: #ffffff;
-        }
+    /* =====================================================
+       FORM CARD
+    ====================================================== */
 
-        .menu a.active {
-            background: #1779c9;
+    .form-card {
+        overflow: hidden;
 
-            color: #ffffff;
-        }
+        background: #ffffff;
 
-        .menu-icon {
-            width: 18px;
+        border:
+            1px solid #e2e9f1;
 
-            min-width: 18px;
+        border-radius: 12px;
 
-            display: flex;
+        box-shadow:
+            0 4px 16px
+            rgba(18, 52, 91, .05);
+    }
 
-            align-items: center;
+    .form-card-header {
+        display: flex;
 
-            justify-content: center;
+        align-items: center;
 
-            text-align: center;
+        gap: 11px;
 
-            font-size: 13px;
+        padding: 17px 20px;
 
-            line-height: 1;
-        }
+        border-bottom:
+            1px solid #edf1f5;
+    }
 
-        /* =====================================================
-           LOGOUT
-        ====================================================== */
+    .form-card-icon {
+        width: 34px;
 
-        .logout-area {
-            position: absolute;
+        height: 34px;
 
-            left: 18px;
-            right: 18px;
-            bottom: 24px;
+        min-width: 34px;
 
-            padding-top: 15px;
+        border-radius: 8px;
 
-            border-top:
-                1px solid rgba(255, 255, 255, .12);
-        }
+        background: #eef6ff;
 
-        .logout-area form {
-            margin: 0;
-        }
+        color: #1779c9;
 
-        .logout-btn {
-            width: 100%;
+        display: flex;
 
-            min-height: 40px;
+        align-items: center;
 
-            border: none;
+        justify-content: center;
 
-            border-radius: 7px;
+        font-size: 14px;
+    }
 
-            background:
-                rgba(255, 255, 255, .08);
+    .form-card-header h3 {
+        color: #17365d;
 
-            color: #e4edf7;
+        font-size: 12px;
 
-            cursor: pointer;
+        line-height: 1.2;
+    }
 
-            font-size: 12px;
+    .form-card-header p {
+        margin-top: 3px;
 
-            font-weight: 600;
+        color: #8996a7;
 
-            transition: .2s ease;
-        }
+        font-size: 9px;
+    }
 
-        .logout-btn:hover {
-            background: #dc3545;
+    .form-body {
+        padding: 20px;
+    }
 
-            color: #ffffff;
-        }
+    /* =====================================================
+       FORM GRID
+    ====================================================== */
 
-        /* =====================================================
-           MAIN
-        ====================================================== */
+    .grid {
+        display: grid;
 
-        .main {
-            margin-left: 275px;
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
-            width:
-                calc(100% - 275px);
+        gap: 16px;
+    }
 
-            min-height: 100vh;
-        }
+    .full {
+        grid-column: 1 / -1;
+    }
 
-        /* =====================================================
-           TOPBAR
-        ====================================================== */
+    .form-group {
+        min-width: 0;
+    }
 
-        .topbar {
-            height: 64px;
+    .form-group label {
+        display: block;
 
-            background: #ffffff;
+        margin-bottom: 6px;
 
-            border-bottom:
-                1px solid #e5ebf2;
+        color: #334155;
 
-            display: flex;
+        font-size: 10px;
 
-            align-items: center;
+        font-weight: 700;
+    }
 
-            justify-content: space-between;
+    .required {
+        color: #e05252;
+    }
 
-            padding: 0 28px;
-        }
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
 
-        .page-title h1 {
-            color: #17365d;
+        padding: 10px 11px;
 
-            font-size: 16px;
+        border:
+            1px solid #d5dce5;
 
-            line-height: 1.2;
-        }
+        border-radius: 7px;
 
-        .page-title p {
-            margin-top: 3px;
+        background: #ffffff;
 
-            color: #7c8da3;
+        color: #1f2937;
 
-            font-size: 9px;
-        }
+        font-size: 11px;
 
-        .admin-profile {
-            display: flex;
+        transition: .2s ease;
+    }
 
-            align-items: center;
+    .form-group input {
+        height: 38px;
+    }
 
-            gap: 9px;
-        }
+    .form-group input:hover,
+    .form-group textarea:hover {
+        border-color: #b9c5d2;
+    }
 
-        .admin-text {
-            text-align: right;
-        }
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
 
-        .admin-text strong {
-            display: block;
+        border-color: #1779c9;
 
-            color: #243b5a;
+        box-shadow:
+            0 0 0 3px
+            rgba(23, 121, 201, .09);
+    }
 
-            font-size: 10px;
+    .form-group textarea {
+        min-height: 90px;
 
-            line-height: 1.2;
-        }
+        resize: vertical;
 
-        .admin-text span {
-            display: block;
+        line-height: 1.5;
+    }
 
-            margin-top: 2px;
+    .help {
+        margin-top: 5px;
 
-            color: #8a96a6;
+        color: #8a96a5;
 
-            font-size: 8px;
-        }
+        font-size: 9px;
 
-        .avatar {
-            width: 30px;
+        line-height: 1.5;
+    }
 
-            height: 30px;
+    /* =====================================================
+       DIVIDER
+    ====================================================== */
 
-            border-radius: 50%;
+    .form-divider {
+        height: 1px;
 
-            background: #eef5ff;
+        margin:
+            21px 0 18px;
 
-            color: #1768b0;
+        border: none;
 
-            display: flex;
+        background: #edf1f5;
+    }
 
-            align-items: center;
+    /* =====================================================
+       ACTIONS
+    ====================================================== */
 
-            justify-content: center;
+    .actions {
+        display: flex;
 
-            font-size: 11px;
+        align-items: center;
 
-            font-weight: 700;
-        }
+        justify-content: space-between;
 
-        /* =====================================================
-           CONTENT
-        ====================================================== */
+        gap: 12px;
 
-        .content {
-            padding: 28px 30px 40px;
-        }
+        margin-top: 20px;
 
-        /* =====================================================
-           PAGE HEADER
-        ====================================================== */
+        padding-top: 18px;
 
-        .page-header {
-            display: flex;
+        border-top:
+            1px solid #edf1f5;
+    }
 
-            align-items: center;
+    .action-left {
+        color: #8995a5;
 
-            justify-content: space-between;
+        font-size: 9px;
+    }
 
-            margin-bottom: 18px;
-        }
+    .action-left b {
+        color: #e05252;
+    }
 
-        .page-header-left {
-            display: flex;
+    .action-buttons {
+        display: flex;
 
-            align-items: center;
+        align-items: center;
 
-            gap: 13px;
-        }
+        gap: 8px;
+    }
 
-        .page-header-icon {
-            width: 42px;
+    .btn {
+        display: inline-flex;
 
-            height: 42px;
+        align-items: center;
 
-            border-radius: 9px;
+        justify-content: center;
 
-            background: #eaf4ff;
+        gap: 6px;
 
-            border:
-                1px solid #d8eafb;
+        min-height: 36px;
 
-            color: #1779c9;
+        padding: 0 14px;
 
-            display: flex;
+        border: none;
 
-            align-items: center;
+        border-radius: 7px;
 
-            justify-content: center;
+        cursor: pointer;
 
-            font-size: 17px;
-        }
+        font-size: 10px;
 
-        .page-header h2 {
-            color: #17365d;
+        font-weight: 700;
 
-            font-size: 17px;
+        transition: .2s ease;
+    }
 
-            line-height: 1.2;
-        }
+    .btn-secondary {
+        background: #eef1f5;
 
-        .page-header p {
-            margin-top: 4px;
+        color: #526171;
+    }
 
-            color: #7c8da3;
+    .btn-secondary:hover {
+        background: #dfe5eb;
+    }
 
-            font-size: 10px;
+    .btn-primary {
+        background: #1779c9;
 
-            line-height: 1.5;
-        }
+        color: #ffffff;
 
-        /* =====================================================
-           ALERT
-        ====================================================== */
+        box-shadow:
+            0 4px 10px
+            rgba(23, 121, 201, .16);
+    }
 
-        .alert-success {
-            margin-bottom: 16px;
+    .btn-primary:hover {
+        background: #1265aa;
 
-            padding: 12px 15px;
+        transform: translateY(-1px);
+    }
 
-            border:
-                1px solid #b7ebcc;
+    /* =====================================================
+       FOOT NOTE
+    ====================================================== */
 
-            border-radius: 8px;
+    .foot-note {
+        margin-top: 15px;
 
-            background: #ecfdf3;
+        color: #98a2b0;
 
-            color: #167342;
+        font-size: 9px;
 
-            font-size: 11px;
+        text-align: center;
+    }
 
-            font-weight: 600;
-        }
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
 
-        .alert-error {
-            margin-bottom: 16px;
-
-            padding: 13px 15px;
-
-            border:
-                1px solid #fecdd3;
-
-            border-radius: 8px;
-
-            background: #fff1f2;
-
-            color: #b42318;
-
-            font-size: 11px;
-        }
-
-        .alert-error strong {
-            display: block;
-
-            margin-bottom: 7px;
-
-            font-size: 11px;
-        }
-
-        .alert-error ul {
-            padding-left: 18px;
-
-            line-height: 1.6;
-        }
-
-        /* =====================================================
-           NOTICE
-        ====================================================== */
-
-        .notice {
-            display: flex;
-
-            align-items: flex-start;
-
-            gap: 11px;
-
-            margin-bottom: 18px;
-
-            padding: 14px 16px;
-
-            border:
-                1px solid #f3dfb0;
-
-            border-left:
-                4px solid #f59e0b;
-
-            border-radius: 10px;
-
-            background: linear-gradient(
-                135deg,
-                #fff8e8,
-                #fffdf7
-            );
-        }
-
-        .notice-icon {
-            width: 27px;
-
-            height: 27px;
-
-            min-width: 27px;
-
-            border-radius: 7px;
-
-            background: #fff0c7;
-
-            color: #c27a00;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
-        .notice strong {
-            display: block;
-
-            margin-bottom: 3px;
-
-            color: #7a5200;
-
-            font-size: 11px;
-        }
-
-        .notice p {
-            color: #8a6a2b;
-
-            font-size: 9px;
-
-            line-height: 1.6;
-        }
-
-        /* =====================================================
-           FORM CARD
-        ====================================================== */
-
-        .form-card {
-            overflow: hidden;
-
-            background: #ffffff;
-
-            border:
-                1px solid #e2e9f1;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 4px 16px
-                rgba(18, 52, 91, .05);
-        }
-
-        .form-card-header {
-            display: flex;
-
-            align-items: center;
-
-            gap: 11px;
-
-            padding: 17px 20px;
-
-            border-bottom:
-                1px solid #edf1f5;
-        }
-
-        .form-card-icon {
-            width: 34px;
-
-            height: 34px;
-
-            min-width: 34px;
-
-            border-radius: 8px;
-
-            background: #eef6ff;
-
-            color: #1779c9;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-size: 14px;
-        }
-
-        .form-card-header h3 {
-            color: #17365d;
-
-            font-size: 12px;
-
-            line-height: 1.2;
-        }
-
-        .form-card-header p {
-            margin-top: 3px;
-
-            color: #8996a7;
-
-            font-size: 9px;
-        }
-
-        .form-body {
-            padding: 20px;
-        }
-
-        /* =====================================================
-           FORM GRID
-        ====================================================== */
+    @media (max-width: 1050px) {
 
         .grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 16px;
+            grid-template-columns: 1fr;
         }
 
         .full {
-            grid-column: 1 / -1;
+            grid-column: auto;
         }
 
-        .form-group {
-            min-width: 0;
+    }
+
+    @media (max-width: 800px) {
+
+        .content {
+            padding:
+                22px 18px 35px;
         }
 
-        .form-group label {
-            display: block;
-
-            margin-bottom: 6px;
-
-            color: #334155;
-
-            font-size: 10px;
-
-            font-weight: 700;
+        .page-header {
+            align-items: flex-start;
         }
 
-        .required {
-            color: #e05252;
+        .form-body {
+            padding: 18px;
         }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-
-            padding: 10px 11px;
-
-            border:
-                1px solid #d5dce5;
-
-            border-radius: 7px;
-
-            background: #ffffff;
-
-            color: #1f2937;
-
-            font-size: 11px;
-
-            transition: .2s ease;
-        }
-
-        .form-group input {
-            height: 38px;
-        }
-
-        .form-group input:hover,
-        .form-group textarea:hover {
-            border-color: #b9c5d2;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-
-            border-color: #1779c9;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(23, 121, 201, .09);
-        }
-
-        .form-group textarea {
-            min-height: 90px;
-
-            resize: vertical;
-
-            line-height: 1.5;
-        }
-
-        .help {
-            margin-top: 5px;
-
-            color: #8a96a5;
-
-            font-size: 9px;
-
-            line-height: 1.5;
-        }
-
-        /* =====================================================
-           DIVIDER
-        ====================================================== */
-
-        .form-divider {
-            height: 1px;
-
-            margin:
-                21px 0 18px;
-
-            border: none;
-
-            background: #edf1f5;
-        }
-
-        /* =====================================================
-           ACTIONS
-        ====================================================== */
 
         .actions {
-            display: flex;
+            align-items: flex-start;
 
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 12px;
-
-            margin-top: 20px;
-
-            padding-top: 18px;
-
-            border-top:
-                1px solid #edf1f5;
-        }
-
-        .action-left {
-            color: #8995a5;
-
-            font-size: 9px;
-        }
-
-        .action-left b {
-            color: #e05252;
+            flex-direction: column;
         }
 
         .action-buttons {
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
+            width: 100%;
         }
 
-        .btn {
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 6px;
-
-            min-height: 36px;
-
-            padding: 0 14px;
-
-            border: none;
-
-            border-radius: 7px;
-
-            cursor: pointer;
-
-            font-size: 10px;
-
-            font-weight: 700;
-
-            transition: .2s ease;
+        .action-buttons .btn {
+            flex: 1;
         }
 
-        .btn-secondary {
-            background: #eef1f5;
+    }
 
-            color: #526171;
+    @media (max-width: 500px) {
+
+        .page-header-left {
+            align-items: flex-start;
         }
 
-        .btn-secondary:hover {
-            background: #dfe5eb;
+        .page-header-icon {
+            width: 38px;
+
+            height: 38px;
+
+            min-width: 38px;
         }
 
-        .btn-primary {
-            background: #1779c9;
-
-            color: #ffffff;
-
-            box-shadow:
-                0 4px 10px
-                rgba(23, 121, 201, .16);
+        .page-header h2 {
+            font-size: 15px;
         }
 
-        .btn-primary:hover {
-            background: #1265aa;
-
-            transform: translateY(-1px);
+        .form-card-header {
+            padding: 15px;
         }
 
-        /* =====================================================
-           FOOT NOTE
-        ====================================================== */
-
-        .foot-note {
-            margin-top: 15px;
-
-            color: #98a2b0;
-
-            font-size: 9px;
-
-            text-align: center;
+        .form-body {
+            padding: 15px;
         }
 
-        /* =====================================================
-           RESPONSIVE
-        ====================================================== */
-
-        @media (max-width: 1050px) {
-
-            .sidebar {
-                width: 240px;
-
-                min-width: 240px;
-            }
-
-            .main {
-                margin-left: 240px;
-
-                width:
-                    calc(100% - 240px);
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .full {
-                grid-column: auto;
-            }
-
+        .notice {
+            padding: 12px;
         }
 
+    }
 
-        @media (max-width: 800px) {
+</style>
+@endpush
 
-            .sidebar {
-                position: relative;
+@section('content')
 
-                width: 100%;
+{{-- =================================================
+     CONTENT
+================================================== --}}
 
-                min-width: 0;
+<div class="content">
 
-                height: auto;
+    {{-- =================================================
+         PAGE HEADER
+    ================================================== --}}
 
-                padding:
-                    20px 16px;
-            }
+    <div class="page-header">
 
-            .main {
-                margin-left: 0;
+        <div class="page-header-left">
 
-                width: 100%;
-            }
-
-            .logout-area {
-                position: static;
-
-                margin-top: 18px;
-            }
-
-            .topbar {
-                height: auto;
-
-                min-height: 64px;
-
-                padding:
-                    14px 18px;
-
-                gap: 12px;
-            }
-
-            .admin-profile {
-                display: none;
-            }
-
-            .content {
-                padding:
-                    22px 18px 35px;
-            }
-
-            .page-header {
-                align-items: flex-start;
-            }
-
-            .form-body {
-                padding: 18px;
-            }
-
-            .actions {
-                align-items: flex-start;
-
-                flex-direction: column;
-            }
-
-            .action-buttons {
-                width: 100%;
-            }
-
-            .action-buttons .btn {
-                flex: 1;
-            }
-
-        }
-
-
-        @media (max-width: 500px) {
-
-            .brand-text h2 {
-                font-size: 16px;
-            }
-
-            .page-header-left {
-                align-items: flex-start;
-            }
-
-            .page-header-icon {
-                width: 38px;
-
-                height: 38px;
-
-                min-width: 38px;
-            }
-
-            .page-header h2 {
-                font-size: 15px;
-            }
-
-            .form-card-header {
-                padding: 15px;
-            }
-
-            .form-body {
-                padding: 15px;
-            }
-
-            .notice {
-                padding: 12px;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-<div class="layout">
-
-
-    {{-- =====================================================
-         SIDEBAR
-    ====================================================== --}}
-
-    <aside class="sidebar">
-
-
-        {{-- BRAND --}}
-
-        <div class="brand">
-
-            <div class="brand-logo">
-                M
+            <div class="page-header-icon">
+                ▰
             </div>
 
-
-            <div class="brand-text">
+            <div>
 
                 <h2>
-                    MAGENTA
+                    Informasi Perusahaan
                 </h2>
 
-
-                <span>
-                    SISTEM INFORMASI MAGANG
-                </span>
+                <p>
+                    Informasi berikut akan digunakan
+                    pada halaman website MAGENTA.
+                </p>
 
             </div>
 
         </div>
 
+    </div>
 
-        {{-- =================================================
-             UTAMA
-        ================================================== --}}
+    {{-- =================================================
+         SUCCESS
+    ================================================== --}}
 
-        <div class="menu-title">
-            UTAMA
+    <x-alert type="success" :message="session('success')" />
+
+    {{-- =================================================
+         ERROR
+    ================================================== --}}
+
+    <x-alert
+        type="error"
+        title="Periksa data berikut:"
+        :messages="$errors->all()"
+    />
+
+    {{-- =================================================
+         NOTICE
+    ================================================== --}}
+
+    <div class="notice">
+
+        <div class="notice-icon">
+            !
         </div>
 
+        <div>
 
-        <div class="menu">
+            <strong>
+                Informasi pengelolaan website
+            </strong>
 
-            {{-- DASHBOARD BERDASARKAN ROLE --}}
-
-            <a
-                href="{{ auth()->user()->role === 'super_admin'
-                    ? route('superadmin.dashboard')
-                    : route('admin.dashboard') }}"
-            >
-
-                <span class="menu-icon">
-                    ▣
-                </span>
-
-                Dashboard
-
-            </a>
-
-        </div>
-
-
-        {{-- =================================================
-             SISTEM
-        ================================================== --}}
-
-        <div class="menu-title">
-            SISTEM
-        </div>
-
-
-        <div class="menu">
-
-
-            {{-- PROFIL PERUSAHAAN --}}
-
-            <a
-                href="{{ route('superadmin.perusahaan.index') }}"
-                class="active"
-            >
-
-                <span class="menu-icon">
-                    ▰
-                </span>
-
-                Profil Perusahaan
-
-            </a>
-
-
-            {{-- KELOLA BANNER --}}
-
-            <a
-                href="{{ route('superadmin.banners.index') }}"
-            >
-
-                <span class="menu-icon">
-                    ▧
-                </span>
-
-                Kelola Banner
-
-            </a>
-
-
-            {{-- KELOLA KONTEN --}}
-
-            <a
-                href="{{ route('superadmin.pengaturan.index') }}"
-            >
-
-                <span class="menu-icon">
-                    ⚙
-                </span>
-
-                Kelola Konten
-
-            </a>
-
-
-            {{-- KELOLA PENGGUNA
-                 HANYA SUPER ADMIN --}}
-
-            @if(auth()->user()->role === 'super_admin')
-
-                <a
-                    href="{{ route('superadmin.pengguna.index') }}"
-                >
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    Kelola Pengguna
-
-                </a>
-
-            @endif
-
+            <p>
+                Data perusahaan dapat diubah langsung
+                dari halaman ini. Perubahan yang disimpan
+                akan digunakan untuk menampilkan informasi
+                perusahaan pada website MAGENTA.
+            </p>
 
         </div>
 
+    </div>
 
-        {{-- =================================================
-             LOGOUT
-        ================================================== --}}
+    {{-- =================================================
+         FORM CARD
+    ================================================== --}}
 
-        <div class="logout-area">
+    <div class="form-card">
 
+        {{-- CARD HEADER --}}
+
+        <div class="form-card-header">
+
+            <div class="form-card-icon">
+                ✎
+            </div>
+
+            <div>
+
+                <h3>
+                    Edit Profil Perusahaan
+                </h3>
+
+                <p>
+                    Lengkapi informasi perusahaan
+                    dengan data terbaru.
+                </p>
+
+            </div>
+
+        </div>
+
+        {{-- FORM BODY --}}
+
+        <div class="form-body">
 
             <form
-                action="{{ route('logout') }}"
+                action="{{ route('superadmin.perusahaan.update') }}"
                 method="POST"
             >
 
                 @csrf
 
+                @method('PUT')
 
-                <button
-                    type="submit"
-                    class="logout-btn"
-                >
+                {{-- =================================================
+                     IDENTITAS
+                ================================================== --}}
 
-                    ⇥ &nbsp;
+                <div class="grid">
 
-                    Logout
+                    {{-- NAMA PERUSAHAAN --}}
 
-                </button>
+                    <div class="form-group full">
 
+                        <label for="nama">
+
+                            Nama Perusahaan
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nama"
+                            name="nama"
+                            value="{{ old(
+                                'nama',
+                                $perusahaan?->nama ?? ''
+                            ) }}"
+                            placeholder="Masukkan nama perusahaan"
+                            required
+                        >
+
+                    </div>
+
+                    {{-- ALAMAT --}}
+
+                    <div class="form-group full">
+
+                        <label for="alamat">
+
+                            Alamat
+
+                            <span class="required">
+                                *
+                            </span>
+
+                        </label>
+
+                        <textarea
+                            id="alamat"
+                            name="alamat"
+                            placeholder="Masukkan alamat lengkap perusahaan"
+                            required
+                        >{{ old(
+                            'alamat',
+                            $perusahaan?->alamat ?? ''
+                        ) }}</textarea>
+
+                        <div class="help">
+                            Masukkan alamat lengkap perusahaan.
+                        </div>
+
+                    </div>
+
+                    {{-- KOTA --}}
+
+                    <div class="form-group">
+
+                        <label for="kota">
+                            Kota
+                        </label>
+
+                        <input
+                            type="text"
+                            id="kota"
+                            name="kota"
+                            value="{{ old(
+                                'kota',
+                                $perusahaan?->kota ?? ''
+                            ) }}"
+                            placeholder="Contoh: Jakarta"
+                        >
+
+                    </div>
+
+                    {{-- TELEPON --}}
+
+                    <div class="form-group">
+
+                        <label for="telepon">
+                            Nomor Telepon
+                        </label>
+
+                        <input
+                            type="text"
+                            id="telepon"
+                            name="telepon"
+                            value="{{ old(
+                                'telepon',
+                                $perusahaan?->telepon ?? ''
+                            ) }}"
+                            placeholder="Contoh: 08123456789"
+                        >
+
+                    </div>
+
+                </div>
+
+                {{-- DIVIDER --}}
+
+                <hr class="form-divider">
+
+                {{-- =================================================
+                     KONTAK
+                ================================================== --}}
+
+                <div class="grid">
+
+                    {{-- EMAIL --}}
+
+                    <div class="form-group">
+
+                        <label for="email">
+                            Email Perusahaan
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value="{{ old(
+                                'email',
+                                $perusahaan?->email ?? ''
+                            ) }}"
+                            placeholder="Contoh: info@perusahaan.com"
+                        >
+
+                    </div>
+
+                    {{-- WEBSITE --}}
+
+                    <div class="form-group">
+
+                        <label for="website">
+                            Website
+                        </label>
+
+                        <input
+                            type="text"
+                            id="website"
+                            name="website"
+                            value="{{ old(
+                                'website',
+                                $perusahaan?->website ?? ''
+                            ) }}"
+                            placeholder="Contoh: https://www.perusahaan.com"
+                        >
+
+                        <div class="help">
+                            Kosongkan jika perusahaan tidak memiliki website.
+                        </div>
+
+                    </div>
+
+                    {{-- DESKRIPSI --}}
+
+                    <div class="form-group full">
+
+                        <label for="deskripsi">
+                            Deskripsi Perusahaan
+                        </label>
+
+                        <textarea
+                            id="deskripsi"
+                            name="deskripsi"
+                            placeholder="Masukkan deskripsi singkat perusahaan"
+                        >{{ old(
+                            'deskripsi',
+                            $perusahaan?->deskripsi ?? ''
+                        ) }}</textarea>
+
+                        <div class="help">
+                            Deskripsi singkat mengenai perusahaan
+                            yang dapat ditampilkan pada website MAGENTA.
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- =================================================
+                     ACTION
+                ================================================== --}}
+
+                <div class="actions">
+
+                    <div class="action-left">
+
+                        <span>
+
+                            <b>*</b>
+                            Wajib diisi
+
+                        </span>
+
+                    </div>
+
+                    <div class="action-buttons">
+
+                        {{-- KEMBALI BERDASARKAN ROLE --}}
+
+                        <a
+                            href="{{ auth()->user()->role === 'super_admin'
+                                ? route('superadmin.dashboard')
+                                : route('admin.dashboard') }}"
+                            class="btn btn-secondary"
+                        >
+
+                            ←
+                            Kembali
+
+                        </a>
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+
+                            ✓
+                            Simpan Perubahan
+
+                        </button>
+
+                    </div>
+
+                </div>
 
             </form>
 
-
         </div>
 
+    </div>
 
-    </aside>
+    {{-- FOOT NOTE --}}
 
+    <div class="foot-note">
 
+        MAGENTA
+        &nbsp;•&nbsp;
+        Sistem Informasi Magang
 
-    {{-- =====================================================
-         MAIN
-    ====================================================== --}}
-
-    <main class="main">
-
-
-        {{-- =================================================
-             TOPBAR
-        ================================================== --}}
-
-        <header class="topbar">
-
-
-            <div class="page-title">
-
-                <h1>
-                    Profil Perusahaan
-                </h1>
-
-
-                <p>
-                    Kelola informasi perusahaan MAGENTA
-                </p>
-
-            </div>
-
-
-            {{-- USER PROFILE --}}
-
-            <div class="admin-profile">
-
-
-                <div class="admin-text">
-
-                    <strong>
-                        {{ auth()->user()->name ?? 'Administrator' }}
-                    </strong>
-
-
-                    <span>
-
-                        {{ auth()->user()->role === 'super_admin'
-                            ? 'Super Admin'
-                            : 'Admin' }}
-
-                    </span>
-
-                </div>
-
-
-                <div class="avatar">
-
-                    {{ strtoupper(
-                        substr(
-                            auth()->user()->name ?? 'A',
-                            0,
-                            1
-                        )
-                    ) }}
-
-                </div>
-
-
-            </div>
-
-
-        </header>
-
-
-
-        {{-- =================================================
-             CONTENT
-        ================================================== --}}
-
-        <div class="content">
-
-
-            {{-- =================================================
-                 PAGE HEADER
-            ================================================== --}}
-
-            <div class="page-header">
-
-
-                <div class="page-header-left">
-
-
-                    <div class="page-header-icon">
-                        ▰
-                    </div>
-
-
-                    <div>
-
-                        <h2>
-                            Informasi Perusahaan
-                        </h2>
-
-
-                        <p>
-                            Informasi berikut akan digunakan
-                            pada halaman website MAGENTA.
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
-            {{-- =================================================
-                 SUCCESS
-            ================================================== --}}
-
-            @if(session('success'))
-
-                <div class="alert-success">
-
-                    ✓ &nbsp;
-
-                    {{ session('success') }}
-
-                </div>
-
-            @endif
-
-
-            {{-- =================================================
-                 ERROR
-            ================================================== --}}
-
-            @if($errors->any())
-
-                <div class="alert-error">
-
-
-                    <strong>
-                        Periksa data berikut:
-                    </strong>
-
-
-                    <ul>
-
-                        @foreach($errors->all() as $error)
-
-                            <li>
-                                {{ $error }}
-                            </li>
-
-                        @endforeach
-
-                    </ul>
-
-
-                </div>
-
-            @endif
-
-
-            {{-- =================================================
-                 NOTICE
-            ================================================== --}}
-
-            <div class="notice">
-
-
-                <div class="notice-icon">
-                    !
-                </div>
-
-
-                <div>
-
-
-                    <strong>
-                        Informasi pengelolaan website
-                    </strong>
-
-
-                    <p>
-                        Data perusahaan dapat diubah langsung
-                        dari halaman ini. Perubahan yang disimpan
-                        akan digunakan untuk menampilkan informasi
-                        perusahaan pada website MAGENTA.
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
-
-            {{-- =================================================
-                 FORM CARD
-            ================================================== --}}
-
-            <div class="form-card">
-
-
-                {{-- CARD HEADER --}}
-
-                <div class="form-card-header">
-
-
-                    <div class="form-card-icon">
-                        ✎
-                    </div>
-
-
-                    <div>
-
-                        <h3>
-                            Edit Profil Perusahaan
-                        </h3>
-
-
-                        <p>
-                            Lengkapi informasi perusahaan
-                            dengan data terbaru.
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-
-                {{-- FORM BODY --}}
-
-                <div class="form-body">
-
-
-                    <form
-                        action="{{ route('superadmin.perusahaan.update') }}"
-                        method="POST"
-                    >
-
-                        @csrf
-
-                        @method('PUT')
-
-
-                        {{-- =================================================
-                             IDENTITAS
-                        ================================================== --}}
-
-                        <div class="grid">
-
-
-                            {{-- NAMA PERUSAHAAN --}}
-
-                            <div class="form-group full">
-
-
-                                <label for="nama">
-
-                                    Nama Perusahaan
-
-                                    <span class="required">
-                                        *
-                                    </span>
-
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="nama"
-                                    name="nama"
-                                    value="{{ old(
-                                        'nama',
-                                        $perusahaan?->nama ?? ''
-                                    ) }}"
-                                    placeholder="Masukkan nama perusahaan"
-                                    required
-                                >
-
-
-                            </div>
-
-
-                            {{-- ALAMAT --}}
-
-                            <div class="form-group full">
-
-
-                                <label for="alamat">
-
-                                    Alamat
-
-                                    <span class="required">
-                                        *
-                                    </span>
-
-                                </label>
-
-
-                                <textarea
-                                    id="alamat"
-                                    name="alamat"
-                                    placeholder="Masukkan alamat lengkap perusahaan"
-                                    required
-                                >{{ old(
-                                    'alamat',
-                                    $perusahaan?->alamat ?? ''
-                                ) }}</textarea>
-
-
-                                <div class="help">
-                                    Masukkan alamat lengkap perusahaan.
-                                </div>
-
-
-                            </div>
-
-
-                            {{-- KOTA --}}
-
-                            <div class="form-group">
-
-
-                                <label for="kota">
-                                    Kota
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="kota"
-                                    name="kota"
-                                    value="{{ old(
-                                        'kota',
-                                        $perusahaan?->kota ?? ''
-                                    ) }}"
-                                    placeholder="Contoh: Jakarta"
-                                >
-
-
-                            </div>
-
-
-                            {{-- TELEPON --}}
-
-                            <div class="form-group">
-
-
-                                <label for="telepon">
-                                    Nomor Telepon
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="telepon"
-                                    name="telepon"
-                                    value="{{ old(
-                                        'telepon',
-                                        $perusahaan?->telepon ?? ''
-                                    ) }}"
-                                    placeholder="Contoh: 08123456789"
-                                >
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        {{-- DIVIDER --}}
-
-                        <hr class="form-divider">
-
-
-                        {{-- =================================================
-                             KONTAK
-                        ================================================== --}}
-
-                        <div class="grid">
-
-
-                            {{-- EMAIL --}}
-
-                            <div class="form-group">
-
-
-                                <label for="email">
-                                    Email Perusahaan
-                                </label>
-
-
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value="{{ old(
-                                        'email',
-                                        $perusahaan?->email ?? ''
-                                    ) }}"
-                                    placeholder="Contoh: info@perusahaan.com"
-                                >
-
-
-                            </div>
-
-
-                            {{-- WEBSITE --}}
-
-                            <div class="form-group">
-
-
-                                <label for="website">
-                                    Website
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="website"
-                                    name="website"
-                                    value="{{ old(
-                                        'website',
-                                        $perusahaan?->website ?? ''
-                                    ) }}"
-                                    placeholder="Contoh: https://www.perusahaan.com"
-                                >
-
-
-                                <div class="help">
-                                    Kosongkan jika perusahaan tidak memiliki website.
-                                </div>
-
-
-                            </div>
-
-
-                            {{-- DESKRIPSI --}}
-
-                            <div class="form-group full">
-
-
-                                <label for="deskripsi">
-                                    Deskripsi Perusahaan
-                                </label>
-
-
-                                <textarea
-                                    id="deskripsi"
-                                    name="deskripsi"
-                                    placeholder="Masukkan deskripsi singkat perusahaan"
-                                >{{ old(
-                                    'deskripsi',
-                                    $perusahaan?->deskripsi ?? ''
-                                ) }}</textarea>
-
-
-                                <div class="help">
-                                    Deskripsi singkat mengenai perusahaan
-                                    yang dapat ditampilkan pada website MAGENTA.
-                                </div>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                        {{-- =================================================
-                             ACTION
-                        ================================================== --}}
-
-                        <div class="actions">
-
-
-                            <div class="action-left">
-
-                                <span>
-
-                                    <b>*</b>
-                                    Wajib diisi
-
-                                </span>
-
-                            </div>
-
-
-                            <div class="action-buttons">
-
-
-                                {{-- KEMBALI BERDASARKAN ROLE --}}
-
-                                <a
-                                    href="{{ auth()->user()->role === 'super_admin'
-                                        ? route('superadmin.dashboard')
-                                        : route('admin.dashboard') }}"
-                                    class="btn btn-secondary"
-                                >
-
-                                    ←
-                                    Kembali
-
-                                </a>
-
-
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                >
-
-                                    ✓
-                                    Simpan Perubahan
-
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </form>
-
-
-                </div>
-
-
-            </div>
-
-
-            {{-- FOOT NOTE --}}
-
-            <div class="foot-note">
-
-                MAGENTA
-                &nbsp;•&nbsp;
-                Sistem Informasi Magang
-
-            </div>
-
-
-        </div>
-
-
-    </main>
-
+    </div>
 
 </div>
 
-
-</body>
-
-</html>
+@endsection
