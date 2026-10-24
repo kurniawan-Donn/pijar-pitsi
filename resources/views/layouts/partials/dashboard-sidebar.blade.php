@@ -4,14 +4,30 @@
     (lihat AppServiceProvider::configureGates()).
 --}}
 @php
-    $isSuperAdmin = auth()->user()?->role === 'super_admin';
+    $routeDashboard = auth()->user()?->routeDashboard() ?? 'admin.dashboard';
 
-    $menuSections = [
+    // Peserta magang punya menu sendiri (bertambah di tahap biodata & logbook).
+    $menuSections = auth()->user()?->isPeserta() ? [
+        'Magang Saya' => [
+            [
+                'label' => 'Dashboard',
+                'icon' => '⌂',
+                'route' => 'peserta.dashboard',
+                'active' => ['peserta.dashboard'],
+            ],
+            [
+                'label' => 'Profil & Password',
+                'icon' => '♙',
+                'route' => 'profil.edit',
+                'active' => ['profil.*'],
+            ],
+        ],
+    ] : [
         'Utama' => [
             [
                 'label' => 'Dashboard',
                 'icon' => '⌂',
-                'route' => $isSuperAdmin ? 'superadmin.dashboard' : 'admin.dashboard',
+                'route' => $routeDashboard,
                 'active' => ['superadmin.dashboard', 'admin.dashboard'],
             ],
             [
@@ -81,7 +97,7 @@
 <aside class="dash-sidebar">
 
     {{-- BRAND --}}
-    <a href="{{ route($isSuperAdmin ? 'superadmin.dashboard' : 'admin.dashboard') }}" class="dash-brand">
+    <a href="{{ route($routeDashboard) }}" class="dash-brand">
 
         <div class="dash-brand-logo">M</div>
 

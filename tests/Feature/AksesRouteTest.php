@@ -15,7 +15,7 @@ use Tests\TestCase;
 
 /**
  * Setiap route aplikasi punya minimal satu test akses untuk tamu, admin,
- * dan super admin. Route baru yang belum didaftarkan di matriks membuat
+ * super admin, dan peserta. Route baru yang belum didaftarkan di matriks membuat
  * test_semua_route_aplikasi_tercakup gagal.
  */
 class AksesRouteTest extends TestCase
@@ -24,11 +24,15 @@ class AksesRouteTest extends TestCase
 
     private const PUBLIK = 'publik';
 
+    private const SEMUA = 'semua';            // semua pengguna login
+
     private const LOGIN = 'login';            // admin & super admin
 
     private const ADMIN = 'admin';            // hanya admin
 
     private const SUPER_ADMIN = 'super_admin'; // hanya super admin
+
+    private const PESERTA = 'peserta';        // hanya peserta magang
 
     /**
      * [nama route => siapa yang boleh mengakses]
@@ -43,11 +47,14 @@ class AksesRouteTest extends TestCase
         'pengajuan.store' => self::PUBLIK,
         'pengajuan.status' => self::PUBLIK,
 
-        // Semua pengguna login
-        'logout' => self::LOGIN,
-        'profil.edit' => self::LOGIN,
-        'profil.update' => self::LOGIN,
-        'profil.password' => self::LOGIN,
+        // Semua pengguna login (termasuk peserta)
+        'logout' => self::SEMUA,
+        'profil.edit' => self::SEMUA,
+        'profil.update' => self::SEMUA,
+        'profil.password' => self::SEMUA,
+
+        // Khusus peserta
+        'peserta.dashboard' => self::PESERTA,
 
         // Khusus admin
         'admin.dashboard' => self::ADMIN,
@@ -135,7 +142,7 @@ class AksesRouteTest extends TestCase
     }
 
     #[DataProvider('semuaRoute')]
-    public function test_akses_route_untuk_tamu_admin_dan_super_admin(string $nama, string $akses): void
+    public function test_akses_route_untuk_tamu_admin_super_admin_dan_peserta(string $nama, string $akses): void
     {
         $route = RouteFacade::getRoutes()->getByName($nama);
         $this->assertNotNull($route, "Route {$nama} tidak ditemukan");
@@ -144,14 +151,14 @@ class AksesRouteTest extends TestCase
 
         Storage::fake('local');
 
-        foreach ([null, 'admin', 'super_admin'] as $role) {
+        foreach ([null, 'admin', 'super_admin', 'peserta'] as $role) {
             $this->refreshApplicationState();
 
             // Dibuat ulang per role: route hapus menghapus datanya.
             $parameter = $this->parameter($route);
 
             if ($role) {
-                $this->actingAs(User::factory()->create(['role' => $role]));
+                $this->actingAs($this->pengguna($role));
             }
 
             $response = $this->call($method, route($nama, $parameter));
@@ -159,9 +166,11 @@ class AksesRouteTest extends TestCase
 
             $boleh = match ($akses) {
                 self::PUBLIK => true,
-                self::LOGIN => $role !== null,
+                self::SEMUA => $role !== null,
+                self::LOGIN => in_array($role, ['admin', 'super_admin'], true),
                 self::ADMIN => $role === 'admin',
                 self::SUPER_ADMIN => $role === 'super_admin',
+                self::PESERTA => $role === 'peserta',
             };
 
             if ($boleh) {
@@ -177,6 +186,20 @@ class AksesRouteTest extends TestCase
                 $this->assertSame(403, $response->getStatusCode(), "{$label} seharusnya ditolak (403)");
             }
         }
+    }
+
+    /**
+     * Akun untuk role yang diuji. Akun peserta selalu terhubung ke data peserta.
+     */
+    private function pengguna(string $role): User
+    {
+        $user = User::factory()->create(['role' => $role]);
+
+        if ($role === 'peserta') {
+            PesertaMagang::create(['nama' => 'Peserta Login', 'status' => 'aktif', 'user_id' => $user->id]);
+        }
+
+        return $user;
     }
 
     /**

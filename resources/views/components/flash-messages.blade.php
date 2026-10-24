@@ -10,6 +10,8 @@
 
 <x-alert type="error" :message="session('error')" />
 
+<x-alert type="warning" :message="session('warning')" />
+
 @if ($validation && $errors->any())
     <x-alert
         type="error"

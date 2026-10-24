@@ -31,7 +31,7 @@
 
 @php
     $authUser = auth()->user();
-    $roleLabel = $authUser?->role === 'super_admin' ? 'Super Admin' : 'Admin';
+    $roleLabel = $authUser?->labelRole() ?? 'Admin';
 @endphp
 
 <div class="dash-layout">

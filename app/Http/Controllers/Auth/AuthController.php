@@ -29,7 +29,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Proses login Admin / Super Admin.
+     * Proses login Admin / Super Admin / Peserta.
      */
     public function login(Request $request)
     {
@@ -63,25 +63,25 @@ class AuthController extends Controller
 
         RateLimiter::clear($throttleKey);
 
+        $user = Auth::user();
+        $routeDashboard = $user->routeDashboard();
+
+        if (! $user->aktif || $routeDashboard === null) {
+            Auth::logout();
+
+            return redirect()
+                ->route('login')
+                ->withErrors([
+                    'email' => $user->aktif
+                        ? 'Akun tidak memiliki hak akses.'
+                        : 'Akun Anda sedang dinonaktifkan. Hubungi admin magang.',
+                ])
+                ->onlyInput('email');
+        }
+
         $request->session()->regenerate();
 
-        $user = Auth::user();
-
-        if ($user->role === 'super_admin') {
-            return redirect()->route('superadmin.dashboard');
-        }
-
-        if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        Auth::logout();
-
-        return redirect()
-            ->route('login')
-            ->withErrors([
-                'email' => 'Akun tidak memiliki hak akses.',
-            ]);
+        return redirect()->route($routeDashboard);
     }
 
     /**
