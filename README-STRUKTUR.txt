@@ -21,6 +21,10 @@ app/Services/
                           (credential: storage/app/google/service-account.json)
 
 resources/views/
+  layouts/     -> dashboard.blade.php (layout Admin & Super Admin)
+                  partials/dashboard-sidebar (menu sesuai role)
+                  partials/dashboard-styles  (CSS bersama)
+  components/  -> alert, flash-messages, stat-card, button, form/input
   website/     -> halaman publik
   auth/        -> login
   admin/       -> dashboard & pengajuan (Admin)
@@ -28,5 +32,8 @@ resources/views/
                   peserta-magang, pengguna
 
 Catatan:
+- Halaman dashboard baru cukup memakai @extends('layouts.dashboard') dan
+  mengisi section title, page_title, page_subtitle, content; CSS khusus
+  halaman lewat @push('styles').
 - Nama folder controller harus sama persis dengan namespace
   (contoh: SuperAdmin, bukan superAdmin) supaya tetap jalan di server Linux.

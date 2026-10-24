@@ -74,8 +74,15 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Tabel `absensis` tidak lagi dipakai secara aktif (absensi di Google Sheets).
 
 ### Kode
-- View dashboard berukuran 700–1.600 baris per file; CSS, sidebar, header, dan
-  logout ditulis ulang di setiap view (Fase 1).
+- ~~CSS, sidebar, header, dan logout ditulis ulang di setiap view~~ —
+  **diperbaiki di Fase 1** (layout `layouts/dashboard`). Sisa: CSS konten
+  masih per halaman (`@push('styles')`) dan banyak kelas mirip antarhalaman
+  (`.card`, `.form-control`, `.button`, …) yang bisa disatukan bertahap ke
+  komponen saat halaman itu disentuh fase berikutnya.
+- `superadmin/banners/create.blade.php` tidak pernah ditampilkan
+  (`BannerController@create` me-redirect ke index); bisa dihapus.
+- ~~Halaman Edit Pengguna error 500 (parameter route `pengguna` vs `user`)~~ —
+  **diperbaiki di Fase 1**.
 - `admin/pengajuan/index` dan `show` kosong; model `Mahasiswa` kosong
   (tanpa `$fillable`/relasi).
 - Route `POST /pengajuan` berada di dalam `role:admin`, padahal dimaksudkan untuk
@@ -110,14 +117,31 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Belum ada Policy/Gate, log aktivitas, maupun fitur ubah password sendiri.
 
 ### Test
-- Hanya ada `ExampleTest` bawaan; belum ada test untuk fitur apa pun.
+- Baru ada test Kelola Konten (`PengaturanWebsiteTest`) dan akses halaman
+  dashboard (`HalamanDashboardTest`); fitur lain belum dites.
+
+## Catatan Fase 1 (layout & komponen)
+
+- Layout: `resources/views/layouts/dashboard.blade.php` (section `title`,
+  `page_title`, `page_subtitle`, `content`; stack `styles`, `scripts`).
+- Sidebar: `layouts/partials/dashboard-sidebar.blade.php`, menu sesuai role
+  (Kelola Pengguna hanya Super Admin). Tambah menu baru di array `$menuSections`.
+- CSS bersama: `layouts/partials/dashboard-styles.blade.php` (partial inline,
+  bukan Vite, karena `app.css` memuat reset Tailwind yang akan mengubah tampilan
+  dan supaya deploy tidak bergantung pada `npm run build`).
+- Komponen: `<x-alert>`, `<x-flash-messages>`, `<x-stat-card>`, `<x-button>`,
+  `<x-form.input>`.
+- Sidebar & topbar disamakan memakai desain halaman Dashboard; sebelumnya ada
+  5 varian berbeda dan menu "Data Peserta" hanya muncul di halaman peserta.
+- Total baris view admin/super admin: 23.257 → 14.386 (termasuk 931 baris
+  layout & komponen baru).
 
 ## 3. Rencana Fase
 
 | Fase | Judul | Status |
 |---|---|---|
 | 0 | Persiapan & dokumentasi proyek | selesai |
-| 1 | Refactor tampilan: layout & komponen Blade bersama | belum |
+| 1 | Refactor tampilan: layout & komponen Blade bersama | selesai |
 | 2 | Modul Pengajuan Magang lengkap | belum |
 | 3 | Penguatan Absensi Google Sheets | belum |
 | 4 | Logbook kegiatan & Penilaian peserta | belum |
