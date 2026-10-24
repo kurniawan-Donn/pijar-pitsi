@@ -9,9 +9,12 @@ use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
+use App\Http\Controllers\SuperAdmin\DivisiController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
+use App\Http\Controllers\SuperAdmin\PenempatanPesertaController;
+use App\Http\Controllers\SuperAdmin\PengaturanMagangController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PenilaianController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
@@ -155,6 +158,29 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         // Data peserta magang
         Route::resource('peserta-magang', PesertaMagangController::class)
             ->parameters(['peserta-magang' => 'pesertaMagang']);
+
+        // Pengaturan magang: aturan umum, tarif uang saku, hari libur
+        Route::controller(PengaturanMagangController::class)
+            ->prefix('/pengaturan-magang')
+            ->name('pengaturan-magang.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::put('/', 'update')->name('update');
+                Route::post('/tarif', 'simpanTarif')->name('tarif.store');
+                Route::delete('/tarif/{tarifUangSaku}', 'hapusTarif')->name('tarif.destroy');
+                Route::post('/libur', 'simpanLibur')->name('libur.store');
+                Route::delete('/libur/{hariLibur}', 'hapusLibur')->name('libur.destroy');
+            });
+
+        // Master divisi
+        Route::resource('divisi', DivisiController::class)
+            ->only(['index', 'store', 'update', 'destroy']);
+
+        // Divisi & mentor peserta per periode
+        Route::put(
+            '/peserta-magang/{pesertaMagang}/penempatan',
+            [PenempatanPesertaController::class, 'update']
+        )->name('peserta-magang.penempatan.update');
 
         // Akun login peserta
         Route::controller(AkunPesertaController::class)

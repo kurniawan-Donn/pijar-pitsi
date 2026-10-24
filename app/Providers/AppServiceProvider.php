@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\PengaturanMagang;
 use App\Models\User;
+use App\Services\PeriodeMagang;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Tanggal awal periode diatur admin di halaman Pengaturan Magang.
+        $this->app->bind(PeriodeMagang::class, fn () => new PeriodeMagang(
+            PengaturanMagang::ambil()->tanggal_awal_periode
+        ));
     }
 
     /**

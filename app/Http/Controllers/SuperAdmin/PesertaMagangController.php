@@ -5,10 +5,13 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Concerns\MemilihBulanAbsensi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PesertaMagangRequest;
+use App\Models\Divisi;
 use App\Models\LogAktivitas;
 use App\Models\PesertaMagang;
+use App\Models\TarifUangSaku;
 use App\Services\AbsensiSheetService;
 use App\Services\Logbook;
+use App\Services\PeriodeMagang;
 use App\Services\RekapAbsensi;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -59,15 +62,16 @@ class PesertaMagangController extends Controller
      * Menampilkan detail peserta sekaligus membaca absensi
      * bulan terpilih dari Google Sheets.
      */
-    public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi): View
+    public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi, PeriodeMagang $periode): View
     {
-        $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa']);
+        $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa', 'penempatans.divisi']);
 
         $bulan = $this->bulanDariRequest($request);
         $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);
         $sheetRows = $sheet['rows'];
 
         $rekap = RekapAbsensi::hitung($sheetRows);
+        $tarif = TarifUangSaku::berlakuPada($bulan);
 
         return view('superadmin.peserta-magang.show', [
             'pesertaMagang' => $pesertaMagang,
@@ -76,9 +80,16 @@ class PesertaMagangController extends Controller
             'rekap' => $rekap,
             'uangSaku' => RekapAbsensi::uangSaku(
                 $rekap,
-                config('absensi.uang_saku.hari_penuh'),
-                config('absensi.uang_saku.setengah_hari')
+                $tarif->tarif_hari_penuh,
+                $tarif->tarif_setengah_hari
             ),
+            'tarif' => $tarif,
+            'periodeMagang' => $periode->untukPeserta($pesertaMagang),
+            'pilihanDivisi' => Divisi::query()
+                ->where('aktif', true)
+                ->orWhereIn('id', $pesertaMagang->penempatans->pluck('divisi_id'))
+                ->orderBy('nama')
+                ->get(),
             'bulanDipilih' => $bulan,
             'pilihanBulan' => $this->pilihanBulan($pesertaMagang, $bulan),
             'ringkasanLogbook' => Logbook::ringkasan(Logbook::baris($sheetRows)),

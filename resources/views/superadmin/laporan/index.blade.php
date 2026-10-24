@@ -336,8 +336,7 @@
         @if ($jenis === 'absensi')
             <div class="hint">
                 Data dibaca dari Google Sheets setiap peserta (disimpan sementara {{ intdiv(config('absensi.cache_seconds'), 60) }} menit).
-                Uang saku: hari penuh × Rp {{ number_format(config('absensi.uang_saku.hari_penuh'), 0, ',', '.') }},
-                setengah hari × Rp {{ number_format(config('absensi.uang_saku.setengah_hari'), 0, ',', '.') }}.
+                Tarif uang saku mengikuti Pengaturan Magang (tarif yang berlaku di awal bulan).
             </div>
         @endif
 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
+use App\Models\TarifUangSaku;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -98,8 +99,10 @@ class LaporanMagang
             ->orderBy('nama')
             ->get();
 
-        $tarifPenuh = config('absensi.uang_saku.hari_penuh');
-        $tarifSetengah = config('absensi.uang_saku.setengah_hari');
+        // Tarif diatur admin (Pengaturan Magang); dipakai tarif yang berlaku di awal bulan.
+        $tarif = TarifUangSaku::berlakuPada($bulan);
+        $tarifPenuh = $tarif->tarif_hari_penuh;
+        $tarifSetengah = $tarif->tarif_setengah_hari;
         $total = ['hadir' => 0, 'uang_saku' => 0, 'gagal' => 0];
 
         $baris = $peserta->values()->map(function (PesertaMagang $p, int $i) use ($bulan, $tarifPenuh, $tarifSetengah, &$total) {
@@ -149,6 +152,7 @@ class LaporanMagang
                 'Jumlah peserta' => $peserta->count(),
                 'Total hadir' => $total['hadir'].' hari',
                 'Total uang saku' => 'Rp '.number_format($total['uang_saku'], 0, ',', '.'),
+                'Tarif hari penuh / setengah hari' => 'Rp '.number_format($tarifPenuh, 0, ',', '.').' / Rp '.number_format($tarifSetengah, 0, ',', '.'),
                 'Data tidak terbaca' => $total['gagal'],
             ],
         ];

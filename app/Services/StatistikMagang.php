@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\PengajuanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
+use App\Models\TarifUangSaku;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 
@@ -138,6 +139,8 @@ class StatistikMagang
             ->whereNotNull('google_sheet_url')
             ->get(['id', 'google_sheet_url']);
 
+        $tarif = TarifUangSaku::berlakuPada($bulan);
+
         $hasil = ['peserta_tersedia' => 0, 'peserta_aktif' => $peserta->count(), 'hadir' => 0, 'izin' => 0, 'sakit' => 0, 'uang_saku' => 0];
 
         foreach ($peserta as $item) {
@@ -155,8 +158,8 @@ class StatistikMagang
             $hasil['sakit'] += $rekap['sakit'];
             $hasil['uang_saku'] += RekapAbsensi::uangSaku(
                 $rekap,
-                config('absensi.uang_saku.hari_penuh'),
-                config('absensi.uang_saku.setengah_hari')
+                $tarif->tarif_hari_penuh,
+                $tarif->tarif_setengah_hari
             );
         }
 

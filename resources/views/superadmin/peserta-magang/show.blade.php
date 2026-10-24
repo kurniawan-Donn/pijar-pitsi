@@ -1526,6 +1526,8 @@
 
         </section>
 
+        @include('superadmin.peserta-magang.partials.penempatan')
+
         {{-- =================================================
              AKSI PESERTA
         ================================================== --}}
@@ -1752,13 +1754,13 @@
                         <div class="allowance-item">
                             <span>Masuk penuh</span>
                             <strong>{{ $rekap['hari_penuh'] }} hari</strong>
-                            <small>× Rp {{ number_format(config('absensi.uang_saku.hari_penuh'), 0, ',', '.') }}</small>
+                            <small>× Rp {{ number_format($tarif->tarif_hari_penuh, 0, ',', '.') }}</small>
                         </div>
 
                         <div class="allowance-item">
                             <span>Masuk setengah hari</span>
                             <strong>{{ $rekap['setengah_hari'] }} hari</strong>
-                            <small>× Rp {{ number_format(config('absensi.uang_saku.setengah_hari'), 0, ',', '.') }}</small>
+                            <small>× Rp {{ number_format($tarif->tarif_setengah_hari, 0, ',', '.') }}</small>
                         </div>
 
                         <div class="allowance-item">

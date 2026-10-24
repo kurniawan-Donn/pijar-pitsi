@@ -72,6 +72,9 @@ return [
     | Mengikuti footer template sheet: hari penuh = sesi pagi & siang lengkap,
     | setengah hari = hanya satu sesi lengkap. Nilai dalam rupiah.
     |
+    | Hanya tarif AWAL: dipakai sekali saat migration tabel tarif_uang_sakus.
+    | Tarif yang berlaku diatur admin di halaman Pengaturan Magang.
+    |
     */
 
     'uang_saku' => [
