@@ -54,6 +54,14 @@ class FeedbackPeserta extends Model
     }
 
     /**
+     * Feedback terkunci setelah surat keterangan diterbitkan.
+     */
+    public static function terkunci(PesertaMagang $peserta): bool
+    {
+        return (bool) $peserta->suratKeterangan?->sudahTerbit();
+    }
+
+    /**
      * Rata-rata skor 1–5.
      */
     public function rataRata(): float

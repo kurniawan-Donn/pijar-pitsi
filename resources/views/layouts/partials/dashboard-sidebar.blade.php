@@ -35,6 +35,12 @@
                 'active' => ['peserta.feedback.*'],
             ],
             [
+                'label' => 'Surat Keterangan',
+                'icon' => '✉',
+                'route' => 'peserta.surat.show',
+                'active' => ['peserta.surat.*'],
+            ],
+            [
                 'label' => 'Profil & Password',
                 'icon' => '♙',
                 'route' => 'profil.edit',

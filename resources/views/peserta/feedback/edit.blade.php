@@ -218,13 +218,17 @@
             <x-alert type="error" title="Feedback belum terkirim:" :messages="$errors->all()" />
         @endif
 
-        @if ($feedback->exists)
+        @if ($terkunci)
+            <x-alert type="info" message="Surat keterangan Anda sudah diterbitkan, sehingga feedback tidak bisa diubah lagi. Terima kasih atas masukan Anda." />
+        @elseif ($feedback->exists)
             <x-alert type="info" :message="'Feedback sudah dikirim '.$feedback->dikirim_pada?->translatedFormat('d F Y').($feedback->jumlah_kirim > 1 ? ' dan diperbarui '.$feedback->updated_at->translatedFormat('d F Y H:i') : '').'. Anda masih bisa mengubah dan mengirim ulang.'" />
         @endif
 
         <form method="POST" action="{{ route('peserta.feedback.update') }}">
             @csrf
             @method('PUT')
+
+            <fieldset @disabled($terkunci) style="border: none; margin: 0; padding: 0; min-width: 0;">
 
             <section class="panel">
                 <h3>Penilaian Program Magang</h3>
@@ -293,9 +297,13 @@
                 @error('pernyataan') <div class="x-form-error">{{ $message }}</div> @enderror
             </section>
 
-            <div class="actions">
-                <x-button>{{ $feedback->exists ? 'Kirim Ulang Feedback' : 'Kirim Feedback' }}</x-button>
-            </div>
+            </fieldset>
+
+            @unless ($terkunci)
+                <div class="actions">
+                    <x-button>{{ $feedback->exists ? 'Kirim Ulang Feedback' : 'Kirim Feedback' }}</x-button>
+                </div>
+            @endunless
         </form>
 
     @endif

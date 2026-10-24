@@ -1612,6 +1612,27 @@
                         </span>
                     </a>
 
+                    {{-- SURAT KETERANGAN --}}
+
+                    <a
+                        href="{{ route('superadmin.peserta-magang.surat', $pesertaMagang) }}"
+                        class="action-item"
+                    >
+                        <span class="action-icon">✉</span>
+                        <span>
+                            Surat Keterangan Magang
+                            <small class="action-meta">
+                                @if($pesertaMagang->suratKeterangan?->sudahTerbit())
+                                    Terbit · {{ $pesertaMagang->suratKeterangan->nomor_surat }}
+                                @elseif($pesertaMagang->suratKeterangan)
+                                    Draft · belum diterbitkan
+                                @else
+                                    Dibuat saat magang selesai
+                                @endif
+                            </small>
+                        </span>
+                    </a>
+
                     {{-- FEEDBACK --}}
 
                     <a
