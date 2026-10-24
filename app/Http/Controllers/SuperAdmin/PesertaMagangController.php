@@ -13,6 +13,7 @@ use App\Services\RekapAbsensi;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PesertaMagangController extends Controller
@@ -60,7 +61,7 @@ class PesertaMagangController extends Controller
      */
     public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi): View
     {
-        $pesertaMagang->load('penilaian');
+        $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa']);
 
         $bulan = $this->bulanDariRequest($request);
         $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);
@@ -213,7 +214,13 @@ class PesertaMagangController extends Controller
             ['nim' => $pesertaMagang->nim, 'status' => $pesertaMagang->status]
         );
 
-        $pesertaMagang->delete();
+        // Akun login peserta ikut dihapus supaya tidak tertinggal tanpa data.
+        DB::transaction(function () use ($pesertaMagang) {
+            $akun = $pesertaMagang->user;
+
+            $pesertaMagang->delete();
+            $akun?->delete();
+        });
 
         return redirect()
             ->route('superadmin.peserta-magang.index')
