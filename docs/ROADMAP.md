@@ -111,7 +111,10 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   yang merujuk ke `CLAUDE.md`.
 
 ### Keamanan
-- Tidak ada rate limiting pada login.
+- ~~Tidak ada rate limiting pada login~~ — **diperbaiki**: maksimal 5 kali
+  gagal per email + IP, lalu dikunci 60 detik (`AuthController`, `LoginTest`).
+- Link "Login Admin" dihapus dari navbar website publik; admin masuk langsung
+  lewat `/login`.
 - Super admin dapat menurunkan role akunnya sendiri (hanya hapus yang dicegah).
 - Password akun awal di-hardcode di `UserSeeder`.
 - Belum ada Policy/Gate, log aktivitas, maupun fitur ubah password sendiri.
