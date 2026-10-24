@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class PesertaMagang extends Model
@@ -19,12 +20,18 @@ class PesertaMagang extends Model
         'pembimbing',
         'status',
         'google_sheet_url',
+        'pengajuan_magang_id',
     ];
 
     protected $casts = [
         'periode_mulai' => 'date',
         'periode_selesai' => 'date',
     ];
+
+    public function pengajuanMagang(): BelongsTo
+    {
+        return $this->belongsTo(PengajuanMagang::class);
+    }
 
     public function absensis(): HasMany
     {

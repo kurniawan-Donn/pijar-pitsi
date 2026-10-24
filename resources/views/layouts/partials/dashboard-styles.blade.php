@@ -515,6 +515,147 @@
     }
 
     /* =========================================================
+       KOMPONEN: BADGE STATUS
+    ========================================================== */
+
+    .x-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        padding: 5px 10px;
+
+        border-radius: 999px;
+
+        background: #eef2f6;
+        color: #4b5d70;
+
+        font-size: 11px;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .x-badge::before {
+        content: "";
+
+        width: 6px;
+        height: 6px;
+
+        border-radius: 50%;
+
+        background: currentColor;
+    }
+
+    .x-badge-menunggu {
+        background: #fff6e8;
+        color: #b4630c;
+    }
+
+    .x-badge-disetujui,
+    .x-badge-aktif {
+        background: #ecfdf3;
+        color: #067647;
+    }
+
+    .x-badge-ditolak {
+        background: #fef3f2;
+        color: #b42318;
+    }
+
+    .x-badge-selesai {
+        background: #eaf3fb;
+        color: #175c95;
+    }
+
+    /* =========================================================
+       KOMPONEN: PAGINATION
+    ========================================================== */
+
+    .x-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 15px;
+
+        padding: 16px 20px;
+
+        border-top: 1px solid #edf1f4;
+    }
+
+    .x-pagination-info {
+        color: #8998a2;
+        font-size: 12px;
+    }
+
+    .x-pagination-links {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .x-pagination-links a,
+    .x-pagination-links span {
+        min-width: 32px;
+        height: 32px;
+
+        padding: 0 9px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid #e1e8ed;
+        border-radius: 7px;
+
+        background: #ffffff;
+        color: #586a75;
+
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .x-pagination-links span[aria-current="page"] {
+        background: #1779c9;
+        border-color: #1779c9;
+        color: #ffffff;
+    }
+
+    .x-pagination-links span[aria-disabled="true"] {
+        opacity: .45;
+    }
+
+    .x-pagination-links a:hover {
+        background: #f1f7fa;
+    }
+
+    /* =========================================================
+       SIDEBAR BADGE
+    ========================================================== */
+
+    .dash-sidebar-badge {
+        margin-left: auto;
+
+        min-width: 22px;
+        height: 22px;
+
+        padding: 0 7px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px;
+
+        background: #f47b20;
+        color: #ffffff;
+
+        font-size: 11px;
+        font-weight: 800;
+    }
+
+    /* =========================================================
        RESPONSIVE
     ========================================================== */
 

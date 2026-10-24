@@ -68,9 +68,8 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   perusahaan tujuan pengajuan; kolom duplikat `nama`/`nama_perusahaan` dan
   `telepon`/`no_telepon`. `PerusahaanController` memakai `Perusahaan::first()`,
   sehingga perusahaan baru dari pengajuan bisa tertukar dengan profil.
-- `mahasiswas.email` unik, sementara `store` pengajuan mencari mahasiswa
-  berdasarkan NIM lalu menimpa email → bisa error unique constraint bila email
-  sudah dipakai mahasiswa lain.
+- ~~`mahasiswas.email` unik tapi bisa tertimpa NIM lain (error 500)~~ —
+  **diperbaiki di Fase 2** (validasi "Email ini sudah terdaftar untuk NIM lain").
 - Tabel `absensis` tidak lagi dipakai secara aktif (absensi di Google Sheets).
 
 ### Kode
@@ -83,10 +82,8 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   (`BannerController@create` me-redirect ke index); bisa dihapus.
 - ~~Halaman Edit Pengguna error 500 (parameter route `pengguna` vs `user`)~~ —
   **diperbaiki di Fase 1**.
-- `admin/pengajuan/index` dan `show` kosong; model `Mahasiswa` kosong
-  (tanpa `$fillable`/relasi).
-- Route `POST /pengajuan` berada di dalam `role:admin`, padahal dimaksudkan untuk
-  form publik.
+- ~~View pengajuan kosong, model `Mahasiswa` kosong, route `POST /pengajuan`
+  di dalam `role:admin`~~ — **diperbaiki di Fase 2**.
 - Validasi masih di controller (kecuali `PesertaMagangRequest`); logika
   validasi banner duplikat di `store` dan `update`.
 - `PengaturanWebsiteController@update` meng-assign 30+ field satu per satu.
@@ -120,8 +117,36 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Belum ada Policy/Gate, log aktivitas, maupun fitur ubah password sendiri.
 
 ### Test
-- Baru ada test Kelola Konten (`PengaturanWebsiteTest`) dan akses halaman
-  dashboard (`HalamanDashboardTest`); fitur lain belum dites.
+- Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
+  publik, dan kelola pengajuan (50 test). Belum dites: banner, profil
+  perusahaan, CRUD peserta & pengguna, absensi Google Sheets.
+
+## Catatan Fase 2 (pengajuan magang & website)
+
+- Pendaftaran **dua jalur**: form website (utama) + Google Form (tombol hanya
+  muncul bila link diisi di Kelola Konten). Pengajuan via Google Form tidak
+  masuk database, jadi tidak bisa dicek statusnya di website.
+- Form website 3 langkah (data diri, akademik, rencana magang) + unggah surat
+  pengantar (PDF/JPG/PNG ≤ 2 MB, disimpan di disk privat
+  `storage/app/private/pengajuan`). Dibatasi 3 kiriman/menit per IP.
+- Satu NIM tidak bisa punya dua pengajuan berstatus menunggu.
+- Cek status publik dengan NIM + email (10 kali/menit per IP), menampilkan
+  catatan admin.
+- Route publik baru: `pengajuan.store` (dulu `admin.pengajuan.store`, diganti
+  karena form ini publik) dan `pengajuan.status`. Route `admin.pengajuan.*`
+  sekarang bisa diakses Admin **dan** Super Admin; tambahan `dokumen` dan
+  `peserta`.
+- Kolom baru: `mahasiswas.asal_kampus`, `pengajuan_magangs.dokumen_path`,
+  `pengajuan_magangs.catatan_admin` (catatan admin tidak lagi menimpa
+  keterangan pendaftar), `peserta_magangs.pengajuan_magang_id`.
+- Data peserta dibuat dari pengajuan **lewat tombol** "Buat Data Peserta" di
+  detail pengajuan yang disetujui (bukan otomatis), lalu admin diarahkan ke
+  form edit peserta untuk melengkapi pembimbing & link Google Sheets.
+- Website publik didesain ulang: navbar sticky + menu mobile, animasi scroll,
+  timeline alur, statistik peserta nyata, dan form multi-langkah. Dipecah ke
+  `website/partials/*` dan komponen `x-website.field`.
+- Zona waktu aplikasi diubah ke `Asia/Jakarta` dan locale ke `id`
+  (nama bulan berbahasa Indonesia).
 
 ## Catatan Fase 1 (layout & komponen)
 
@@ -145,7 +170,7 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 |---|---|---|
 | 0 | Persiapan & dokumentasi proyek | selesai |
 | 1 | Refactor tampilan: layout & komponen Blade bersama | selesai |
-| 2 | Modul Pengajuan Magang lengkap | belum |
+| 2 | Modul Pengajuan Magang lengkap (+ redesain website) | selesai |
 | 3 | Penguatan Absensi Google Sheets | belum |
 | 4 | Logbook kegiatan & Penilaian peserta | belum |
 | 5 | Dashboard statistik, Laporan & Export | belum |

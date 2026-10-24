@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\PengaturanWebsite;
 use App\Models\Perusahaan;
+use App\Models\PesertaMagang;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -19,6 +20,10 @@ class HomeController extends Controller
             'banners' => Banner::aktif()->get(),
             'perusahaan' => Perusahaan::first(),
             'pengaturan' => PengaturanWebsite::first(),
+            'statistik' => [
+                'peserta_aktif' => PesertaMagang::where('status', 'aktif')->count(),
+                'alumni' => PesertaMagang::where('status', 'selesai')->count(),
+            ],
         ]);
     }
 }
