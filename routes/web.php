@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfilController;
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
+use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
@@ -154,6 +155,17 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         // Data peserta magang
         Route::resource('peserta-magang', PesertaMagangController::class)
             ->parameters(['peserta-magang' => 'pesertaMagang']);
+
+        // Akun login peserta
+        Route::controller(AkunPesertaController::class)
+            ->prefix('/peserta-magang/{pesertaMagang}/akun')
+            ->name('peserta-magang.akun.')
+            ->group(function () {
+                Route::post('/', 'store')->name('store');
+                Route::put('/password', 'resetPassword')->name('reset');
+                Route::put('/status', 'updateStatus')->name('status');
+                Route::delete('/', 'destroy')->name('destroy');
+            });
 
         // Update absensi langsung ke Google Sheets peserta
         Route::put(

@@ -123,13 +123,27 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **211 test** (959 assertion). Setiap route aplikasi (57 route) punya test
+- **226 test** (1043 assertion). Setiap route aplikasi (61 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 9 (kelola akun peserta)
+
+- Kartu **Akun Login Peserta** di halaman detail peserta
+  (`SuperAdmin/AkunPesertaController`, route `superadmin.peserta-magang.akun.*`,
+  admin + super admin): buat akun, reset password, aktifkan/nonaktifkan, hapus.
+- Email login terisi otomatis dari email pendaftaran (pengajuan) bila ada.
+- Password sementara 10 karakter (huruf + angka) hanya ditampilkan sekali
+  lewat flash session, tidak pernah dicatat di log, dan wajib diganti saat
+  login pertama.
+- Semua aksi tercatat di Log Aktivitas (`buat_akun_peserta`,
+  `reset_password_peserta`, `ubah_status_akun_peserta`, `hapus_akun_peserta`).
+- Menghapus akun tidak menghapus data peserta; menghapus data peserta ikut
+  menghapus akunnya.
 
 ## Catatan Fase 8 (aktor peserta)
 
@@ -209,7 +223,7 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 6 | Keamanan, otorisasi & test | selesai |
 | 7 | Persiapan deploy (dikerjakan setelah Fase 18) | belum |
 | 8 | Aktor peserta: role, akun, middleware | selesai |
-| 9 | Kelola akun peserta oleh admin | belum |
+| 9 | Kelola akun peserta oleh admin | selesai |
 | 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | belum |
 | 11 | Biodata peserta | belum |
 | 12 | Logbook harian, kehadiran, izin, uang saku | belum |

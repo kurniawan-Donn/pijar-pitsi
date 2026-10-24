@@ -1003,6 +1003,93 @@
             grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         }
     }
+
+    /* =====================================================
+       AKUN LOGIN PESERTA
+    ====================================================== */
+
+    .akun-card {
+        margin-bottom: 20px;
+
+        scroll-margin-top: 20px;
+    }
+
+    .akun-password {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+
+        margin-bottom: 16px;
+        padding: 14px 16px;
+
+        border: 1px dashed #f4a261;
+        border-radius: 10px;
+
+        background: #fff8f1;
+
+        color: #7a4a17;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .akun-password code {
+        padding: 4px 10px;
+
+        border-radius: 6px;
+
+        background: #ffffff;
+
+        color: #17324d;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .akun-info {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+
+        margin-bottom: 18px;
+    }
+
+    .akun-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        gap: 12px;
+    }
+
+    .akun-form .x-form-group {
+        flex: 1 1 280px;
+
+        margin-bottom: 0;
+    }
+
+    .akun-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .akun-actions form {
+        margin: 0;
+    }
+
+    .akun-hint {
+        margin-top: 12px;
+
+        color: #7b8794;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 800px) {
+        .akun-info {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endpush
 
@@ -1308,6 +1395,136 @@
             </section>
 
         </div>
+
+        {{-- =================================================
+             AKUN LOGIN PESERTA
+        ================================================== --}}
+
+        @php
+            $akun = $pesertaMagang->user;
+        @endphp
+
+        <section class="card akun-card" id="akun">
+
+            <div class="card-header">
+
+                <div class="card-title">
+                    Akun Login Peserta
+                </div>
+
+                <div class="card-description">
+                    Akun untuk peserta mengisi biodata dan logbook di website.
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <x-alert type="success" :message="session('akun_status')" />
+                <x-alert type="error" :message="session('akun_error')" />
+
+                @if(session('password_sementara'))
+                    <div class="akun-password" role="status">
+                        <span>Password sementara:</span>
+                        <code>{{ session('password_sementara') }}</code>
+                        <span>
+                            Catat dan berikan kepada peserta sekarang. Password ini <strong>hanya ditampilkan sekali</strong>
+                            dan wajib diganti peserta saat login pertama.
+                        </span>
+                    </div>
+                @endif
+
+                @if($akun)
+
+                    <div class="akun-info">
+
+                        <div class="info-item">
+                            <div class="info-label">Email Login</div>
+                            <div class="info-value">{{ $akun->email }}</div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Status Akun</div>
+                            <div class="info-value">
+                                <span class="status-badge {{ $akun->aktif ? 'status-aktif' : 'status-selesai' }}">
+                                    {{ $akun->aktif ? 'Aktif' : 'Nonaktif' }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label">Password</div>
+                            <div class="info-value">
+                                {{ $akun->wajib_ganti_password ? 'Masih sementara (belum diganti)' : 'Sudah diganti peserta' }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="akun-actions">
+
+                        <form
+                            method="POST"
+                            action="{{ route('superadmin.peserta-magang.akun.reset', $pesertaMagang) }}"
+                            onsubmit="return confirm('Buat password sementara baru? Password lama tidak bisa dipakai lagi.')"
+                        >
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-secondary">↻ Reset Password</button>
+                        </form>
+
+                        <form method="POST" action="{{ route('superadmin.peserta-magang.akun.status', $pesertaMagang) }}">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-secondary">
+                                {{ $akun->aktif ? '⏸ Nonaktifkan Akun' : '▶ Aktifkan Akun' }}
+                            </button>
+                        </form>
+
+                        <form
+                            method="POST"
+                            action="{{ route('superadmin.peserta-magang.akun.destroy', $pesertaMagang) }}"
+                            onsubmit="return confirm('Hapus akun login peserta ini? Data peserta tetap tersimpan.')"
+                        >
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Hapus Akun</button>
+                        </form>
+
+                    </div>
+
+                @else
+
+                    <form
+                        method="POST"
+                        action="{{ route('superadmin.peserta-magang.akun.store', $pesertaMagang) }}"
+                        class="akun-form"
+                    >
+                        @csrf
+
+                        <x-form.input
+                            name="email"
+                            type="email"
+                            label="Email Login"
+                            :value="$pesertaMagang->pengajuanMagang?->mahasiswa?->email"
+                            maxlength="255"
+                            required
+                        />
+
+                        <button type="submit" class="btn btn-orange">+ Buat Akun Login</button>
+
+                    </form>
+
+                    <p class="akun-hint">
+                        Sistem membuat password sementara yang ditampilkan sekali setelah akun dibuat.
+                        Email terisi otomatis dari data pendaftaran bila ada.
+                    </p>
+
+                @endif
+
+            </div>
+
+        </section>
 
         {{-- =================================================
              AKSI PESERTA
