@@ -50,6 +50,12 @@
                 'badge' => \App\Models\PengajuanMagang::where('status', \App\Models\PengajuanMagang::STATUS_MENUNGGU)->count(),
             ],
             [
+                'label' => 'Monitoring',
+                'icon' => '◉',
+                'route' => 'superadmin.monitoring.index',
+                'active' => ['superadmin.monitoring.*'],
+            ],
+            [
                 'label' => 'Laporan',
                 'icon' => '▥',
                 'route' => 'superadmin.laporan.index',
