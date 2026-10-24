@@ -81,6 +81,11 @@
 <div class="content">
 
     <x-alert type="success" :message="session('success')" />
+    <x-alert type="warning" :message="session('warning')" />
+
+    @if ($user->wajib_ganti_password)
+        <x-alert type="info" message="Akun Anda masih memakai password sementara dari admin. Ganti password di panel Ganti Password untuk membuka halaman lain." />
+    @endif
 
     <div class="grid">
 
@@ -89,7 +94,7 @@
             <p>Nama ditampilkan di topbar dan log aktivitas. Email dipakai untuk login.</p>
 
             <div class="akun-info">
-                Role: <strong>{{ $user->role === 'super_admin' ? 'Super Admin' : 'Admin' }}</strong>
+                Role: <strong>{{ $user->labelRole() }}</strong>
                 · terdaftar {{ $user->created_at?->translatedFormat('d F Y') }}
             </div>
 

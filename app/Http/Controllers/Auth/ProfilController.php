@@ -49,13 +49,23 @@ class ProfilController extends Controller
             'password.different' => 'Password baru harus berbeda dari password saat ini.',
         ]);
 
-        $request->user()->update(['password' => $validated['password']]);
+        $dariPasswordSementara = $request->user()->wajib_ganti_password;
+
+        $request->user()->update([
+            'password' => $validated['password'],
+            'wajib_ganti_password' => false,
+        ]);
 
         // Token sesi baru setelah password berubah.
         $request->session()->regenerate();
 
         LogAktivitas::catat('ubah_password', $request->user(), 'Mengganti password akun sendiri');
 
-        return redirect()->route('profil.edit')->with('success', 'Password berhasil diganti.');
+        // Setelah password sementara diganti, langsung lanjut ke dashboard.
+        $tujuan = $dariPasswordSementara ? $request->user()->routeDashboard() : null;
+
+        return redirect()
+            ->route($tujuan ?? 'profil.edit')
+            ->with('success', 'Password berhasil diganti.');
     }
 }

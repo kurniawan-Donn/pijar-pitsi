@@ -12,10 +12,13 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Pendaftaran diarahkan ke Google Form (`pengaturan_websites.google_form_url`).
 
 ### Autentikasi
-- Login/logout (`AuthController`), redirect sesuai role:
-  `super_admin` → `superadmin.dashboard`, `admin` → `admin.dashboard`.
+- Login/logout (`AuthController`), redirect sesuai role (`User::routeDashboard()`):
+  `super_admin` → `superadmin.dashboard`, `admin` → `admin.dashboard`,
+  `peserta` → `peserta.dashboard`. Akun `aktif = false` ditolak.
 - Pembatasan akses lewat `RoleMiddleware` (`role:admin`, `role:super_admin`,
-  `role:admin,super_admin`).
+  `role:admin,super_admin`, `role:peserta`).
+- `WajibGantiPassword` (grup `web`): akun dengan password sementara hanya bisa
+  membuka halaman profil sampai password diganti.
 - Akun awal dari `database/seeders/UserSeeder.php`.
 
 ### Area Admin (`role:admin`)
@@ -41,13 +44,13 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 ### Data
 | Tabel | Model | Catatan |
 |---|---|---|
-| users | User | kolom `role` enum admin/super_admin |
+| users | User | `role` string: admin/super_admin/peserta (`User::ROLES`), `wajib_ganti_password`, `aktif` |
 | mahasiswas | Mahasiswa | model masih kosong |
 | perusahaans | Perusahaan | dipakai untuk profil perusahaan **dan** perusahaan tujuan pengajuan |
 | pengajuan_magangs | PengajuanMagang | status menunggu/disetujui/ditolak |
 | banners | Banner | scope `aktif()` |
 | pengaturan_websites | PengaturanWebsite | konten homepage + `google_form_url` |
-| peserta_magangs | PesertaMagang | `google_sheet_url`, status aktif/selesai |
+| peserta_magangs | PesertaMagang | `google_sheet_url`, status aktif/selesai, `user_id` (akun peserta), `nomor_peserta` MG{tahun}{bulan}{urut} |
 | absensis | Absensi | data absensi lokal lama (sumber utama kini Google Sheets) |
 
 ## 2. Utang Teknis
@@ -120,13 +123,33 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **200 test** (848 assertion). Setiap route aplikasi (56 route) punya test
-  akses untuk tamu, admin, dan super admin (`AksesRouteTest`); route baru yang
-  belum dimasukkan ke matriks membuat test gagal.
+- **211 test** (959 assertion). Setiap route aplikasi (57 route) punya test
+  akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
+  baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 8 (aktor peserta)
+
+Rencana lengkap fitur peserta (biodata, logbook, uang saku, feedback, surat
+keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
+
+- Role baru `peserta` di tabel `users`. Kolom `role` diubah dari enum ke
+  string supaya role baru tidak perlu mengubah enum di tiap database; nilai
+  valid ada di `User::ROLES`.
+- `peserta_magangs.user_id` menghubungkan akun dan data peserta (satu akun
+  per peserta, `nullOnDelete`). `nomor_peserta` dibuat otomatis
+  (`PesertaMagang::nomorPesertaBaru()`), peserta lama diisi oleh migration.
+- Area `/peserta` (`peserta.*`) dijaga `role:peserta` + `peserta.aktif`:
+  akun nonaktif dikeluarkan, akun tanpa data peserta 403, peserta berstatus
+  selesai hanya boleh request baca (GET).
+- Semua route lama tetap menolak peserta (403), dibuktikan `AksesRouteTest`.
+  Profil & ganti password dibuka untuk peserta.
+- Kelola Pengguna hanya menampilkan akun admin/super admin; akun peserta
+  menghasilkan 404 di sana (dikelola dari halaman peserta di Fase 9).
+- `docs/reverensi/` (contoh buku kerja berisi data pribadi) masuk `.gitignore`.
 
 ## Catatan Fase 6 (keamanan)
 
@@ -184,4 +207,15 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 4 | Logbook kegiatan & Penilaian peserta | selesai |
 | 5 | Dashboard statistik, Laporan & Export | selesai |
 | 6 | Keamanan, otorisasi & test | selesai |
-| 7 | Persiapan deploy | belum |
+| 7 | Persiapan deploy (dikerjakan setelah Fase 18) | belum |
+| 8 | Aktor peserta: role, akun, middleware | selesai |
+| 9 | Kelola akun peserta oleh admin | belum |
+| 10 | Pengaturan magang, tarif, hari libur, periode 28–27, divisi | belum |
+| 11 | Biodata peserta | belum |
+| 12 | Logbook harian, kehadiran, izin, uang saku | belum |
+| 13 | Impor riwayat sheet lama | belum |
+| 14 | Dashboard monitoring | belum |
+| 15 | Feedback magang | belum |
+| 16 | Penyesuaian penilaian | belum |
+| 17 | Surat keterangan magang | belum |
+| 18 | Laporan dari database | belum |

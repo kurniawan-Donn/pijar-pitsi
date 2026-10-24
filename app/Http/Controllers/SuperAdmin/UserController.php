@@ -16,7 +16,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::orderBy('role', 'asc')
+        // Akun peserta dikelola dari halaman peserta, bukan di sini.
+        $users = User::whereIn('role', [User::ROLE_ADMIN, User::ROLE_SUPER_ADMIN])
+            ->orderBy('role', 'asc')
             ->orderBy('name', 'asc')
             ->get();
 
@@ -83,6 +85,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $this->pastikanBukanPeserta($user);
+
         return view(
             'superadmin.pengguna.edit',
             compact('user')
@@ -94,6 +98,8 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $this->pastikanBukanPeserta($user);
+
         $validated = $request->validate([
             'name' => [
                 'required',
@@ -176,6 +182,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->pastikanBukanPeserta($user);
+
         /*
         |--------------------------------------------------------------
         | Super Admin tidak boleh menghapus akun dirinya sendiri.
@@ -206,6 +214,14 @@ class UserController extends Controller
                 'success',
                 'Pengguna berhasil dihapus.'
             );
+    }
+
+    /**
+     * Halaman ini hanya untuk akun admin & super admin.
+     */
+    private function pastikanBukanPeserta(User $user): void
+    {
+        abort_if($user->isPeserta(), 404);
     }
 
     /**

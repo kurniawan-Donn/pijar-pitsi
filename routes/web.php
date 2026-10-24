@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfilController;
+use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
@@ -50,7 +51,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
 // Profil & password pengguna yang sedang login
-Route::middleware(['auth', 'role:admin,super_admin'])
+Route::middleware(['auth', 'role:admin,super_admin,peserta'])
     ->controller(ProfilController::class)
     ->prefix('profil')
     ->name('profil.')
@@ -58,6 +59,23 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         Route::get('/', 'edit')->name('edit');
         Route::put('/', 'update')->name('update');
         Route::put('/password', 'updatePassword')->name('password');
+    });
+
+/*
+|--------------------------------------------------------------------------
+| AREA PESERTA MAGANG
+|--------------------------------------------------------------------------
+|
+| Akun peserta dibuat admin. Peserta berstatus selesai hanya bisa membaca
+| (dijaga middleware peserta.aktif).
+|
+*/
+
+Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
+    ->prefix('peserta')
+    ->name('peserta.')
+    ->group(function () {
+        Route::get('/dashboard', PesertaDashboardController::class)->name('dashboard');
     });
 
 /*
