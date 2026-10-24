@@ -46,14 +46,22 @@ class AbsensiGoogleSheetsTest extends TestCase
      */
     private function isiSheet(): array
     {
-        return [
+        $isi = [
             ['No', 'Tanggal', 'Pagi', '', 'Siang', '', 'Activity', 'Output', 'Lokasi', 'Action'],
             ['', '', 'Masuk', 'Keluar', 'Masuk', 'Keluar'],
-            ['1', '01/10/2026', '08:00', '12:00', '13:00', '16.00', 'Membuat laporan', 'Laporan', 'Kantor', 'OK'],
-            [],
-            ['2', '02/10/2026', '', '', '', '', 'Izin acara kampus'],
-            ['3', '03/10/2026', '', '', '', '', 'Sakit'],
+            ['1', '01/10/2026', '08:00', '12:00', '13:00', '16.00', 'Membuat laporan', 'Laporan', 'Kantor', 'Diterima'],
+            ['2', '', '', '', '', '', '', '', '', '......'],
+            ['3', '03/10/2026', '', '', '', '', 'Izin acara kampus', '', '', '......'],
+            ['4', '04/10/2026', '', '', '', '', 'Sakit', '', '', 'Review'],
+            ['5', '05/10/2026', '08:00', '12:00', '', '', 'Rapat tim', 'Notulen', 'Kantor', 'Ditolak'],
         ];
+
+        // Baris 6–31 template: hanya nomor & placeholder Action.
+        for ($no = 6; $no <= 31; $no++) {
+            $isi[] = [(string) $no, '', '', '', '', '', '', '', '', '......'];
+        }
+
+        return $isi;
     }
 
     private function bukaDetail(array $query = [])
@@ -66,7 +74,7 @@ class AbsensiGoogleSheetsTest extends TestCase
     {
         $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
             $mock->shouldReceive('getSheetTitlesFromUrl')->once()->with(self::URL)->andReturn(['SEPTEMBER 2026', 'Oktober 2026']);
-            $mock->shouldReceive('getValuesFromUrl')->once()->with(self::URL, "'Oktober 2026'!B11:K100")->andReturn($this->isiSheet());
+            $mock->shouldReceive('getValuesFromUrl')->once()->with(self::URL, "'Oktober 2026'!B11:K43")->andReturn($this->isiSheet());
         });
 
         $response = $this->bukaDetail();
@@ -78,20 +86,23 @@ class AbsensiGoogleSheetsTest extends TestCase
             ->assertSee('value="15"', false)
             ->assertSee('Oktober 2026');
 
-        $this->assertSame(
-            ['tercatat' => 3, 'hadir' => 1, 'izin' => 1, 'sakit' => 1, 'belum_diisi' => 0],
-            $response->viewData('rekap')
-        );
+        $rekap = $response->viewData('rekap');
+        $this->assertSame(4, $rekap['tercatat']);
+        $this->assertSame(2, $rekap['hadir']);
+        $this->assertSame(1, $rekap['izin']);
+        $this->assertSame(1, $rekap['sakit']);
 
-        // Baris kosong (baris 14) dilewati; nomor baris asli tetap benar.
-        $this->assertSame([13, 15, 16], array_column($response->viewData('sheetRows'), 'sheet_row'));
+        // Baris yang hanya berisi nomor & placeholder dilewati;
+        // nomor baris asli tetap benar.
+        $this->assertSame([13, 15, 16, 17], array_column($response->viewData('sheetRows'), 'sheet_row'));
+        $this->assertSame('', $response->viewData('sheetRows')[1]['action']);
     }
 
     public function test_tab_berbahasa_inggris_juga_dikenali(): void
     {
         $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
             $mock->shouldReceive('getSheetTitlesFromUrl')->andReturn(['OCTOBER 2026']);
-            $mock->shouldReceive('getValuesFromUrl')->with(self::URL, "'OCTOBER 2026'!B11:K100")->andReturn($this->isiSheet());
+            $mock->shouldReceive('getValuesFromUrl')->with(self::URL, "'OCTOBER 2026'!B11:K43")->andReturn($this->isiSheet());
         });
 
         $this->bukaDetail()->assertOk()->assertSee('Membuat laporan');
@@ -101,7 +112,7 @@ class AbsensiGoogleSheetsTest extends TestCase
     {
         $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
             $mock->shouldReceive('getSheetTitlesFromUrl')->andReturn(['SEPTEMBER 2026', 'OKTOBER 2026']);
-            $mock->shouldReceive('getValuesFromUrl')->once()->with(self::URL, "'SEPTEMBER 2026'!B11:K100")->andReturn([]);
+            $mock->shouldReceive('getValuesFromUrl')->once()->with(self::URL, "'SEPTEMBER 2026'!B11:K43")->andReturn([]);
         });
 
         $response = $this->bukaDetail(['bulan' => '2026-09']);

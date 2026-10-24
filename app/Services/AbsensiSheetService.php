@@ -110,6 +110,27 @@ class AbsensiSheetService
     }
 
     /**
+     * Setel kolom Action (verifikasi logbook) untuk beberapa baris sekaligus.
+     *
+     * @param  array<int, int>  $sheetRows
+     */
+    public function perbaruiAction(string $url, CarbonInterface $bulan, array $sheetRows, string $action): void
+    {
+        $tab = $this->cariTab($url, $bulan);
+        $kolom = $this->hurufKolom('action');
+
+        $data = [];
+
+        foreach (array_unique($sheetRows) as $sheetRow) {
+            $data[sprintf("'%s'!%s%d", $tab, $kolom, $sheetRow)] = [[$action]];
+        }
+
+        $this->sheets->batchUpdateValuesFromUrl($url, $data);
+
+        Cache::forget($this->cacheKey('baris', $url, $bulan->format('Y-m')));
+    }
+
+    /**
      * Hapus cache spreadsheet peserta (daftar tab & data bulan tersebut).
      */
     public function lupakan(string $url, CarbonInterface $bulan): void
@@ -139,21 +160,32 @@ class AbsensiSheetService
                 continue;
             }
 
-            $row = array_slice(array_pad($row, $jumlahKolom, ''), 0, $jumlahKolom);
+            $row = array_combine(
+                $kolom,
+                array_slice(array_pad($row, $jumlahKolom, ''), 0, $jumlahKolom)
+            );
 
-            // Lewati baris kosong.
-            if (collect($row)->every(fn ($nilai) => trim((string) $nilai) === '')) {
+            // Placeholder dropdown Action ("......") dianggap kosong.
+            if (isset($row['action']) && preg_match('/^\s*[.\-–—]*\s*$/u', (string) $row['action'])) {
+                $row['action'] = '';
+            }
+
+            // Lewati baris kosong. Kolom No diabaikan karena template
+            // sudah menomori 1–31 walau tanggalnya belum diisi.
+            $isi = array_diff_key($row, array_flip(['no', 'action']));
+
+            if (collect($isi)->every(fn ($nilai) => trim((string) $nilai) === '')) {
                 continue;
             }
 
-            $rows[] = ['sheet_row' => $index + $headerRow] + array_combine($kolom, $row);
+            $rows[] = ['sheet_row' => $index + $headerRow] + $row;
         }
 
         return $rows;
     }
 
     /**
-     * Range baca, contoh: 'OKTOBER 2026'!B11:K100
+     * Range baca, contoh: 'OKTOBER 2026'!B11:K43
      */
     private function rangeBaca(string $tab): string
     {

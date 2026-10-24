@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PesertaMagang extends Model
 {
@@ -27,6 +28,11 @@ class PesertaMagang extends Model
         'periode_mulai' => 'date',
         'periode_selesai' => 'date',
     ];
+
+    public function penilaian(): HasOne
+    {
+        return $this->hasOne(PenilaianPeserta::class);
+    }
 
     public function pengajuanMagang(): BelongsTo
     {

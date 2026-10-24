@@ -653,6 +653,10 @@
                                 </th>
 
                                 <th>
+                                    Nilai Akhir
+                                </th>
+
+                                <th>
                                     Aksi
                                 </th>
 
@@ -764,6 +768,19 @@
                                                 Selesai
                                             </span>
 
+                                        @endif
+
+                                    </td>
+
+                                    {{-- NILAI AKHIR --}}
+
+                                    <td>
+
+                                        @if($peserta->penilaian)
+                                            <strong>{{ number_format($peserta->penilaian->nilai_akhir, 2, ',', '.') }}</strong>
+                                            <span class="secondary-text">({{ $peserta->penilaian->predikat }})</span>
+                                        @else
+                                            <a href="{{ route('superadmin.peserta-magang.penilaian', $peserta) }}" class="secondary-text">Belum dinilai</a>
                                         @endif
 
                                     </td>

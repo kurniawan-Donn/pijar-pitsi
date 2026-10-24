@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Google\Client;
 use Google\Service\Sheets;
+use Google\Service\Sheets\BatchUpdateValuesRequest;
 use Google\Service\Sheets\ValueRange;
 use RuntimeException;
 
@@ -112,6 +113,29 @@ class GoogleSheetsService
         );
 
         return (int) $response->getUpdatedCells();
+    }
+
+    /**
+     * Menulis beberapa range sekaligus dalam satu panggilan API.
+     *
+     * @param  array<string, array<int, array<int, mixed>>>  $data  [range => values]
+     */
+    public function batchUpdateValuesFromUrl(string $url, array $data): int
+    {
+        $request = new BatchUpdateValuesRequest([
+            'valueInputOption' => 'USER_ENTERED',
+            'data' => collect($data)
+                ->map(fn (array $values, string $range) => new ValueRange(['range' => $range, 'values' => $values]))
+                ->values()
+                ->all(),
+        ]);
+
+        $response = $this->sheets()->spreadsheets_values->batchUpdate(
+            $this->extractSpreadsheetId($url),
+            $request
+        );
+
+        return (int) $response->getTotalUpdatedCells();
     }
 
     /**

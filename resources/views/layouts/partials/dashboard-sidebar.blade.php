@@ -47,6 +47,13 @@
                 'active' => ['superadmin.peserta-magang.*'],
             ],
             [
+                'label' => 'Aspek Penilaian',
+                'icon' => '★',
+                'route' => 'superadmin.aspek-penilaian.index',
+                'active' => ['superadmin.aspek-penilaian.*'],
+                'roles' => ['super_admin'],
+            ],
+            [
                 'label' => 'Kelola Pengguna',
                 'icon' => '♟',
                 'route' => 'superadmin.pengguna.index',
