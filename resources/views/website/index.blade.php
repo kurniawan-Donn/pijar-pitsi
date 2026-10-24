@@ -401,29 +401,6 @@
         }
 
 
-        .nav-admin {
-
-            background: var(--primary);
-
-            color: white !important;
-
-            padding:
-                11px 18px;
-
-            border-radius: 7px;
-
-        }
-
-
-        .nav-admin:hover {
-
-            background: var(--primary-dark);
-
-            color: white !important;
-
-        }
-
-
         /* =====================================================
            HERO
         ====================================================== */
@@ -1628,17 +1605,7 @@
 
                 </li>
 
-
-                <li>
-
-                    <a
-                        href="{{ route('login') }}"
-                        class="nav-admin"
-                    >
-                        Login Admin
-                    </a>
-
-                </li>
+                {{-- Login admin tidak ditautkan di website publik; akses langsung lewat /login. --}}
 
             </ul>
 
