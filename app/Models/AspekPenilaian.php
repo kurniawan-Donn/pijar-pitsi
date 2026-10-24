@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AspekPenilaian extends Model
 {
@@ -14,6 +15,7 @@ class AspekPenilaian extends Model
         'bobot',
         'urutan',
         'aktif',
+        'kelompok_penilaian_id',
     ];
 
     protected $casts = [
@@ -21,6 +23,11 @@ class AspekPenilaian extends Model
         'urutan' => 'integer',
         'aktif' => 'boolean',
     ];
+
+    public function kelompok(): BelongsTo
+    {
+        return $this->belongsTo(KelompokPenilaian::class, 'kelompok_penilaian_id');
+    }
 
     /**
      * Aspek aktif sesuai urutan tampil.

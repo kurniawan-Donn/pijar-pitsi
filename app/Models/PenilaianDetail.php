@@ -14,11 +14,14 @@ class PenilaianDetail extends Model
         'nama_aspek',
         'bobot',
         'nilai',
+        'kelompok',
+        'bobot_kelompok',
     ];
 
     protected $casts = [
         'bobot' => 'integer',
         'nilai' => 'integer',
+        'bobot_kelompok' => 'integer',
     ];
 
     public function penilaian(): BelongsTo

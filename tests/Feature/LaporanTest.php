@@ -213,7 +213,7 @@ class LaporanTest extends TestCase
         $laporan = $response->viewData('laporan');
 
         $response->assertOk()->assertSee('Peserta Bernilai')->assertSee('86,50');
-        $this->assertContains('Kemampuan Teknis', $laporan['kolom']);
+        $this->assertContains('Kolaborasi Tim', $laporan['kolom']);
         $this->assertSame('86,50', $laporan['ringkasan']['Rata-rata']);
     }
 }
