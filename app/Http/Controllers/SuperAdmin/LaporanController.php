@@ -4,9 +4,16 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Services\LaporanMagang;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use OpenSpout\Common\Entity\Row;
+use OpenSpout\Common\Entity\Style\Color;
+use OpenSpout\Common\Entity\Style\Style;
+use OpenSpout\Writer\XLSX\Writer as XlsxWriter;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class LaporanController extends Controller
@@ -64,6 +71,59 @@ class LaporanController extends Controller
 
             fclose($output);
         }, $namaFile, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /**
+     * Unduh laporan sebagai file Excel (.xlsx).
+     */
+    public function xlsx(Request $request, LaporanMagang $laporan): BinaryFileResponse
+    {
+        [$jenis, $filter] = $this->filter($request);
+        $data = $laporan->buat($jenis, $filter);
+
+        $tebal = (new Style)->withFontBold(true);
+        $judulKolom = (new Style)->withFontBold(true)->withFontColor(Color::WHITE)->withBackgroundColor('12345B');
+
+        $berkas = tempnam(sys_get_temp_dir(), 'laporan-').'.xlsx';
+
+        $writer = new XlsxWriter;
+        $writer->openToFile($berkas);
+        $writer->getCurrentSheet()->setName(mb_substr(LaporanMagang::JENIS[$jenis], 0, 31));
+        $writer->getOptions()->setColumnWidth(6, 1);
+        $writer->getOptions()->setColumnWidthForRange(18, 2, max(2, count($data['kolom'])));
+
+        $writer->addRow(Row::fromValuesWithStyle([$data['judul']], $tebal));
+        $writer->addRow(Row::fromValues([$data['keterangan']]));
+        $writer->addRow(Row::fromValues([]));
+        $writer->addRow(Row::fromValuesWithStyle($data['kolom'], $judulKolom));
+
+        foreach ($data['baris'] as $baris) {
+            $writer->addRow(Row::fromValues($baris));
+        }
+
+        $writer->addRow(Row::fromValues([]));
+
+        foreach ($data['ringkasan'] as $label => $nilai) {
+            $writer->addRow(Row::fromValues([$label, $nilai]));
+        }
+
+        $writer->close();
+
+        return response()
+            ->download($berkas, 'laporan-'.$jenis.'-'.now()->format('Ymd-His').'.xlsx')
+            ->deleteFileAfterSend();
+    }
+
+    /**
+     * Unduh laporan sebagai file PDF (A4 landscape).
+     */
+    public function pdf(Request $request, LaporanMagang $laporan): Response
+    {
+        [$jenis, $filter] = $this->filter($request);
+
+        return Pdf::loadView('superadmin.laporan.pdf', ['laporan' => $laporan->buat($jenis, $filter)])
+            ->setPaper('a4', 'landscape')
+            ->download('laporan-'.$jenis.'-'.now()->format('Ymd-His').'.pdf');
     }
 
     /**

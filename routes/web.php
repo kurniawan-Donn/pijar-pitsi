@@ -151,6 +151,8 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
         Route::get('/laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
         Route::get('/laporan/csv', [LaporanController::class, 'csv'])->name('laporan.csv');
+        Route::get('/laporan/xlsx', [LaporanController::class, 'xlsx'])->name('laporan.xlsx');
+        Route::get('/laporan/pdf', [LaporanController::class, 'pdf'])->name('laporan.pdf');
 
         // Penilaian akhir peserta
         Route::get(

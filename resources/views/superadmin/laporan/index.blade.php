@@ -279,8 +279,10 @@
             </form>
 
             <div class="export-actions">
-                <x-button variant="secondary" :href="route('superadmin.laporan.csv', $queryExport)">⬇ Excel (CSV)</x-button>
-                <x-button variant="secondary" :href="route('superadmin.laporan.cetak', $queryExport)" target="_blank" rel="noopener">🖨 Cetak / PDF</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.xlsx', $queryExport)">⬇ Excel (.xlsx)</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.pdf', $queryExport)">⬇ PDF</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.csv', $queryExport)">CSV</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.cetak', $queryExport)" target="_blank" rel="noopener">🖨 Cetak</x-button>
             </div>
 
         </div>

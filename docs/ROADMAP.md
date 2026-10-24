@@ -121,7 +121,7 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 ### Test
 - Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
   publik, kelola pengajuan, absensi Google Sheets, logbook, penilaian,
-  statistik dashboard, dan laporan/export (107 test). Belum dites: banner,
+  statistik dashboard, dan laporan/export (110 test). Belum dites: banner,
   profil perusahaan, CRUD peserta & pengguna.
 
 ## Catatan Fase 5 (dashboard, laporan, export)
@@ -136,16 +136,16 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - Halaman **Laporan** (`superadmin.laporan.index`, Admin & Super Admin):
   rekap peserta per periode, rekap absensi & uang saku per peserta per bulan,
   dan nilai akhir per aspek. Disusun oleh `App\Services\LaporanMagang`.
-- Export saat ini tanpa paket tambahan: **CSV** (BOM UTF-8 + pemisah `;`,
-  langsung rapi di Excel regional Indonesia) dan **versi cetak** A4 landscape
-  (Cetak → Simpan sebagai PDF di browser).
-- Hasil cek paket export:
-  - `maatwebsite/excel` **tidak kompatibel** dengan Laravel 13 (composer hanya
-    menemukan v1.1.5 yang memakai `phpoffice/phpexcel`, sudah ditinggalkan).
-  - `barryvdh/laravel-dompdf` v3.1.2 kompatibel.
-  - `phpoffice/phpspreadsheet` dan `openspout/openspout` butuh ekstensi PHP
-    `zip`, yang di PHP 8.4 Laragon masih nonaktif (`;extension=zip` di
-    `php.ini`, file `php_zip.dll` sudah tersedia).
+- Export tersedia dalam 4 bentuk: **Excel (.xlsx)** lewat `openspout/openspout`
+  v5, **PDF** lewat `barryvdh/laravel-dompdf` v3 (A4 landscape, template
+  `superadmin/laporan/pdf.blade.php`, font DejaVu Sans), **CSV** (BOM UTF-8 +
+  pemisah `;`), dan **versi cetak** browser.
+- `maatwebsite/excel` tidak dipakai karena belum mendukung Laravel 13
+  (composer hanya menemukan v1.1.5 berbasis `phpoffice/phpexcel` yang sudah
+  ditinggalkan).
+- **Butuh ekstensi PHP `zip`** (untuk .xlsx). Di PHP 8.4 Laragon lokal sudah
+  diaktifkan (`extension=zip` di `php.ini`, cadangan `php.ini.bak-sebelum-zip`).
+  Pastikan server produksi juga mengaktifkannya (dicatat untuk Fase 7).
 
 ## Catatan Fase 3 (absensi Google Sheets)
 
@@ -245,6 +245,6 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 2 | Modul Pengajuan Magang lengkap (+ redesain website) | selesai |
 | 3 | Penguatan Absensi Google Sheets | selesai |
 | 4 | Logbook kegiatan & Penilaian peserta | selesai |
-| 5 | Dashboard statistik, Laporan & Export | selesai (export .xlsx/.pdf native menunggu keputusan paket) |
+| 5 | Dashboard statistik, Laporan & Export | selesai |
 | 6 | Keamanan, otorisasi & test | belum |
 | 7 | Persiapan deploy | belum |
