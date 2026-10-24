@@ -20,6 +20,12 @@
                 'active' => ['admin.pengajuan.*'],
                 'badge' => \App\Models\PengajuanMagang::where('status', \App\Models\PengajuanMagang::STATUS_MENUNGGU)->count(),
             ],
+            [
+                'label' => 'Laporan',
+                'icon' => '▥',
+                'route' => 'superadmin.laporan.index',
+                'active' => ['superadmin.laporan.*'],
+            ],
         ],
         'Sistem' => [
             [

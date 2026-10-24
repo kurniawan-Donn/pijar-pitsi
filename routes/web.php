@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
+use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PenilaianController;
@@ -55,7 +58,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
-    Route::view('/admin/dashboard', 'admin.dashboard.index')
+    Route::get('/admin/dashboard', AdminDashboardController::class)
         ->name('admin.dashboard');
 
 });
@@ -144,6 +147,13 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             [LogbookController::class, 'update']
         )->name('peserta-magang.logbook.update');
 
+        // Laporan & export
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/cetak', [LaporanController::class, 'cetak'])->name('laporan.cetak');
+        Route::get('/laporan/csv', [LaporanController::class, 'csv'])->name('laporan.csv');
+        Route::get('/laporan/xlsx', [LaporanController::class, 'xlsx'])->name('laporan.xlsx');
+        Route::get('/laporan/pdf', [LaporanController::class, 'pdf'])->name('laporan.pdf');
+
         // Penilaian akhir peserta
         Route::get(
             '/peserta-magang/{pesertaMagang}/penilaian',
@@ -168,7 +178,7 @@ Route::middleware(['auth', 'role:super_admin'])
     ->name('superadmin.')
     ->group(function () {
 
-        Route::view('/dashboard', 'superadmin.dashboard.index')
+        Route::get('/dashboard', SuperAdminDashboardController::class)
             ->name('dashboard');
 
         // Kelola pengguna

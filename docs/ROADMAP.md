@@ -90,7 +90,11 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 - ~~Layout sheet di-hardcode, tab bulan hanya bahasa Inggris & bulan berjalan,
   rekap di Blade, tanpa cache, `GoogleSheetsService` sulit di-mock~~ —
   **diperbaiki di Fase 3**.
-- Dashboard admin & super admin hanya `Route::view` tanpa data.
+- ~~Dashboard admin & super admin hanya `Route::view` tanpa data~~ —
+  **diperbaiki di Fase 5**.
+- ~~Filter tanggal periode membandingkan teks `Y-m-d 00:00:00` dengan
+  `Y-m-d` sehingga tanggal batas terlewat~~ — **diperbaiki di Fase 5**
+  (`whereDate`). Perhatikan pola ini bila menambah query tanggal baru.
 - Route `superadmin.pengguna.show` terdaftar (dari `Route::resource`) tetapi
   `UserController` tidak punya method `show` → membuka URL tersebut menghasilkan
   error 500. Perlu `->except('show')` atau method redirect (Fase 6).
@@ -116,8 +120,32 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 
 ### Test
 - Sudah ada test: Kelola Konten, akses halaman dashboard, login, pendaftaran
-  publik, kelola pengajuan, absensi Google Sheets, logbook, dan penilaian
-  (95 test). Belum dites: banner, profil perusahaan, CRUD peserta & pengguna.
+  publik, kelola pengajuan, absensi Google Sheets, logbook, penilaian,
+  statistik dashboard, dan laporan/export (110 test). Belum dites: banner,
+  profil perusahaan, CRUD peserta & pengguna.
+
+## Catatan Fase 5 (dashboard, laporan, export)
+
+- Dashboard Admin & Super Admin (`Admin\DashboardController`,
+  `SuperAdmin\DashboardController`, data dari `App\Services\StatistikMagang`):
+  peserta aktif/selesai/belum dinilai, pengajuan per status & per bulan
+  (grafik CSS tanpa library), peserta yang berakhir bulan ini, pengajuan
+  terbaru, sebaran predikat, dan ringkasan absensi.
+- Ringkasan absensi di dashboard **hanya memakai cache** (tidak memanggil API
+  Google) supaya dashboard tetap cepat; rekap lengkap ada di Laporan Absensi.
+- Halaman **Laporan** (`superadmin.laporan.index`, Admin & Super Admin):
+  rekap peserta per periode, rekap absensi & uang saku per peserta per bulan,
+  dan nilai akhir per aspek. Disusun oleh `App\Services\LaporanMagang`.
+- Export tersedia dalam 4 bentuk: **Excel (.xlsx)** lewat `openspout/openspout`
+  v5, **PDF** lewat `barryvdh/laravel-dompdf` v3 (A4 landscape, template
+  `superadmin/laporan/pdf.blade.php`, font DejaVu Sans), **CSV** (BOM UTF-8 +
+  pemisah `;`), dan **versi cetak** browser.
+- `maatwebsite/excel` tidak dipakai karena belum mendukung Laravel 13
+  (composer hanya menemukan v1.1.5 berbasis `phpoffice/phpexcel` yang sudah
+  ditinggalkan).
+- **Butuh ekstensi PHP `zip`** (untuk .xlsx). Di PHP 8.4 Laragon lokal sudah
+  diaktifkan (`extension=zip` di `php.ini`, cadangan `php.ini.bak-sebelum-zip`).
+  Pastikan server produksi juga mengaktifkannya (dicatat untuk Fase 7).
 
 ## Catatan Fase 3 (absensi Google Sheets)
 
@@ -217,6 +245,6 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 | 2 | Modul Pengajuan Magang lengkap (+ redesain website) | selesai |
 | 3 | Penguatan Absensi Google Sheets | selesai |
 | 4 | Logbook kegiatan & Penilaian peserta | selesai |
-| 5 | Dashboard statistik, Laporan & Export | belum |
+| 5 | Dashboard statistik, Laporan & Export | selesai |
 | 6 | Keamanan, otorisasi & test | belum |
 | 7 | Persiapan deploy | belum |
