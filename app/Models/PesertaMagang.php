@@ -64,6 +64,21 @@ class PesertaMagang extends Model
         return $this->hasOne(BiodataPeserta::class);
     }
 
+    public function logbookHarians(): HasMany
+    {
+        return $this->hasMany(LogbookHarian::class);
+    }
+
+    public function izins(): HasMany
+    {
+        return $this->hasMany(IzinPeserta::class);
+    }
+
+    public function bukaKunciLogbooks(): HasMany
+    {
+        return $this->hasMany(BukaKunciLogbook::class);
+    }
+
     public function penempatans(): HasMany
     {
         return $this->hasMany(PenempatanPeserta::class);

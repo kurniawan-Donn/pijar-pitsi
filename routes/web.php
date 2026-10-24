@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfilController;
 use App\Http\Controllers\Peserta\BiodataController as PesertaBiodataController;
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
+use App\Http\Controllers\Peserta\IzinController as PesertaIzinController;
+use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\SuperAdmin\DivisiController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
+use App\Http\Controllers\SuperAdmin\LogbookHarianController;
 use App\Http\Controllers\SuperAdmin\PenempatanPesertaController;
 use App\Http\Controllers\SuperAdmin\PengaturanMagangController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
@@ -85,6 +88,30 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
 
         Route::get('/biodata', [PesertaBiodataController::class, 'edit'])->name('biodata.edit');
         Route::put('/biodata', [PesertaBiodataController::class, 'update'])->name('biodata.update');
+
+        // Logbook harian (tanggal Y-m-d)
+        Route::controller(PesertaLogbookController::class)
+            ->prefix('/logbook')
+            ->name('logbook.')
+            ->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::get('/cetak', 'cetak')->name('cetak');
+                Route::get('/bukti/{logbookBukti}', 'bukti')->name('bukti');
+                Route::get('/{tanggal}', 'edit')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('edit');
+                Route::put('/{tanggal}', 'update')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('update');
+                Route::delete('/{tanggal}', 'destroy')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('destroy');
+            });
+
+        // Izin / sakit beberapa hari
+        Route::controller(PesertaIzinController::class)
+            ->prefix('/izin')
+            ->name('izin.')
+            ->group(function () {
+                Route::get('/ajukan', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::delete('/{izinPeserta}', 'destroy')->name('destroy');
+                Route::get('/{izinPeserta}/bukti', 'bukti')->name('bukti');
+            });
     });
 
 /*
@@ -195,6 +222,17 @@ Route::middleware(['auth', 'role:admin,super_admin'])
                 Route::put('/program', 'updateProgram')->name('peserta-magang.biodata.program');
                 Route::put('/tinjau', 'tinjau')->name('peserta-magang.biodata.tinjau');
             });
+
+        // Logbook harian (database): verifikasi, izin/sakit, buka kunci, cetak
+        Route::controller(LogbookHarianController::class)->group(function () {
+            Route::get('/peserta-magang/{pesertaMagang}/logbook-harian', 'index')->name('peserta-magang.logbook-harian');
+            Route::put('/peserta-magang/{pesertaMagang}/logbook-harian/verifikasi', 'verifikasi')->name('peserta-magang.logbook-harian.verifikasi');
+            Route::post('/peserta-magang/{pesertaMagang}/logbook-harian/buka-kunci', 'bukaKunci')->name('peserta-magang.logbook-harian.buka-kunci');
+            Route::get('/peserta-magang/{pesertaMagang}/logbook-harian/cetak', 'cetak')->name('peserta-magang.logbook-harian.cetak');
+            Route::put('/peserta-magang/{pesertaMagang}/izin/{izinPeserta}', 'verifikasiIzin')->name('peserta-magang.izin.verifikasi');
+            Route::get('/logbook-bukti/{logbookBukti}', 'bukti')->name('logbook-bukti.show');
+            Route::get('/izin-bukti/{izinPeserta}', 'buktiIzin')->name('izin-bukti.show');
+        });
 
         // Akun login peserta
         Route::controller(AkunPesertaController::class)

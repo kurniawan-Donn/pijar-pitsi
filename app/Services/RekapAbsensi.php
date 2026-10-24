@@ -11,10 +11,12 @@ namespace App\Services;
  * - Ada minimal satu waktu absensi terisi → hadir
  * - Selain itu                            → belum diisi
  *
- * Kehadiran (hanya untuk baris hadir), mengikuti footer template sheet:
- * - Hari penuh     : sesi pagi (masuk + keluar) dan sesi siang lengkap
- * - Setengah hari  : hanya satu sesi yang lengkap
- * - Tidak lengkap  : ada waktu terisi, tapi tidak ada sesi yang lengkap
+ * Kehadiran (hanya untuk baris hadir), mengikuti cara buku kerja diisi:
+ * - Hari penuh     : ada jam pagi masuk dan jam siang keluar (pulang sore);
+ *                    pagi keluar & siang masuk (istirahat) boleh kosong
+ * - Setengah hari  : hanya satu sesi lengkap, yaitu pagi masuk + pagi keluar
+ *                    (pulang siang) atau siang masuk + siang keluar (datang siang)
+ * - Tidak lengkap  : selain itu, mis. hanya jam masuk
  */
 class RekapAbsensi
 {
@@ -97,7 +99,7 @@ class RekapAbsensi
         $sesiSiang = self::terisi($row, 'siang_masuk') && self::terisi($row, 'siang_keluar');
 
         return match (true) {
-            $sesiPagi && $sesiSiang => 'hari_penuh',
+            self::terisi($row, 'pagi_masuk') && self::terisi($row, 'siang_keluar') => 'hari_penuh',
             $sesiPagi || $sesiSiang => 'setengah_hari',
             default => 'tidak_lengkap',
         };

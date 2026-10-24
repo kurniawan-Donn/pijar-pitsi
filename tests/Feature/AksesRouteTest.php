@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Banner;
 use App\Models\Divisi;
 use App\Models\HariLibur;
+use App\Models\IzinPeserta;
+use App\Models\LogbookHarian;
 use App\Models\PengajuanMagang;
 use App\Models\PesertaMagang;
 use App\Models\TarifUangSaku;
@@ -60,6 +62,16 @@ class AksesRouteTest extends TestCase
         'peserta.dashboard' => self::PESERTA,
         'peserta.biodata.edit' => self::PESERTA,
         'peserta.biodata.update' => self::PESERTA,
+        'peserta.logbook.index' => self::PESERTA,
+        'peserta.logbook.cetak' => self::PESERTA,
+        'peserta.logbook.bukti' => self::PESERTA,
+        'peserta.logbook.edit' => self::PESERTA,
+        'peserta.logbook.update' => self::PESERTA,
+        'peserta.logbook.destroy' => self::PESERTA,
+        'peserta.izin.create' => self::PESERTA,
+        'peserta.izin.store' => self::PESERTA,
+        'peserta.izin.destroy' => self::PESERTA,
+        'peserta.izin.bukti' => self::PESERTA,
 
         // Khusus admin
         'admin.dashboard' => self::ADMIN,
@@ -104,6 +116,13 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.biodata' => self::LOGIN,
         'superadmin.peserta-magang.biodata.program' => self::LOGIN,
         'superadmin.peserta-magang.biodata.tinjau' => self::LOGIN,
+        'superadmin.peserta-magang.logbook-harian' => self::LOGIN,
+        'superadmin.peserta-magang.logbook-harian.verifikasi' => self::LOGIN,
+        'superadmin.peserta-magang.logbook-harian.buka-kunci' => self::LOGIN,
+        'superadmin.peserta-magang.logbook-harian.cetak' => self::LOGIN,
+        'superadmin.peserta-magang.izin.verifikasi' => self::LOGIN,
+        'superadmin.logbook-bukti.show' => self::LOGIN,
+        'superadmin.izin-bukti.show' => self::LOGIN,
         'superadmin.peserta-magang.akun.store' => self::LOGIN,
         'superadmin.peserta-magang.akun.reset' => self::LOGIN,
         'superadmin.peserta-magang.akun.status' => self::LOGIN,
@@ -177,11 +196,13 @@ class AksesRouteTest extends TestCase
         foreach ([null, 'admin', 'super_admin', 'peserta'] as $role) {
             $this->refreshApplicationState();
 
-            // Dibuat ulang per role: route hapus menghapus datanya.
-            $parameter = $this->parameter($route);
+            $login = $role ? $this->pengguna($role) : null;
 
-            if ($role) {
-                $this->actingAs($this->pengguna($role));
+            // Dibuat ulang per role: route hapus menghapus datanya.
+            $parameter = $this->parameter($route, $login);
+
+            if ($login) {
+                $this->actingAs($login);
             }
 
             $response = $this->call($method, route($nama, $parameter));
@@ -219,10 +240,26 @@ class AksesRouteTest extends TestCase
         $user = User::factory()->create(['role' => $role]);
 
         if ($role === 'peserta') {
-            PesertaMagang::create(['nama' => 'Peserta Login', 'status' => 'aktif', 'user_id' => $user->id]);
+            PesertaMagang::create($this->dataPeserta(['nama' => 'Peserta Login', 'user_id' => $user->id]));
         }
 
         return $user;
+    }
+
+    /**
+     * Peserta aktif dengan masa magang yang mencakup hari ini.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function dataPeserta(array $data = []): array
+    {
+        return $data + [
+            'nama' => 'Peserta Akses',
+            'status' => 'aktif',
+            'periode_mulai' => now()->subDays(30)->toDateString(),
+            'periode_selesai' => now()->addDays(30)->toDateString(),
+        ];
     }
 
     /**
@@ -239,9 +276,12 @@ class AksesRouteTest extends TestCase
      *
      * @return array<string, mixed>
      */
-    private function parameter(Route $route): array
+    private function parameter(Route $route, ?User $login): array
     {
         $isi = [];
+
+        // Data milik peserta yang login (untuk route peserta), atau peserta baru.
+        $peserta = $login?->pesertaMagang;
 
         foreach ($route->parameterNames() as $nama) {
             $isi[$nama] = match ($nama) {
@@ -249,12 +289,33 @@ class AksesRouteTest extends TestCase
                     PengajuanMagang::factory()->denganDokumen('pengajuan/akses.pdf')->create(),
                     fn () => Storage::disk('local')->put('pengajuan/akses.pdf', '%PDF-uji')
                 ),
-                'pesertaMagang' => PesertaMagang::create(['nama' => 'Peserta Akses', 'status' => 'aktif']),
+                'pesertaMagang' => $peserta = PesertaMagang::create($this->dataPeserta()),
                 'banner' => Banner::create(['judul' => 'Banner Akses', 'status' => 'aktif']),
                 'user' => User::factory()->create(['role' => 'admin']),
                 'tarifUangSaku' => TarifUangSaku::create(['berlaku_mulai' => fake()->unique()->date(), 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000]),
                 'hariLibur' => HariLibur::create(['tanggal' => fake()->unique()->date(), 'keterangan' => 'Libur Akses']),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
+                'tanggal' => now()->toDateString(),
+                'logbookBukti' => tap(
+                    LogbookHarian::create([
+                        'peserta_magang_id' => ($peserta ??= PesertaMagang::create($this->dataPeserta()))->id,
+                        'tanggal' => now()->subDays(fake()->unique()->numberBetween(1, 25))->toDateString(),
+                        'kehadiran' => 'hadir',
+                    ])->buktis()->create(['path' => 'logbook/akses.pdf', 'nama_asli' => 'akses.pdf', 'mime' => 'application/pdf', 'ukuran' => 8]),
+                    fn () => Storage::disk('local')->put('logbook/akses.pdf', '%PDF-uji')
+                ),
+                'izinPeserta' => tap(
+                    IzinPeserta::create([
+                        'peserta_magang_id' => ($peserta ??= PesertaMagang::create($this->dataPeserta()))->id,
+                        'jenis' => 'sakit',
+                        'tanggal_mulai' => now()->toDateString(),
+                        'tanggal_selesai' => now()->toDateString(),
+                        'keterangan' => 'Sakit akses',
+                        'bukti_path' => 'izin/akses.pdf',
+                        'bukti_nama' => 'akses.pdf',
+                    ]),
+                    fn () => Storage::disk('local')->put('izin/akses.pdf', '%PDF-uji')
+                ),
             };
         }
 

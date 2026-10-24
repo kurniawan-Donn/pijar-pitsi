@@ -13,6 +13,8 @@ class RekapAbsensiTest extends TestCase
         $rows = [
             // Hari penuh: pagi & siang lengkap.
             ['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00', 'siang_masuk' => '13:00', 'siang_keluar' => '16.00'],
+            // Hari penuh seperti di buku kerja: hanya pagi masuk & siang keluar.
+            ['pagi_masuk' => '08.00', 'siang_keluar' => '16.30'],
             // Setengah hari: hanya pagi lengkap.
             ['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00', 'activity' => 'Rapat'],
             // Setengah hari: hanya siang lengkap.
@@ -27,15 +29,40 @@ class RekapAbsensiTest extends TestCase
         ];
 
         $this->assertSame([
-            'tercatat' => 8,
-            'hadir' => 4,
+            'tercatat' => 9,
+            'hadir' => 5,
             'izin' => 2,
             'sakit' => 1,
             'belum_diisi' => 1,
-            'hari_penuh' => 1,
+            'hari_penuh' => 2,
             'setengah_hari' => 2,
             'tidak_lengkap' => 1,
         ], RekapAbsensi::hitung($rows));
+    }
+
+    /**
+     * @return array<string, array{array<string, string>, string}>
+     */
+    public static function contohSesi(): array
+    {
+        return [
+            'empat kolom' => [['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00', 'siang_masuk' => '13:00', 'siang_keluar' => '16:30'], 'hari_penuh'],
+            'masuk pagi pulang sore' => [['pagi_masuk' => '08:00', 'siang_keluar' => '16:30'], 'hari_penuh'],
+            'pulang siang' => [['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00'], 'setengah_hari'],
+            'datang siang' => [['siang_masuk' => '13:00', 'siang_keluar' => '16:30'], 'setengah_hari'],
+            'hanya masuk pagi' => [['pagi_masuk' => '08:00'], 'tidak_lengkap'],
+            'hanya keluar sore' => [['siang_keluar' => '16:30'], 'tidak_lengkap'],
+            'masuk siang tanpa keluar' => [['pagi_keluar' => '12:00', 'siang_masuk' => '13:00'], 'tidak_lengkap'],
+        ];
+    }
+
+    /**
+     * @param  array<string, string>  $row
+     */
+    #[DataProvider('contohSesi')]
+    public function test_jenis_kehadiran(array $row, string $jenis): void
+    {
+        $this->assertSame($jenis, RekapAbsensi::jenisKehadiran($row));
     }
 
     public function test_uang_saku_dari_hari_penuh_dan_setengah_hari(): void
