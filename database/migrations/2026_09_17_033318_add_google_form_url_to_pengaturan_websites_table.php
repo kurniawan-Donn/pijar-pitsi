@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::table('pengaturan_websites', function (Blueprint $table) {
             $table->text('google_form_url')
-                ->nullable()
-                ->after('pendaftaran_judul');
+                ->nullable();
         });
     }
 

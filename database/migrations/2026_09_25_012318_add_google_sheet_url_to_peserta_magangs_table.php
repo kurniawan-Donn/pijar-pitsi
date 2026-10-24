@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::table('peserta_magangs', function (Blueprint $table) {
             $table->text('google_sheet_url')
-                ->nullable()
-                ->after('status');
+                ->nullable();
         });
     }
 
