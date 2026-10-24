@@ -393,13 +393,15 @@
         justify-content: center;
         gap: 8px;
 
-        min-height: 42px;
-        padding: 0 18px;
+        min-width: 120px;
+        height: 40px;
+        padding: 0 16px;
 
         border: 1px solid transparent;
-        border-radius: 9px;
+        border-radius: 7px;
 
-        font-size: 14px;
+        font-family: inherit;
+        font-size: 12px;
         font-weight: 700;
 
         cursor: pointer;
@@ -409,17 +411,19 @@
 
     .x-btn-primary {
         background: #1779c9;
+        border-color: #1779c9;
         color: #ffffff;
     }
 
     .x-btn-primary:hover {
-        background: #12345b;
+        background: #1269b1;
+        border-color: #1269b1;
     }
 
     .x-btn-secondary {
         background: #ffffff;
-        border-color: #d5dee8;
-        color: #33475b;
+        border-color: #d7e0eb;
+        color: #60758d;
     }
 
     .x-btn-secondary:hover {
@@ -428,11 +432,13 @@
 
     .x-btn-danger {
         background: #d92d20;
+        border-color: #d92d20;
         color: #ffffff;
     }
 
     .x-btn-danger:hover {
         background: #b42318;
+        border-color: #b42318;
     }
 
     /* =========================================================
@@ -448,56 +454,63 @@
 
         margin-bottom: 7px;
 
-        color: #25415b;
-        font-size: 13px;
+        color: #174a7e;
+        font-size: 12px;
         font-weight: 700;
     }
 
     .x-form-required {
-        color: #d92d20;
+        color: #e05252;
     }
 
     .x-form-control {
         width: 100%;
-        min-height: 44px;
+        height: 42px;
 
-        padding: 10px 13px;
+        padding: 0 12px;
 
-        border: 1px solid #d5dee8;
-        border-radius: 9px;
+        border: 1px solid #d7e0eb;
+        border-radius: 7px;
 
         background: #ffffff;
-        color: #1f2937;
+        color: #243f5c;
 
         font-family: inherit;
-        font-size: 14px;
+        font-size: 12px;
 
         outline: none;
 
         transition: .2s ease;
     }
 
+    textarea.x-form-control {
+        height: auto;
+        padding: 10px 12px;
+        line-height: 1.6;
+    }
+
     .x-form-control:focus {
         border-color: #1779c9;
-        box-shadow: 0 0 0 3px rgba(23, 121, 201, .12);
+        box-shadow: 0 0 0 3px rgba(23, 121, 201, .08);
     }
 
     .x-form-control.is-invalid {
-        border-color: #d92d20;
+        border-color: #e05252;
     }
 
     .x-form-hint {
         margin-top: 6px;
 
-        color: #8a96a3;
-        font-size: 12px;
+        color: #879bb1;
+        font-size: 10px;
+        line-height: 1.5;
     }
 
     .x-form-error {
         margin-top: 6px;
 
-        color: #d92d20;
-        font-size: 12px;
+        color: #e05252;
+        font-size: 11px;
         font-weight: 600;
     }
 

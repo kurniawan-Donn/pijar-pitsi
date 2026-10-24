@@ -1,1755 +1,885 @@
 {{-- resources/views/superadmin/peserta-magang/create.blade.php --}}
 
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.dashboard')
 
-<head>
+@section('title', 'Tambah Peserta Magang')
+@section('page_title', 'Tambah Peserta Magang')
+@section('page_subtitle', 'Tambahkan data mahasiswa yang akan mengikuti kegiatan magang.')
 
-    <meta charset="UTF-8">
+@push('styles')
+<style>
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f4f7fb;
+        color: #263238;
+        min-height: 100vh;
+    }
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    button,
+    input,
+    select {
+        font-family: inherit;
+    }
 
-    <title>
-        Tambah Peserta Magang - MAGENTA
-    </title>
+    /* =====================================================
+       CONTENT
+    ====================================================== */
 
+    .content {
 
-    <style>
+        padding: 32px;
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    }
 
+    .content-header {
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #263238;
-            min-height: 100vh;
-        }
+        display: flex;
 
+        align-items: flex-start;
 
-        a {
-            text-decoration: none;
-        }
+        justify-content: space-between;
 
+        gap: 20px;
 
-        button,
-        input,
-        select {
-            font-family: inherit;
-        }
+        margin-bottom: 25px;
 
+    }
 
-        /* =====================================================
-           LAYOUT
-        ====================================================== */
+    .heading {
 
-        .sidebar {
+        font-size: 26px;
 
-            position: fixed;
+        color: #17313d;
 
-            top: 0;
-            left: 0;
-            bottom: 0;
+        font-weight: 800;
 
-            width: 275px;
+    }
 
-            background: #12345b;
+    .heading-description {
 
-            color: white;
+        color: #7b8b96;
 
-            padding: 24px 18px;
+        font-size: 13px;
 
-            overflow-y: auto;
+        margin-top: 7px;
 
-            z-index: 1000;
+    }
 
-        }
+    /* =====================================================
+       BUTTON
+    ====================================================== */
 
+    .btn {
 
-        .main-wrapper {
+        display: inline-flex;
 
-            margin-left: 275px;
+        align-items: center;
 
-            min-height: 100vh;
+        justify-content: center;
 
-        }
+        gap: 8px;
 
+        min-height: 42px;
 
-        /* =====================================================
-           BRAND
-        ====================================================== */
+        padding:
+            0 17px;
 
-        .brand {
+        border-radius: 8px;
 
-            display: flex;
+        border: none;
 
-            align-items: center;
+        font-size: 13px;
 
-            gap: 12px;
+        font-weight: 700;
 
-            padding:
-                4px 8px 28px;
+        cursor: pointer;
 
-            border-bottom:
-                1px solid rgba(255,255,255,0.12);
+        transition: 0.2s ease;
 
-            margin-bottom: 25px;
+    }
 
-        }
+    .btn-primary {
 
+        background: #0878a8;
 
-        .brand-mark {
+        color: white;
 
-            width: 44px;
-            height: 44px;
+    }
 
-            background: white;
+    .btn-primary:hover {
 
-            color: #12345b;
+        background: #075d83;
 
-            border-radius: 10px;
+        transform: translateY(-1px);
 
-            display: flex;
+    }
 
-            align-items: center;
+    .btn-secondary {
 
-            justify-content: center;
+        background: white;
 
-            font-size: 20px;
+        color: #52646e;
 
-            font-weight: 800;
+        border:
+            1px solid #dce5ea;
 
-            flex-shrink: 0;
+    }
 
-        }
+    .btn-secondary:hover {
 
+        background: #f7fafc;
 
-        .brand-name {
+    }
 
-            font-size: 18px;
+    /* =====================================================
+       FORM CARD
+    ====================================================== */
 
-            font-weight: 800;
+    .card {
 
-            line-height: 1.2;
+        background: white;
 
-        }
+        border:
+            1px solid #e2eaf0;
 
+        border-radius: 14px;
 
-        .brand-subtitle {
+        box-shadow:
+            0 8px 28px rgba(31, 77, 102, 0.06);
 
-            margin-top: 3px;
+        overflow: hidden;
 
-            font-size: 11px;
+    }
 
-            color:
-                rgba(255,255,255,0.65);
+    .card-header {
 
-        }
+        padding:
+            22px 25px;
 
+        border-bottom:
+            1px solid #edf1f4;
 
-        /* =====================================================
-           SIDEBAR MENU
-        ====================================================== */
+    }
 
-        .menu-section {
+    .card-title {
 
-            margin-bottom: 25px;
+        font-size: 16px;
 
-        }
+        font-weight: 800;
 
+        color: #263238;
 
-        .menu-title {
+    }
 
-            color:
-                rgba(255,255,255,0.45);
+    .card-description {
 
-            font-size: 10px;
+        margin-top: 5px;
 
-            font-weight: 800;
+        color: #8a99a3;
 
-            letter-spacing: 1.2px;
+        font-size: 12px;
 
-            margin:
-                0 10px 9px;
+        line-height: 1.6;
 
-            text-transform: uppercase;
+    }
 
-        }
+    .card-body {
 
+        padding:
+            25px;
 
-        .menu {
+    }
 
-            display: grid;
+    /* =====================================================
+       FORM
+    ====================================================== */
 
-            gap: 5px;
+    .form-grid {
 
-        }
+        display: grid;
 
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
-        .menu-link {
+        gap:
+            20px;
 
-            display: flex;
+    }
 
-            align-items: center;
+    .form-group {
 
-            gap: 11px;
+        display: flex;
 
-            color:
-                rgba(255,255,255,0.82);
+        flex-direction: column;
 
-            padding:
-                11px 12px;
+    }
 
-            border-radius: 8px;
+    .form-group.full {
 
-            font-size: 13px;
+        grid-column:
+            1 / -1;
 
-            font-weight: 600;
+    }
 
-            transition: 0.2s ease;
+    .form-label {
 
-        }
+        margin-bottom: 7px;
 
+        color: #34454f;
 
-        .menu-link:hover {
+        font-size: 12px;
 
-            background:
-                rgba(255,255,255,0.08);
+        font-weight: 800;
 
-            color: white;
+    }
 
-        }
+    .required {
 
+        color: #d64545;
 
-        .menu-link.active {
+    }
 
-            background:
-                rgba(255,255,255,0.14);
+    .form-input,
+    .form-select {
 
-            color: white;
+        width: 100%;
 
-            box-shadow:
-                inset 3px 0 0 #f47b20;
+        min-height: 44px;
 
-        }
+        padding:
+            0 13px;
 
+        border:
+            1px solid #dce5ea;
 
-        .menu-icon {
+        border-radius: 8px;
 
-            width: 20px;
+        background: white;
 
-            text-align: center;
+        color: #263238;
 
-            font-size: 15px;
+        font-size: 13px;
 
-            flex-shrink: 0;
+        outline: none;
 
-        }
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
 
+    }
 
-        /* =====================================================
-           SIDEBAR BOTTOM
-        ====================================================== */
+    .form-input:focus,
+    .form-select:focus {
 
-        .sidebar-bottom {
+        border-color: #0878a8;
 
-            margin-top: 35px;
+        box-shadow:
+            0 0 0 3px
+            rgba(8, 120, 168, 0.10);
 
-            padding-top: 20px;
+    }
 
-            border-top:
-                1px solid rgba(255,255,255,0.12);
+    textarea.form-input {
 
-        }
+        min-height: 105px;
 
+        padding:
+            12px 13px;
 
-        .logout-button {
+        resize: vertical;
 
-            width: 100%;
+        line-height: 1.6;
 
-            display: flex;
+    }
 
-            align-items: center;
+    .form-help {
 
-            gap: 11px;
+        margin-top: 6px;
 
-            border: none;
+        color: #8a99a3;
 
-            background: transparent;
+        font-size: 11px;
 
-            color:
-                rgba(255,255,255,0.78);
+        line-height: 1.6;
 
-            padding:
-                11px 12px;
+    }
 
-            border-radius: 8px;
+    .field-error {
 
-            cursor: pointer;
+        margin-top: 6px;
 
-            font-size: 13px;
+        color: #b42318;
 
-            font-weight: 600;
+        font-size: 11px;
 
-            text-align: left;
+    }
 
-        }
+    /* =====================================================
+       GOOGLE SHEETS BOX
+    ====================================================== */
 
+    .sheets-box {
 
-        .logout-button:hover {
+        background: #f7fafc;
 
-            background:
-                rgba(255,255,255,0.08);
+        border:
+            1px solid #e3ebf0;
 
-            color: white;
+        border-radius: 10px;
 
-        }
+        padding:
+            18px;
 
+    }
 
-        /* =====================================================
-           TOPBAR
-        ====================================================== */
+    .sheets-title {
 
-        .topbar {
+        display: flex;
 
-            height: 78px;
+        align-items: center;
 
-            background: white;
+        gap: 9px;
 
-            border-bottom:
-                1px solid #e3eaf1;
+        color: #0878a8;
 
-            display: flex;
+        font-size: 13px;
 
-            align-items: center;
+        font-weight: 800;
 
-            justify-content: space-between;
+        margin-bottom: 7px;
 
-            padding:
-                0 32px;
+    }
 
-        }
+    .sheets-description {
 
+        color: #74848e;
 
-        .page-title {
+        font-size: 11px;
 
-            font-size: 20px;
+        line-height: 1.7;
 
-            font-weight: 800;
+        margin-bottom: 14px;
 
-            color: #17313d;
+    }
 
-        }
+    /* =====================================================
+       FORM FOOTER
+    ====================================================== */
 
+    .card-footer {
 
-        .page-subtitle {
+        padding:
+            20px 25px;
 
-            margin-top: 4px;
+        background: #fbfcfd;
 
-            color: #7b8b96;
+        border-top:
+            1px solid #edf1f4;
 
-            font-size: 12px;
+        display: flex;
 
-        }
+        align-items: center;
 
+        justify-content: flex-end;
 
-        .user-info {
+        gap: 10px;
 
-            display: flex;
+    }
 
-            align-items: center;
+    /* =====================================================
+       RESPONSIVE
+    ====================================================== */
 
-            gap: 12px;
-
-        }
-
-
-        .user-avatar {
-
-            width: 40px;
-            height: 40px;
-
-            border-radius: 50%;
-
-            background: #eaf3f8;
-
-            color: #0878a8;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-weight: 800;
-
-            font-size: 14px;
-
-        }
-
-
-        .user-name {
-
-            font-size: 13px;
-
-            font-weight: 700;
-
-            color: #263238;
-
-        }
-
-
-        .user-role {
-
-            margin-top: 3px;
-
-            font-size: 11px;
-
-            color: #7b8b96;
-
-        }
-
-
-        /* =====================================================
-           CONTENT
-        ====================================================== */
+    @media (max-width: 900px) {
 
         .content {
 
-            padding: 32px;
+            padding: 22px;
 
         }
-
-
-        .content-header {
-
-            display: flex;
-
-            align-items: flex-start;
-
-            justify-content: space-between;
-
-            gap: 20px;
-
-            margin-bottom: 25px;
-
-        }
-
-
-        .heading {
-
-            font-size: 26px;
-
-            color: #17313d;
-
-            font-weight: 800;
-
-        }
-
-
-        .heading-description {
-
-            color: #7b8b96;
-
-            font-size: 13px;
-
-            margin-top: 7px;
-
-        }
-
-
-        /* =====================================================
-           BUTTON
-        ====================================================== */
-
-        .btn {
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            gap: 8px;
-
-            min-height: 42px;
-
-            padding:
-                0 17px;
-
-            border-radius: 8px;
-
-            border: none;
-
-            font-size: 13px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition: 0.2s ease;
-
-        }
-
-
-        .btn-primary {
-
-            background: #0878a8;
-
-            color: white;
-
-        }
-
-
-        .btn-primary:hover {
-
-            background: #075d83;
-
-            transform: translateY(-1px);
-
-        }
-
-
-        .btn-secondary {
-
-            background: white;
-
-            color: #52646e;
-
-            border:
-                1px solid #dce5ea;
-
-        }
-
-
-        .btn-secondary:hover {
-
-            background: #f7fafc;
-
-        }
-
-
-        /* =====================================================
-           ALERT ERROR
-        ====================================================== */
-
-        .error-alert {
-
-            background: #fff0f0;
-
-            border:
-                1px solid #ffd0d0;
-
-            color: #b42318;
-
-            border-radius: 9px;
-
-            padding:
-                13px 16px;
-
-            margin-bottom: 20px;
-
-            font-size: 13px;
-
-        }
-
-
-        .error-alert strong {
-
-            display: block;
-
-            margin-bottom: 7px;
-
-        }
-
-
-        .error-alert ul {
-
-            margin-left: 18px;
-
-        }
-
-
-        .error-alert li {
-
-            margin-bottom: 3px;
-
-        }
-
-
-        /* =====================================================
-           FORM CARD
-        ====================================================== */
-
-        .card {
-
-            background: white;
-
-            border:
-                1px solid #e2eaf0;
-
-            border-radius: 14px;
-
-            box-shadow:
-                0 8px 28px rgba(31, 77, 102, 0.06);
-
-            overflow: hidden;
-
-        }
-
-
-        .card-header {
-
-            padding:
-                22px 25px;
-
-            border-bottom:
-                1px solid #edf1f4;
-
-        }
-
-
-        .card-title {
-
-            font-size: 16px;
-
-            font-weight: 800;
-
-            color: #263238;
-
-        }
-
-
-        .card-description {
-
-            margin-top: 5px;
-
-            color: #8a99a3;
-
-            font-size: 12px;
-
-            line-height: 1.6;
-
-        }
-
-
-        .card-body {
-
-            padding:
-                25px;
-
-        }
-
-
-        /* =====================================================
-           FORM
-        ====================================================== */
 
         .form-grid {
 
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap:
-                20px;
+            grid-template-columns: 1fr;
 
         }
 
+        .form-group.full {
 
-        .form-group {
+            grid-column:
+                auto;
 
-            display: flex;
+        }
+
+    }
+
+    @media (max-width: 700px) {
+
+        .content {
+
+            padding: 18px;
+
+        }
+
+        .content-header {
 
             flex-direction: column;
 
         }
 
+        .card-body {
 
-        .form-group.full {
-
-            grid-column:
-                1 / -1;
+            padding: 20px;
 
         }
 
-
-        .form-label {
-
-            margin-bottom: 7px;
-
-            color: #34454f;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-        }
-
-
-        .required {
-
-            color: #d64545;
-
-        }
-
-
-        .form-input,
-        .form-select {
-
-            width: 100%;
-
-            min-height: 44px;
+        .card-header {
 
             padding:
-                0 13px;
-
-            border:
-                1px solid #dce5ea;
-
-            border-radius: 8px;
-
-            background: white;
-
-            color: #263238;
-
-            font-size: 13px;
-
-            outline: none;
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
+                20px;
 
         }
-
-
-        .form-input:focus,
-        .form-select:focus {
-
-            border-color: #0878a8;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(8, 120, 168, 0.10);
-
-        }
-
-
-        textarea.form-input {
-
-            min-height: 105px;
-
-            padding:
-                12px 13px;
-
-            resize: vertical;
-
-            line-height: 1.6;
-
-        }
-
-
-        .form-help {
-
-            margin-top: 6px;
-
-            color: #8a99a3;
-
-            font-size: 11px;
-
-            line-height: 1.6;
-
-        }
-
-
-        .field-error {
-
-            margin-top: 6px;
-
-            color: #b42318;
-
-            font-size: 11px;
-
-        }
-
-
-        /* =====================================================
-           GOOGLE SHEETS BOX
-        ====================================================== */
-
-        .sheets-box {
-
-            background: #f7fafc;
-
-            border:
-                1px solid #e3ebf0;
-
-            border-radius: 10px;
-
-            padding:
-                18px;
-
-        }
-
-
-        .sheets-title {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 9px;
-
-            color: #0878a8;
-
-            font-size: 13px;
-
-            font-weight: 800;
-
-            margin-bottom: 7px;
-
-        }
-
-
-        .sheets-description {
-
-            color: #74848e;
-
-            font-size: 11px;
-
-            line-height: 1.7;
-
-            margin-bottom: 14px;
-
-        }
-
-
-        /* =====================================================
-           FORM FOOTER
-        ====================================================== */
 
         .card-footer {
 
             padding:
-                20px 25px;
-
-            background: #fbfcfd;
-
-            border-top:
-                1px solid #edf1f4;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: flex-end;
-
-            gap: 10px;
+                18px 20px;
 
         }
 
+    }
 
-        /* =====================================================
-           RESPONSIVE
-        ====================================================== */
+</style>
+@endpush
 
-        @media (max-width: 900px) {
+@section('content')
 
-            .sidebar {
+    {{-- CONTENT --}}
 
-                width: 230px;
+    <div class="content">
 
-            }
+        {{-- HEADER --}}
 
-
-            .main-wrapper {
-
-                margin-left: 230px;
-
-            }
-
-
-            .content {
-
-                padding: 22px;
-
-            }
-
-
-            .topbar {
-
-                padding:
-                    0 22px;
-
-            }
-
-
-            .form-grid {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .form-group.full {
-
-                grid-column:
-                    auto;
-
-            }
-
-        }
-
-
-        @media (max-width: 700px) {
-
-            .sidebar {
-
-                position: static;
-
-                width: 100%;
-
-                min-height: auto;
-
-            }
-
-
-            .main-wrapper {
-
-                margin-left: 0;
-
-            }
-
-
-            .topbar {
-
-                height: auto;
-
-                min-height: 78px;
-
-                padding:
-                    15px 20px;
-
-            }
-
-
-            .content {
-
-                padding: 18px;
-
-            }
-
-
-            .content-header {
-
-                flex-direction: column;
-
-            }
-
-
-            .user-info {
-
-                display: none;
-
-            }
-
-
-            .card-body {
-
-                padding: 20px;
-
-            }
-
-
-            .card-header {
-
-                padding:
-                    20px;
-
-            }
-
-
-            .card-footer {
-
-                padding:
-                    18px 20px;
-
-            }
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-    @php
-
-        $role = auth()->user()->role;
-
-        $isSuperAdmin = $role === 'super_admin';
-
-        $dashboardRoute = $isSuperAdmin
-            ? route('superadmin.dashboard')
-            : route('admin.dashboard');
-
-        $roleLabel = $isSuperAdmin
-            ? 'Super Admin'
-            : 'Admin';
-
-        $userName = auth()->user()->name;
-
-        $userInitial = strtoupper(
-            substr($userName, 0, 1)
-        );
-
-    @endphp
-
-
-    {{-- =====================================================
-         SIDEBAR
-    ====================================================== --}}
-
-    <aside class="sidebar">
-
-
-        <div class="brand">
-
-            <div class="brand-mark">
-                M
-            </div>
+        <div class="content-header">
 
             <div>
 
-                <div class="brand-name">
-                    MAGENTA
+                <div class="heading">
+                    Tambah Peserta
                 </div>
 
-                <div class="brand-subtitle">
-                    Sistem Informasi Magang
+                <div class="heading-description">
+                    Isi data peserta magang dan tautkan Google Sheets absensinya.
                 </div>
 
             </div>
 
-        </div>
-
-
-        {{-- UTAMA --}}
-
-        <div class="menu-section">
-
-            <div class="menu-title">
-                Utama
-            </div>
-
-            <nav class="menu">
-
-                <a
-                    href="{{ $dashboardRoute }}"
-                    class="menu-link"
-                >
-
-                    <span class="menu-icon">
-                        ▦
-                    </span>
-
-                    Dashboard
-
-                </a>
-
-            </nav>
-
-        </div>
-
-
-        {{-- SISTEM --}}
-
-        <div class="menu-section">
-
-            <div class="menu-title">
-                Sistem
-            </div>
-
-            <nav class="menu">
-
-
-                {{-- PROFIL PERUSAHAAN --}}
-
-                <a
-                    href="{{ route('superadmin.perusahaan.index') }}"
-                    class="menu-link"
-                >
-
-                    <span class="menu-icon">
-                        ◉
-                    </span>
-
-                    Profil Perusahaan
-
-                </a>
-
-
-                {{-- BANNER --}}
-
-                <a
-                    href="{{ route('superadmin.banners.index') }}"
-                    class="menu-link"
-                >
-
-                    <span class="menu-icon">
-                        ▣
-                    </span>
-
-                    Kelola Banner
-
-                </a>
-
-
-                {{-- KONTEN --}}
-
-                <a
-                    href="{{ route('superadmin.pengaturan.index') }}"
-                    class="menu-link"
-                >
-
-                    <span class="menu-icon">
-                        ✎
-                    </span>
-
-                    Kelola Konten
-
-                </a>
-
-
-                {{-- PESERTA MAGANG --}}
-
-                <a
-                    href="{{ route('superadmin.peserta-magang.index') }}"
-                    class="menu-link active"
-                >
-
-                    <span class="menu-icon">
-                        ♙
-                    </span>
-
-                    Data Peserta
-
-                </a>
-
-
-                {{-- KHUSUS SUPER ADMIN --}}
-
-                @if($isSuperAdmin)
-
-                    <a
-                        href="{{ route('superadmin.pengguna.index') }}"
-                        class="menu-link"
-                    >
-
-                        <span class="menu-icon">
-                            ♟
-                        </span>
-
-                        Kelola Pengguna
-
-                    </a>
-
-                @endif
-
-
-            </nav>
-
-        </div>
-
-
-        {{-- LOGOUT --}}
-
-        <div class="sidebar-bottom">
-
-            <form
-                action="{{ route('logout') }}"
-                method="POST"
+            <a
+                href="{{ route('superadmin.peserta-magang.index') }}"
+                class="btn btn-secondary"
             >
 
-                @csrf
+                ← Kembali
 
-                <button
-                    type="submit"
-                    class="logout-button"
-                >
-
-                    <span class="menu-icon">
-                        ⇥
-                    </span>
-
-                    Keluar
-
-                </button>
-
-            </form>
+            </a>
 
         </div>
 
+        {{-- VALIDATION ERROR --}}
 
-    </aside>
+        <x-alert
+            type="error"
+            title="Data belum dapat disimpan."
+            :messages="$errors->all()"
+        />
 
+        {{-- FORM --}}
 
-    {{-- =====================================================
-         MAIN
-    ====================================================== --}}
+        <form
+            action="{{ route('superadmin.peserta-magang.store') }}"
+            method="POST"
+        >
 
-    <div class="main-wrapper">
+            @csrf
 
+            <section class="card">
 
-        {{-- TOPBAR --}}
+                {{-- CARD HEADER --}}
 
-        <header class="topbar">
+                <div class="card-header">
 
-
-            <div>
-
-                <div class="page-title">
-                    Tambah Peserta Magang
-                </div>
-
-                <div class="page-subtitle">
-                    Tambahkan data mahasiswa yang akan mengikuti kegiatan magang.
-                </div>
-
-            </div>
-
-
-            <div class="user-info">
-
-                <div class="user-avatar">
-                    {{ $userInitial }}
-                </div>
-
-                <div>
-
-                    <div class="user-name">
-                        {{ $userName }}
+                    <div class="card-title">
+                        Informasi Peserta Magang
                     </div>
 
-                    <div class="user-role">
-                        {{ $roleLabel }}
+                    <div class="card-description">
+                        Data ini digunakan untuk mengidentifikasi peserta dan menghubungkannya dengan data absensi.
                     </div>
 
                 </div>
 
-            </div>
+                {{-- CARD BODY --}}
 
+                <div class="card-body">
 
-        </header>
+                    <div class="form-grid">
 
+                        {{-- NAMA --}}
 
-        {{-- CONTENT --}}
+                        <div class="form-group">
 
-        <main class="content">
+                            <label
+                                for="nama"
+                                class="form-label"
+                            >
 
+                                Nama Lengkap
+                                <span class="required">
+                                    *
+                                </span>
 
-            {{-- HEADER --}}
+                            </label>
 
-            <div class="content-header">
+                            <input
+                                type="text"
+                                id="nama"
+                                name="nama"
+                                class="form-input"
+                                value="{{ old('nama') }}"
+                                placeholder="Masukkan nama lengkap mahasiswa"
+                                maxlength="255"
+                                required
+                            >
 
-                <div>
+                            @error('nama')
 
-                    <div class="heading">
-                        Tambah Peserta
-                    </div>
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
 
-                    <div class="heading-description">
-                        Isi data peserta magang dan tautkan Google Sheets absensinya.
-                    </div>
+                            @enderror
 
-                </div>
-
-
-                <a
-                    href="{{ route('superadmin.peserta-magang.index') }}"
-                    class="btn btn-secondary"
-                >
-
-                    ← Kembali
-
-                </a>
-
-            </div>
-
-
-            {{-- VALIDATION ERROR --}}
-
-            @if($errors->any())
-
-                <div class="error-alert">
-
-                    <strong>
-                        Data belum dapat disimpan.
-                    </strong>
-
-                    <ul>
-
-                        @foreach($errors->all() as $error)
-
-                            <li>
-                                {{ $error }}
-                            </li>
-
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
-
-
-            {{-- FORM --}}
-
-            <form
-                action="{{ route('superadmin.peserta-magang.store') }}"
-                method="POST"
-            >
-
-                @csrf
-
-
-                <section class="card">
-
-
-                    {{-- CARD HEADER --}}
-
-                    <div class="card-header">
-
-                        <div class="card-title">
-                            Informasi Peserta Magang
                         </div>
 
-                        <div class="card-description">
-                            Data ini digunakan untuk mengidentifikasi peserta dan menghubungkannya dengan data absensi.
+                        {{-- NIM --}}
+
+                        <div class="form-group">
+
+                            <label
+                                for="nim"
+                                class="form-label"
+                            >
+                                NIM
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nim"
+                                name="nim"
+                                class="form-input"
+                                value="{{ old('nim') }}"
+                                placeholder="Masukkan NIM"
+                                maxlength="50"
+                            >
+
+                            @error('nim')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
                         </div>
 
-                    </div>
+                        {{-- KAMPUS --}}
 
+                        <div class="form-group">
 
-                    {{-- CARD BODY --}}
+                            <label
+                                for="asal_kampus"
+                                class="form-label"
+                            >
+                                Asal Kampus
+                            </label>
 
-                    <div class="card-body">
+                            <input
+                                type="text"
+                                id="asal_kampus"
+                                name="asal_kampus"
+                                class="form-input"
+                                value="{{ old('asal_kampus') }}"
+                                placeholder="Contoh: Politeknik Madiun"
+                                maxlength="255"
+                            >
 
+                            @error('asal_kampus')
 
-                        <div class="form-grid">
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
 
+                            @enderror
 
-                            {{-- NAMA --}}
+                        </div>
 
-                            <div class="form-group">
+                        {{-- PROGRAM STUDI --}}
 
-                                <label
-                                    for="nama"
-                                    class="form-label"
+                        <div class="form-group">
+
+                            <label
+                                for="program_studi"
+                                class="form-label"
+                            >
+                                Program Studi
+                            </label>
+
+                            <input
+                                type="text"
+                                id="program_studi"
+                                name="program_studi"
+                                class="form-input"
+                                value="{{ old('program_studi') }}"
+                                placeholder="Contoh: Teknik Informatika"
+                                maxlength="255"
+                            >
+
+                            @error('program_studi')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                        {{-- PERIODE MULAI --}}
+
+                        <div class="form-group">
+
+                            <label
+                                for="periode_mulai"
+                                class="form-label"
+                            >
+                                Periode Mulai
+                            </label>
+
+                            <input
+                                type="date"
+                                id="periode_mulai"
+                                name="periode_mulai"
+                                class="form-input"
+                                value="{{ old('periode_mulai') }}"
+                            >
+
+                            @error('periode_mulai')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                        {{-- PERIODE SELESAI --}}
+
+                        <div class="form-group">
+
+                            <label
+                                for="periode_selesai"
+                                class="form-label"
+                            >
+                                Periode Selesai
+                            </label>
+
+                            <input
+                                type="date"
+                                id="periode_selesai"
+                                name="periode_selesai"
+                                class="form-input"
+                                value="{{ old('periode_selesai') }}"
+                            >
+
+                            @error('periode_selesai')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                        {{-- PEMBIMBING --}}
+
+                        <div class="form-group">
+
+                            <label
+                                for="pembimbing"
+                                class="form-label"
+                            >
+                                Pembimbing / Mentor
+                            </label>
+
+                            <input
+                                type="text"
+                                id="pembimbing"
+                                name="pembimbing"
+                                class="form-input"
+                                value="{{ old('pembimbing') }}"
+                                placeholder="Nama pembimbing / mentor"
+                                maxlength="255"
+                            >
+
+                            @error('pembimbing')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                        {{-- STATUS --}}
+
+                        <div class="form-group">
+
+                            <label
+                                for="status"
+                                class="form-label"
+                            >
+
+                                Status
+                                <span class="required">
+                                    *
+                                </span>
+
+                            </label>
+
+                            <select
+                                id="status"
+                                name="status"
+                                class="form-select"
+                                required
+                            >
+
+                                <option
+                                    value="aktif"
+                                    {{ old('status', 'aktif') === 'aktif' ? 'selected' : '' }}
                                 >
+                                    Aktif
+                                </option>
 
-                                    Nama Lengkap
-                                    <span class="required">
-                                        *
+                                <option
+                                    value="selesai"
+                                    {{ old('status') === 'selesai' ? 'selected' : '' }}
+                                >
+                                    Selesai
+                                </option>
+
+                            </select>
+
+                            @error('status')
+
+                                <div class="field-error">
+                                    {{ $message }}
+                                </div>
+
+                            @enderror
+
+                        </div>
+
+                        {{-- GOOGLE SHEETS --}}
+
+                        <div class="form-group full">
+
+                            <div class="sheets-box">
+
+                                <div class="sheets-title">
+
+                                    <span>
+                                        ▣
                                     </span>
 
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="nama"
-                                    name="nama"
-                                    class="form-input"
-                                    value="{{ old('nama') }}"
-                                    placeholder="Masukkan nama lengkap mahasiswa"
-                                    maxlength="255"
-                                    required
-                                >
-
-
-                                @error('nama')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- NIM --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="nim"
-                                    class="form-label"
-                                >
-                                    NIM
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="nim"
-                                    name="nim"
-                                    class="form-input"
-                                    value="{{ old('nim') }}"
-                                    placeholder="Masukkan NIM"
-                                    maxlength="50"
-                                >
-
-
-                                @error('nim')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- KAMPUS --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="asal_kampus"
-                                    class="form-label"
-                                >
-                                    Asal Kampus
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="asal_kampus"
-                                    name="asal_kampus"
-                                    class="form-input"
-                                    value="{{ old('asal_kampus') }}"
-                                    placeholder="Contoh: Politeknik Madiun"
-                                    maxlength="255"
-                                >
-
-
-                                @error('asal_kampus')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- PROGRAM STUDI --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="program_studi"
-                                    class="form-label"
-                                >
-                                    Program Studi
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="program_studi"
-                                    name="program_studi"
-                                    class="form-input"
-                                    value="{{ old('program_studi') }}"
-                                    placeholder="Contoh: Teknik Informatika"
-                                    maxlength="255"
-                                >
-
-
-                                @error('program_studi')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- PERIODE MULAI --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="periode_mulai"
-                                    class="form-label"
-                                >
-                                    Periode Mulai
-                                </label>
-
-
-                                <input
-                                    type="date"
-                                    id="periode_mulai"
-                                    name="periode_mulai"
-                                    class="form-input"
-                                    value="{{ old('periode_mulai') }}"
-                                >
-
-
-                                @error('periode_mulai')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- PERIODE SELESAI --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="periode_selesai"
-                                    class="form-label"
-                                >
-                                    Periode Selesai
-                                </label>
-
-
-                                <input
-                                    type="date"
-                                    id="periode_selesai"
-                                    name="periode_selesai"
-                                    class="form-input"
-                                    value="{{ old('periode_selesai') }}"
-                                >
-
-
-                                @error('periode_selesai')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- PEMBIMBING --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="pembimbing"
-                                    class="form-label"
-                                >
-                                    Pembimbing / Mentor
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="pembimbing"
-                                    name="pembimbing"
-                                    class="form-input"
-                                    value="{{ old('pembimbing') }}"
-                                    placeholder="Nama pembimbing / mentor"
-                                    maxlength="255"
-                                >
-
-
-                                @error('pembimbing')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- STATUS --}}
-
-                            <div class="form-group">
-
-                                <label
-                                    for="status"
-                                    class="form-label"
-                                >
-
-                                    Status
-                                    <span class="required">
-                                        *
-                                    </span>
-
-                                </label>
-
-
-                                <select
-                                    id="status"
-                                    name="status"
-                                    class="form-select"
-                                    required
-                                >
-
-                                    <option
-                                        value="aktif"
-                                        {{ old('status', 'aktif') === 'aktif' ? 'selected' : '' }}
-                                    >
-                                        Aktif
-                                    </option>
-
-                                    <option
-                                        value="selesai"
-                                        {{ old('status') === 'selesai' ? 'selected' : '' }}
-                                    >
-                                        Selesai
-                                    </option>
-
-                                </select>
-
-
-                                @error('status')
-
-                                    <div class="field-error">
-                                        {{ $message }}
-                                    </div>
-
-                                @enderror
-
-                            </div>
-
-
-                            {{-- GOOGLE SHEETS --}}
-
-                            <div class="form-group full">
-
-                                <div class="sheets-box">
-
-
-                                    <div class="sheets-title">
-
-                                        <span>
-                                            ▣
-                                        </span>
-
-                                        Google Sheets Absensi
-
-                                    </div>
-
-
-                                    <div class="sheets-description">
-                                        Masukkan link Google Sheets yang digunakan untuk menyimpan data absensi dan Daily Activity peserta ini.
-                                    </div>
-
-
-                                    <label
-                                        for="google_sheet_url"
-                                        class="form-label"
-                                    >
-
-                                        Link Google Sheets
-                                        <span class="required">
-                                            *
-                                        </span>
-
-                                    </label>
-
-
-                                    <input
-                                        type="url"
-                                        id="google_sheet_url"
-                                        name="google_sheet_url"
-                                        class="form-input"
-                                        value="{{ old('google_sheet_url') }}"
-                                        placeholder="https://docs.google.com/spreadsheets/d/..."
-                                        maxlength="2048"
-                                    >
-
-
-                                    <div class="form-help">
-                                        Contoh: https://docs.google.com/spreadsheets/d/...
-                                    </div>
-
-
-                                    @error('google_sheet_url')
-
-                                        <div class="field-error">
-                                            {{ $message }}
-                                        </div>
-
-                                    @enderror
-
+                                    Google Sheets Absensi
 
                                 </div>
 
-                            </div>
+                                <div class="sheets-description">
+                                    Masukkan link Google Sheets yang digunakan untuk menyimpan data absensi dan Daily Activity peserta ini.
+                                </div>
 
+                                <label
+                                    for="google_sheet_url"
+                                    class="form-label"
+                                >
+
+                                    Link Google Sheets
+                                    <span class="required">
+                                        *
+                                    </span>
+
+                                </label>
+
+                                <input
+                                    type="url"
+                                    id="google_sheet_url"
+                                    name="google_sheet_url"
+                                    class="form-input"
+                                    value="{{ old('google_sheet_url') }}"
+                                    placeholder="https://docs.google.com/spreadsheets/d/..."
+                                    maxlength="2048"
+                                >
+
+                                <div class="form-help">
+                                    Contoh: https://docs.google.com/spreadsheets/d/...
+                                </div>
+
+                                @error('google_sheet_url')
+
+                                    <div class="field-error">
+                                        {{ $message }}
+                                    </div>
+
+                                @enderror
+
+                            </div>
 
                         </div>
 
                     </div>
 
+                </div>
 
-                    {{-- CARD FOOTER --}}
+                {{-- CARD FOOTER --}}
 
-                    <div class="card-footer">
+                <div class="card-footer">
 
-                        <a
-                            href="{{ route('superadmin.peserta-magang.index') }}"
-                            class="btn btn-secondary"
-                        >
-                            Batal
-                        </a>
+                    <a
+                        href="{{ route('superadmin.peserta-magang.index') }}"
+                        class="btn btn-secondary"
+                    >
+                        Batal
+                    </a>
 
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
 
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >
+                        Simpan Peserta
 
-                            Simpan Peserta
+                    </button>
 
-                        </button>
+                </div>
 
-                    </div>
+            </section>
 
-
-                </section>
-
-            </form>
-
-
-        </main>
-
+        </form>
 
     </div>
 
-
-</body>
-
-</html>
+@endsection
