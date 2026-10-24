@@ -5,45 +5,17 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PesertaMagangRequest;
 use App\Models\PesertaMagang;
-use App\Services\GoogleSheetsService;
+use App\Services\AbsensiSheetService;
+use App\Services\CredentialTidakDitemukanException;
+use App\Services\RekapAbsensi;
+use App\Services\TabBulanTidakDitemukanException;
+use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PesertaMagangController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | LAYOUT GOOGLE SHEETS ABSENSI
-    |--------------------------------------------------------------------------
-    |
-    | B11 = No            G11 = Siang Keluar
-    | C11 = Tanggal       H11 = Activity
-    | D11 = Pagi Masuk    I11 = Output
-    | E11 = Pagi Keluar   J11 = Lokasi
-    | F11 = Siang Masuk   K11 = Action
-    |
-    | Baris 11 = header, baris 12 = sub header, baris 13 = data pertama.
-    |
-    */
-
-    private const SHEET_HEADER_ROW = 11;
-
-    private const SHEET_FIRST_DATA_ROW = 13;
-
-    private const SHEET_COLUMNS = [
-        'no',
-        'tanggal',
-        'pagi_masuk',
-        'pagi_keluar',
-        'siang_masuk',
-        'siang_keluar',
-        'activity',
-        'output',
-        'lokasi',
-        'action',
-    ];
-
     /**
      * Menampilkan daftar peserta magang.
      */
@@ -79,52 +51,50 @@ class PesertaMagangController extends Controller
     }
 
     /**
-     * Menampilkan detail peserta
-     * sekaligus membaca data dari Google Sheets.
+     * Menampilkan detail peserta sekaligus membaca absensi
+     * bulan terpilih dari Google Sheets.
      */
-    public function show(PesertaMagang $pesertaMagang): View
+    public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi): View
     {
-        // Absensi lokal tetap dimuat untuk menjaga data lama.
-        $pesertaMagang->load([
-            'absensis' => fn ($query) => $query->orderBy('tanggal', 'desc'),
-        ]);
+        $bulan = $this->bulanDariRequest($request);
 
         $sheetRows = [];
         $sheetError = null;
+        $tabAktif = null;
+        $diambilPada = null;
 
-        // Nama tab bulan, contoh: SEPTEMBER 2026
-        $currentMonthTitle = $this->currentSheetTitle();
-
-        if (!$pesertaMagang->google_sheet_url) {
+        if (! $pesertaMagang->google_sheet_url) {
             $sheetError = 'Peserta ini belum memiliki link Google Sheets.';
         } else {
             try {
-                $range = "'{$currentMonthTitle}'!B" . self::SHEET_HEADER_ROW . ':K100';
+                $hasil = $absensi->ambil($pesertaMagang->google_sheet_url, $bulan);
 
-                $values = app(GoogleSheetsService::class)->getValuesFromUrl(
-                    $pesertaMagang->google_sheet_url,
-                    $range
-                );
-
-                $sheetRows = $this->mapSheetRows($values);
+                $sheetRows = $hasil['rows'];
+                $tabAktif = $hasil['tab'];
+                $diambilPada = CarbonImmutable::parse($hasil['diambil_pada']);
+            } catch (TabBulanTidakDitemukanException $e) {
+                $sheetError = 'Tab bulan '.$bulan->translatedFormat('F Y').' belum ada di Google Sheets peserta. '
+                    .'Tab yang tersedia: '.($e->tersedia ? implode(', ', $e->tersedia) : '(tidak ada)').'.';
+            } catch (CredentialTidakDitemukanException $e) {
+                report($e);
+                $sheetError = 'Koneksi Google Sheets belum diatur: file credential service account belum dipasang di server.';
             } catch (\Throwable $e) {
                 report($e);
-
                 $sheetError = 'Data Google Sheets belum dapat dibaca. '
-                    . 'Periksa koneksi, URL spreadsheet, '
-                    . 'dan izin Service Account.';
+                    .'Periksa koneksi, URL spreadsheet, dan izin Service Account.';
             }
         }
 
-        return view(
-            'superadmin.peserta-magang.show',
-            compact(
-                'pesertaMagang',
-                'sheetRows',
-                'currentMonthTitle',
-                'sheetError'
-            )
-        );
+        return view('superadmin.peserta-magang.show', [
+            'pesertaMagang' => $pesertaMagang,
+            'sheetRows' => $sheetRows,
+            'sheetError' => $sheetError,
+            'rekap' => RekapAbsensi::hitung($sheetRows),
+            'bulanDipilih' => $bulan,
+            'pilihanBulan' => $this->pilihanBulan($pesertaMagang, $bulan),
+            'tabAktif' => $tabAktif,
+            'diambilPada' => $diambilPada,
+        ]);
     }
 
     /**
@@ -153,73 +123,83 @@ class PesertaMagangController extends Controller
     }
 
     /**
-     * Memperbarui absensi peserta langsung
-     * ke Google Sheets.
+     * Memperbarui absensi peserta langsung ke Google Sheets.
      */
     public function updateAbsensi(
         Request $request,
-        PesertaMagang $pesertaMagang
+        PesertaMagang $pesertaMagang,
+        AbsensiSheetService $absensi
     ): RedirectResponse {
         $validated = $request->validate([
-            'sheet_row' => ['required', 'integer', 'min:' . self::SHEET_FIRST_DATA_ROW],
+            'bulan' => ['required', 'date_format:Y-m'],
+            'sheet_row' => ['required', 'integer', 'min:'.config('absensi.first_data_row'), 'max:'.config('absensi.last_row')],
             'pagi_masuk' => ['nullable', 'date_format:H:i'],
             'pagi_keluar' => ['nullable', 'date_format:H:i'],
             'siang_masuk' => ['nullable', 'date_format:H:i'],
             'siang_keluar' => ['nullable', 'date_format:H:i'],
         ], [
+            'bulan.required' => 'Bulan absensi tidak ditemukan.',
+            'bulan.date_format' => 'Bulan absensi tidak valid.',
             'sheet_row.required' => 'Baris Google Sheets tidak ditemukan.',
             'sheet_row.integer' => 'Baris Google Sheets tidak valid.',
             'sheet_row.min' => 'Baris Google Sheets tidak valid.',
+            'sheet_row.max' => 'Baris Google Sheets tidak valid.',
             'pagi_masuk.date_format' => 'Format Pagi Masuk harus HH:MM.',
             'pagi_keluar.date_format' => 'Format Pagi Keluar harus HH:MM.',
             'siang_masuk.date_format' => 'Format Siang Masuk harus HH:MM.',
             'siang_keluar.date_format' => 'Format Siang Keluar harus HH:MM.',
         ]);
 
-        $redirect = redirect()->route(
-            'superadmin.peserta-magang.show',
-            $pesertaMagang
-        );
+        $bulan = CarbonImmutable::createFromFormat('!Y-m', $validated['bulan']);
 
-        if (!$pesertaMagang->google_sheet_url) {
-            return $redirect->with(
-                'error',
-                'Peserta ini belum memiliki Google Sheets.'
-            );
+        $redirect = redirect()->route('superadmin.peserta-magang.show', [
+            'pesertaMagang' => $pesertaMagang,
+            'bulan' => $validated['bulan'],
+        ]);
+
+        if (! $pesertaMagang->google_sheet_url) {
+            return $redirect->with('error', 'Peserta ini belum memiliki Google Sheets.');
         }
 
         try {
-            $sheetRow = (int) $validated['sheet_row'];
-
-            // D = Pagi Masuk, E = Pagi Keluar, F = Siang Masuk, G = Siang Keluar
-            $range = "'{$this->currentSheetTitle()}'!D{$sheetRow}:G{$sheetRow}";
-
-            $values = [[
-                $validated['pagi_masuk'] ?? '',
-                $validated['pagi_keluar'] ?? '',
-                $validated['siang_masuk'] ?? '',
-                $validated['siang_keluar'] ?? '',
-            ]];
-
-            app(GoogleSheetsService::class)->updateValuesFromUrl(
+            $absensi->perbaruiWaktu(
                 $pesertaMagang->google_sheet_url,
-                $range,
-                $values
+                $bulan,
+                (int) $validated['sheet_row'],
+                $validated
             );
 
-            return $redirect->with(
-                'success',
-                'Data absensi berhasil diperbarui di Google Sheets.'
-            );
+            return $redirect->with('success', 'Data absensi berhasil diperbarui di Google Sheets.');
         } catch (\Throwable $e) {
             report($e);
 
             return $redirect->with(
                 'error',
-                'Data absensi gagal diperbarui. '
-                . 'Periksa koneksi dan izin Google Sheets.'
+                'Data absensi gagal diperbarui. Periksa koneksi dan izin Google Sheets.'
             );
         }
+    }
+
+    /**
+     * Hapus cache dan baca ulang absensi dari Google Sheets.
+     */
+    public function muatUlangAbsensi(
+        Request $request,
+        PesertaMagang $pesertaMagang,
+        AbsensiSheetService $absensi
+    ): RedirectResponse {
+        $bulan = $this->bulanDariRequest($request);
+
+        if ($pesertaMagang->google_sheet_url) {
+            $absensi->lupakan($pesertaMagang->google_sheet_url, $bulan);
+        }
+
+        return redirect()
+            ->route('superadmin.peserta-magang.show', [
+                'pesertaMagang' => $pesertaMagang,
+                'bulan' => $bulan->format('Y-m'),
+            ])
+            ->with('success', 'Data absensi dimuat ulang dari Google Sheets.');
     }
 
     /**
@@ -238,44 +218,50 @@ class PesertaMagangController extends Controller
     }
 
     /**
-     * Nama tab Google Sheets untuk bulan berjalan.
+     * Bulan dari parameter ?bulan=YYYY-MM, default bulan berjalan.
      */
-    private function currentSheetTitle(): string
+    private function bulanDariRequest(Request $request): CarbonImmutable
     {
-        return strtoupper(now()->format('F Y'));
+        $bulan = (string) $request->input('bulan');
+
+        if (preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $bulan)) {
+            return CarbonImmutable::createFromFormat('!Y-m', $bulan);
+        }
+
+        return CarbonImmutable::now()->startOfMonth();
     }
 
     /**
-     * Mengubah data mentah Google Sheets menjadi baris absensi.
+     * Pilihan bulan: sepanjang periode magang (maks. 24 bulan),
+     * atau 6 bulan terakhir bila periode belum diisi.
+     *
+     * @return array<string, string> [YYYY-MM => "Oktober 2026"]
      */
-    private function mapSheetRows(array $values): array
+    private function pilihanBulan(PesertaMagang $peserta, CarbonImmutable $dipilih): array
     {
-        $rows = [];
-        $columnCount = count(self::SHEET_COLUMNS);
-        $headerRows = self::SHEET_FIRST_DATA_ROW - self::SHEET_HEADER_ROW;
+        $sekarang = CarbonImmutable::now()->startOfMonth();
 
-        foreach ($values as $index => $row) {
-            // Lewati baris header & sub header.
-            if ($index < $headerRows) {
-                continue;
-            }
+        $mulai = $peserta->periode_mulai
+            ? CarbonImmutable::parse($peserta->periode_mulai)->startOfMonth()
+            : $sekarang->subMonths(5);
 
-            $row = array_pad($row, $columnCount, '');
+        $selesai = $peserta->periode_selesai
+            ? CarbonImmutable::parse($peserta->periode_selesai)->startOfMonth()
+            : $sekarang;
 
-            // Lewati baris kosong.
-            if (collect($row)->every(fn ($value) => trim((string) $value) === '')) {
-                continue;
-            }
-
-            $rows[] = [
-                // Nomor baris asli di Google Sheets.
-                'sheet_row' => $index + self::SHEET_HEADER_ROW,
-            ] + array_combine(
-                self::SHEET_COLUMNS,
-                array_slice($row, 0, $columnCount)
-            );
+        if ($selesai->lessThan($mulai)) {
+            $selesai = $mulai;
         }
 
-        return $rows;
+        $pilihan = [];
+
+        for ($bulan = $mulai; $bulan->lessThanOrEqualTo($selesai) && count($pilihan) < 24; $bulan = $bulan->addMonth()) {
+            $pilihan[$bulan->format('Y-m')] = $bulan->translatedFormat('F Y');
+        }
+
+        $pilihan[$dipilih->format('Y-m')] ??= $dipilih->translatedFormat('F Y');
+        ksort($pilihan);
+
+        return $pilihan;
     }
 }

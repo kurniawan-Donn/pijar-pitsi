@@ -21,8 +21,12 @@ app/Http/Requests/
   CekStatusPengajuanRequest    -> validasi cek status (NIM + email)
 
 app/Services/
-  GoogleSheetsService  -> baca/tulis absensi ke Google Sheets
+  GoogleSheetsService  -> koneksi API Google Sheets
                           (credential: storage/app/google/service-account.json)
+  AbsensiSheetService  -> baca/tulis absensi per bulan + cache
+  RekapAbsensi         -> hitung hadir/izin/sakit/belum diisi
+
+config/absensi.php     -> layout sheet absensi, path credential, lama cache
 
 resources/views/
   layouts/     -> dashboard.blade.php (layout Admin & Super Admin)
