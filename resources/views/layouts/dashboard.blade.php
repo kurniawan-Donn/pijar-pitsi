@@ -51,7 +51,7 @@
                 @endif
             </div>
 
-            <div class="dash-user-info">
+            <a href="{{ route('profil.edit') }}" class="dash-user-info" title="Profil & password">
 
                 <div class="dash-user-avatar">
                     {{ strtoupper(substr($authUser?->name ?? 'A', 0, 1)) }}
@@ -63,11 +63,11 @@
                     </div>
 
                     <div class="dash-user-role">
-                        {{ $roleLabel }}
+                        {{ $roleLabel }} · Profil
                     </div>
                 </div>
 
-            </div>
+            </a>
 
         </header>
 

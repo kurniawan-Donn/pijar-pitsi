@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Concerns\MemilihBulanAbsensi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PesertaMagangRequest;
+use App\Models\LogAktivitas;
 use App\Models\PesertaMagang;
 use App\Services\AbsensiSheetService;
 use App\Services\Logbook;
@@ -157,6 +158,13 @@ class PesertaMagangController extends Controller
                 $validated
             );
 
+            LogAktivitas::catat(
+                'ubah_absensi',
+                $pesertaMagang,
+                "Absensi {$pesertaMagang->nama} ({$validated['bulan']}, baris {$validated['sheet_row']}) diperbarui",
+                array_intersect_key($validated, array_flip(['bulan', 'sheet_row', 'pagi_masuk', 'pagi_keluar', 'siang_masuk', 'siang_keluar']))
+            );
+
             return $redirect->with('success', 'Data absensi berhasil diperbarui di Google Sheets.');
         } catch (\Throwable $e) {
             report($e);
@@ -198,6 +206,13 @@ class PesertaMagangController extends Controller
      */
     public function destroy(PesertaMagang $pesertaMagang): RedirectResponse
     {
+        LogAktivitas::catat(
+            'hapus_peserta',
+            $pesertaMagang,
+            "Peserta {$pesertaMagang->nama} dihapus",
+            ['nim' => $pesertaMagang->nim, 'status' => $pesertaMagang->status]
+        );
+
         $pesertaMagang->delete();
 
         return redirect()

@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('mahasiswa_id')
-                  ->constrained('mahasiswas')
-                  ->onDelete('cascade');
+                ->constrained('mahasiswas')
+                ->onDelete('cascade');
 
             $table->foreignId('perusahaan_id')
-                  ->constrained('perusahaans')
-                  ->onDelete('cascade');
+                ->constrained('perusahaans')
+                ->onDelete('cascade');
 
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->enum('status', [
                 'menunggu',
                 'disetujui',
-                'ditolak'
+                'ditolak',
             ])->default('menunggu');
 
             $table->text('keterangan')->nullable();

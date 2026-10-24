@@ -9,39 +9,39 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('perusahaans', function (Blueprint $table) {
-            if (!Schema::hasColumn('perusahaans', 'nama')) {
+            if (! Schema::hasColumn('perusahaans', 'nama')) {
                 $table->string('nama')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'alamat')) {
+            if (! Schema::hasColumn('perusahaans', 'alamat')) {
                 $table->text('alamat')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'kota')) {
+            if (! Schema::hasColumn('perusahaans', 'kota')) {
                 $table->string('kota', 100)->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'telepon')) {
+            if (! Schema::hasColumn('perusahaans', 'telepon')) {
                 $table->string('telepon', 50)->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'email')) {
+            if (! Schema::hasColumn('perusahaans', 'email')) {
                 $table->string('email')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'website')) {
+            if (! Schema::hasColumn('perusahaans', 'website')) {
                 $table->string('website')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'nama_pembimbing')) {
+            if (! Schema::hasColumn('perusahaans', 'nama_pembimbing')) {
                 $table->string('nama_pembimbing')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'jabatan_pembimbing')) {
+            if (! Schema::hasColumn('perusahaans', 'jabatan_pembimbing')) {
                 $table->string('jabatan_pembimbing')->nullable();
             }
 
-            if (!Schema::hasColumn('perusahaans', 'deskripsi')) {
+            if (! Schema::hasColumn('perusahaans', 'deskripsi')) {
                 $table->text('deskripsi')->nullable();
             }
         });

@@ -286,6 +286,8 @@
     </div>
 
     <!-- VALIDATION ERROR -->
+    <x-alert type="error" :message="session('error')" />
+
     <x-alert
         type="error"
         title="Data belum dapat disimpan."

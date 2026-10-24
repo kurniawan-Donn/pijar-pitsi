@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Models\LogAktivitas;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserController extends Controller
 {
@@ -53,9 +55,8 @@ class UserController extends Controller
 
             'password' => [
                 'required',
-                'string',
-                'min:8',
                 'confirmed',
+                Password::min(8)->letters()->numbers(),
             ],
 
             'role' => [
@@ -110,9 +111,8 @@ class UserController extends Controller
 
             'password' => [
                 'nullable',
-                'string',
-                'min:8',
                 'confirmed',
+                Password::min(8)->letters()->numbers(),
             ],
 
             'role' => [
@@ -126,6 +126,22 @@ class UserController extends Controller
 
         /*
         |--------------------------------------------------------------
+        | Role akun sendiri dan Super Admin terakhir tidak boleh turun,
+        | supaya sistem tidak pernah kehilangan Super Admin.
+        |--------------------------------------------------------------
+        */
+        $turunDariSuperAdmin = $user->role === 'super_admin' && $validated['role'] !== 'super_admin';
+
+        if ($turunDariSuperAdmin && $user->id === auth()->id()) {
+            return back()->withInput()->with('error', 'Role akun yang sedang digunakan tidak dapat diturunkan.');
+        }
+
+        if ($turunDariSuperAdmin && $this->superAdminTerakhir($user)) {
+            return back()->withInput()->with('error', 'Minimal harus ada satu Super Admin. Tambahkan Super Admin lain terlebih dahulu.');
+        }
+
+        /*
+        |--------------------------------------------------------------
         | Password hanya diperbarui jika diisi.
         |--------------------------------------------------------------
         */
@@ -133,7 +149,19 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
+        $roleLama = $user->role;
+
         $user->update($validated);
+
+        LogAktivitas::catat(
+            'ubah_pengguna',
+            $user,
+            "Akun {$user->email} diperbarui",
+            array_filter([
+                'role' => $roleLama !== $user->role ? ['dari' => $roleLama, 'ke' => $user->role] : null,
+                'password_diganti' => isset($validated['password']) ?: null,
+            ])
+        );
 
         return redirect()
             ->route('superadmin.pengguna.index')
@@ -162,6 +190,14 @@ class UserController extends Controller
                 );
         }
 
+        if ($user->role === 'super_admin' && $this->superAdminTerakhir($user)) {
+            return redirect()
+                ->route('superadmin.pengguna.index')
+                ->with('error', 'Super Admin terakhir tidak dapat dihapus.');
+        }
+
+        LogAktivitas::catat('hapus_pengguna', $user, "Akun {$user->email} ({$user->role}) dihapus");
+
         $user->delete();
 
         return redirect()
@@ -170,5 +206,13 @@ class UserController extends Controller
                 'success',
                 'Pengguna berhasil dihapus.'
             );
+    }
+
+    /**
+     * Apakah pengguna ini satu-satunya Super Admin.
+     */
+    private function superAdminTerakhir(User $user): bool
+    {
+        return ! User::where('role', 'super_admin')->whereKeyNot($user->id)->exists();
     }
 }

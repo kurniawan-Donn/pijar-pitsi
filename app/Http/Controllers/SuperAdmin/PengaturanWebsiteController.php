@@ -21,7 +21,6 @@ class PengaturanWebsiteController extends Controller
         );
     }
 
-
     /**
      * Menyimpan seluruh perubahan konten website.
      */
@@ -45,7 +44,6 @@ class PengaturanWebsiteController extends Controller
                 'nullable',
                 'string',
             ],
-
 
             /*
             |--------------------------------------------------------------------------
@@ -97,7 +95,6 @@ class PengaturanWebsiteController extends Controller
                 'string',
             ],
 
-
             /*
             |--------------------------------------------------------------------------
             | PERSYARATAN MAGANG
@@ -147,7 +144,6 @@ class PengaturanWebsiteController extends Controller
                 'nullable',
                 'string',
             ],
-
 
             /*
             |--------------------------------------------------------------------------
@@ -210,7 +206,6 @@ class PengaturanWebsiteController extends Controller
                 'string',
             ],
 
-
             /*
             |--------------------------------------------------------------------------
             | GOOGLE FORM
@@ -219,12 +214,11 @@ class PengaturanWebsiteController extends Controller
 
             'google_form_url' => [
                 'nullable',
-                'url',
+                'url:http,https',
                 'max:2048',
             ],
 
         ]);
-
 
         /*
         |--------------------------------------------------------------------------
@@ -234,12 +228,11 @@ class PengaturanWebsiteController extends Controller
 
         $pengaturan = PengaturanWebsite::first();
 
-        if (!$pengaturan) {
+        if (! $pengaturan) {
 
-            $pengaturan = new PengaturanWebsite();
+            $pengaturan = new PengaturanWebsite;
 
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -252,7 +245,6 @@ class PengaturanWebsiteController extends Controller
 
         $pengaturan->informasi_terbaru_deskripsi =
             $validated['informasi_terbaru_deskripsi'] ?? null;
-
 
         $pengaturan->pengumuman_judul =
             $validated['pengumuman_judul'];
@@ -278,7 +270,6 @@ class PengaturanWebsiteController extends Controller
         $pengaturan->pengumuman_card3_deskripsi =
             $validated['pengumuman_card3_deskripsi'] ?? null;
 
-
         $pengaturan->persyaratan_judul =
             $validated['persyaratan_judul'];
 
@@ -302,7 +293,6 @@ class PengaturanWebsiteController extends Controller
 
         $pengaturan->persyaratan3_deskripsi =
             $validated['persyaratan3_deskripsi'] ?? null;
-
 
         $pengaturan->alur_judul =
             $validated['alur_judul'];
@@ -334,7 +324,6 @@ class PengaturanWebsiteController extends Controller
         $pengaturan->alur4_deskripsi =
             $validated['alur4_deskripsi'] ?? null;
 
-
         /*
         |--------------------------------------------------------------------------
         | GOOGLE FORM
@@ -344,7 +333,6 @@ class PengaturanWebsiteController extends Controller
         $pengaturan->google_form_url =
             $validated['google_form_url'] ?? null;
 
-
         /*
         |--------------------------------------------------------------------------
         | Simpan ke database
@@ -352,7 +340,6 @@ class PengaturanWebsiteController extends Controller
         */
 
         $pengaturan->save();
-
 
         /*
         |--------------------------------------------------------------------------

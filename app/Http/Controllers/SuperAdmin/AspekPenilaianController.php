@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SimpanAspekPenilaianRequest;
 use App\Models\AspekPenilaian;
+use App\Models\LogAktivitas;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -45,6 +46,13 @@ class AspekPenilaianController extends Controller
                 ]);
             }
         });
+
+        LogAktivitas::catat(
+            'ubah_aspek_penilaian',
+            null,
+            'Aspek & bobot penilaian diperbarui',
+            ['aktif' => AspekPenilaian::aktif()->pluck('bobot', 'nama')->all()]
+        );
 
         return redirect()
             ->route('superadmin.aspek-penilaian.index')

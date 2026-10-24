@@ -3,10 +3,12 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ProfilController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
+use App\Http\Controllers\SuperAdmin\LogAktivitasController;
 use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PenilaianController;
@@ -46,6 +48,17 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
+
+// Profil & password pengguna yang sedang login
+Route::middleware(['auth', 'role:admin,super_admin'])
+    ->controller(ProfilController::class)
+    ->prefix('profil')
+    ->name('profil.')
+    ->group(function () {
+        Route::get('/', 'edit')->name('edit');
+        Route::put('/', 'update')->name('update');
+        Route::put('/password', 'updatePassword')->name('password');
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -183,12 +196,21 @@ Route::middleware(['auth', 'role:super_admin'])
 
         // Kelola pengguna
         Route::resource('pengguna', UserController::class)
-            ->parameters(['pengguna' => 'user']);
+            ->parameters(['pengguna' => 'user'])
+            ->except('show')
+            ->middleware('can:kelola-pengguna');
 
         // Aspek & bobot penilaian
         Route::get('/aspek-penilaian', [AspekPenilaianController::class, 'index'])
+            ->can('kelola-aspek-penilaian')
             ->name('aspek-penilaian.index');
         Route::put('/aspek-penilaian', [AspekPenilaianController::class, 'update'])
+            ->can('kelola-aspek-penilaian')
             ->name('aspek-penilaian.update');
+
+        // Log aktivitas
+        Route::get('/log-aktivitas', [LogAktivitasController::class, 'index'])
+            ->can('lihat-log-aktivitas')
+            ->name('log-aktivitas.index');
 
     });

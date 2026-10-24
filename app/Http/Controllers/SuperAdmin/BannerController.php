@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BannerRequest;
 use App\Models\Banner;
-use Illuminate\Http\Request;
+use App\Models\LogAktivitas;
 use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
@@ -41,39 +42,9 @@ class BannerController extends Controller
      * Jika belum ada:
      * - buat banner baru
      */
-    public function store(Request $request)
+    public function store(BannerRequest $request)
     {
-        $validated = $request->validate([
-            'judul' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-
-            'deskripsi' => [
-                'nullable',
-                'string'
-            ],
-
-            'gambar' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048'
-            ],
-
-            'tombol_teks' => [
-                'nullable',
-                'string',
-                'max:100'
-            ],
-
-            'tombol_link' => [
-                'nullable',
-                'string',
-                'max:255'
-            ],
-        ]);
+        $validated = $request->validated();
 
         /*
         |--------------------------------------------------------------------------
@@ -190,40 +161,10 @@ class BannerController extends Controller
      * Tetap disediakan untuk kompatibilitas route resource.
      */
     public function update(
-        Request $request,
+        BannerRequest $request,
         Banner $banner
     ) {
-        $validated = $request->validate([
-            'judul' => [
-                'required',
-                'string',
-                'max:255'
-            ],
-
-            'deskripsi' => [
-                'nullable',
-                'string'
-            ],
-
-            'gambar' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png,webp',
-                'max:2048'
-            ],
-
-            'tombol_teks' => [
-                'nullable',
-                'string',
-                'max:100'
-            ],
-
-            'tombol_link' => [
-                'nullable',
-                'string',
-                'max:255'
-            ],
-        ]);
+        $validated = $request->validated();
 
         /*
         |--------------------------------------------------------------------------
@@ -291,6 +232,8 @@ class BannerController extends Controller
                 $banner->gambar
             );
         }
+
+        LogAktivitas::catat('hapus_banner', $banner, "Banner \"{$banner->judul}\" dihapus");
 
         $banner->delete();
 
