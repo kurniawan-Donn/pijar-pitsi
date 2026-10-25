@@ -990,6 +990,22 @@ Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
 - Dikelola admin dan super admin: upload, judul, keterangan, tanggal kegiatan, urutan,
   tampil/sembunyikan. Masuk grup sidebar "Konten Website".
 
+**Hasil (`fase-28-dokumentasi`) ✅**
+
+- Tabel `dokumentasis` (judul ≤ 150, keterangan ≤ 300, tanggal kegiatan, foto + thumbnail, urutan,
+  tampil). Model `Dokumentasi`, `DokumentasiController` (resource tanpa show + `urutan` + `tampil`),
+  `SimpanDokumentasiRequest`, service `FotoDokumentasi`.
+- Foto JPG/PNG ≤ 5 MB, minimal 300×200; disimpan ulang sebagai JPG di disk public (EXIF terbuang,
+  diputar sesuai orientasi HP) dalam dua ukuran: besar ≤ 1600 px (lightbox) dan thumbnail ≤ 640 px.
+  Foto lama dihapus saat diganti atau dokumentasi dihapus.
+- Beranda: bagian "Kegiatan Magang" (`#dokumentasi`) di antara Alur dan Alumni, hanya tampil bila
+  ada foto yang ditampilkan. Grid 2 baris dengan kolom memanjang ke kanan (4 kolom terlihat di
+  desktop, 3 di tablet, ±1,5 di HP), tombol geser, overlay gradasi saat hover/fokus, lightbox
+  `<dialog>` dengan tombol dan panah keyboard. Di layar sentuh: sentuh pertama menampilkan
+  keterangan, sentuh kedua memperbesar.
+- Navbar tidak ditambah menu baru (tetap sesuai 8.7).
+- Ikut diperbaiki: tombol Login navbar sebelumnya hilang di lebar 1025–1200 px.
+
 ### 9.7 Tahap 5: Buku panduan dan buku alur (terakhir, setelah UI final)
 
 - Menu "Panduan" di web sesuai role yang login, plus file Markdown di `docs/panduan/`.

@@ -376,6 +376,13 @@
         </div>
 
         {{-- =================================================
+             DOKUMENTASI (tampil bila ada foto yang ditampilkan)
+        ================================================== --}}
+        @if ($dokumentasis->isNotEmpty())
+            @include('website.partials.dokumentasi')
+        @endif
+
+        {{-- =================================================
              ALUMNI (tampil bila ada alumni yang ditampilkan)
         ================================================== --}}
         @if ($alumnis->isNotEmpty())
