@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Services\FotoAlumni;
 use App\Services\FotoDokumentasi;
 use App\Services\FotoProfil;
+use App\Services\TandaTanganDokumen;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Model;
@@ -66,6 +67,11 @@ class PanduanDemoSeeder extends Seeder
             'menyetujui_nama' => 'Hendra Kusuma',
             'menyetujui_jabatan' => 'Manager GA & FA',
         ]);
+
+        $tandaTangan = app(TandaTanganDokumen::class);
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'ttd_mengetahui', $this->tandaTangan(false));
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'ttd_menyetujui', $this->tandaTangan(false));
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'stempel', $this->tandaTangan(true));
 
         $divisi = collect(['Unit Umum', 'Divisi Konsultan', 'Divisi IT'])
             ->mapWithKeys(fn (string $nama) => [$nama => Divisi::firstOrCreate(['nama' => $nama])]);
@@ -120,7 +126,7 @@ class PanduanDemoSeeder extends Seeder
         ]);
 
         // Peserta selesai: Bayu (sudah dinilai, feedback, surat terbit, alumni).
-        $bayu = $this->peserta('Bayu Saputra', 'bayu@contoh.test', Str::password(16), [
+        $bayu = $this->peserta('Bayu Saputra', 'bayu@contoh.test', $passwordPeserta, [
             'nim' => '2105110045',
             'asal_kampus' => 'Universitas Islam Indonesia',
             'program_studi' => 'Teknik Informatika',
@@ -235,8 +241,8 @@ class PanduanDemoSeeder extends Seeder
             'posisi_dilamar' => 'Staf Magang',
             'jenis_program' => 'wajib_kampus',
             'durasi_bulan' => 6,
-            'keterampilan' => 'Microsoft Excel, analisis data, presentasi',
-            'bahasa' => 'Indonesia, Inggris',
+            'keterampilan' => ['Microsoft Excel', 'Analisis data', 'Presentasi'],
+            'bahasa' => ['Indonesia', 'Inggris'],
             'no_rekening' => '0000000000',
             'nama_bank' => 'Bank Contoh',
             'atas_nama_rekening' => $nama,
@@ -319,6 +325,36 @@ class PanduanDemoSeeder extends Seeder
             'dinilai_oleh' => $penilai->id,
             'dinilai_pada' => now(),
         ])->details()->createMany($details->all());
+    }
+
+    /**
+     * Gambar tanda tangan (coretan) atau stempel (lingkaran) contoh, PNG transparan.
+     */
+    private function tandaTangan(bool $stempel): UploadedFile
+    {
+        [$lebar, $tinggi] = $stempel ? [400, 400] : [600, 240];
+        $gambar = imagecreatetruecolor($lebar, $tinggi);
+        imagesavealpha($gambar, true);
+        imagefill($gambar, 0, 0, (int) imagecolorallocatealpha($gambar, 0, 0, 0, 127));
+        imagesetthickness($gambar, 6);
+
+        if ($stempel) {
+            $biru = (int) imagecolorallocatealpha($gambar, 30, 70, 160, 25);
+            imageellipse($gambar, 200, 200, 380, 380, $biru);
+            imageellipse($gambar, 200, 200, 300, 300, $biru);
+            imagestring($gambar, 5, 148, 192, 'CONTOH PITSI', $biru);
+        } else {
+            $tinta = (int) imagecolorallocate($gambar, 25, 35, 80);
+            $titik = [[40, 170], [110, 60], [170, 190], [240, 70], [300, 170], [380, 90], [450, 150], [560, 110]];
+            foreach (array_slice($titik, 1) as $i => $ke) {
+                imageline($gambar, $titik[$i][0], $titik[$i][1], $ke[0], $ke[1], $tinta);
+            }
+        }
+
+        $path = tempnam(sys_get_temp_dir(), 'ttd').'.png';
+        imagepng($gambar, $path);
+
+        return new UploadedFile($path, 'contoh.png', 'image/png', null, true);
     }
 
     private function hariKerjaSebelum(CarbonImmutable $tanggal, int $jumlah): CarbonImmutable

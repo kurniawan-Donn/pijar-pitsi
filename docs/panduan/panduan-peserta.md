@@ -122,9 +122,17 @@ dihitung. Pilih periode lain di bagian atas, atau unduh PDF.
 
 1. Setelah magang selesai, admin menerbitkan surat keterangan bila syarat terpenuhi: biodata
    disetujui, penilaian sudah diisi, dan feedback sudah dikirim.
-2. Buka menu **Surat Keterangan**, lalu klik **Unduh Surat (PDF)**.
-3. Surat memuat tanda tangan, stempel, dan **QR code**. Siapa pun bisa memindai QR untuk memeriksa
-   keaslian surat.
+2. Buka menu **Surat Keterangan**. Bila surat sudah terbit, nomor dan tanggal surat tampil di sana.
+   Klik **Unduh Surat (PDF)**.
+
+![Surat keterangan sudah terbit](../../public/images/panduan/peserta-surat.jpg)
+
+3. Surat memuat kop perusahaan, data magang Anda, tanda tangan, stempel, dan **QR code**.
+
+![Contoh surat keterangan magang (PDF)](../../public/images/panduan/contoh-surat-keterangan.jpg)
+
+4. Siapa pun (misalnya pihak kampus) bisa memindai QR untuk memeriksa keaslian surat. Halaman
+   verifikasi hanya menampilkan nama, periode, dan nomor surat.
 
 ![Halaman verifikasi surat dari QR](../../public/images/panduan/verifikasi-surat.jpg)
 

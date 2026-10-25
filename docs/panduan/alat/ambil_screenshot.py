@@ -35,7 +35,18 @@ AKUN = {
     'admin': ('admin@magenta.local', os.environ.get('PANDUAN_ADMIN_PASSWORD', '')),
     'super_admin': ('superadmin@magenta.local', os.environ.get('PANDUAN_SUPERADMIN_PASSWORD', '')),
     'peserta': ('rina@contoh.test', os.environ.get('PANDUAN_PASSWORD', '')),
+    # Peserta yang sudah selesai dan suratnya terbit (langkah unduh surat).
+    'peserta_selesai': ('bayu@contoh.test', os.environ.get('PANDUAN_PASSWORD', '')),
 }
+
+# Halaman error tidak boleh ikut dipotret.
+JS_CEK_ERROR = """
+(() => {
+    const teks = document.body ? document.body.innerText.slice(0, 400) : '';
+    return /Internal Server Error|TypeError|ErrorException|QueryException|Not Found|Forbidden|Page Expired/.test(teks)
+        || /^(403|404|419|500)\b/.test(document.title);
+})()
+"""
 
 # Tampilkan semua animasi masuk; matikan scroll halus.
 JS_SIAP = """
@@ -61,6 +72,10 @@ DAFTAR = [
     ('peserta-rekap', 'peserta', '/peserta/rekap', '', 1100),
     ('peserta-feedback', 'peserta', '/peserta/feedback', '', 1100),
     ('profil', 'peserta', '/profil', '', 1000),
+
+    ('peserta-surat', 'peserta_selesai', '/peserta/surat-keterangan', '', 800),
+    # Halaman pertama PDF surat (diunduh dulu, lalu dibuka di penampil PDF Chrome).
+    ('contoh-surat-keterangan', 'peserta_selesai', 'pdf:/peserta/surat-keterangan/unduh', '', 1100),
 
     ('admin-dashboard', 'admin', '/admin/dashboard', '', 1000),
     ('admin-pengajuan', 'admin', '/admin/pengajuan', '', 900),
@@ -142,7 +157,36 @@ async def login(cdp, role):
         raise SystemExit('login gagal: ' + role)
 
 
+async def cek_error(cdp, nama):
+    if await cdp.js(JS_CEK_ERROR):
+        raise SystemExit(f'Halaman untuk {nama} berisi error; screenshot dihentikan.')
+
+
+async def potret_pdf(cdp, nama, path, tinggi):
+    """Unduh PDF memakai sesi login yang aktif, lalu potret halaman pertamanya."""
+    isi = await cdp.js(f"""
+        fetch({json.dumps(BASIS + path)}, {{credentials: 'same-origin'}})
+            .then(r => r.ok && r.headers.get('content-type').includes('pdf') ? r.arrayBuffer() : Promise.reject(r.status))
+            .then(b => {{ let s = ''; new Uint8Array(b).forEach(x => s += String.fromCharCode(x)); return btoa(s); }})
+    """)
+    if not isi:
+        raise SystemExit(f'PDF untuk {nama} gagal diunduh.')
+    berkas = os.path.join(os.environ.get('TEMP', '/tmp'), nama + '.pdf')
+    with open(berkas, 'wb') as f:
+        f.write(base64.b64decode(isi))
+    await cdp.call('Emulation.setDeviceMetricsOverride', width=LEBAR, height=tinggi, deviceScaleFactor=1, mobile=False)
+    await cdp.buka('file:///' + berkas.replace(os.sep, '/') + '#toolbar=0&navpanes=0&view=FitH')
+    await asyncio.sleep(2.5)
+    hasil = await cdp.call('Page.captureScreenshot', format='jpeg', quality=82)
+    await cdp.call('Emulation.setDeviceMetricsOverride', width=LEBAR, height=TINGGI, deviceScaleFactor=1, mobile=False)
+    with open(os.path.join(KELUAR, nama + '.jpg'), 'wb') as f:
+        f.write(base64.b64decode(hasil['data']))
+    os.remove(berkas)
+    print(f'  {nama}.jpg (PDF) {LEBAR}x{tinggi}')
+
+
 async def potret(cdp, nama, js_tambahan, tinggi_maks):
+    await cek_error(cdp, nama)
     await cdp.js(JS_SIAP)
     if js_tambahan:
         await cdp.js(js_tambahan)
@@ -193,6 +237,10 @@ async def main(kode_surat, hanya):
                     else:
                         await login(cdp, role)
                     role_aktif = role
+                if path.startswith('pdf:'):
+                    await cdp.buka(BASIS + '/login')
+                    await potret_pdf(cdp, nama, path[4:], tinggi_maks)
+                    continue
                 await cdp.buka(BASIS + path.replace('{kode}', kode_surat))
                 await potret(cdp, nama, js_tambahan, tinggi_maks)
     finally:

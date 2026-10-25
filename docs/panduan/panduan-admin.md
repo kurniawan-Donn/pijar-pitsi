@@ -107,6 +107,8 @@ menunggu verifikasi, dan izin yang menunggu.
 
 ![Surat keterangan](../../public/images/panduan/admin-surat.jpg)
 
+![Contoh surat keterangan yang diterbitkan](../../public/images/panduan/contoh-surat-keterangan.jpg)
+
 ## 10. Feedback dan Laporan
 
 - **Feedback**: rekap rata-rata kepuasan dan jawaban setiap peserta.
