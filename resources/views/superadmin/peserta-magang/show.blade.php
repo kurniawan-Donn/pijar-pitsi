@@ -494,238 +494,6 @@
     }
 
     /* =====================================================
-       REKAP ABSENSI
-    ====================================================== */
-
-    .attendance-summary {
-        display: grid;
-
-        grid-template-columns:
-            repeat(3, minmax(0, 1fr));
-
-        gap: 14px;
-
-        margin-bottom: 20px;
-    }
-
-    .summary-card {
-        background: white;
-
-        border:
-            1px solid #e2eaf0;
-
-        border-radius: 12px;
-
-        padding: 18px;
-
-        box-shadow:
-            0 5px 18px rgba(31, 77, 102, 0.04);
-    }
-
-    .summary-label {
-        color: #7b8b96;
-
-        font-size: 10px;
-
-        font-weight: 800;
-
-        text-transform: uppercase;
-
-        letter-spacing: 0.6px;
-    }
-
-    .summary-value {
-        margin-top: 6px;
-
-        color: #17313d;
-
-        font-size: 28px;
-
-        font-weight: 800;
-
-        line-height: 1;
-    }
-
-    .summary-description {
-        margin-top: 7px;
-
-        color: #8a99a3;
-
-        font-size: 10px;
-
-        line-height: 1.5;
-    }
-
-    /* =====================================================
-       ABSENSI TABLE
-    ====================================================== */
-
-    .absensi-table-wrapper {
-        overflow-x: auto;
-    }
-
-    .absensi-table {
-        width: 100%;
-
-        border-collapse: collapse;
-
-        min-width: 1280px;
-    }
-
-    .absensi-table th {
-        text-align: left;
-
-        background: #f8fafc;
-
-        color: #697a85;
-
-        padding:
-            12px 14px;
-
-        font-size: 10px;
-
-        text-transform: uppercase;
-
-        letter-spacing: 0.4px;
-
-        border-bottom:
-            1px solid #e7edf1;
-
-        white-space: nowrap;
-    }
-
-    .absensi-table td {
-        padding:
-            13px 14px;
-
-        font-size: 11px;
-
-        color: #52636d;
-
-        border-bottom:
-            1px solid #edf2f5;
-
-        vertical-align: top;
-    }
-
-    .absensi-table tr:last-child td {
-        border-bottom: none;
-    }
-
-    .attendance-input {
-        width: 92px;
-
-        min-height: 34px;
-
-        padding:
-            0 9px;
-
-        border:
-            1px solid #d7e2e8;
-
-        border-radius: 7px;
-
-        background: white;
-
-        color: #34454f;
-
-        font-size: 11px;
-
-        outline: none;
-    }
-
-    .attendance-input:focus {
-        border-color: #0878a8;
-
-        box-shadow:
-            0 0 0 3px rgba(8,120,168,0.08);
-    }
-
-    .attendance-save {
-        min-height: 34px;
-
-        padding:
-            0 11px;
-
-        border: none;
-
-        border-radius: 7px;
-
-        background: #f47b20;
-
-        color: white;
-
-        font-size: 10px;
-
-        font-weight: 800;
-
-        cursor: pointer;
-
-        white-space: nowrap;
-    }
-
-    .attendance-save:hover {
-        background: #d96512;
-    }
-
-    .attendance-edit-form {
-        margin: 0;
-    }
-
-    .sheet-note {
-        padding:
-            14px 16px;
-
-        margin-bottom: 16px;
-
-        border-radius: 9px;
-
-        background: #f7fafc;
-
-        border:
-            1px solid #e3ebf0;
-
-        color: #667781;
-
-        font-size: 11px;
-
-        line-height: 1.6;
-    }
-
-    .sheet-alert-error {
-        padding:
-            12px 15px;
-
-        margin-bottom: 15px;
-
-        border-radius: 8px;
-
-        background: #fff0f0;
-
-        border:
-            1px solid #ffd1d1;
-
-        color: #c62828;
-
-        font-size: 11px;
-
-        font-weight: 700;
-    }
-
-    .empty-absensi {
-        text-align: center;
-
-        padding:
-            40px 20px;
-
-        color: #8a99a3;
-
-        font-size: 12px;
-
-        line-height: 1.7;
-    }
-
-    /* =====================================================
        FOOTER ACTION
     ====================================================== */
 
@@ -766,11 +534,6 @@
         .dashboard-grid {
             grid-template-columns: 1fr;
         }
-
-        .attendance-summary {
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-        }
     }
 
     @media (max-width: 700px) {
@@ -801,98 +564,11 @@
 
             flex-direction: column;
         }
-
-        .attendance-summary {
-            grid-template-columns: 1fr;
-        }
     }
-
 
     /* =====================================================
-       TOOLBAR BULAN & STATUS BARIS (Fase 3)
+       KETERANGAN ITEM AKSI
     ====================================================== */
-
-    .absensi-toolbar {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 12px;
-
-        margin-bottom: 14px;
-    }
-
-    .month-form {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .month-form label {
-        color: #4b5d70;
-        font-size: 12px;
-        font-weight: 800;
-    }
-
-    .month-form select {
-        min-width: 190px;
-        height: 38px;
-
-        padding: 0 12px;
-
-        border: 1px solid #d7e0eb;
-        border-radius: 8px;
-
-        background: white;
-        color: #17313d;
-
-        font-family: inherit;
-        font-size: 13px;
-        font-weight: 700;
-
-        cursor: pointer;
-    }
-
-    .toolbar-button {
-        height: 38px;
-
-        padding: 0 14px;
-
-        border: 1px solid #d7e0eb;
-        border-radius: 8px;
-
-        background: white;
-        color: #0878a8;
-
-        font-family: inherit;
-        font-size: 12px;
-        font-weight: 800;
-
-        cursor: pointer;
-
-        transition: .2s ease;
-    }
-
-    .toolbar-button:hover {
-        border-color: #0878a8;
-        background: #f1f8fc;
-    }
-
-    .attendance-summary {
-        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    }
-
-    .summary-izin .summary-value {
-        color: #b4630c;
-    }
-
-    .summary-sakit .summary-value {
-        color: #c62828;
-    }
-
-    .summary-belum_diisi .summary-value {
-        color: #8a99a3;
-    }
 
     .action-meta {
         display: block;
@@ -902,106 +578,6 @@
         color: #8a99a3;
         font-size: 10px;
         font-weight: 600;
-    }
-
-    .allowance-box {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-
-        margin-bottom: 20px;
-
-        border: 1px solid #e2eaf0;
-        border-radius: 12px;
-
-        background: #f8fbfd;
-
-        overflow: hidden;
-    }
-
-    .allowance-item {
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-
-        padding: 14px 16px;
-    }
-
-    .allowance-item + .allowance-item {
-        border-left: 1px solid #e2eaf0;
-    }
-
-    .allowance-item span {
-        color: #7b8b96;
-        font-size: 10px;
-        font-weight: 800;
-        letter-spacing: .5px;
-        text-transform: uppercase;
-    }
-
-    .allowance-item strong {
-        color: #17313d;
-        font-size: 17px;
-    }
-
-    .allowance-item small {
-        color: #8a99a3;
-        font-size: 10px;
-    }
-
-    .allowance-total {
-        background: #fff6ee;
-    }
-
-    .allowance-total strong {
-        color: #d96512;
-    }
-
-    @media (max-width: 1100px) {
-        .allowance-box {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .allowance-item:nth-child(3) {
-            border-left: 0;
-        }
-
-        .allowance-item:nth-child(n + 3) {
-            border-top: 1px solid #e2eaf0;
-        }
-    }
-
-    .row-status {
-        display: inline-block;
-
-        margin-top: 4px;
-        padding: 2px 8px;
-
-        border-radius: 999px;
-
-        font-size: 10px;
-        font-weight: 800;
-    }
-
-    .row-status-izin {
-        background: #fff6e8;
-        color: #b4630c;
-    }
-
-    .row-status-sakit {
-        background: #fff0f0;
-        color: #c62828;
-    }
-
-    @media (max-width: 1100px) {
-        .attendance-summary {
-            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-        }
-    }
-
-    @media (max-width: 700px) {
-        .attendance-summary {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        }
     }
 
     /* =====================================================
@@ -1334,11 +910,11 @@
                 <div class="card-header">
 
                     <div class="card-title">
-                        Absensi
+                        Google Sheets (Riwayat)
                     </div>
 
                     <div class="card-description">
-                        Google Sheets yang digunakan untuk absensi peserta.
+                        Buku kerja lama peserta. Kehadiran & logbook kini diisi di website.
                     </div>
 
                 </div>
@@ -1352,11 +928,11 @@
                         </div>
 
                         <div class="sheets-title">
-                            Google Sheets Absensi
+                            Buku Kerja Lama
                         </div>
 
                         <div class="sheets-description">
-                            Spreadsheet ini menjadi tempat pencatatan absensi dan Daily Activity peserta.
+                            Aplikasi tidak lagi membaca sheet ini. Isinya bisa diimpor sekali ke Logbook Harian.
                         </div>
 
                         @if($pesertaMagang->google_sheet_url)
@@ -1377,13 +953,21 @@
                                 class="btn btn-orange"
                                 style="width:100%;"
                             >
-                                Buka Google Sheets Absensi ↗
+                                Buka Google Sheets ↗
+                            </a>
+
+                            <a
+                                href="{{ route('superadmin.peserta-magang.logbook-harian', $pesertaMagang) }}#impor"
+                                class="btn btn-secondary"
+                                style="width:100%; margin-top:8px;"
+                            >
+                                Impor ke Logbook Harian
                             </a>
 
                         @else
 
                             <div class="sheets-missing">
-                                Link Google Sheets absensi belum tersedia untuk peserta ini.
+                                Peserta ini tidak punya link Google Sheets lama.
                             </div>
 
                         @endif
@@ -1586,7 +1170,7 @@
                             </span>
 
                             <span>
-                                Buka Google Sheets Absensi
+                                Buka Google Sheets (riwayat)
                             </span>
 
                         </a>
@@ -1661,26 +1245,6 @@
                         </span>
                     </a>
 
-                    {{-- LOGBOOK (GOOGLE SHEETS, RIWAYAT) --}}
-
-                    <a
-                        href="{{ route('superadmin.peserta-magang.logbook', ['pesertaMagang' => $pesertaMagang, 'bulan' => $bulanDipilih->format('Y-m')]) }}"
-                        class="action-item"
-                    >
-                        <span class="action-icon">📒</span>
-                        <span>
-                            Logbook Google Sheets (riwayat)
-                            @if($ringkasanLogbook['total'] > 0)
-                                <small class="action-meta">
-                                    {{ $ringkasanLogbook['Diterima'] }}/{{ $ringkasanLogbook['total'] }} hari diterima
-                                    @if($ringkasanLogbook['belum'] > 0)
-                                        · {{ $ringkasanLogbook['belum'] }} belum diperiksa
-                                    @endif
-                                </small>
-                            @endif
-                        </span>
-                    </a>
-
                     {{-- PENILAIAN --}}
 
                     <a
@@ -1702,391 +1266,6 @@
                     </a>
 
                 </div>
-
-            </div>
-
-        </section>
-
-        {{-- =================================================
-             RIWAYAT ABSENSI & DAILY ACTIVITY
-        ================================================== --}}
-
-        <section
-            class="card"
-            style="margin-top:20px;"
-        >
-
-            <div class="card-header">
-
-                <div class="card-title">
-                    Riwayat Absensi & Daily Activity
-                </div>
-
-                <div class="card-description">
-                    Data dibaca langsung dari Google Sheets peserta melalui koneksi MAGENTA.
-                </div>
-
-            </div>
-
-            <div class="card-body">
-
-                {{-- SUCCESS --}}
-
-                <x-alert type="success" :message="session('success')" />
-
-                {{-- ERROR --}}
-
-                <x-alert type="error" :message="session('error')" />
-
-                {{-- GOOGLE SHEETS ERROR --}}
-
-                @if($sheetError)
-
-                    <div class="sheet-alert-error">
-                        {{ $sheetError }}
-                    </div>
-
-                @endif
-
-                {{-- PILIH BULAN & MUAT ULANG --}}
-
-                <div class="absensi-toolbar">
-
-                    <form method="GET" action="{{ route('superadmin.peserta-magang.show', $pesertaMagang) }}" class="month-form">
-                        <label for="bulan">Bulan</label>
-                        <select id="bulan" name="bulan" onchange="this.form.submit()">
-                            @foreach($pilihanBulan as $nilai => $label)
-                                <option value="{{ $nilai }}" @selected($nilai === $bulanDipilih->format('Y-m'))>{{ $label }}</option>
-                            @endforeach
-                        </select>
-                        <noscript><button type="submit" class="toolbar-button">Tampilkan</button></noscript>
-                    </form>
-
-                    @if($pesertaMagang->google_sheet_url)
-                        <form method="POST" action="{{ route('superadmin.peserta-magang.absensi.refresh', $pesertaMagang) }}">
-                            @csrf
-                            <input type="hidden" name="bulan" value="{{ $bulanDipilih->format('Y-m') }}">
-                            <button type="submit" class="toolbar-button">⟳ Muat ulang data</button>
-                        </form>
-                    @endif
-
-                </div>
-
-                <div class="sheet-note">
-
-                    @if($tabAktif)
-                        Tab <strong>{{ $tabAktif }}</strong>
-                        @if($diambilPada)
-                            · data diambil {{ $diambilPada->diffForHumans() }}
-                            (disimpan sementara {{ intdiv(config('absensi.cache_seconds'), 60) }} menit).
-                        @endif
-                        <br>
-                    @endif
-
-                    Kolom
-                    <strong>Activity, Output, Lokasi, dan Action</strong>
-                    tetap diisi oleh mahasiswa melalui Google Sheets.
-                    Admin dapat mengubah empat waktu absensi melalui MAGENTA.
-
-                </div>
-
-                @if(count($sheetRows) > 0)
-
-                    {{-- =================================================
-                         REKAP ABSENSI
-                    ================================================== --}}
-
-
-                    <div class="attendance-summary">
-
-                        @foreach([
-                            'tercatat' => ['Hari Tercatat', 'Baris yang terisi di Google Sheets.'],
-                            'hadir' => ['Hadir', 'Memiliki data waktu absensi.'],
-                            'izin' => ['Izin', 'Activity berisi "izin".'],
-                            'sakit' => ['Sakit', 'Activity berisi "sakit".'],
-                            'belum_diisi' => ['Belum Diisi', 'Tanpa waktu & keterangan.'],
-                        ] as $kunci => [$label, $keterangan])
-                            <div class="summary-card summary-{{ $kunci }}">
-                                <div class="summary-label">{{ $label }}</div>
-                                <div class="summary-value">{{ $rekap[$kunci] }}</div>
-                                <div class="summary-description">{{ $keterangan }}</div>
-                            </div>
-                        @endforeach
-
-                    </div>
-
-                    {{-- REKAP KEHADIRAN & UANG SAKU (mengikuti footer template sheet) --}}
-
-                    <div class="allowance-box">
-
-                        <div class="allowance-item">
-                            <span>Masuk penuh</span>
-                            <strong>{{ $rekap['hari_penuh'] }} hari</strong>
-                            <small>× Rp {{ number_format($tarif->tarif_hari_penuh, 0, ',', '.') }}</small>
-                        </div>
-
-                        <div class="allowance-item">
-                            <span>Masuk setengah hari</span>
-                            <strong>{{ $rekap['setengah_hari'] }} hari</strong>
-                            <small>× Rp {{ number_format($tarif->tarif_setengah_hari, 0, ',', '.') }}</small>
-                        </div>
-
-                        <div class="allowance-item">
-                            <span>Absen / izin / sakit</span>
-                            <strong>{{ $rekap['izin'] + $rekap['sakit'] }} hari</strong>
-                            @if($rekap['tidak_lengkap'])
-                                <small>{{ $rekap['tidak_lengkap'] }} hari jam belum lengkap</small>
-                            @endif
-                        </div>
-
-                        <div class="allowance-item allowance-total">
-                            <span>Total uang saku</span>
-                            <strong>Rp {{ number_format($uangSaku, 0, ',', '.') }}</strong>
-                            <small>{{ $bulanDipilih->translatedFormat('F Y') }}</small>
-                        </div>
-
-                    </div>
-
-
-                    {{-- =================================================
-                         TABEL ABSENSI
-                    ================================================== --}}
-
-                    <div class="absensi-table-wrapper">
-
-                        <table class="absensi-table">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        No
-                                    </th>
-
-                                    <th>
-                                        Tanggal
-                                    </th>
-
-                                    <th>
-                                        Pagi Masuk
-                                    </th>
-
-                                    <th>
-                                        Pagi Keluar
-                                    </th>
-
-                                    <th>
-                                        Siang Masuk
-                                    </th>
-
-                                    <th>
-                                        Siang Keluar
-                                    </th>
-
-                                    <th>
-                                        Activity
-                                    </th>
-
-                                    <th>
-                                        Output
-                                    </th>
-
-                                    <th>
-                                        Lokasi
-                                    </th>
-
-                                    <th>
-                                        Action
-                                    </th>
-
-                                    <th>
-                                        Simpan
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody>
-
-                                @foreach($sheetRows as $row)
-
-                                    @php
-
-                                        $formId =
-                                            'attendance-form-'
-                                            . $row['sheet_row'];
-
-                                    @endphp
-
-                                    <tr>
-
-                                        {{-- NO --}}
-
-                                        <td>
-                                            {{ $row['no'] ?: '-' }}
-                                        </td>
-
-                                        {{-- TANGGAL --}}
-
-                                        <td>
-                                            {{ $row['tanggal'] ?: '-' }}
-
-                                            @php($statusBaris = \App\Services\RekapAbsensi::statusBaris($row))
-                                            @if(in_array($statusBaris, ['izin', 'sakit'], true))
-                                                <span class="row-status row-status-{{ $statusBaris }}">{{ ucfirst($statusBaris) }}</span>
-                                            @endif
-                                        </td>
-
-                                        {{-- PAGI MASUK --}}
-
-                                        <td>
-
-                                            <input
-                                                type="time"
-                                                name="pagi_masuk"
-                                                form="{{ $formId }}"
-                                                class="attendance-input"
-                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['pagi_masuk']) }}"
-                                            >
-
-                                        </td>
-
-                                        {{-- PAGI KELUAR --}}
-
-                                        <td>
-
-                                            <input
-                                                type="time"
-                                                name="pagi_keluar"
-                                                form="{{ $formId }}"
-                                                class="attendance-input"
-                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['pagi_keluar']) }}"
-                                            >
-
-                                        </td>
-
-                                        {{-- SIANG MASUK --}}
-
-                                        <td>
-
-                                            <input
-                                                type="time"
-                                                name="siang_masuk"
-                                                form="{{ $formId }}"
-                                                class="attendance-input"
-                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['siang_masuk']) }}"
-                                            >
-
-                                        </td>
-
-                                        {{-- SIANG KELUAR --}}
-
-                                        <td>
-
-                                            <input
-                                                type="time"
-                                                name="siang_keluar"
-                                                form="{{ $formId }}"
-                                                class="attendance-input"
-                                                value="{{ \App\Services\RekapAbsensi::normalisasiJam($row['siang_keluar']) }}"
-                                            >
-
-                                        </td>
-
-                                        {{-- ACTIVITY --}}
-
-                                        <td>
-                                            {{ $row['activity'] ?: '-' }}
-                                        </td>
-
-                                        {{-- OUTPUT --}}
-
-                                        <td>
-                                            {{ $row['output'] ?: '-' }}
-                                        </td>
-
-                                        {{-- LOKASI --}}
-
-                                        <td>
-                                            {{ $row['lokasi'] ?: '-' }}
-                                        </td>
-
-                                        {{-- ACTION --}}
-
-                                        <td>
-                                            {{ $row['action'] ?: '-' }}
-                                        </td>
-
-                                        {{-- SIMPAN --}}
-
-                                        <td>
-
-                                            <form
-                                                id="{{ $formId }}"
-                                                action="{{ route(
-                                                    'superadmin.peserta-magang.absensi.update',
-                                                    $pesertaMagang
-                                                ) }}"
-                                                method="POST"
-                                                class="attendance-edit-form"
-                                            >
-
-                                                @csrf
-
-                                                @method('PUT')
-
-                                                <input
-                                                    type="hidden"
-                                                    name="bulan"
-                                                    value="{{ $bulanDipilih->format('Y-m') }}"
-                                                >
-
-                                                <input
-                                                    type="hidden"
-                                                    name="sheet_row"
-                                                    value="{{ $row['sheet_row'] }}"
-                                                >
-
-                                                <button
-                                                    type="submit"
-                                                    class="attendance-save"
-                                                >
-                                                    Simpan
-                                                </button>
-
-                                            </form>
-
-                                        </td>
-
-                                    </tr>
-
-                                @endforeach
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                @else
-
-                    <div class="empty-absensi">
-
-                        Belum ada data absensi dari Google Sheets untuk periode
-
-                        <strong>
-                            {{ $bulanDipilih->translatedFormat('F Y') }}
-                        </strong>.
-
-                        <br>
-
-                        Pastikan tab bulan tersebut tersedia di Google Sheets peserta.
-
-                    </div>
-
-                @endif
 
             </div>
 
@@ -2122,7 +1301,7 @@
                         rel="noopener noreferrer"
                         class="btn btn-orange"
                     >
-                        ▣ Buka Absensi
+                        ▣ Google Sheets
                     </a>
 
                 @endif
@@ -2138,7 +1317,7 @@
                 ) }}"
                 method="POST"
                 onsubmit="return confirm(
-                    'Yakin ingin menghapus peserta ini? Data absensi lokal peserta juga akan ikut terhapus.'
+                    'Yakin ingin menghapus peserta ini? Akun, biodata, logbook, penilaian, feedback, dan surat peserta juga akan ikut terhapus.'
                 );"
             >
 

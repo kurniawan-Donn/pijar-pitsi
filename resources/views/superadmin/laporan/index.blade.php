@@ -4,7 +4,7 @@
 
 @section('title', 'Laporan')
 @section('page_title', 'Laporan')
-@section('page_subtitle', 'Rekap peserta, absensi, dan nilai akhir magang')
+@section('page_subtitle', 'Rekap peserta, kehadiran & uang saku, nilai akhir, dan feedback magang')
 
 @php
     $queryExport = array_filter(['jenis' => $jenis] + $filter);
@@ -250,8 +250,8 @@
 
                 @if ($jenis === 'absensi')
                     <div>
-                        <label for="bulan">Bulan</label>
-                        <input type="month" id="bulan" name="bulan" value="{{ $filter['bulan'] }}">
+                        <label for="periode">Periode (28–27)</label>
+                        <input type="month" id="periode" name="periode" value="{{ $filter['periode'] }}" title="Bulan tanggal akhir periode, mis. Agustus = 28 Juli – 27 Agustus">
                     </div>
                 @else
                     <div>
@@ -335,8 +335,8 @@
 
         @if ($jenis === 'absensi')
             <div class="hint">
-                Data dibaca dari Google Sheets setiap peserta (disimpan sementara {{ intdiv(config('absensi.cache_seconds'), 60) }} menit).
-                Tarif uang saku mengikuti Pengaturan Magang (tarif yang berlaku di awal bulan).
+                Data dari logbook harian peserta. Hari penuh = jam pagi masuk & siang keluar; setengah hari = satu sesi.
+                Hari yang ditolak tidak dihitung; uang saku memakai tarif yang berlaku pada tanggal masing-masing (Pengaturan Magang).
             </div>
         @endif
 

@@ -2,12 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\LogbookHarian;
 use App\Models\Mahasiswa;
 use App\Models\PengajuanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\User;
 use App\Services\GoogleSheetsService;
+use App\Services\MonitoringPeserta;
 use App\Services\StatistikMagang;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -75,9 +77,22 @@ class StatistikDashboardTest extends TestCase
         );
     }
 
-    public function test_absensi_dashboard_hanya_memakai_cache(): void
+    public function test_kehadiran_dashboard_dari_logbook_tanpa_google_sheets(): void
     {
-        $this->peserta(['google_sheet_url' => 'https://docs.google.com/spreadsheets/d/abc/edit']);
+        $peserta = $this->peserta([
+            'google_sheet_url' => 'https://docs.google.com/spreadsheets/d/abc/edit',
+            'periode_mulai' => '2026-09-01',
+            'periode_selesai' => '2026-12-31',
+        ]);
+
+        LogbookHarian::create([
+            'peserta_magang_id' => $peserta->id,
+            'tanggal' => now()->toDateString(),
+            'kehadiran' => 'hadir',
+            'pagi_masuk' => '08:00',
+            'siang_keluar' => '16:30',
+            'activity' => 'Kegiatan',
+        ]);
 
         // Dashboard tidak boleh memanggil Google sama sekali.
         $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
@@ -85,10 +100,17 @@ class StatistikDashboardTest extends TestCase
             $mock->shouldNotReceive('getValuesFromUrl');
         });
 
-        $absensi = app(StatistikMagang::class)->absensiBulanIni();
+        $monitoring = app(MonitoringPeserta::class);
+        $kehadiran = $monitoring->kehadiranPeriode($monitoring->tabel());
 
-        $this->assertSame(0, $absensi['peserta_tersedia']);
-        $this->assertSame(1, $absensi['peserta_aktif']);
+        $this->assertSame(1, $kehadiran['peserta']);
+        $this->assertSame(1, $kehadiran['hadir']);
+        $this->assertSame(50000, $kehadiran['uang_saku']);
+
+        $this->actingAs(User::factory()->create(['role' => 'admin']))
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee('Kehadiran Periode '.$kehadiran['periode']);
     }
 
     public function test_dashboard_admin_dan_super_admin_menampilkan_statistik(): void

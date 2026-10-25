@@ -90,7 +90,7 @@
 
     <h1>MAGENTA</h1>
 
-    <p>Login Admin & Super Admin</p>
+    <p>Masuk sebagai admin atau peserta magang</p>
 
     @if($errors->any())
         <div class="error">

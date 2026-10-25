@@ -6,10 +6,8 @@ use App\Models\LogAktivitas;
 use App\Models\PengajuanMagang;
 use App\Models\PesertaMagang;
 use App\Models\User;
-use App\Services\GoogleSheetsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class LogAktivitasTest extends TestCase
@@ -55,52 +53,6 @@ class LogAktivitasTest extends TestCase
 
         $this->assertDatabaseHas('log_aktivitas', ['aksi' => 'hapus_pengajuan', 'subjek_id' => $pengajuan->id]);
         $this->assertDatabaseHas('log_aktivitas', ['aksi' => 'hapus_peserta', 'keterangan' => 'Peserta Peserta Dihapus dihapus']);
-    }
-
-    public function test_ubah_absensi_tercatat(): void
-    {
-        $peserta = PesertaMagang::create([
-            'nama' => 'Peserta Absen',
-            'status' => 'aktif',
-            'google_sheet_url' => 'https://docs.google.com/spreadsheets/d/abc/edit',
-        ]);
-
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getSheetTitlesFromUrl')->andReturn(['OKTOBER 2026']);
-            $mock->shouldReceive('updateValuesFromUrl')->andReturn(4);
-        });
-
-        $this->actingAs($this->admin)->put(route('superadmin.peserta-magang.absensi.update', $peserta), [
-            'bulan' => '2026-10',
-            'sheet_row' => 15,
-            'pagi_masuk' => '08:00',
-        ]);
-
-        $log = LogAktivitas::firstWhere('aksi', 'ubah_absensi');
-
-        $this->assertNotNull($log);
-        $this->assertSame('08:00', $log->data['pagi_masuk']);
-        $this->assertSame(15, (int) $log->data['sheet_row']);
-    }
-
-    public function test_absensi_gagal_tidak_tercatat(): void
-    {
-        $peserta = PesertaMagang::create([
-            'nama' => 'Peserta Absen',
-            'status' => 'aktif',
-            'google_sheet_url' => 'https://docs.google.com/spreadsheets/d/abc/edit',
-        ]);
-
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getSheetTitlesFromUrl')->andThrow(new \RuntimeException('403'));
-        });
-
-        $this->actingAs($this->admin)->put(route('superadmin.peserta-magang.absensi.update', $peserta), [
-            'bulan' => '2026-10',
-            'sheet_row' => 15,
-        ]);
-
-        $this->assertDatabaseMissing('log_aktivitas', ['aksi' => 'ubah_absensi']);
     }
 
     public function test_halaman_log_khusus_super_admin_dan_bisa_difilter(): void

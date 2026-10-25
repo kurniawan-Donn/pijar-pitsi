@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Services\LaporanMagang;
+use App\Services\PeriodeMagang;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -138,10 +139,10 @@ class LaporanController extends Controller
             'dari' => ['nullable', 'date'],
             'sampai' => ['nullable', 'date', 'after_or_equal:dari'],
             'status' => ['nullable', Rule::in(['aktif', 'selesai'])],
-            'bulan' => ['nullable', 'date_format:Y-m'],
+            'periode' => ['nullable', 'date_format:Y-m'],
         ], [
             'sampai.after_or_equal' => 'Tanggal akhir harus sama atau setelah tanggal awal.',
-            'bulan.date_format' => 'Format bulan tidak valid.',
+            'periode.date_format' => 'Format periode tidak valid.',
         ]);
 
         return [
@@ -150,7 +151,7 @@ class LaporanController extends Controller
                 'dari' => $validated['dari'] ?? null,
                 'sampai' => $validated['sampai'] ?? null,
                 'status' => $validated['status'] ?? null,
-                'bulan' => $validated['bulan'] ?? now()->format('Y-m'),
+                'periode' => $validated['periode'] ?? app(PeriodeMagang::class)->kunciUntuk(now()),
             ],
         ];
     }

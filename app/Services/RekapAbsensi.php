@@ -3,15 +3,9 @@
 namespace App\Services;
 
 /**
- * Perhitungan rekap absensi dari baris Google Sheets.
+ * Aturan jam kerja harian (dipakai logbook, rekap periode, dan impor sheet).
  *
- * Status baris:
- * - Activity mengandung "sakit"           → sakit
- * - Activity mengandung "izin" / "ijin"   → izin
- * - Ada minimal satu waktu absensi terisi → hadir
- * - Selain itu                            → belum diisi
- *
- * Kehadiran (hanya untuk baris hadir), mengikuti cara buku kerja diisi:
+ * Kehadiran (hanya untuk hari hadir), mengikuti cara buku kerja diisi:
  * - Hari penuh     : ada jam pagi masuk dan jam siang keluar (pulang sore);
  *                    pagi keluar & siang masuk (istirahat) boleh kosong
  * - Setengah hari  : hanya satu sesi lengkap, yaitu pagi masuk + pagi keluar
@@ -20,74 +14,6 @@ namespace App\Services;
  */
 class RekapAbsensi
 {
-    private const KOLOM_WAKTU = ['pagi_masuk', 'pagi_keluar', 'siang_masuk', 'siang_keluar'];
-
-    /**
-     * @param  array<int, array<string, mixed>>  $rows
-     * @return array{tercatat: int, hadir: int, izin: int, sakit: int, belum_diisi: int, hari_penuh: int, setengah_hari: int, tidak_lengkap: int}
-     */
-    public static function hitung(array $rows): array
-    {
-        $rekap = [
-            'tercatat' => count($rows),
-            'hadir' => 0,
-            'izin' => 0,
-            'sakit' => 0,
-            'belum_diisi' => 0,
-            'hari_penuh' => 0,
-            'setengah_hari' => 0,
-            'tidak_lengkap' => 0,
-        ];
-
-        foreach ($rows as $row) {
-            $status = self::statusBaris($row);
-            $rekap[$status]++;
-
-            if ($status === 'hadir') {
-                $rekap[self::jenisKehadiran($row)]++;
-            }
-        }
-
-        return $rekap;
-    }
-
-    /**
-     * Total uang saku dari rekap: hari penuh × tarif penuh + setengah hari × tarif setengah.
-     *
-     * @param  array{hari_penuh: int, setengah_hari: int}  $rekap
-     */
-    public static function uangSaku(array $rekap, int $tarifHariPenuh, int $tarifSetengahHari): int
-    {
-        return $rekap['hari_penuh'] * $tarifHariPenuh
-            + $rekap['setengah_hari'] * $tarifSetengahHari;
-    }
-
-    /**
-     * Status satu baris absensi: hadir, izin, sakit, atau belum_diisi.
-     *
-     * @param  array<string, mixed>  $row
-     */
-    public static function statusBaris(array $row): string
-    {
-        $activity = strtolower(trim((string) ($row['activity'] ?? '')));
-
-        if (str_contains($activity, 'sakit')) {
-            return 'sakit';
-        }
-
-        if (str_contains($activity, 'izin') || str_contains($activity, 'ijin')) {
-            return 'izin';
-        }
-
-        foreach (self::KOLOM_WAKTU as $kolom) {
-            if (self::terisi($row, $kolom)) {
-                return 'hadir';
-            }
-        }
-
-        return 'belum_diisi';
-    }
-
     /**
      * Jenis kehadiran: hari_penuh, setengah_hari, atau tidak_lengkap.
      *

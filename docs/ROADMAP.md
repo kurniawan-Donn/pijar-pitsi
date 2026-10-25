@@ -5,53 +5,54 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
 
 ## 1. Fitur yang Sudah Ada
 
+Ringkasan kondisi setelah Fase 18 (detail per fase ada di catatan di bawah;
+struktur file di `README-STRUKTUR.txt`).
+
 ### Website publik
-- Halaman utama one-page (`/`, `HomeController@index`): banner, profil perusahaan,
-  dan konten dari tabel `pengaturan_websites` (informasi terbaru, pengumuman,
-  persyaratan, alur magang).
-- Pendaftaran diarahkan ke Google Form (`pengaturan_websites.google_form_url`).
+- Halaman one-page (banner, profil perusahaan, konten), pendaftaran magang
+  lewat form website atau Google Form, cek status pengajuan (MG-xxxxxx).
 
-### Autentikasi
-- Login/logout (`AuthController`), redirect sesuai role (`User::routeDashboard()`):
-  `super_admin` → `superadmin.dashboard`, `admin` → `admin.dashboard`,
-  `peserta` → `peserta.dashboard`. Akun `aktif = false` ditolak.
-- Pembatasan akses lewat `RoleMiddleware` (`role:admin`, `role:super_admin`,
-  `role:admin,super_admin`, `role:peserta`).
-- `WajibGantiPassword` (grup `web`): akun dengan password sementara hanya bisa
-  membuka halaman profil sampai password diganti.
-- Akun awal dari `database/seeders/UserSeeder.php`.
+### Aktor
+- **Admin** dan **Super Admin** (Super Admin: + kelola pengguna, aspek
+  penilaian, log aktivitas lewat Gate).
+- **Peserta** (anak magang): akun dibuat admin, password sementara wajib
+  diganti; peserta selesai hanya baca (kecuali feedback).
 
-### Area Admin (`role:admin`)
-- Dashboard statis (`Route::view`, tanpa data).
-- Pengajuan magang (`Admin/PengajuanMagangController`): index, create (redirect
-  ke `/#pengajuan`), store, show, updateStatus, destroy. **View index & show
-  masih kosong.**
+### Admin & Super Admin
+- Pengajuan magang → buat data peserta; akun login peserta.
+- Pengaturan Magang (batas isi mundur, periode 28–27, tarif uang saku
+  berjangka, hari libur, penanda tangan, format nomor surat), Divisi dan
+  penempatan per periode.
+- Biodata (tinjau/setujui/revisi), Logbook Harian (verifikasi, izin/sakit,
+  buka kunci, PDF periode, impor riwayat sheet lama), Penilaian (Hard/Soft
+  Skill, predikat teks, PDF), Feedback (rekap), Surat Keterangan (terbit,
+  nomor otomatis, PDF).
+- Monitoring, dashboard statistik, Laporan (peserta, kehadiran & uang saku
+  per periode, nilai, feedback) dengan export XLSX/PDF/CSV/cetak.
 
-### Fitur bersama Admin + Super Admin (`role:admin,super_admin`, prefix `/superadmin`)
-- Profil perusahaan (satu baris di tabel `perusahaans`).
-- Kelola banner (resource; hanya satu banner utama yang dipertahankan, upload
-  gambar ke disk `public`).
-- Kelola konten website (`PengaturanWebsiteController`).
-- Data peserta magang (resource, validasi `PesertaMagangRequest`, pagination).
-- Absensi peserta dibaca dari Google Sheets (tab bulan berjalan, range B11:K100)
-  dan jam masuk/keluar dapat diubah langsung ke sheet
-  (`GoogleSheetsService`, credential `storage/app/google/service-account.json`).
+### Peserta
+- Dashboard, Biodata, Logbook Harian (+ izin/sakit, bukti, PDF), Feedback
+  (dibuka H-30), Surat Keterangan (unduh setelah terbit), Profil.
 
-### Area khusus Super Admin (`role:super_admin`)
-- Dashboard statis (`Route::view`).
-- Kelola pengguna (CRUD; tidak bisa menghapus akun sendiri).
+### Sumber data
+- Semua kehadiran, logbook, dan uang saku dari **database**. Google Sheets
+  hanya dipakai untuk **impor sekali** riwayat buku kerja lama
+  (`google_sheet_url` peserta + credential service account).
 
-### Data
-| Tabel | Model | Catatan |
-|---|---|---|
-| users | User | `role` string: admin/super_admin/peserta (`User::ROLES`), `wajib_ganti_password`, `aktif` |
-| mahasiswas | Mahasiswa | model masih kosong |
-| perusahaans | Perusahaan | dipakai untuk profil perusahaan **dan** perusahaan tujuan pengajuan |
-| pengajuan_magangs | PengajuanMagang | status menunggu/disetujui/ditolak |
-| banners | Banner | scope `aktif()` |
-| pengaturan_websites | PengaturanWebsite | konten homepage + `google_form_url` |
-| peserta_magangs | PesertaMagang | `google_sheet_url`, status aktif/selesai, `user_id` (akun peserta), `nomor_peserta` MG{tahun}{bulan}{urut} |
-| absensis | Absensi | data absensi lokal lama (sumber utama kini Google Sheets) |
+### Data utama
+| Tabel | Isi |
+|---|---|
+| users | akun admin/super_admin/peserta (`role` string, `aktif`, `wajib_ganti_password`) |
+| mahasiswas, pengajuan_magangs | pendaftar & pengajuan |
+| peserta_magangs | peserta (`user_id`, `nomor_peserta`, periode, status, `google_sheet_url` untuk impor) |
+| biodata_pesertas | biodata (NIK, rekening, kesehatan terenkripsi) |
+| pengaturan_magangs, tarif_uang_sakus, hari_liburs | pengaturan program |
+| divisis, penempatan_pesertas | divisi & rotasi per periode |
+| logbook_harians, logbook_buktis, izin_pesertas, buka_kunci_logbooks | logbook & kehadiran |
+| kelompok_penilaians, aspek_penilaians, predikat_penilaians, penilaian_pesertas, penilaian_details | penilaian |
+| feedback_pesertas, surat_keterangans | feedback & surat |
+| log_aktivitas | jejak aksi |
+| absensis | tabel lama, tidak dipakai (bisa dihapus di fase terpisah) |
 
 ## 2. Utang Teknis
 
@@ -123,13 +124,36 @@ dan rencana pengembangan per fase (lihat juga `docs/PROMPT-PENGEMBANGAN.md`).
   Fase 6**.
 
 ### Test
-- **394 test** (1991 assertion). Setiap route aplikasi (110 route) punya test
+- **370 test** (1883 assertion). Setiap route aplikasi (106 route) punya test
   akses untuk tamu, admin, super admin, dan peserta (`AksesRouteTest`); route
   baru yang belum dimasukkan ke matriks membuat test gagal.
 - Coverage kode belum bisa diukur: ekstensi Xdebug/PCOV tidak terpasang.
   Coverage kasar per fitur: semua controller punya feature test; yang paling
   tipis adalah Profil Perusahaan & Kelola Konten (hanya akses + simpan) dan
   Banner (akses + validasi).
+
+## Catatan Fase 18 (laporan dari database)
+
+- Sesuai keputusan "impor sekali, lalu Google Sheets tidak dibaca lagi":
+  - **Laporan "Kehadiran & Uang Saku"** (jenis `absensi`) kini per periode
+    28–27 dari logbook harian: hari penuh, setengah hari, izin, sakit, libur,
+    belum diisi, menunggu verifikasi, uang saku (tarif per tanggal), divisi
+    periode itu, dan rekening. Filter `bulan` diganti `periode` (Y-m).
+  - **Dashboard**: panel absensi dari cache sheet diganti "Kehadiran Periode
+    …" dari data monitoring (dihitung sekali bersama kartu monitoring).
+  - **Detail peserta**: bagian absensi & daily activity Google Sheets dihapus;
+    kartu sheet menjadi "Google Sheets (Riwayat)" dengan tombol impor.
+- Dihapus: `AbsensiSheetService`, `Logbook` (service sheet),
+  `TabBulanTidakDitemukanException`, `SuperAdmin/LogbookController` + view,
+  `MemilihBulanAbsensi`, `VerifikasiLogbookRequest`, route
+  `superadmin.peserta-magang.absensi.update/.refresh` dan
+  `superadmin.peserta-magang.logbook(.update)`, beserta test-nya.
+  Penggantinya: Logbook Harian & Izin (`superadmin.peserta-magang.logbook-harian`).
+- `RekapAbsensi` disisakan untuk aturan jam kerja; `config/absensi.php` hanya
+  berisi credential (untuk impor) dan tarif awal; variabel `ABSENSI_*`
+  dihapus dari `.env.example` (boleh dihapus juga dari `.env`).
+- Label aksi log lama (`ubah_absensi`, `verifikasi_logbook`) tetap ada agar
+  riwayat Log Aktivitas terbaca.
 
 ## Catatan Fase 17 (surat keterangan magang)
 
@@ -400,4 +424,4 @@ keterangan) ada di `docs/rencana-fitur.md`. Fase 8 hanya fondasinya:
 | 15 | Feedback magang | selesai |
 | 16 | Penyesuaian penilaian | selesai |
 | 17 | Surat keterangan magang | selesai |
-| 18 | Laporan dari database | belum |
+| 18 | Laporan dari database | selesai |

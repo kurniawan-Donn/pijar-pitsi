@@ -85,7 +85,7 @@ class HalamanDashboardTest extends TestCase
             ->get(route('superadmin.peserta-magang.show', $peserta))
             ->assertOk()
             ->assertSee('Peserta Uji')
-            ->assertSee('belum memiliki link Google Sheets');
+            ->assertSee('tidak punya link Google Sheets lama');
 
         $this->actingAs($superAdmin)
             ->get(route('superadmin.peserta-magang.edit', $peserta))
