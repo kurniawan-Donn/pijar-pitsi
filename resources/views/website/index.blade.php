@@ -372,6 +372,13 @@
         </section>
 
         {{-- =================================================
+             FAQ (tampil bila ada pertanyaan yang ditampilkan)
+        ================================================== --}}
+        @if ($faqs->isNotEmpty())
+            @include('website.partials.faq')
+        @endif
+
+        {{-- =================================================
              PENDAFTARAN & CEK STATUS
         ================================================== --}}
         @include('website.partials.pendaftaran')

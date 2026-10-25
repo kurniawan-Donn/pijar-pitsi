@@ -67,7 +67,7 @@ bisa dibuka admin dan super admin, atau pendaftarnya sendiri lewat tautan di Cek
 | Monitoring, Feedback (rekap), Laporan & export | ✓ | ✓ | – |
 | Hari libur | ✓ | ✓ | – |
 | **Pengaturan** (tarif uang saku, batas isi logbook, periode, penanda tangan) | ✓ | lihat saja | – |
-| Profil perusahaan, banner, konten website | ✓ | ✓ | – |
+| Profil perusahaan, banner, konten website, FAQ | ✓ | ✓ | – |
 | **Kelola pengguna** (akun admin & super admin) | ✓ | – | – |
 | **Aspek penilaian** (kelompok, bobot, predikat) | ✓ | – | – |
 | **Log aktivitas** | ✓ | – | – |
@@ -166,6 +166,8 @@ Centang setiap langkah yang berhasil.
 ### G. Laporan & fitur Super Admin
 - [ ] **Laporan** → tab *Kehadiran & Uang Saku* (pilih periode), *Nilai Akhir*, *Feedback*
   → coba **Excel / PDF / CSV**.
+- [ ] **FAQ**: tambah satu pertanyaan, geser urutannya dengan ▲ ▼, sembunyikan satu FAQ, lalu cek
+  bagian **FAQ** di beranda (hanya yang ditampilkan muncul dan bisa dibuka-tutup).
 - [ ] (Super Admin) **Log Aktivitas**: semua tindakan di atas tercatat.
 - [ ] (Super Admin) **Kelola Pengguna**: tambah akun admin baru (akun peserta tidak tampil di sini).
 - [ ] (Opsional) Logbook Harian → **Impor Riwayat**: upload buku kerja `.xlsx` lama untuk peserta

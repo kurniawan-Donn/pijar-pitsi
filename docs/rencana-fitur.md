@@ -771,12 +771,16 @@ Tabel `faqs`:
 
 | Method | Path | Nama |
 |---|---|---|
-| resource (tanpa show) | `/superadmin/faq` | `superadmin.faq.*` |
-| PUT | `/superadmin/faq-urutan` | `superadmin.faq.urutan` |
+| resource (index, store, update, destroy) | `/superadmin/faq` | `superadmin.faq.*` |
+| PUT | `/superadmin/faq/{faq}/urutan` (`arah` = naik/turun) | `superadmin.faq.urutan` |
+
+Dikerjakan di satu halaman (tambah di atas, ubah di daftar yang bisa dibuka-tutup), mengikuti
+pola halaman Divisi.
 
 - Halaman publik: bagian `#faq` di beranda, berupa accordion `<details>` (tanpa library),
   dikelompokkan per kategori bila ada.
-- Seeder: 5 FAQ awal yang diambil dari teks Persyaratan/Alur.
+- 5 FAQ awal dibuat oleh migrasi `create_faqs_table`, bukan seeder, supaya ikut terbentuk
+  saat deploy.
 
 **Alumni**
 
@@ -871,7 +875,7 @@ Tabel `feedback_pesertas` + kolom `bersedia_tampil_alumni` (boolean, default fal
 | R1 ✅ | `fase-20-login-sidebar` | Login satu pintu, sidebar baru per grup, halaman daftar admin (pertanyaan 3), Rekap Kehadiran peserta, hak Pengaturan (pertanyaan 4) | R0 |
 | R2 ✅ | `fase-21-foto-profil` | `users.foto_path`, service `FotoProfil`, pas foto di biodata, `<x-avatar>` | R0 |
 | R3 ✅ | `fase-22-dashboard-peserta` | `RingkasanPeserta`, kartu dashboard, kalender mini, test logbook (8.5) | R1 |
-| R4 | `fase-23-faq` | Tabel, CRUD, accordion publik | R1 |
+| R4 ✅ | `fase-23-faq` | Tabel, CRUD, accordion publik | R1 |
 | R5 | `fase-24-alumni` | Tabel, centang di feedback, CRUD + dari peserta, carousel + popup, navbar publik baru | R2, R4 |
 
 - Setiap tahap memperbarui matriks `AksesRouteTest` dan `docs/PANDUAN-UJI-COBA.md`.

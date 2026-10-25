@@ -186,6 +186,12 @@
                 'route' => 'superadmin.pengaturan.index',
                 'active' => ['superadmin.pengaturan.*'],
             ],
+            [
+                'label' => 'FAQ',
+                'icon' => '?',
+                'route' => 'superadmin.faq.index',
+                'active' => ['superadmin.faq.*'],
+            ],
         ],
         'Sistem' => [
             [

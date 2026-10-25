@@ -18,6 +18,7 @@ use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
 use App\Http\Controllers\SuperAdmin\DaftarPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
+use App\Http\Controllers\SuperAdmin\FaqController;
 use App\Http\Controllers\SuperAdmin\FeedbackController;
 use App\Http\Controllers\SuperAdmin\ImporLogbookController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
@@ -211,6 +212,10 @@ Route::middleware(['auth', 'role:admin,super_admin'])
 
         // Kelola banner
         Route::resource('banners', BannerController::class);
+
+        // FAQ website publik
+        Route::resource('faq', FaqController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::put('/faq/{faq}/urutan', [FaqController::class, 'urutan'])->name('faq.urutan');
 
         // Kelola konten website
         Route::get('/pengaturan', [PengaturanWebsiteController::class, 'index'])
