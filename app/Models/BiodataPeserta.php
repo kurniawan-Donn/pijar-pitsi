@@ -80,6 +80,8 @@ class BiodataPeserta extends Model
      * @var array<string, string>
      */
     public const FIELD_WAJIB = [
+        // Pas foto = foto profil akun peserta (users.foto_path), bukan kolom biodata.
+        'pas_foto' => 'Pas foto',
         'nama_lengkap' => 'Nama lengkap',
         'jenis_kelamin' => 'Jenis kelamin',
         'tempat_lahir' => 'Tempat lahir',
@@ -234,6 +236,10 @@ class BiodataPeserta extends Model
 
     private function terisi(string $field): bool
     {
+        if ($field === 'pas_foto') {
+            return (bool) $this->pesertaMagang?->user?->foto_path;
+        }
+
         $nilai = $this->getAttribute($field);
 
         if (is_array($nilai)) {

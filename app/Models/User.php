@@ -102,4 +102,23 @@ class User extends Authenticatable
             default => null,
         };
     }
+
+    /**
+     * Huruf pertama nama, dipakai bila belum ada foto profil.
+     */
+    public function inisial(): string
+    {
+        return mb_strtoupper(mb_substr(trim((string) $this->name) ?: 'A', 0, 1));
+    }
+
+    /**
+     * URL foto profil (lewat controller berizin), atau null bila belum ada.
+     * Nama file ikut di query agar cache browser berganti saat foto diganti.
+     */
+    public function urlFoto(): ?string
+    {
+        return $this->foto_path
+            ? route('foto-profil.show', [$this, 'v' => substr(md5($this->foto_path), 0, 8)])
+            : null;
+    }
 }

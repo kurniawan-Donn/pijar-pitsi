@@ -53,9 +53,7 @@
 
             <a href="{{ route('profil.edit') }}" class="dash-user-info" title="Profil & password">
 
-                <div class="dash-user-avatar">
-                    {{ strtoupper(substr($authUser?->name ?? 'A', 0, 1)) }}
-                </div>
+                <x-avatar :user="$authUser" class="dash-user-avatar" />
 
                 <div class="dash-user-text">
                     <div class="dash-user-name">

@@ -122,6 +122,40 @@
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
     }
 
+    .foto-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        padding-bottom: 22px;
+    }
+
+    .foto-pratinjau {
+        border-radius: 14px;
+    }
+
+    .foto-isi h3 {
+        color: #17324d;
+        font-size: 15px;
+    }
+
+    .foto-isi p {
+        margin: 4px 0 12px;
+
+        color: #7b8794;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .foto-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+
+        font-size: 12px;
+    }
+
     .section-head {
         display: flex;
         align-items: center;
@@ -389,6 +423,26 @@
     @if ($biodata->status === 'perlu_revisi' && $biodata->catatan_revisi)
         <x-alert type="warning" title="Catatan revisi dari admin:" :message="$biodata->catatan_revisi" />
     @endif
+
+    {{-- PAS FOTO: form terpisah, bisa diganti kapan saja (juga setelah disetujui). --}}
+    <section class="section foto-section" id="pas-foto">
+        <x-avatar :user="auth()->user()" :ukuran="96" class="foto-pratinjau" />
+
+        <div class="foto-isi">
+            <h3>Pas Foto *</h3>
+            <p>
+                Foto wajah terbaru, latar polos. JPG/PNG maksimal 2 MB, otomatis dipotong persegi.
+                Foto ini juga menjadi foto profil Anda dan boleh diganti kapan saja tanpa persetujuan ulang.
+            </p>
+
+            <form method="POST" action="{{ route('profil.foto') }}" enctype="multipart/form-data" class="foto-form">
+                @csrf
+                @method('PUT')
+                <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih pas foto">
+                <x-button variant="secondary">{{ auth()->user()->foto_path ? 'Ganti Foto' : 'Unggah Foto' }}</x-button>
+            </form>
+        </div>
+    </section>
 
     <form method="POST" action="{{ route('peserta.biodata.update') }}">
         @csrf

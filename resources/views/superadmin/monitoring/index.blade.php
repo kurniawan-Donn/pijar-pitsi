@@ -127,6 +127,12 @@
         color: #17324d;
     }
 
+    .nama-foto {
+        float: left;
+
+        margin: 2px 9px 0 0;
+    }
+
     .kecil {
         display: block;
 
@@ -315,6 +321,7 @@
                         @endphp
                         <tr>
                             <td class="nama">
+                                <x-avatar :user="$peserta->user" :nama="$peserta->nama" :ukuran="28" class="nama-foto" />
                                 <strong>{{ $peserta->nama }}</strong>
                                 <span class="kecil">{{ $peserta->nomor_peserta }}{{ $peserta->asal_kampus ? ' · '.$peserta->asal_kampus : '' }}</span>
                                 <span class="kecil">

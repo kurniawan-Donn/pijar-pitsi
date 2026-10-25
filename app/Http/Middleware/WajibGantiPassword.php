@@ -11,7 +11,7 @@ class WajibGantiPassword
     /**
      * Route yang tetap boleh dibuka sebelum password sementara diganti.
      */
-    private const DIIZINKAN = ['profil.edit', 'profil.password', 'logout'];
+    private const DIIZINKAN = ['profil.edit', 'profil.password', 'foto-profil.show', 'logout'];
 
     /**
      * Akun dengan password sementara (dibuat/di-reset admin) wajib

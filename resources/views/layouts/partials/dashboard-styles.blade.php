@@ -515,6 +515,34 @@
     }
 
     /* =========================================================
+       KOMPONEN: AVATAR (foto profil / inisial)
+    ========================================================== */
+
+    .x-avatar {
+        width: var(--avatar, 40px);
+        height: var(--avatar, 40px);
+
+        flex-shrink: 0;
+
+        border-radius: 50%;
+
+        object-fit: cover;
+    }
+
+    .x-avatar-inisial {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        background: #eaf3fb;
+        color: #1779c9;
+
+        font-size: calc(var(--avatar, 40px) * .4);
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    /* =========================================================
        KOMPONEN: BADGE STATUS
     ========================================================== */
 

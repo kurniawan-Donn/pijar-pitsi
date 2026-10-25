@@ -50,6 +50,50 @@
         justify-content: flex-end;
     }
 
+    .foto-panel {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        max-width: 1000px;
+        margin-bottom: 18px;
+    }
+
+    .foto-pratinjau {
+        border-radius: 14px;
+    }
+
+    .foto-panel p {
+        margin: 4px 0 12px;
+
+        color: #7b8794;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .foto-aksi,
+    .foto-form {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+
+        font-size: 12px;
+    }
+
+    .link-hapus {
+        border: none;
+
+        background: none;
+        color: #c62828;
+
+        font-family: inherit;
+        font-size: 12px;
+        font-weight: 700;
+
+        cursor: pointer;
+    }
+
     .akun-info {
         margin-bottom: 18px;
         padding: 12px 14px;
@@ -86,6 +130,44 @@
     @if ($user->wajib_ganti_password)
         <x-alert type="info" message="Akun Anda masih memakai password sementara dari admin. Ganti password di panel Ganti Password untuk membuka halaman lain." />
     @endif
+
+    @if ($errors->has('foto'))
+        <x-alert type="error" :message="$errors->first('foto')" />
+    @endif
+
+    {{-- FOTO PROFIL (untuk peserta sekaligus pas foto biodata) --}}
+    @unless ($user->wajib_ganti_password)
+        <section class="panel foto-panel">
+            <x-avatar :user="$user" :ukuran="84" class="foto-pratinjau" />
+
+            <div>
+                <h3>Foto Profil</h3>
+                <p>
+                    JPG/PNG maksimal 2 MB, otomatis dipotong persegi.
+                    @if ($user->isPeserta())
+                        Foto ini juga dipakai sebagai pas foto biodata.
+                    @endif
+                </p>
+
+                <div class="foto-aksi">
+                    <form method="POST" action="{{ route('profil.foto') }}" enctype="multipart/form-data" class="foto-form">
+                        @csrf
+                        @method('PUT')
+                        <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih foto profil">
+                        <x-button variant="secondary">{{ $user->foto_path ? 'Ganti Foto' : 'Unggah Foto' }}</x-button>
+                    </form>
+
+                    @if ($user->foto_path)
+                        <form method="POST" action="{{ route('profil.foto.hapus') }}" onsubmit="return confirm('Hapus foto profil?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="link-hapus">Hapus foto</button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        </section>
+    @endunless
 
     <div class="grid">
 

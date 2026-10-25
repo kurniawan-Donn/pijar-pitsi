@@ -73,7 +73,7 @@ bisa dibuka admin dan super admin, atau pendaftarnya sendiri lewat tautan di Cek
 | **Log aktivitas** | ✓ | – | – |
 | Isi biodata, logbook harian, izin/sakit, lihat Rekap Kehadiran | – | – | ✓ |
 | Kirim feedback, unduh surat keterangan | – | – | ✓ |
-| Ganti profil & password sendiri | ✓ | ✓ | ✓ |
+| Ganti profil, password & foto profil sendiri | ✓ | ✓ | ✓ |
 
 Ringkasnya: **Super Admin = Admin + grup menu Sistem** (Kelola Pengguna, Aspek Penilaian,
 Pengaturan, Log Aktivitas). Admin mengelola hari libur lewat menu **Hari Libur**.
@@ -127,6 +127,7 @@ Centang setiap langkah yang berhasil.
 ### D. Peserta mulai (login **Peserta** di jendela lain)
 - [ ] Login dengan email + password sementara: langsung diminta **ganti password**.
 - [ ] **Biodata**:
+  - [ ] unggah **Pas Foto** (JPG/PNG ≤ 2 MB); foto langsung tampil di pojok kanan atas dan di tabel admin;
   - [ ] isi sebagian → **Simpan Draft** (progres % naik);
   - [ ] lengkapi semua, centang pernyataan → **Kirim untuk Ditinjau**.
 - [ ] **Logbook Harian**:
