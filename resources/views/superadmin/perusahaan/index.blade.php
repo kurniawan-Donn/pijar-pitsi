@@ -348,6 +348,70 @@
     }
 
     /* =====================================================
+       PETA LOKASI
+    ===================================================== */
+
+    .peta-pengaturan {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 300px;
+        gap: 18px;
+        align-items: start;
+    }
+
+    .peta-centang {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-bottom: 12px;
+
+        color: var(--teks);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .peta-pratinjau iframe,
+    .peta-kosong {
+        width: 100%;
+        height: 190px;
+
+        border: 1px solid var(--garis);
+        border-radius: 10px;
+    }
+
+    .peta-pratinjau > span {
+        display: block;
+
+        margin-top: 5px;
+
+        color: var(--teks-sekunder);
+        font-size: 11.5px;
+        text-align: center;
+    }
+
+    .peta-kosong {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        padding: 14px;
+
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
+
+        font-size: 12px;
+        text-align: center;
+    }
+
+    @media (max-width: 800px) {
+        .peta-pengaturan {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* =====================================================
        ACTIONS
     ====================================================== */
 
@@ -842,6 +906,66 @@
                             yang dapat ditampilkan pada website PILARA.
                         </div>
 
+                    </div>
+
+                </div>
+
+                {{-- DIVIDER --}}
+
+                <hr class="form-divider">
+
+                {{-- =================================================
+                     PETA LOKASI (bagian Kontak di beranda)
+                ================================================== --}}
+
+                <div class="peta-pengaturan">
+
+                    <div>
+
+                        <label class="peta-centang">
+                            <input type="checkbox" name="tampilkan_peta" value="1" @checked(old('tampilkan_peta', $perusahaan?->tampilkan_peta ?? true))>
+                            Tampilkan peta lokasi di bagian Kontak beranda
+                        </label>
+
+                        <div class="form-group">
+
+                            <label for="peta_embed">
+                                Kode Sematan Google Maps (opsional)
+                            </label>
+
+                            <textarea
+                                id="peta_embed"
+                                name="peta_embed"
+                                rows="3"
+                                placeholder='&lt;iframe src="https://www.google.com/maps/embed?pb=..."&gt;&lt;/iframe&gt;'
+                            >{{ old('peta_embed', $perusahaan?->peta_embed_url ?? '') }}</textarea>
+
+                            <div class="help">
+                                Kosongkan agar peta dibuat otomatis dari <b>alamat</b> di atas.
+                                Agar titiknya tepat: buka Google Maps → cari kantor → <b>Bagikan</b> →
+                                <b>Sematkan peta</b> → <b>Salin HTML</b>, lalu tempel di sini.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="peta-pratinjau">
+                        @if ($perusahaan?->urlPeta())
+                            <iframe
+                                src="{{ $perusahaan->urlPeta() }}"
+                                title="Pratinjau peta lokasi"
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                allowfullscreen
+                            ></iframe>
+                            <span>Pratinjau peta yang tampil sekarang</span>
+                        @else
+                            <div class="peta-kosong">
+                                <x-icon name="map-pin" :size="22" />
+                                {{ $perusahaan?->tampilkan_peta === false ? 'Peta sedang disembunyikan.' : 'Isi alamat lalu simpan untuk melihat pratinjau peta.' }}
+                            </div>
+                        @endif
                     </div>
 
                 </div>
