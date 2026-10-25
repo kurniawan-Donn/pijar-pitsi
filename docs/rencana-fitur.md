@@ -1041,7 +1041,7 @@ Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
 
 ## 10. Revisi 6: Isi Jam Logbook dari Kartu Absensi
 
-Status: **direncanakan**, menunggu keputusan pemilik (10.9). Branch: `fase-32-scan-kartu-absensi`.
+Status: **dikerjakan**; keputusan pemilik di 10.9. Branch: `fase-32-scan-kartu-absensi`.
 Dikerjakan setelah modul logbook stabil (Revisi 5 sudah selesai dan di-merge).
 
 ### 10.1 Latar belakang
@@ -1068,7 +1068,7 @@ sistem membaca jam dengan Gemini, peserta memeriksa lalu menyimpan.
 | Depan | 8 | 07:57 | 16:38 | |
 | Depan | 9 | 08:06 | 16:42 | |
 | Depan | 12 | 07:57 | 16:41 | tercetak di baris 11 (11 = Minggu) |
-| Depan | 13 | 08:10 | 16:49 | tercetak di antara baris 12–13 |
+| Depan | 13 | 08:10 | 16:43 | tercetak di antara baris 12–13 (dikoreksi pemilik) |
 | Depan | 14 | 08:02 | – | tercetak di antara baris 13–14 |
 | Depan | 15 | 08:05 | 16:37 | tercetak di antara baris 14–15 |
 | Belakang | 16 | 07:54 | 16:54 | |
@@ -1078,7 +1078,7 @@ sistem membaca jam dengan Gemini, peserta memeriksa lalu menyimpan.
 | Belakang | 22 | 07:47 | 16:45 | |
 | Belakang | 23 | 08:05 | – | belum keluar saat difoto |
 
-Baris tanggal 12–15 sisi depan adalah kasus sulit (meleset) dan perlu dikonfirmasi pemilik (10.9).
+Baris tanggal 12–15 sisi depan adalah kasus sulit (meleset); kunci jawaban sudah dikonfirmasi pemilik.
 
 ### 10.2 Cara baca (Gemini)
 
@@ -1154,9 +1154,16 @@ harian, akses foto kartu (peserta lain 403), lama vs baru, penanda diubah/di lua
 Uji akurasi nyata dengan dua foto contoh (memanggil Gemini sungguhan) dilaporkan terpisah, tidak
 masuk test otomatis.
 
-### 10.9 Keputusan yang dibutuhkan
+### 10.9 Keputusan pemilik (26-10-2026)
 
-Dicatat di percakapan; diisi setelah pemilik menjawab.
+1. **Kunci jawaban** sisi depan 11–15: 11 kosong (Minggu), 12 = 07:57–16:41, 13 = 08:10–16:43,
+   14 = 08:02 tanpa keluar, 15 = 08:05–16:37.
+2. **Tanggal tanpa logbook:** logbook dibuat (Hadir, jam terisi, status Menunggu) dengan tanda
+   *activity belum diisi*. Admin tidak bisa menerimanya sebelum activity diisi; dashboard
+   mengingatkan peserta.
+3. **Bulan yang bisa dipilih:** hanya bulan dari jendela aktif (tanggal 14–17 → sisi 1–15 bulan
+   ini; tanggal 28–2 → sisi 16–31 bulan dari tanggal 28). Kartu bulan lain tetap bisa diisi manual.
+4. **Tanggal Izin/Sakit:** dilewati, baris tampil kuning dengan peringatan; tidak ditimpa.
 
 ### 10.10 Urutan pengerjaan
 
