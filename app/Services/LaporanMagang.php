@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\FeedbackPeserta;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
-use App\Models\TarifUangSaku;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -23,13 +22,14 @@ class LaporanMagang
 {
     public const JENIS = [
         'peserta' => 'Rekap Peserta',
-        'absensi' => 'Rekap Absensi',
+        'absensi' => 'Kehadiran & Uang Saku',
         'nilai' => 'Nilai Akhir',
         'feedback' => 'Feedback Magang',
     ];
 
     public function __construct(
-        private readonly AbsensiSheetService $absensi,
+        private readonly KalenderLogbook $kalender,
+        private readonly PeriodeMagang $periode,
     ) {}
 
     /**
@@ -90,73 +90,62 @@ class LaporanMagang
     }
 
     /**
-     * Rekap absensi & uang saku per peserta untuk satu bulan (dibaca dari Google Sheets).
+     * Rekap kehadiran & uang saku per peserta untuk satu periode 28–27
+     * (dari logbook harian di database).
      *
-     * @param  array{bulan?: ?string}  $filter
+     * @param  array{periode?: ?string}  $filter
      */
     private function absensi(array $filter): array
     {
-        $bulan = $this->bulan($filter['bulan'] ?? null);
+        $kunci = $this->kunciPeriode($filter['periode'] ?? null);
+        $rentang = $this->periode->rentang($kunci);
 
-        $peserta = $this->queryPeriode($bulan->toDateString(), $bulan->endOfMonth()->toDateString())
+        $peserta = $this->queryPeriode($rentang['mulai']->toDateString(), $rentang['selesai']->toDateString())
+            ->whereNotNull('periode_mulai')
+            ->whereNotNull('periode_selesai')
+            ->with(['biodata', 'penempatans.divisi'])
             ->orderBy('nama')
             ->get();
 
-        // Tarif diatur admin (Pengaturan Magang); dipakai tarif yang berlaku di awal bulan.
-        $tarif = TarifUangSaku::berlakuPada($bulan);
-        $tarifPenuh = $tarif->tarif_hari_penuh;
-        $tarifSetengah = $tarif->tarif_setengah_hari;
-        $total = ['hadir' => 0, 'uang_saku' => 0, 'gagal' => 0];
+        $total = ['hari_penuh' => 0, 'setengah_hari' => 0, 'uang_saku' => 0, 'menunggu' => 0];
 
-        $baris = $peserta->values()->map(function (PesertaMagang $p, int $i) use ($bulan, $tarifPenuh, $tarifSetengah, &$total) {
-            $dasar = [$i + 1, $p->nama, $p->nim ?: '-'];
+        $baris = $peserta->values()->map(function (PesertaMagang $p, int $i) use ($kunci, &$total) {
+            $periode = collect($this->kalender->daftarPeriode($p))->firstWhere('kunci', $kunci);
+            $rekap = $this->kalender->rekap($periode ? $this->kalender->hari($p, $periode) : []);
+            $biodata = $p->biodata;
 
-            if (! $p->google_sheet_url) {
-                $total['gagal']++;
-
-                return array_merge($dasar, array_fill(0, 8, '-'), ['Belum ada link Google Sheets']);
+            foreach (array_keys($total) as $kolom) {
+                $total[$kolom] += $rekap[$kolom];
             }
 
-            try {
-                $rows = $this->absensi->ambil($p->google_sheet_url, $bulan)['rows'];
-            } catch (\Throwable $e) {
-                report($e);
-                $total['gagal']++;
-
-                return array_merge($dasar, array_fill(0, 8, '-'), [$e instanceof TabBulanTidakDitemukanException ? 'Tab bulan tidak ada' : 'Gagal membaca sheet']);
-            }
-
-            $rekap = RekapAbsensi::hitung($rows);
-            $logbook = Logbook::ringkasan(Logbook::baris($rows));
-            $uangSaku = RekapAbsensi::uangSaku($rekap, $tarifPenuh, $tarifSetengah);
-
-            $total['hadir'] += $rekap['hadir'];
-            $total['uang_saku'] += $uangSaku;
-
-            return array_merge($dasar, [
-                $rekap['tercatat'],
-                $rekap['hadir'],
+            return [
+                $i + 1,
+                $p->nama,
+                $p->nim ?: '-',
+                $p->penempatanUntuk($kunci)?->divisi?->nama ?? '-',
                 $rekap['hari_penuh'],
                 $rekap['setengah_hari'],
                 $rekap['izin'],
                 $rekap['sakit'],
-                $logbook['Diterima'].'/'.$logbook['total'],
-                $uangSaku,
-                '',
-            ]);
+                $rekap['libur'],
+                $rekap['belum_diisi'],
+                $rekap['menunggu'],
+                $rekap['uang_saku'],
+                $biodata?->no_rekening ? trim($biodata->nama_bank.' '.$biodata->no_rekening.' a.n. '.$biodata->atas_nama_rekening) : '-',
+            ];
         })->all();
 
         return [
-            'judul' => 'Rekap Absensi & Uang Saku',
-            'keterangan' => 'Bulan '.$bulan->translatedFormat('F Y'),
-            'kolom' => ['No', 'Nama', 'NIM', 'Hari Tercatat', 'Hadir', 'Hari Penuh', 'Setengah Hari', 'Izin', 'Sakit', 'Logbook Diterima', 'Uang Saku (Rp)', 'Keterangan'],
+            'judul' => 'Rekap Kehadiran & Uang Saku',
+            'keterangan' => 'Periode '.$this->periode->label($kunci).' ('.$rentang['mulai']->translatedFormat('d M').' – '.$rentang['selesai']->translatedFormat('d M Y').')',
+            'kolom' => ['No', 'Nama', 'NIM', 'Divisi', 'Hari Penuh', 'Setengah Hari', 'Izin', 'Sakit', 'Libur', 'Belum Diisi', 'Menunggu Verifikasi', 'Uang Saku (Rp)', 'Rekening'],
             'baris' => $baris,
             'ringkasan' => [
                 'Jumlah peserta' => $peserta->count(),
-                'Total hadir' => $total['hadir'].' hari',
+                'Total hari penuh' => $total['hari_penuh'].' hari',
+                'Total setengah hari' => $total['setengah_hari'].' hari',
                 'Total uang saku' => 'Rp '.number_format($total['uang_saku'], 0, ',', '.'),
-                'Tarif hari penuh / setengah hari' => 'Rp '.number_format($tarifPenuh, 0, ',', '.').' / Rp '.number_format($tarifSetengah, 0, ',', '.'),
-                'Data tidak terbaca' => $total['gagal'],
+                'Menunggu verifikasi' => $total['menunggu'].' hari',
             ],
         ];
     }
@@ -259,11 +248,14 @@ class LaporanMagang
             ->when($dari, fn (Builder $q) => $q->where(fn (Builder $w) => $w->whereNull('periode_selesai')->orWhereDate('periode_selesai', '>=', $dari)));
     }
 
-    private function bulan(?string $bulan): CarbonImmutable
+    /**
+     * Kunci periode (Y-m) dari filter, atau periode yang sedang berjalan.
+     */
+    private function kunciPeriode(?string $kunci): string
     {
-        return $bulan && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $bulan)
-            ? CarbonImmutable::createFromFormat('!Y-m', $bulan)
-            : CarbonImmutable::now()->startOfMonth();
+        return $kunci && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $kunci)
+            ? $kunci
+            : $this->periode->kunciUntuk(CarbonImmutable::today());
     }
 
     private function labelPeriode(?string $dari, ?string $sampai): string

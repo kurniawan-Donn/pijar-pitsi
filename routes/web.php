@@ -20,7 +20,6 @@ use App\Http\Controllers\SuperAdmin\FeedbackController;
 use App\Http\Controllers\SuperAdmin\ImporLogbookController;
 use App\Http\Controllers\SuperAdmin\LaporanController;
 use App\Http\Controllers\SuperAdmin\LogAktivitasController;
-use App\Http\Controllers\SuperAdmin\LogbookController;
 use App\Http\Controllers\SuperAdmin\LogbookHarianController;
 use App\Http\Controllers\SuperAdmin\MonitoringController;
 use App\Http\Controllers\SuperAdmin\PenempatanPesertaController;
@@ -268,29 +267,6 @@ Route::middleware(['auth', 'role:admin,super_admin'])
                 Route::put('/status', 'updateStatus')->name('status');
                 Route::delete('/', 'destroy')->name('destroy');
             });
-
-        // Update absensi langsung ke Google Sheets peserta
-        Route::put(
-            '/peserta-magang/{pesertaMagang}/absensi',
-            [PesertaMagangController::class, 'updateAbsensi']
-        )->name('peserta-magang.absensi.update');
-
-        // Hapus cache & baca ulang absensi dari Google Sheets
-        Route::post(
-            '/peserta-magang/{pesertaMagang}/absensi/muat-ulang',
-            [PesertaMagangController::class, 'muatUlangAbsensi']
-        )->name('peserta-magang.absensi.refresh');
-
-        // Logbook kegiatan (dibaca dari sheet, verifikasi ke kolom Action)
-        Route::get(
-            '/peserta-magang/{pesertaMagang}/logbook',
-            [LogbookController::class, 'show']
-        )->name('peserta-magang.logbook');
-
-        Route::put(
-            '/peserta-magang/{pesertaMagang}/logbook',
-            [LogbookController::class, 'update']
-        )->name('peserta-magang.logbook.update');
 
         // Feedback peserta: rekap & detail
         Route::get('/feedback', [FeedbackController::class, 'index'])->name('feedback.index');

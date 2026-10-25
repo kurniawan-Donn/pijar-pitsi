@@ -3,13 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\AspekPenilaian;
+use App\Models\LogbookHarian;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\User;
-use App\Services\GoogleSheetsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Mockery\MockInterface;
 use OpenSpout\Reader\XLSX\Reader as XlsxReader;
 use Tests\TestCase;
 
@@ -152,38 +151,39 @@ class LaporanTest extends TestCase
             ->assertSee('Admin Uji');
     }
 
-    public function test_rekap_absensi_menghitung_uang_saku_dan_menandai_sheet_bermasalah(): void
+    public function test_rekap_kehadiran_dan_uang_saku_per_periode_dari_logbook(): void
     {
-        $this->peserta(['nama' => 'Ada Sheet', 'google_sheet_url' => 'https://docs.google.com/spreadsheets/d/ada/edit']);
-        $this->peserta(['nama' => 'Tanpa Sheet']);
-        $this->peserta(['nama' => 'Tab Hilang', 'google_sheet_url' => 'https://docs.google.com/spreadsheets/d/hilang/edit']);
+        // Hari ini 15 Okt 2026 → periode Oktober = 28 Sep – 27 Okt 2026.
+        $aktif = $this->peserta(['nama' => 'Peserta Rajin', 'periode_mulai' => '2026-09-01', 'periode_selesai' => '2026-12-31']);
+        $this->peserta(['nama' => 'Belum Mulai', 'periode_mulai' => '2026-11-01', 'periode_selesai' => '2026-12-31']);
 
-        $this->mock(GoogleSheetsService::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getSheetTitlesFromUrl')
-                ->with('https://docs.google.com/spreadsheets/d/ada/edit')->andReturn(['OKTOBER 2026']);
-            $mock->shouldReceive('getSheetTitlesFromUrl')
-                ->with('https://docs.google.com/spreadsheets/d/hilang/edit')->andReturn(['SEPTEMBER 2026']);
-            $mock->shouldReceive('getValuesFromUrl')->andReturn([
-                ['No'], [''],
-                ['1', '01/10', '08:00', '12:00', '13:00', '16:00', 'Coding', 'Fitur', 'Kantor', 'Diterima'],
-                ['2', '02/10', '08:00', '12:00', '', '', 'Rapat', '', '', '......'],
-                ['3', '03/10', '', '', '', '', 'Sakit', '', '', ''],
+        foreach ([
+            ['2026-09-28', ['pagi_masuk' => '08:00', 'siang_keluar' => '16:30']],                       // penuh
+            ['2026-09-29', ['pagi_masuk' => '08:00', 'pagi_keluar' => '12:00']],                        // setengah
+            ['2026-09-30', ['pagi_masuk' => '08:00', 'siang_keluar' => '16:30', 'status_verifikasi' => 'ditolak']],
+            ['2026-10-01', ['kehadiran' => 'sakit']],
+        ] as [$tanggal, $data]) {
+            LogbookHarian::create($data + [
+                'peserta_magang_id' => $aktif->id,
+                'tanggal' => $tanggal,
+                'kehadiran' => 'hadir',
+                'activity' => 'Kegiatan',
             ]);
-        });
+        }
 
         $response = $this->actingAs($this->admin)
-            ->get(route('superadmin.laporan.index', ['jenis' => 'absensi', 'bulan' => '2026-10']));
+            ->get(route('superadmin.laporan.index', ['jenis' => 'absensi', 'periode' => '2026-10']));
 
-        $response->assertOk()
-            ->assertSee('Belum ada link Google Sheets')
-            ->assertSee('Tab bulan tidak ada');
+        $laporan = $response->viewData('laporan');
 
-        $baris = collect($response->viewData('laporan')['baris'])->keyBy(1);
+        $response->assertOk()->assertSee('Periode Oktober 2026 (28 Sep – 27 Okt 2026)');
+        $this->assertSame(['Peserta Rajin'], array_column($laporan['baris'], 1));
 
-        // Hari Tercatat, Hadir, Penuh, Setengah, Izin, Sakit, Logbook, Uang saku
-        $this->assertSame([3, 2, 1, 1, 0, 1, '1/3', 75000], array_slice($baris['Ada Sheet'], 3, 8));
-        $this->assertSame('Rp 75.000', $response->viewData('laporan')['ringkasan']['Total uang saku']);
-        $this->assertSame(2, $response->viewData('laporan')['ringkasan']['Data tidak terbaca']);
+        // Hari Penuh, Setengah, Izin, Sakit, Libur, Belum Diisi, Menunggu, Uang Saku
+        $baris = $laporan['baris'][0];
+        $this->assertSame([1, 1, 0, 1], array_slice($baris, 4, 4));
+        $this->assertSame(75000, $baris[11]);
+        $this->assertSame('Rp 75.000', $laporan['ringkasan']['Total uang saku']);
     }
 
     public function test_laporan_nilai_memuat_kolom_aspek_dan_rata_rata(): void

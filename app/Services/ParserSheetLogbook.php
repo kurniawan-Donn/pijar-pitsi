@@ -261,9 +261,12 @@ class ParserSheetLogbook
     private function status(string $format, array $row, array $kolom): string
     {
         if ($format === 'baru' && isset($kolom['action'])) {
-            $action = Logbook::actionBaku($this->teks($row[$kolom['action']] ?? ''));
+            $action = strtolower($this->teks($row[$kolom['action']] ?? ''));
 
-            return $action ? strtolower($action) : LogbookHarian::MENUNGGU;
+            // Kolom Action sheet: Diterima / Ditolak / Review; selain itu belum diperiksa.
+            return in_array($action, [LogbookHarian::DITERIMA, LogbookHarian::DITOLAK, LogbookHarian::REVIEW], true)
+                ? $action
+                : LogbookHarian::MENUNGGU;
         }
 
         if (isset($kolom['paraf']) && in_array(mb_strtolower($this->teks($row[$kolom['paraf']] ?? '')), ['v', '✓', '√'], true)) {

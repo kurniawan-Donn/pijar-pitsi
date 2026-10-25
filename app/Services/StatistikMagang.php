@@ -6,7 +6,6 @@ use App\Models\PengajuanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\PredikatPenilaian;
-use App\Models\TarifUangSaku;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 
@@ -15,10 +14,6 @@ use Illuminate\Support\Collection;
  */
 class StatistikMagang
 {
-    public function __construct(
-        private readonly AbsensiSheetService $absensi,
-    ) {}
-
     /**
      * @return array{aktif: int, selesai: int, total: int, belum_dinilai: int}
      */
@@ -128,46 +123,5 @@ class StatistikMagang
             ->merge($jumlah->keys()->diff($urutan))
             ->mapWithKeys(fn (string $predikat) => [$predikat => (int) ($jumlah[$predikat] ?? 0)])
             ->all();
-    }
-
-    /**
-     * Ringkasan absensi bulan ini dari data yang sudah tersimpan di cache
-     * (tidak memanggil Google, supaya dashboard tetap cepat).
-     *
-     * @return array{peserta_tersedia: int, peserta_aktif: int, hadir: int, izin: int, sakit: int, uang_saku: int}
-     */
-    public function absensiBulanIni(): array
-    {
-        $bulan = CarbonImmutable::now()->startOfMonth();
-
-        $peserta = PesertaMagang::where('status', 'aktif')
-            ->whereNotNull('google_sheet_url')
-            ->get(['id', 'google_sheet_url']);
-
-        $tarif = TarifUangSaku::berlakuPada($bulan);
-
-        $hasil = ['peserta_tersedia' => 0, 'peserta_aktif' => $peserta->count(), 'hadir' => 0, 'izin' => 0, 'sakit' => 0, 'uang_saku' => 0];
-
-        foreach ($peserta as $item) {
-            $data = $this->absensi->dariCache($item->google_sheet_url, $bulan);
-
-            if (! $data) {
-                continue;
-            }
-
-            $rekap = RekapAbsensi::hitung($data['rows']);
-
-            $hasil['peserta_tersedia']++;
-            $hasil['hadir'] += $rekap['hadir'];
-            $hasil['izin'] += $rekap['izin'];
-            $hasil['sakit'] += $rekap['sakit'];
-            $hasil['uang_saku'] += RekapAbsensi::uangSaku(
-                $rekap,
-                $tarif->tarif_hari_penuh,
-                $tarif->tarif_setengah_hari
-            );
-        }
-
-        return $hasil;
     }
 }

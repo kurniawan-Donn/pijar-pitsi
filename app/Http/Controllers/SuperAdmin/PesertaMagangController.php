@@ -2,27 +2,18 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
-use App\Http\Controllers\Concerns\MemilihBulanAbsensi;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PesertaMagangRequest;
 use App\Models\Divisi;
 use App\Models\LogAktivitas;
 use App\Models\PesertaMagang;
-use App\Models\TarifUangSaku;
-use App\Services\AbsensiSheetService;
-use App\Services\Logbook;
 use App\Services\PeriodeMagang;
-use App\Services\RekapAbsensi;
-use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PesertaMagangController extends Controller
 {
-    use MemilihBulanAbsensi;
-
     /**
      * Menampilkan daftar peserta magang.
      */
@@ -59,42 +50,20 @@ class PesertaMagangController extends Controller
     }
 
     /**
-     * Menampilkan detail peserta sekaligus membaca absensi
-     * bulan terpilih dari Google Sheets.
+     * Menampilkan detail peserta: data, akun, penempatan, dan tautan fitur.
      */
-    public function show(Request $request, PesertaMagang $pesertaMagang, AbsensiSheetService $absensi, PeriodeMagang $periode): View
+    public function show(PesertaMagang $pesertaMagang, PeriodeMagang $periode): View
     {
         $pesertaMagang->load(['penilaian', 'user', 'pengajuanMagang.mahasiswa', 'penempatans.divisi', 'biodata', 'feedback', 'suratKeterangan']);
 
-        $bulan = $this->bulanDariRequest($request);
-        $sheet = $this->bacaSheetBulan($pesertaMagang, $bulan, $absensi);
-        $sheetRows = $sheet['rows'];
-
-        $rekap = RekapAbsensi::hitung($sheetRows);
-        $tarif = TarifUangSaku::berlakuPada($bulan);
-
         return view('superadmin.peserta-magang.show', [
             'pesertaMagang' => $pesertaMagang,
-            'sheetRows' => $sheetRows,
-            'sheetError' => $sheet['error'],
-            'rekap' => $rekap,
-            'uangSaku' => RekapAbsensi::uangSaku(
-                $rekap,
-                $tarif->tarif_hari_penuh,
-                $tarif->tarif_setengah_hari
-            ),
-            'tarif' => $tarif,
             'periodeMagang' => $periode->untukPeserta($pesertaMagang),
             'pilihanDivisi' => Divisi::query()
                 ->where('aktif', true)
                 ->orWhereIn('id', $pesertaMagang->penempatans->pluck('divisi_id'))
                 ->orderBy('nama')
                 ->get(),
-            'bulanDipilih' => $bulan,
-            'pilihanBulan' => $this->pilihanBulan($pesertaMagang, $bulan),
-            'ringkasanLogbook' => Logbook::ringkasan(Logbook::baris($sheetRows)),
-            'tabAktif' => $sheet['tab'],
-            'diambilPada' => $sheet['diambil_pada'],
         ]);
     }
 
@@ -124,97 +93,8 @@ class PesertaMagangController extends Controller
     }
 
     /**
-     * Memperbarui absensi peserta langsung ke Google Sheets.
-     */
-    public function updateAbsensi(
-        Request $request,
-        PesertaMagang $pesertaMagang,
-        AbsensiSheetService $absensi
-    ): RedirectResponse {
-        $validated = $request->validate([
-            'bulan' => ['required', 'date_format:Y-m'],
-            'sheet_row' => ['required', 'integer', 'min:'.config('absensi.first_data_row'), 'max:'.config('absensi.last_row')],
-            'pagi_masuk' => ['nullable', 'date_format:H:i'],
-            'pagi_keluar' => ['nullable', 'date_format:H:i'],
-            'siang_masuk' => ['nullable', 'date_format:H:i'],
-            'siang_keluar' => ['nullable', 'date_format:H:i'],
-        ], [
-            'bulan.required' => 'Bulan absensi tidak ditemukan.',
-            'bulan.date_format' => 'Bulan absensi tidak valid.',
-            'sheet_row.required' => 'Baris Google Sheets tidak ditemukan.',
-            'sheet_row.integer' => 'Baris Google Sheets tidak valid.',
-            'sheet_row.min' => 'Baris Google Sheets tidak valid.',
-            'sheet_row.max' => 'Baris Google Sheets tidak valid.',
-            'pagi_masuk.date_format' => 'Format Pagi Masuk harus HH:MM.',
-            'pagi_keluar.date_format' => 'Format Pagi Keluar harus HH:MM.',
-            'siang_masuk.date_format' => 'Format Siang Masuk harus HH:MM.',
-            'siang_keluar.date_format' => 'Format Siang Keluar harus HH:MM.',
-        ]);
-
-        $bulan = CarbonImmutable::createFromFormat('!Y-m', $validated['bulan']);
-
-        $redirect = redirect()->route('superadmin.peserta-magang.show', [
-            'pesertaMagang' => $pesertaMagang,
-            'bulan' => $validated['bulan'],
-        ]);
-
-        if (! $pesertaMagang->google_sheet_url) {
-            return $redirect->with('error', 'Peserta ini belum memiliki Google Sheets.');
-        }
-
-        try {
-            $absensi->perbaruiWaktu(
-                $pesertaMagang->google_sheet_url,
-                $bulan,
-                (int) $validated['sheet_row'],
-                $validated
-            );
-
-            LogAktivitas::catat(
-                'ubah_absensi',
-                $pesertaMagang,
-                "Absensi {$pesertaMagang->nama} ({$validated['bulan']}, baris {$validated['sheet_row']}) diperbarui",
-                array_intersect_key($validated, array_flip(['bulan', 'sheet_row', 'pagi_masuk', 'pagi_keluar', 'siang_masuk', 'siang_keluar']))
-            );
-
-            return $redirect->with('success', 'Data absensi berhasil diperbarui di Google Sheets.');
-        } catch (\Throwable $e) {
-            report($e);
-
-            return $redirect->with(
-                'error',
-                'Data absensi gagal diperbarui. Periksa koneksi dan izin Google Sheets.'
-            );
-        }
-    }
-
-    /**
-     * Hapus cache dan baca ulang absensi dari Google Sheets.
-     */
-    public function muatUlangAbsensi(
-        Request $request,
-        PesertaMagang $pesertaMagang,
-        AbsensiSheetService $absensi
-    ): RedirectResponse {
-        $bulan = $this->bulanDariRequest($request);
-
-        if ($pesertaMagang->google_sheet_url) {
-            $absensi->lupakan($pesertaMagang->google_sheet_url, $bulan);
-        }
-
-        return redirect()
-            ->route('superadmin.peserta-magang.show', [
-                'pesertaMagang' => $pesertaMagang,
-                'bulan' => $bulan->format('Y-m'),
-            ])
-            ->with('success', 'Data absensi dimuat ulang dari Google Sheets.');
-    }
-
-    /**
-     * Menghapus peserta.
-     *
-     * Absensi lokal peserta juga akan ikut terhapus
-     * karena menggunakan cascadeOnDelete().
+     * Menghapus peserta beserta data turunannya (cascadeOnDelete):
+     * biodata, logbook, izin, penempatan, penilaian, feedback, surat.
      */
     public function destroy(PesertaMagang $pesertaMagang): RedirectResponse
     {

@@ -478,23 +478,25 @@
     {{-- ABSENSI & NILAI --}}
     <section class="panel">
         <div class="panel-title">
-            <h3>Absensi {{ now()->translatedFormat('F') }}</h3>
-            <span>{{ $absensi['peserta_tersedia'] }}/{{ $absensi['peserta_aktif'] }} peserta</span>
+            <h3>Kehadiran Periode {{ $kehadiran['periode'] }}</h3>
+            <span>{{ $kehadiran['peserta'] }} peserta aktif</span>
         </div>
 
-        @if ($absensi['peserta_tersedia'] > 0)
+        @if ($kehadiran['peserta'] > 0)
             <div class="mini-stats">
-                <div class="mini-stat"><span>Hadir</span><strong>{{ $absensi['hadir'] }}</strong></div>
-                <div class="mini-stat"><span>Izin + Sakit</span><strong>{{ $absensi['izin'] + $absensi['sakit'] }}</strong></div>
-                <div class="mini-stat" style="grid-column: 1 / -1;"><span>Uang saku berjalan</span><strong>Rp {{ number_format($absensi['uang_saku'], 0, ',', '.') }}</strong></div>
+                <div class="mini-stat"><span>Hadir</span><strong>{{ $kehadiran['hadir'] }}</strong></div>
+                <div class="mini-stat"><span>Izin + Sakit</span><strong>{{ $kehadiran['izin'] + $kehadiran['sakit'] }}</strong></div>
+                <div class="mini-stat"><span>Belum diisi</span><strong>{{ $kehadiran['belum_diisi'] }}</strong></div>
+                <div class="mini-stat"><span>Setengah hari</span><strong>{{ $kehadiran['setengah_hari'] }}</strong></div>
+                <div class="mini-stat" style="grid-column: 1 / -1;"><span>Uang saku berjalan</span><strong>Rp {{ number_format($kehadiran['uang_saku'], 0, ',', '.') }}</strong></div>
             </div>
         @else
-            <div class="list-empty">Belum ada data absensi tersimpan.</div>
+            <div class="list-empty">Belum ada peserta aktif.</div>
         @endif
 
         <p class="note-small">
-            Diambil dari data Google Sheets yang sudah dibuka dalam {{ intdiv(config('absensi.cache_seconds'), 60) }} menit terakhir.
-            Rekap lengkap ada di <a href="{{ route('superadmin.laporan.index', ['jenis' => 'absensi']) }}" style="color:#1779c9;font-weight:700;">Laporan Absensi</a>.
+            Dari logbook harian periode berjalan (28–27). Rekap lengkap ada di
+            <a href="{{ route('superadmin.laporan.index', ['jenis' => 'absensi']) }}" style="color:#1779c9;font-weight:700;">Laporan Kehadiran &amp; Uang Saku</a>.
         </p>
 
         @if ($totalDinilai > 0)

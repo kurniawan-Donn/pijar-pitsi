@@ -28,7 +28,10 @@ class MonitoringPeserta
         'biodata' => 'Progres biodata terendah',
     ];
 
-    public function __construct(private KalenderLogbook $kalender) {}
+    public function __construct(
+        private KalenderLogbook $kalender,
+        private PeriodeMagang $periode,
+    ) {}
 
     /**
      * Satu baris per peserta untuk periode berjalan.
@@ -124,6 +127,28 @@ class MonitoringPeserta
             'izin_menunggu' => IzinPeserta::whereIn('peserta_magang_id', $tabel->pluck('peserta.id'))
                 ->where('status', LogbookHarian::MENUNGGU)
                 ->count(),
+        ];
+    }
+
+    /**
+     * Kehadiran & uang saku periode berjalan peserta aktif (dari tabel()).
+     *
+     * @param  Collection<int, array<string, mixed>>  $tabel
+     * @return array{periode: string, peserta: int, hadir: int, setengah_hari: int, izin: int, sakit: int, belum_diisi: int, uang_saku: int}
+     */
+    public function kehadiranPeriode(Collection $tabel): array
+    {
+        $jumlah = fn (string $kolom) => (int) $tabel->sum(fn (array $item) => $item['rekap'][$kolom]);
+
+        return [
+            'periode' => $this->periode->label($this->kalender->kunciPeriode(CarbonImmutable::today())),
+            'peserta' => $tabel->count(),
+            'hadir' => $jumlah('hari_penuh') + $jumlah('setengah_hari'),
+            'setengah_hari' => $jumlah('setengah_hari'),
+            'izin' => $jumlah('izin'),
+            'sakit' => $jumlah('sakit'),
+            'belum_diisi' => $jumlah('belum_diisi'),
+            'uang_saku' => $jumlah('uang_saku'),
         ];
     }
 
