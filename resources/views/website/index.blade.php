@@ -410,13 +410,36 @@
             <div class="container">
 
                 <div class="contact-grid">
-                    <article class="card about-card" data-reveal>
-                        <span class="section-label">Tentang Kami</span>
-                        <h2>{{ $namaPerusahaan }}</h2>
-                        <p>
-                            {{ $perusahaan?->deskripsi ?: 'Kami membuka kesempatan magang bagi mahasiswa untuk belajar langsung di dunia kerja, mendapatkan pengalaman nyata, dan bimbingan dari tim profesional.' }}
-                        </p>
-                    </article>
+                    <div class="kontak-kiri">
+                        <article class="card about-card" data-reveal>
+                            <span class="section-label">Tentang Kami</span>
+                            <h2>{{ $namaPerusahaan }}</h2>
+                            <p>
+                                {{ $perusahaan?->deskripsi ?: 'Kami membuka kesempatan magang bagi mahasiswa untuk belajar langsung di dunia kerja, mendapatkan pengalaman nyata, dan bimbingan dari tim profesional.' }}
+                            </p>
+                        </article>
+
+                        {{-- Peta lokasi: diatur di Profil Perusahaan (sematan Google Maps atau dari alamat). --}}
+                        @if ($perusahaan?->urlPeta())
+                            <div class="card peta-card" data-reveal style="--delay: .1s">
+                                <iframe
+                                    src="{{ $perusahaan->urlPeta() }}"
+                                    title="Peta lokasi {{ $namaPerusahaan }}"
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    allowfullscreen
+                                ></iframe>
+
+                                @if ($perusahaan->urlBukaPeta())
+                                    <a href="{{ $perusahaan->urlBukaPeta() }}" target="_blank" rel="noopener noreferrer" class="peta-buka">
+                                        <x-icon name="map-pin" :size="16" />
+                                        Buka di Google Maps
+                                        <x-icon name="external-link" :size="14" />
+                                    </a>
+                                @endif
+                            </div>
+                        @endif
+                    </div>
 
                     <div class="contact-list">
                         @forelse ($kontakItems as $index => [$ikon, $label, $nilai, $tautan])

@@ -129,7 +129,7 @@ Hari libur tidak dihitung sebagai hari kerja di logbook dan rekap.
 
 | Menu | Fungsi |
 |---|---|
-| Profil Perusahaan | Nama, alamat, kontak, deskripsi (dipakai juga di kop surat dan PDF). |
+| Profil Perusahaan | Nama, alamat, kontak, deskripsi (dipakai juga di kop surat dan PDF), dan **peta lokasi** di bagian Kontak beranda. Tanpa kode sematan, peta dibuat dari alamat. Agar titiknya tepat: Google Maps → cari kantor → **Bagikan** → **Sematkan peta** → **Salin HTML**, lalu tempel di kolom *Kode Sematan Google Maps*. Peta bisa disembunyikan lewat centang. |
 | Banner | Banner utama beranda. |
 | Konten | Teks pengumuman, persyaratan, alur, dan tautan Google Form. |
 | Alumni | Kartu alumni di beranda: pilih dari peserta yang selesai dan bersedia, atau input manual. |

@@ -2418,6 +2418,45 @@
         padding: 40px;
     }
 
+    .kontak-kiri {
+        display: grid;
+        gap: 18px;
+    }
+
+    .peta-card {
+        overflow: hidden;
+
+        padding: 0;
+    }
+
+    .peta-card iframe {
+        width: 100%;
+        height: 280px;
+
+        display: block;
+
+        border: 0;
+    }
+
+    .peta-buka {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 13px 18px;
+
+        border-top: 1px solid var(--line);
+
+        color: var(--primary-dark);
+
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .peta-buka:hover {
+        background: var(--primary-soft);
+    }
+
     .about-card h2 {
         color: var(--navy);
 
