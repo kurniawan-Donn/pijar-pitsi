@@ -75,14 +75,59 @@
             text-align: justify;
         }
 
+        .penutup {
+            width: 100%;
+            margin-top: 22px;
+
+            border-collapse: collapse;
+
+            page-break-inside: avoid;
+        }
+
+        .penutup td {
+            vertical-align: bottom;
+        }
+
+        .verifikasi {
+            width: 50%;
+
+            color: #4b5563;
+            font-size: 8px;
+            line-height: 1.4;
+        }
+
+        .verifikasi img {
+            width: 78px;
+            height: 78px;
+        }
+
         .ttd {
             width: 260px;
-            margin-top: 26px;
             margin-left: auto;
         }
 
         .ttd .ruang {
-            height: 64px;
+            position: relative;
+
+            height: 70px;
+        }
+
+        .ttd .ruang .gambar-ttd {
+            position: absolute;
+            top: 4px;
+            left: 40px;
+
+            height: 62px;
+        }
+
+        .ttd .ruang .gambar-stempel {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+
+            height: 82px;
+
+            opacity: .85;
         }
 
         .ttd .nama {
@@ -169,11 +214,36 @@
     Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.
 </p>
 
-<table class="ttd">
-    <tr><td>{{ $data['kota_surat'] ?: '........................' }}, {{ $tanggal($data['tanggal_surat']) }}</td></tr>
-    <tr><td>{{ $data['penanda_tangan']['jabatan'] ?: '' }}</td></tr>
-    <tr><td class="ruang"></td></tr>
-    <tr><td class="nama">{{ $data['penanda_tangan']['nama'] ?: '(........................................)' }}</td></tr>
+{{-- QR verifikasi (kiri) dan tanda tangan + stempel (kanan); tidak boleh terpotong ke halaman berikutnya. --}}
+<table class="penutup">
+    <tr>
+        <td class="verifikasi">
+            @if ($qr)
+                <img src="{{ $qr }}" alt="QR verifikasi"><br>
+                Pindai QR untuk memeriksa keaslian surat ini:<br>
+                {{ $urlVerifikasi }}
+            @endif
+        </td>
+        <td>
+            <table class="ttd">
+                <tr><td>{{ $data['kota_surat'] ?: '........................' }}, {{ $tanggal($data['tanggal_surat']) }}</td></tr>
+                <tr><td>{{ $data['penanda_tangan']['jabatan'] ?: '' }}</td></tr>
+                <tr>
+                    <td>
+                        <div class="ruang">
+                            @if ($stempel)
+                                <img src="{{ $stempel }}" alt="" class="gambar-stempel">
+                            @endif
+                            @if ($ttd)
+                                <img src="{{ $ttd }}" alt="" class="gambar-ttd">
+                            @endif
+                        </div>
+                    </td>
+                </tr>
+                <tr><td class="nama">{{ $data['penanda_tangan']['nama'] ?: '(........................................)' }}</td></tr>
+            </table>
+        </td>
+    </tr>
 </table>
 
 </body>

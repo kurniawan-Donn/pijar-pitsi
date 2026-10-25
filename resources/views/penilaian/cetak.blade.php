@@ -142,7 +142,29 @@
         }
 
         .ttd .ruang {
+            position: relative;
+
+            height: 44px;
+        }
+
+        .ttd .gambar-ttd {
+            position: absolute;
+            top: 2px;
+            left: 50%;
+
             height: 40px;
+            margin-left: -50px;
+        }
+
+        .ttd .gambar-stempel {
+            position: absolute;
+            top: -6px;
+            left: 50%;
+
+            height: 56px;
+            margin-left: -95px;
+
+            opacity: .85;
         }
 
         .ttd .nama {
@@ -255,7 +277,26 @@
             <td>Mengetahui,</td>
             <td>Menyetujui,</td>
         </tr>
-        <tr><td class="ruang"></td><td class="ruang"></td><td class="ruang"></td></tr>
+        <tr>
+            <td><div class="ruang"></div></td>
+            <td>
+                <div class="ruang">
+                    @if ($ttdMengetahui)
+                        <img src="{{ $ttdMengetahui }}" alt="" class="gambar-ttd">
+                    @endif
+                </div>
+            </td>
+            <td>
+                <div class="ruang">
+                    @if ($stempel)
+                        <img src="{{ $stempel }}" alt="" class="gambar-stempel">
+                    @endif
+                    @if ($ttdMenyetujui)
+                        <img src="{{ $ttdMenyetujui }}" alt="" class="gambar-ttd">
+                    @endif
+                </div>
+            </td>
+        </tr>
         <tr>
             <td class="nama">{{ $penempatan?->mentor_nama ?: ($biodata->mentor_magang ?: '(Pembimbing / Mentor)') }}</td>
             <td class="nama">{{ $pengaturan->mengetahui_nama ?: '(........................)' }}</td>

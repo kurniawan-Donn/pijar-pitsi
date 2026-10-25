@@ -9,7 +9,10 @@ use App\Models\PengaturanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\User;
+use App\Services\TandaTanganDokumen;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -275,6 +278,13 @@ class PenilaianTest extends TestCase
             'menyetujui_nama' => 'Nama Penanda Tangan Menyetujui Yang Panjang',
             'menyetujui_jabatan' => 'Direktur Utama',
         ]);
+
+        // Gambar tanda tangan & stempel ukuran terbesar ikut tercetak.
+        Storage::fake('local');
+        $tandaTangan = app(TandaTanganDokumen::class);
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'ttd_mengetahui', UploadedFile::fake()->image('ttd-1.png', 600, 300));
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'ttd_menyetujui', UploadedFile::fake()->image('ttd-2.png', 600, 300));
+        $tandaTangan->simpan(PengaturanMagang::ambil(), 'stempel', UploadedFile::fake()->image('stempel.png', 400, 400));
 
         $this->actingAs($user)
             ->put(route('superadmin.peserta-magang.penilaian.update', $this->peserta), [

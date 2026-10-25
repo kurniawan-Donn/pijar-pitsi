@@ -13,6 +13,7 @@ use App\Models\Perusahaan;
 use App\Models\PesertaMagang;
 use App\Models\PredikatPenilaian;
 use App\Services\PeriodeMagang;
+use App\Services\TandaTanganDokumen;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
@@ -94,7 +95,7 @@ class PenilaianController extends Controller
     /**
      * Lembar penilaian (PDF) format sheet PENILAIAN MHS MAGANG.
      */
-    public function cetak(PesertaMagang $pesertaMagang, PeriodeMagang $periode): Response|RedirectResponse
+    public function cetak(PesertaMagang $pesertaMagang, PeriodeMagang $periode, TandaTanganDokumen $tandaTangan): Response|RedirectResponse
     {
         $pesertaMagang->load(['penilaian.details', 'penilaian.penilai', 'biodata', 'penempatans.divisi', 'pengajuanMagang.mahasiswa', 'user']);
 
@@ -104,6 +105,7 @@ class PenilaianController extends Controller
                 ->with('error', 'Simpan penilaian terlebih dahulu sebelum mencetak.');
         }
 
+        $pengaturan = PengaturanMagang::ambil();
         $kunciTerakhir = $pesertaMagang->periode_selesai ? $periode->kunciUntuk($pesertaMagang->periode_selesai) : null;
 
         $pdf = Pdf::loadView('penilaian.cetak', [
@@ -112,8 +114,11 @@ class PenilaianController extends Controller
             'biodata' => BiodataPeserta::untuk($pesertaMagang),
             'penempatan' => $kunciTerakhir ? $pesertaMagang->penempatanUntuk($kunciTerakhir) : null,
             'predikats' => PredikatPenilaian::orderBy('batas_bawah')->get(),
-            'pengaturan' => PengaturanMagang::ambil(),
+            'pengaturan' => $pengaturan,
             'perusahaan' => Perusahaan::query()->first(),
+            'ttdMengetahui' => $tandaTangan->dataUri($pengaturan->mengetahui_ttd_path),
+            'ttdMenyetujui' => $tandaTangan->dataUri($pengaturan->menyetujui_ttd_path),
+            'stempel' => $tandaTangan->dataUri($pengaturan->stempel_path),
         ])->setPaper('a4', 'portrait');
 
         return $pdf->download('penilaian-'.Str::slug($pesertaMagang->nama).'.pdf');

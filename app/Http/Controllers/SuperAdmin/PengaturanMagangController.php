@@ -7,11 +7,14 @@ use App\Models\HariLibur;
 use App\Models\LogAktivitas;
 use App\Models\PengaturanMagang;
 use App\Models\TarifUangSaku;
+use App\Services\TandaTanganDokumen;
 use Carbon\CarbonImmutable;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Pengaturan program magang: aturan umum, riwayat tarif uang saku,
@@ -39,9 +42,9 @@ class PengaturanMagangController extends Controller
     }
 
     /**
-     * Simpan aturan umum & penanda tangan.
+     * Simpan aturan umum, penanda tangan, serta gambar tanda tangan dan stempel.
      */
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request, TandaTanganDokumen $tandaTangan): RedirectResponse
     {
         $validated = $request->validate([
             'batas_isi_mundur_hari' => ['required', 'integer', 'min:0', 'max:60'],
@@ -52,18 +55,40 @@ class PengaturanMagangController extends Controller
             'menyetujui_nama' => ['nullable', 'string', 'max:255'],
             'menyetujui_jabatan' => ['nullable', 'string', 'max:255'],
             'format_nomor_surat' => ['required', 'string', 'max:100', 'regex:/\{urut\}/'],
+            ...collect(TandaTanganDokumen::KOLOM)->keys()->mapWithKeys(fn (string $jenis) => [
+                $jenis => TandaTanganDokumen::aturan(),
+                'hapus_'.$jenis => ['nullable', 'boolean'],
+            ])->all(),
         ], [
             'format_nomor_surat.regex' => 'Format nomor surat wajib memuat {urut}.',
+            ...collect(TandaTanganDokumen::KOLOM)->keys()->flatMap(fn (string $jenis) => [
+                "{$jenis}.mimes" => 'Gambar harus berformat PNG atau JPG.',
+                "{$jenis}.max" => 'Ukuran gambar maksimal 1 MB.',
+                "{$jenis}.dimensions" => 'Ukuran gambar minimal 80 × 40 piksel dan maksimal 4000 piksel.',
+            ])->all(),
         ], [
+            'ttd_mengetahui' => 'tanda tangan Mengetahui',
+            'ttd_menyetujui' => 'tanda tangan Menyetujui',
+            'stempel' => 'stempel',
             'batas_isi_mundur_hari' => 'batas isi mundur',
             'tanggal_awal_periode' => 'tanggal awal periode',
             'format_nomor_surat' => 'format nomor surat',
         ]);
 
         $pengaturan = PengaturanMagang::ambil();
-        $pengaturan->fill($validated);
+        $pengaturan->fill(collect($validated)->only($pengaturan->getFillable())->all());
         $berubah = $pengaturan->getDirty();
         $pengaturan->save();
+
+        foreach (array_keys(TandaTanganDokumen::KOLOM) as $jenis) {
+            if ($request->hasFile($jenis)) {
+                $tandaTangan->simpan($pengaturan, $jenis, $request->file($jenis));
+                $berubah[$jenis] = 'diunggah';
+            } elseif ($request->boolean('hapus_'.$jenis) && $pengaturan->{TandaTanganDokumen::KOLOM[$jenis]}) {
+                $tandaTangan->hapus($pengaturan, $jenis);
+                $berubah[$jenis] = 'dihapus';
+            }
+        }
 
         if ($berubah) {
             LogAktivitas::catat('ubah_pengaturan_magang', $pengaturan, 'Pengaturan magang diperbarui', $berubah);
@@ -72,6 +97,23 @@ class PengaturanMagangController extends Controller
         return redirect()
             ->route('superadmin.pengaturan-magang.index')
             ->with('success', 'Pengaturan magang berhasil disimpan.');
+    }
+
+    /**
+     * Gambar tanda tangan / stempel untuk pratinjau di halaman pengaturan (khusus super admin).
+     */
+    public function gambar(string $jenis): Response
+    {
+        abort_unless(array_key_exists($jenis, TandaTanganDokumen::KOLOM), 404);
+
+        $path = PengaturanMagang::ambil()->{TandaTanganDokumen::KOLOM[$jenis]};
+
+        abort_unless($path && Storage::disk('local')->exists($path), 404);
+
+        return Storage::disk('local')->response($path, null, [
+            'Cache-Control' => 'private, no-store',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 
     /**

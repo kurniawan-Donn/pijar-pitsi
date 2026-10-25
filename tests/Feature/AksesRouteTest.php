@@ -10,7 +10,9 @@ use App\Models\HariLibur;
 use App\Models\IzinPeserta;
 use App\Models\LogbookHarian;
 use App\Models\PengajuanMagang;
+use App\Models\PengaturanMagang;
 use App\Models\PesertaMagang;
+use App\Models\SuratKeterangan;
 use App\Models\TarifUangSaku;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,6 +20,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -55,6 +58,7 @@ class AksesRouteTest extends TestCase
         'pengajuan.store' => self::PUBLIK,
         'pengajuan.status' => self::PUBLIK,
         'pengajuan.dokumen' => self::PUBLIK, // signed URL, lihat KeamananAksesDataTest
+        'verifikasi-surat' => self::PUBLIK,
 
         // Semua pengguna login (termasuk peserta)
         'logout' => self::SEMUA,
@@ -185,6 +189,7 @@ class AksesRouteTest extends TestCase
         'superadmin.aspek-penilaian.predikat' => self::SUPER_ADMIN,
         'superadmin.log-aktivitas.index' => self::SUPER_ADMIN,
         'superadmin.pengaturan-magang.update' => self::SUPER_ADMIN,
+        'superadmin.pengaturan-magang.gambar' => self::SUPER_ADMIN,
         'superadmin.pengaturan-magang.tarif.store' => self::SUPER_ADMIN,
         'superadmin.pengaturan-magang.tarif.destroy' => self::SUPER_ADMIN,
     ];
@@ -346,6 +351,17 @@ class AksesRouteTest extends TestCase
                 'alumni' => Alumni::factory()->create(),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
                 'tanggal' => now()->toDateString(),
+                'kode' => SuratKeterangan::create([
+                    'peserta_magang_id' => PesertaMagang::create($this->dataPeserta())->id,
+                    'status' => SuratKeterangan::TERBIT,
+                    'nomor_surat' => fake()->unique()->numerify('###/SKM/X/2026'),
+                    'kode_verifikasi' => Str::random(32),
+                    'data' => ['nama' => 'Peserta Akses', 'periode_mulai' => '2026-06-01', 'periode_selesai' => '2026-10-01'],
+                ])->kode_verifikasi,
+                'jenis' => tap('stempel', function () {
+                    PengaturanMagang::ambil()->forceFill(['stempel_path' => 'tanda-tangan/stempel-akses.png'])->save();
+                    Storage::disk('local')->put('tanda-tangan/stempel-akses.png', 'png-uji');
+                }),
                 'logbookBukti' => tap(
                     LogbookHarian::create([
                         'peserta_magang_id' => ($peserta ??= PesertaMagang::create($this->dataPeserta()))->id,

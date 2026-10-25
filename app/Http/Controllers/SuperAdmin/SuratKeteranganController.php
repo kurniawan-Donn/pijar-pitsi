@@ -90,6 +90,8 @@ class SuratKeteranganController extends Controller
                 ]);
             }
 
+            $surat->pastikanKodeVerifikasi();
+
             $surat->fill([
                 'status' => SuratKeterangan::TERBIT,
                 'tanggal_surat' => $tanggal->toDateString(),

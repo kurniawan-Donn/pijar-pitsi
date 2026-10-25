@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.3",
         "barryvdh/laravel-dompdf": "^3.1",
+        "chillerlan/php-qrcode": "^5.0",
         "google/apiclient": "^2.20",
         "laravel/framework": "^13.17",
         "laravel/tinker": "^3.0",

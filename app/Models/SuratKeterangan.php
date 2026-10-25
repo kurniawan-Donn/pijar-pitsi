@@ -6,6 +6,7 @@ use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
  * Surat keterangan magang. Syarat terbit: biodata disetujui, penilaian
@@ -54,6 +55,26 @@ class SuratKeterangan extends Model
     public function sudahTerbit(): bool
     {
         return $this->status === self::TERBIT;
+    }
+
+    /**
+     * Beri kode verifikasi publik (QR) bila belum punya. Kode tidak berubah saat terbit ulang.
+     */
+    public function pastikanKodeVerifikasi(): void
+    {
+        if (! $this->kode_verifikasi) {
+            $this->kode_verifikasi = Str::random(32);
+        }
+    }
+
+    /**
+     * Alamat halaman verifikasi publik, atau null untuk surat yang belum terbit.
+     */
+    public function urlVerifikasi(): ?string
+    {
+        return $this->sudahTerbit() && $this->kode_verifikasi
+            ? route('verifikasi-surat', $this->kode_verifikasi)
+            : null;
     }
 
     /**
@@ -130,6 +151,9 @@ class SuratKeterangan extends Model
             'penanda_tangan' => [
                 'nama' => $pengaturan->menyetujui_nama,
                 'jabatan' => $pengaturan->menyetujui_jabatan,
+                // Gambar ikut disalin agar surat terbit tidak berubah bila penanda tangan diganti.
+                'ttd_path' => $pengaturan->menyetujui_ttd_path,
+                'stempel_path' => $pengaturan->stempel_path,
             ],
             'tanggal_surat' => $tanggalSurat->toDateString(),
         ];
