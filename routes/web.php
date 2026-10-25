@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PengajuanMagangController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\PanduanController;
 use App\Http\Controllers\Auth\ProfilController;
 use App\Http\Controllers\Peserta\BiodataController as PesertaBiodataController;
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
@@ -93,6 +94,12 @@ Route::middleware(['auth', 'role:admin,super_admin,peserta'])
         Route::put('/foto', 'updateFoto')->name('foto');
         Route::delete('/foto', 'hapusFoto')->name('foto.hapus');
     });
+
+// Buku panduan sesuai role (sumber: docs/panduan).
+Route::get('/panduan/{bagian?}', [PanduanController::class, 'show'])
+    ->middleware(['auth', 'role:admin,super_admin,peserta'])
+    ->where('bagian', '[a-z-]+')
+    ->name('panduan');
 
 // Foto profil di disk privat: pemiliknya, admin, dan super admin.
 Route::get('/foto-profil/{user}', [ProfilController::class, 'foto'])

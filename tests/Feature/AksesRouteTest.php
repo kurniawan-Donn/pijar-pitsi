@@ -70,6 +70,7 @@ class AksesRouteTest extends TestCase
         'profil.foto.hapus' => self::SEMUA,
         // Foto akun lain: hanya admin & super admin (pemilik dibahas di FotoProfilTest).
         'foto-profil.show' => self::LOGIN,
+        'panduan' => self::SEMUA,
 
         // Khusus peserta
         'peserta.dashboard' => self::PESERTA,
@@ -361,6 +362,8 @@ class AksesRouteTest extends TestCase
                 'dokumentasi' => Dokumentasi::factory()->create(),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
                 'tanggal' => now()->toDateString(),
+                // Tanpa bagian: bagian pertama sesuai role (lihat PanduanTest).
+                'bagian' => null,
                 'kode' => SuratKeterangan::create([
                     'peserta_magang_id' => PesertaMagang::create($this->dataPeserta())->id,
                     'status' => SuratKeterangan::TERBIT,

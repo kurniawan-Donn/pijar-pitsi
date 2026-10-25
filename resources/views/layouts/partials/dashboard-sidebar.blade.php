@@ -67,6 +67,12 @@
                 'route' => 'profil.edit',
                 'active' => ['profil.*'],
             ],
+            [
+                'label' => 'Panduan',
+                'icon' => 'book-open',
+                'route' => 'panduan',
+                'active' => ['panduan'],
+            ],
         ],
     ] : [
         'Utama' => [
@@ -234,6 +240,14 @@
                 'route' => 'superadmin.log-aktivitas.index',
                 'active' => ['superadmin.log-aktivitas.*'],
                 'can' => 'lihat-log-aktivitas',
+            ],
+        ],
+        'Bantuan' => [
+            [
+                'label' => 'Panduan',
+                'icon' => 'book-open',
+                'route' => 'panduan',
+                'active' => ['panduan'],
             ],
         ],
     ];
