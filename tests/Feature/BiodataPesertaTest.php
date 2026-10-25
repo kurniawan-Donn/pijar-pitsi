@@ -295,7 +295,7 @@ class BiodataPesertaTest extends TestCase
         $this->actingAs($this->akun)
             ->get(route('peserta.dashboard'))
             ->assertOk()
-            ->assertSee('Biodata · Belum dikirim')
+            ->assertSeeInOrder(['<h3>Biodata</h3>', 'Belum dikirim'], false)
             ->assertSee(route('peserta.biodata.edit'));
     }
 
