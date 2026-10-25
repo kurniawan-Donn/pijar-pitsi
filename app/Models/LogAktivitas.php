@@ -37,6 +37,8 @@ class LogAktivitas extends Model
         'hapus_faq' => 'Hapus FAQ',
         'simpan_alumni' => 'Simpan alumni',
         'hapus_alumni' => 'Hapus alumni',
+        'scan_kartu_absensi' => 'Scan kartu absensi',
+        'simpan_scan_kartu_absensi' => 'Simpan jam dari kartu absensi',
         'simpan_dokumentasi' => 'Simpan dokumentasi',
         'hapus_dokumentasi' => 'Hapus dokumentasi',
         'ubah_penempatan' => 'Ubah penempatan divisi',

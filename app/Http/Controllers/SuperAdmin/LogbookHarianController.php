@@ -74,9 +74,20 @@ class LogbookHarianController extends Controller
             'catatan_verifikasi.required_if' => 'Tulis alasan bila logbook ditolak.',
         ]);
 
-        $jumlah = LogbookHarian::where('peserta_magang_id', $pesertaMagang->id)
+        $dipilih = LogbookHarian::where('peserta_magang_id', $pesertaMagang->id)
             ->whereIn('id', $validated['logbook'])
-            ->whereNull('izin_peserta_id')
+            ->whereNull('izin_peserta_id');
+
+        // Hadir tanpa activity (mis. jam dari scan kartu) belum boleh diterima.
+        $tanpaActivity = $validated['status'] === LogbookHarian::DITERIMA
+            ? (clone $dipilih)->where('kehadiran', LogbookHarian::HADIR)->where(fn ($q) => $q->whereNull('activity')->orWhere('activity', ''))->count()
+            : 0;
+
+        if ($tanpaActivity) {
+            $dipilih->where(fn ($q) => $q->where('kehadiran', '!=', LogbookHarian::HADIR)->orWhere(fn ($q) => $q->whereNotNull('activity')->where('activity', '!=', '')));
+        }
+
+        $jumlah = $dipilih
             ->update([
                 'status_verifikasi' => $validated['status'],
                 'catatan_verifikasi' => $validated['catatan_verifikasi'] ?? null,
@@ -90,7 +101,8 @@ class LogbookHarianController extends Controller
         ]);
 
         return $this->kembali($pesertaMagang, $validated['periode'] ?? null)
-            ->with('success', "{$jumlah} hari berhasil ditandai ".LogbookHarian::STATUS_VERIFIKASI[$validated['status']].'.');
+            ->with('success', "{$jumlah} hari berhasil ditandai ".LogbookHarian::STATUS_VERIFIKASI[$validated['status']].'.')
+            ->with('warning', $tanpaActivity ? "{$tanpaActivity} hari tidak diterima karena activity belum diisi peserta." : null);
     }
 
     /**

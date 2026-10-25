@@ -10,6 +10,7 @@ use App\Models\LogbookBukti;
 use App\Models\LogbookHarian;
 use App\Models\PesertaMagang;
 use App\Services\CetakLogbook;
+use App\Services\JendelaScanKartu;
 use App\Services\KalenderLogbook;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
@@ -30,7 +31,7 @@ class LogbookController extends Controller
     /**
      * Tabel satu periode (28–27) seperti sheet bulanan, beserta rekap.
      */
-    public function index(Request $request): View
+    public function index(Request $request, JendelaScanKartu $jendelaScan): View
     {
         $peserta = $this->peserta($request);
         $periode = $this->kalender->pilihPeriode($peserta, $request->query('periode'));
@@ -45,6 +46,11 @@ class LogbookController extends Controller
             'tarif' => $periode ? $this->kalender->tarifPeriode($periode) : null,
             'izins' => $periode ? $this->izinDalam($peserta, $periode) : collect(),
             'biodata' => BiodataPeserta::untuk($peserta),
+            'scanKartu' => [
+                'aktif' => $jendelaScan->aktif(),
+                'bisa' => $jendelaScan->pilihan($peserta) !== [],
+                'bukaBerikutnya' => $jendelaScan->bukaBerikutnya(),
+            ],
         ]);
     }
 
@@ -52,12 +58,11 @@ class LogbookController extends Controller
     {
         $peserta = $this->peserta($request);
         $hari = $this->tanggal($tanggal);
+        $logbook = $this->logbook($peserta, $hari);
 
-        if ($tolak = $this->tolakAkses($peserta, $hari)) {
+        if ($tolak = $this->tolakAkses($peserta, $hari, $logbook)) {
             return $tolak;
         }
-
-        $logbook = $this->logbook($peserta, $hari);
 
         if ($logbook && ! $logbook->bisaDiubahPeserta()) {
             return $this->keIndex($hari)->with('error', 'Logbook tanggal ini sudah diterima atau bagian dari izin/sakit, sehingga tidak dapat diubah.');
@@ -78,12 +83,13 @@ class LogbookController extends Controller
     {
         $peserta = $this->peserta($request);
         $hari = $this->tanggal($tanggal);
+        $lama = $this->logbook($peserta, $hari);
 
-        if ($tolak = $this->tolakAkses($peserta, $hari)) {
+        if ($tolak = $this->tolakAkses($peserta, $hari, $lama)) {
             return $tolak;
         }
 
-        $logbook = $this->logbook($peserta, $hari) ?? new LogbookHarian([
+        $logbook = $lama ?? new LogbookHarian([
             'peserta_magang_id' => $peserta->id,
             'tanggal' => $hari->toDateString(),
         ]);
@@ -189,11 +195,18 @@ class LogbookController extends Controller
     }
 
     /**
-     * Redirect dengan pesan bila tanggal tidak boleh diisi peserta.
+     * Redirect dengan pesan bila tanggal tidak boleh diisi peserta. Logbook yang dibuat dari scan
+     * kartu di luar batas isi mundur tetap boleh dilengkapi (activity), tanpa membuka kunci tanggal lain.
      */
-    private function tolakAkses(PesertaMagang $peserta, CarbonImmutable $hari): ?RedirectResponse
+    private function tolakAkses(PesertaMagang $peserta, CarbonImmutable $hari, ?LogbookHarian $logbook = null): ?RedirectResponse
     {
-        $pesan = match ($this->kalender->akses($peserta, $hari)) {
+        $akses = $this->kalender->akses($peserta, $hari);
+
+        if ($akses === KalenderLogbook::LEWAT_BATAS && $logbook?->di_luar_batas_isi) {
+            return null;
+        }
+
+        $pesan = match ($akses) {
             KalenderLogbook::BISA => null,
             KalenderLogbook::BELUM_TIBA => 'Tanggal tersebut belum tiba.',
             KalenderLogbook::DI_LUAR => 'Tanggal tersebut di luar masa magang Anda.',

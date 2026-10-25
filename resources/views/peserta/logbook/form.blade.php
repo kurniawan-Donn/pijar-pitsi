@@ -200,6 +200,17 @@
             <h3>Kehadiran</h3>
             <p>Untuk izin atau sakit (termasuk beberapa hari dengan satu surat), gunakan form izin.</p>
 
+            @if ($logbook->exists && $logbook->dariScan())
+                <x-alert type="info">
+                    Jam diisi dari <a href="{{ route('scan-kartu.foto', $logbook->scan_kartu_absensi_id) }}" target="_blank" rel="noopener">foto kartu absensi</a>
+                    (hasil scan: {{ ($logbook->jam_scan_asli['pagi_masuk'] ?? '') ?: '–' }} – {{ ($logbook->jam_scan_asli['siang_keluar'] ?? '') ?: '–' }}).
+                    Bila jam diubah, admin melihat tanda "diubah setelah scan".
+                    @if ($logbook->activityBelumDiisi())
+                        <br><strong>Lengkapi activity agar logbook ini bisa diterima admin.</strong>
+                    @endif
+                </x-alert>
+            @endif
+
             <div class="pilihan">
                 <label><input type="radio" name="kehadiran" value="hadir" @checked($kehadiran === 'hadir') data-kehadiran> Hadir</label>
                 <label><input type="radio" name="kehadiran" value="libur" @checked($kehadiran === 'libur') data-kehadiran> Libur</label>
@@ -250,6 +261,12 @@
         <section class="panel">
             <h3>Bukti (opsional)</h3>
             <p>Foto atau dokumen pendukung. JPG, PNG, atau PDF, maksimal 2 MB per file dan 3 file per hari.</p>
+
+            @if ($logbook->exists && $logbook->scan_kartu_absensi_id)
+                <p><x-icon name="camera" :size="15" /> Foto kartu absensi otomatis menjadi bukti:
+                    <a href="{{ route('scan-kartu.foto', $logbook->scan_kartu_absensi_id) }}" target="_blank" rel="noopener">lihat kartu</a>
+                    (tidak mengurangi jatah 3 file).</p>
+            @endif
 
             @if ($logbook->exists && $logbook->buktis->isNotEmpty())
                 <div class="bukti-lama">

@@ -177,6 +177,18 @@
         cursor: pointer;
     }
 
+    .scan-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0 14px;
+    }
+
+    @media (max-width: 1000px) {
+        .scan-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
     .ttd-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -293,7 +305,7 @@
             </p>
 
             @cannot('kelola-pengaturan-magang')
-                <p class="hanya-baca"><x-icon name="lock" :size="15" /> Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola hari libur.</p>
+                <p class="hanya-baca"><x-icon name="lock" :size="15" /> Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola scan kartu absensi dan hari libur.</p>
             @endcannot
 
             <form method="POST" action="{{ route('superadmin.pengaturan-magang.update') }}" enctype="multipart/form-data">
@@ -355,6 +367,40 @@
                     </div>
                 @endcan
                 </fieldset>
+            </form>
+        </section>
+
+        {{-- SCAN KARTU ABSENSI (admin & super admin) --}}
+        <section class="panel panel-wide" id="scan">
+            <h3>Scan Kartu Absensi</h3>
+            <p>
+                Peserta bisa mengisi jam logbook dari foto kartu absensi. Tombol scan hanya aktif pada rentang tanggal
+                di bawah; jendela yang melewati akhir bulan (mis. 28 s.d. 2) berarti tanggal 1–2 dipakai untuk kartu
+                bulan sebelumnya. Hasil scan selalu diperiksa peserta sebelum disimpan.
+            </p>
+
+            <x-alert type="error" title="Pengaturan scan belum disimpan:" :messages="$errors->scan->all()" />
+
+            <form method="POST" action="{{ route('superadmin.pengaturan-magang.scan') }}">
+                @csrf
+                @method('PUT')
+
+                <label class="check-kecil" style="margin-bottom: 14px; font-size: 13px; font-weight: 600;">
+                    <input type="checkbox" name="scan_aktif" value="1" @checked(old('scan_aktif', $pengaturan->scan_aktif))>
+                    Fitur scan kartu absensi aktif
+                </label>
+
+                <div class="scan-grid">
+                    <x-form.input name="scan_jendela_1_mulai" type="number" label="Sisi 1–15: mulai tanggal" :value="$pengaturan->scan_jendela_1_mulai" min="1" max="31" required />
+                    <x-form.input name="scan_jendela_1_selesai" type="number" label="Sisi 1–15: sampai tanggal" :value="$pengaturan->scan_jendela_1_selesai" min="1" max="31" required />
+                    <x-form.input name="scan_jendela_2_mulai" type="number" label="Sisi 16–31: mulai tanggal" :value="$pengaturan->scan_jendela_2_mulai" min="1" max="31" required />
+                    <x-form.input name="scan_jendela_2_selesai" type="number" label="Sisi 16–31: sampai tanggal" :value="$pengaturan->scan_jendela_2_selesai" min="1" max="31" required hint="Lebih kecil dari tanggal mulai = bulan berikutnya." />
+                    <x-form.input name="scan_batas_harian" type="number" label="Batas scan per peserta per hari" :value="$pengaturan->scan_batas_harian" min="1" max="50" required />
+                </div>
+
+                <div class="actions">
+                    <x-button>Simpan Scan Kartu</x-button>
+                </div>
             </form>
         </section>
 

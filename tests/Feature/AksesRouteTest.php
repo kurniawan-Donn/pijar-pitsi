@@ -13,6 +13,7 @@ use App\Models\LogbookHarian;
 use App\Models\PengajuanMagang;
 use App\Models\PengaturanMagang;
 use App\Models\PesertaMagang;
+use App\Models\ScanKartuAbsensi;
 use App\Models\SuratKeterangan;
 use App\Models\TarifUangSaku;
 use App\Models\User;
@@ -71,9 +72,15 @@ class AksesRouteTest extends TestCase
         // Foto akun lain: hanya admin & super admin (pemilik dibahas di FotoProfilTest).
         'foto-profil.show' => self::LOGIN,
         'panduan' => self::SEMUA,
+        // Foto kartu: pemilik (peserta) dan admin; peserta lain diuji di ScanKartuAbsensiTest.
+        'scan-kartu.foto' => self::SEMUA,
 
         // Khusus peserta
         'peserta.dashboard' => self::PESERTA,
+        'peserta.scan-kartu.create' => self::PESERTA,
+        'peserta.scan-kartu.store' => self::PESERTA,
+        'peserta.scan-kartu.show' => self::PESERTA,
+        'peserta.scan-kartu.simpan' => self::PESERTA,
         'peserta.biodata.edit' => self::PESERTA,
         'peserta.biodata.update' => self::PESERTA,
         'peserta.logbook.index' => self::PESERTA,
@@ -135,6 +142,8 @@ class AksesRouteTest extends TestCase
         'superadmin.alumni.update' => self::LOGIN,
         'superadmin.alumni.destroy' => self::LOGIN,
         'superadmin.alumni.urutan' => self::LOGIN,
+        'superadmin.scan-kartu.show' => self::LOGIN,
+        'superadmin.pengaturan-magang.scan' => self::LOGIN,
         'superadmin.dokumentasi.index' => self::LOGIN,
         'superadmin.dokumentasi.create' => self::LOGIN,
         'superadmin.dokumentasi.store' => self::LOGIN,
@@ -360,6 +369,16 @@ class AksesRouteTest extends TestCase
                 'faq' => Faq::factory()->create(),
                 'alumni' => Alumni::factory()->create(),
                 'dokumentasi' => Dokumentasi::factory()->create(),
+                // Scan milik peserta yang login (untuk route peserta), atau peserta baru.
+                'scanKartuAbsensi' => tap(
+                    ScanKartuAbsensi::factory()->create([
+                        'peserta_magang_id' => ($login?->pesertaMagang ?? ($peserta ??= PesertaMagang::create($this->dataPeserta())))->id,
+                        'tahun' => now()->year,
+                        'bulan' => now()->month,
+                        'foto_path' => 'scan-kartu/akses.jpg',
+                    ]),
+                    fn () => Storage::disk('local')->put('scan-kartu/akses.jpg', 'jpg-uji')
+                ),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
                 'tanggal' => now()->toDateString(),
                 // Tanpa bagian: bagian pertama sesuai role (lihat PanduanTest).

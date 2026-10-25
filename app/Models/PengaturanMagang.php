@@ -20,10 +20,22 @@ class PengaturanMagang extends Model
         'menyetujui_nama',
         'menyetujui_jabatan',
         'format_nomor_surat',
+        'scan_aktif',
+        'scan_jendela_1_mulai',
+        'scan_jendela_1_selesai',
+        'scan_jendela_2_mulai',
+        'scan_jendela_2_selesai',
+        'scan_batas_harian',
     ];
 
     protected $casts = [
         'batas_isi_mundur_hari' => 'integer',
+        'scan_aktif' => 'boolean',
+        'scan_jendela_1_mulai' => 'integer',
+        'scan_jendela_1_selesai' => 'integer',
+        'scan_jendela_2_mulai' => 'integer',
+        'scan_jendela_2_selesai' => 'integer',
+        'scan_batas_harian' => 'integer',
         'tanggal_awal_periode' => 'integer',
     ];
 
