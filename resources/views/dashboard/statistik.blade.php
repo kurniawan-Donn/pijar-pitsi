@@ -7,7 +7,7 @@
     $totalPengajuan = array_sum($pengajuanPerStatus);
     $totalDinilai = array_sum($sebaranPredikat);
     $maksPredikat = max(1, max($sebaranPredikat ?: [0]));
-    $warnaStatus = ['menunggu' => '#f59e0b', 'disetujui' => '#16a34a', 'ditolak' => '#dc2626'];
+    $warnaStatus = ['menunggu' => 'var(--peringatan)', 'disetujui' => 'var(--sukses)', 'ditolak' => 'var(--bahaya)'];
 @endphp
 
 @push('styles')
@@ -47,7 +47,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -62,23 +62,23 @@
         padding-bottom: 14px;
         margin-bottom: 16px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
     }
 
     .panel-title h3 {
-        color: #1e3a56;
+        color: var(--utama-gelap);
         font-size: 15px;
         font-weight: 750;
     }
 
     .panel-title a,
     .panel-title span {
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .panel-title a {
-        color: #1779c9;
+        color: var(--utama);
         font-weight: 700;
     }
 
@@ -113,14 +113,14 @@
 
         border-radius: 8px 8px 3px 3px;
 
-        background: linear-gradient(180deg, #1f8ad6, #12345b);
+        background: linear-gradient(180deg, var(--utama), var(--utama-gelap));
 
         animation: grow .8s cubic-bezier(.22, .8, .24, 1) both;
         transform-origin: bottom;
     }
 
     .bar-fill.kosong {
-        background: #e8eef4;
+        background: var(--garis);
     }
 
     .bar-value {
@@ -130,13 +130,13 @@
 
         transform: translateX(-50%);
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 12px;
         font-weight: 800;
     }
 
     .bar-label {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         white-space: nowrap;
     }
@@ -157,7 +157,7 @@
 
         border-radius: 999px;
 
-        background: #eef2f6;
+        background: var(--garis);
     }
 
     .stack span {
@@ -177,7 +177,7 @@
         justify-content: space-between;
 
         font-size: 13px;
-        color: #33475b;
+        color: var(--teks);
     }
 
     .legend-item i {
@@ -192,7 +192,7 @@
     }
 
     .legend-item strong {
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .list {
@@ -207,7 +207,7 @@
 
         padding: 11px 0;
 
-        border-top: 1px solid #f0f3f6;
+        border-top: 1px solid var(--garis);
 
         font-size: 13px;
     }
@@ -220,18 +220,18 @@
     .list-item strong {
         display: block;
 
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .list-item small {
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .list-empty {
         padding: 20px 0;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 13px;
         text-align: center;
     }
@@ -247,26 +247,26 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .mini-stat span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 700;
     }
 
     .mini-stat strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 20px;
     }
 
     .note-small {
         margin-top: 12px;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
         line-height: 1.6;
     }
@@ -288,7 +288,7 @@
     .predikat-bar b {
         overflow: hidden;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 12px;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -301,7 +301,7 @@
 
         border-radius: 999px;
 
-        background: #eef2f6;
+        background: var(--garis);
     }
 
     .predikat-track span {
@@ -311,11 +311,11 @@
 
         border-radius: 999px;
 
-        background: #1779c9;
+        background: var(--utama);
     }
 
     .predikat-bar small {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: right;
     }
 
@@ -341,32 +341,32 @@
 {{-- ANGKA UTAMA --}}
 <div class="stat-row">
     <a href="{{ route('superadmin.peserta-magang.index') }}" class="stat-link">
-        <x-stat-card label="Peserta Aktif" :value="$peserta['aktif']" icon="♙" hint="{{ $peserta['total'] }} peserta terdata" />
+        <x-stat-card label="Peserta Aktif" :value="$peserta['aktif']" icon="users" hint="{{ $peserta['total'] }} peserta terdata" />
     </a>
     <a href="{{ route('superadmin.peserta-magang.index') }}" class="stat-link">
-        <x-stat-card label="Peserta Selesai" :value="$peserta['selesai']" icon="🎓" hint="{{ $peserta['belum_dinilai'] }} belum dinilai" />
+        <x-stat-card label="Peserta Selesai" :value="$peserta['selesai']" icon="graduation-cap" hint="{{ $peserta['belum_dinilai'] }} belum dinilai" />
     </a>
     <a href="{{ route('admin.pengajuan.index', ['status' => 'menunggu']) }}" class="stat-link">
-        <x-stat-card label="Pengajuan Menunggu" :value="$pengajuanPerStatus['menunggu']" icon="✉" hint="Perlu diproses" />
+        <x-stat-card label="Pengajuan Menunggu" :value="$pengajuanPerStatus['menunggu']" icon="inbox" hint="Perlu diproses" />
     </a>
     <a href="{{ route('superadmin.laporan.index') }}" class="stat-link">
-        <x-stat-card label="Berakhir Bulan Ini" :value="$berakhirBulanIni->count()" icon="⏱" hint="Periode magang selesai" />
+        <x-stat-card label="Berakhir Bulan Ini" :value="$berakhirBulanIni->count()" icon="clock" hint="Periode magang selesai" />
     </a>
 </div>
 
 {{-- MONITORING PESERTA (logbook & biodata dari database) --}}
 <div class="stat-row">
     <a href="{{ route('superadmin.monitoring.index', ['belum_hari_ini' => 1]) }}" class="stat-link">
-        <x-stat-card label="Logbook Hari Ini" :value="$monitoring['sudah_isi_hari_ini'].'/'.$monitoring['wajib_hari_ini']" icon="📒" :hint="$monitoring['wajib_hari_ini'] ? 'peserta sudah mengisi' : 'hari ini bukan hari kerja'" />
+        <x-stat-card label="Logbook Hari Ini" :value="$monitoring['sudah_isi_hari_ini'].'/'.$monitoring['wajib_hari_ini']" icon="clipboard-list" :hint="$monitoring['wajib_hari_ini'] ? 'peserta sudah mengisi' : 'hari ini bukan hari kerja'" />
     </a>
     <a href="{{ route('superadmin.monitoring.index', ['urut' => 'menunggu']) }}" class="stat-link">
-        <x-stat-card label="Logbook Menunggu" :value="$monitoring['logbook_menunggu']" icon="✓" hint="Perlu diverifikasi" />
+        <x-stat-card label="Logbook Menunggu" :value="$monitoring['logbook_menunggu']" icon="circle-check" hint="Perlu diverifikasi" />
     </a>
     <a href="{{ route('superadmin.monitoring.index', ['urut' => 'menunggu']) }}" class="stat-link">
-        <x-stat-card label="Izin / Sakit Menunggu" :value="$monitoring['izin_menunggu']" icon="✚" hint="Perlu diverifikasi" />
+        <x-stat-card label="Izin / Sakit Menunggu" :value="$monitoring['izin_menunggu']" icon="calendar-plus" hint="Perlu diverifikasi" />
     </a>
     <a href="{{ route('superadmin.monitoring.index', ['urut' => 'biodata']) }}" class="stat-link">
-        <x-stat-card label="Biodata Menunggu Tinjau" :value="$monitoring['biodata_diajukan']" icon="☷" :hint="$monitoring['biodata_disetujui'].'/'.$monitoring['peserta_aktif'].' peserta aktif disetujui'" />
+        <x-stat-card label="Biodata Menunggu Tinjau" :value="$monitoring['biodata_diajukan']" icon="id-card" :hint="$monitoring['biodata_disetujui'].'/'.$monitoring['peserta_aktif'].' peserta aktif disetujui'" />
     </a>
 </div>
 
@@ -416,7 +416,7 @@
                     <strong>{{ $jumlah }}</strong>
                 </a>
             @endforeach
-            <div class="legend-item" style="border-top: 1px solid #edf1f5; padding-top: 10px;">
+            <div class="legend-item" style="border-top: 1px solid var(--garis); padding-top: 10px;">
                 <span>Total</span>
                 <strong>{{ $totalPengajuan }}</strong>
             </div>
@@ -496,7 +496,7 @@
 
         <p class="note-small">
             Dari logbook harian periode berjalan (28–27). Rekap lengkap ada di
-            <a href="{{ route('superadmin.laporan.index', ['jenis' => 'absensi']) }}" style="color:#1779c9;font-weight:700;">Laporan Kehadiran &amp; Uang Saku</a>.
+            <a href="{{ route('superadmin.laporan.index', ['jenis' => 'absensi']) }}" style="color:var(--utama);font-weight:700;">Laporan Kehadiran &amp; Uang Saku</a>.
         </p>
 
         @if ($totalDinilai > 0)

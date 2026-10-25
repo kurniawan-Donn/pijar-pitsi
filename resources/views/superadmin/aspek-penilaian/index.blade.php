@@ -20,7 +20,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -31,14 +31,14 @@
     .panel h3 {
         margin-bottom: 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
     }
 
     .panel > p {
         margin-bottom: 18px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -47,10 +47,10 @@
         margin-bottom: 16px;
         padding: 16px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 11px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
     }
 
     .kelompok-head {
@@ -69,7 +69,7 @@
     }
 
     .kelompok-head label {
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -82,8 +82,8 @@
     th {
         padding: 8px 10px;
 
-        background: #f2f6fa;
-        color: #6b7c8d;
+        background: var(--garis);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -95,7 +95,7 @@
     td {
         padding: 8px 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
         vertical-align: middle;
     }
@@ -112,7 +112,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
@@ -139,11 +139,11 @@
         width: 18px;
         height: 18px;
 
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .row-new td {
-        background: #f5f9fd;
+        background: var(--permukaan-redup);
     }
 
     .total {
@@ -158,7 +158,7 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
 
         font-size: 14px;
     }
@@ -168,11 +168,11 @@
     }
 
     .total.ok strong {
-        color: #067647;
+        color: var(--sukses);
     }
 
     .total.salah strong {
-        color: #b42318;
+        color: var(--bahaya);
     }
 
     .kelompok-baru {

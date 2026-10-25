@@ -40,7 +40,7 @@
 
         margin-bottom: 5px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -50,7 +50,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         font-family: inherit;
@@ -77,7 +77,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -86,7 +86,7 @@
     .panel h3 {
         margin-bottom: 14px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -98,7 +98,7 @@
 
         padding: 7px 0;
 
-        border-top: 1px solid #f0f3f6;
+        border-top: 1px solid var(--garis);
 
         font-size: 12.5px;
     }
@@ -112,7 +112,7 @@
 
         border-radius: 999px;
 
-        background: #edf1f5;
+        background: var(--garis);
 
         overflow: hidden;
     }
@@ -124,7 +124,7 @@
 
         border-radius: 999px;
 
-        background: linear-gradient(90deg, #1779c9, #19a974);
+        background: linear-gradient(90deg, var(--utama), var(--sukses));
     }
 
     .bar-row strong {
@@ -142,8 +142,8 @@
     table.daftar th {
         padding: 8px 10px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -154,11 +154,11 @@
     table.daftar td {
         padding: 9px 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     table.daftar a {
-        color: #1779c9;
+        color: var(--utama);
         font-weight: 700;
         text-decoration: none;
     }
@@ -166,11 +166,11 @@
     details.terbuka {
         padding: 10px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     details.terbuka summary {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 13px;
         font-weight: 700;
 
@@ -181,7 +181,7 @@
         margin: 10px 0 0;
         padding-left: 18px;
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -193,13 +193,13 @@
     }
 
     details.terbuka small {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
     }
 
     .empty {
         padding: 24px;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -245,13 +245,13 @@
             <x-button variant="secondary">Tampilkan</x-button>
         </form>
 
-        <x-button variant="secondary" :href="route('superadmin.laporan.index', array_filter(['jenis' => 'feedback'] + $filter))">⬇ Export (Laporan)</x-button>
+        <x-button variant="secondary" :href="route('superadmin.laporan.index', array_filter(['jenis' => 'feedback'] + $filter))"><x-icon name="download" :size="16" /> Export (Laporan)</x-button>
     </div>
 
     <div class="stat-row">
-        <x-stat-card label="Feedback Terkumpul" :value="$hasil['jumlah']" icon="✎" />
-        <x-stat-card label="Rata-rata Kepuasan" :value="$angka($hasil['rata_rata']).' / 5'" icon="★" hint="Rata-rata 10 pertanyaan skala" />
-        <x-stat-card label="Bersedia Merekomendasikan" :value="$bersedia.' / '.$hasil['jumlah']" icon="👍" hint="Sangat bersedia + bersedia" />
+        <x-stat-card label="Feedback Terkumpul" :value="$hasil['jumlah']" icon="message-square" />
+        <x-stat-card label="Rata-rata Kepuasan" :value="$angka($hasil['rata_rata']).' / 5'" icon="star" hint="Rata-rata 10 pertanyaan skala" />
+        <x-stat-card label="Bersedia Merekomendasikan" :value="$bersedia.' / '.$hasil['jumlah']" icon="thumbs-up" hint="Sangat bersedia + bersedia" />
     </div>
 
     @if ($hasil['jumlah'] === 0)

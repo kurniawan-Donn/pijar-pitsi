@@ -15,16 +15,16 @@
     .lb-rekap-item {
         padding: 14px 16px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 11px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
     }
 
     .lb-rekap-item span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
@@ -35,24 +35,24 @@
 
         margin-top: 4px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 20px;
     }
 
     .lb-rekap-item small {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .lb-rekap-total {
         grid-column: span 2;
 
-        background: #fff8f1;
+        background: var(--peringatan-muda);
         border-color: #f9d9bd;
     }
 
     .lb-rekap-total strong {
-        color: #b54708;
+        color: var(--peringatan);
     }
 
     @media (max-width: 900px) {

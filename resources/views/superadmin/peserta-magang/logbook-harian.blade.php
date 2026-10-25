@@ -34,7 +34,7 @@
 
         margin-bottom: 6px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -46,7 +46,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
@@ -71,7 +71,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -80,7 +80,7 @@
     .panel h3 {
         margin-bottom: 12px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -97,10 +97,10 @@
         margin-bottom: 14px;
         padding: 12px 14px;
 
-        border: 1px solid #dbe7f3;
+        border: 1px solid var(--utama-muda);
         border-radius: 10px;
 
-        background: #f5f9fd;
+        background: var(--permukaan-redup);
     }
 
     .verif .catatan {
@@ -114,7 +114,7 @@
     .verif-info {
         align-self: center;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -129,7 +129,7 @@
         padding: 12px 14px;
         margin-bottom: 8px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 10px;
 
         font-size: 13px;
@@ -138,11 +138,11 @@
     .izin-item small {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
     }
 
     .izin-item a {
-        color: #1779c9;
+        color: var(--utama);
     }
 
     .izin-aksi {
@@ -157,7 +157,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         font-family: inherit;
@@ -178,7 +178,7 @@
     .impor-note {
         margin: -6px 0 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -187,10 +187,10 @@
         margin-bottom: 14px;
         padding: 14px 16px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 10px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
 
         font-size: 13px;
     }
@@ -206,13 +206,13 @@
     .impor-hasil td {
         padding: 6px 8px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
 
         text-align: left;
     }
 
     .impor-hasil th {
-        color: #6b7c8d;
+        color: var(--teks-sekunder);
         font-size: 11px;
         text-transform: uppercase;
     }
@@ -242,7 +242,7 @@
     .empty {
         padding: 30px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -293,7 +293,7 @@
 
             <div class="toolbar-actions">
                 <x-button variant="secondary" :href="route('superadmin.peserta-magang.show', $pesertaMagang)">← Detail peserta</x-button>
-                <x-button variant="secondary" :href="route('superadmin.peserta-magang.logbook-harian.cetak', [$pesertaMagang, 'periode' => $periode['kunci']])">⬇ Unduh PDF</x-button>
+                <x-button variant="secondary" :href="route('superadmin.peserta-magang.logbook-harian.cetak', [$pesertaMagang, 'periode' => $periode['kunci']])"><x-icon name="download" :size="16" /> Unduh PDF</x-button>
             </div>
         </div>
 
@@ -322,7 +322,7 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status" value="diterima">
-                                <x-button variant="secondary">✓ Terima</x-button>
+                                <x-button variant="secondary"><x-icon name="check" :size="16" /> Terima</x-button>
                             </form>
                             <form method="POST" action="{{ route('superadmin.peserta-magang.izin.verifikasi', [$pesertaMagang, $izin]) }}">
                                 @csrf

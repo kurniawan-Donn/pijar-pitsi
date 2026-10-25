@@ -4,14 +4,14 @@
 
 @section('title', 'Kelola Pengguna')
 @section('page_title', 'Kelola Pengguna')
-@section('page_subtitle', 'Kelola akun Admin dan Super Admin MAGENTA')
+@section('page_subtitle', 'Kelola akun Admin dan Super Admin PILARA')
 
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #12345b;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--utama-gelap);
         min-height: 100vh;
     }
 
@@ -63,12 +63,12 @@
 
         border-radius: 12px;
 
-        background: #eaf5fd;
+        background: var(--utama-muda);
 
         border:
-            1px solid #d5eafa;
+            1px solid var(--utama-muda);
 
-        color: #1374b9;
+        color: var(--utama);
 
         display: flex;
 
@@ -84,7 +84,7 @@
     .info-title {
         font-size: 20px;
 
-        color: #12345b;
+        color: var(--utama-gelap);
 
         font-weight: 700;
     }
@@ -94,7 +94,7 @@
 
         font-size: 11px;
 
-        color: #74859a;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -105,7 +105,7 @@
         background: #ffffff;
 
         border:
-            1px solid #e2e9f1;
+            1px solid var(--garis);
 
         border-radius: 12px;
 
@@ -123,7 +123,7 @@
             15px 20px;
 
         border-bottom:
-            1px solid #e8edf3;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -151,12 +151,12 @@
 
         border-radius: 9px;
 
-        background: #edf6fd;
+        background: var(--utama-muda);
 
         border:
-            1px solid #dceefa;
+            1px solid var(--utama-muda);
 
-        color: #1675b8;
+        color: var(--utama);
 
         display: flex;
 
@@ -174,7 +174,7 @@
 
         font-weight: 700;
 
-        color: #12345b;
+        color: var(--utama-gelap);
     }
 
     .card-description {
@@ -182,7 +182,7 @@
 
         font-size: 10px;
 
-        color: #7a8b9f;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -199,7 +199,7 @@
 
         border-radius: 7px;
 
-        background: #1472bb;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -221,7 +221,7 @@
     }
 
     .btn-primary:hover {
-        background: #105f9e;
+        background: var(--utama-gelap);
     }
 
     .btn-icon {
@@ -247,9 +247,9 @@
     }
 
     thead th {
-        background: #f8fafc;
+        background: var(--permukaan-redup);
 
-        color: #64758a;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
 
@@ -265,7 +265,7 @@
         text-align: left;
 
         border-bottom:
-            1px solid #e5ebf1;
+            1px solid var(--garis);
 
         white-space: nowrap;
     }
@@ -275,11 +275,11 @@
             16px 18px;
 
         border-bottom:
-            1px solid #edf1f5;
+            1px solid var(--garis);
 
         font-size: 11px;
 
-        color: #4e6075;
+        color: var(--teks-sekunder);
 
         vertical-align: middle;
     }
@@ -289,13 +289,13 @@
     }
 
     tbody tr:hover {
-        background: #fbfdff;
+        background: var(--utama-muda);
     }
 
     .number-column {
         width: 55px;
 
-        color: #6c7d91;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -319,9 +319,9 @@
 
         border-radius: 50%;
 
-        background: #edf5fc;
+        background: var(--utama-muda);
 
-        color: #176da8;
+        color: var(--utama-gelap);
 
         display: flex;
 
@@ -341,7 +341,7 @@
 
         font-weight: 700;
 
-        color: #173c65;
+        color: var(--utama-gelap);
     }
 
     .user-email {
@@ -349,7 +349,7 @@
 
         font-size: 10px;
 
-        color: #7b8b9d;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -374,15 +374,15 @@
     }
 
     .role-superadmin {
-        background: #fff1df;
+        background: var(--peringatan-muda);
 
-        color: #d97816;
+        color: var(--peringatan);
     }
 
     .role-admin {
-        background: #e8f3ff;
+        background: var(--utama-muda);
 
-        color: #166da9;
+        color: var(--utama-gelap);
     }
 
     /* =========================================================
@@ -390,7 +390,7 @@
     ========================================================= */
 
     .date-text {
-        color: #65778c;
+        color: var(--teks-sekunder);
 
         font-size: 10px;
     }
@@ -420,11 +420,11 @@
         border-radius: 6px;
 
         border:
-            1px solid #d8e5f2;
+            1px solid var(--garis-kuat);
 
-        background: #f5f9fd;
+        background: var(--permukaan-redup);
 
-        color: #1268a7;
+        color: var(--utama-gelap);
 
         display: inline-flex;
 
@@ -442,19 +442,19 @@
     }
 
     .action-button:hover {
-        background: #eaf4fc;
+        background: var(--utama-muda);
     }
 
     .delete-button {
         border-color: #f0d4d4;
 
-        background: #fff8f8;
+        background: var(--bahaya-muda);
 
-        color: #c34a4a;
+        color: var(--bahaya);
     }
 
     .delete-button:hover {
-        background: #fff0f0;
+        background: var(--bahaya-muda);
     }
 
     .disabled-action {
@@ -465,9 +465,9 @@
 
         border-radius: 6px;
 
-        background: #f5f6f8;
+        background: var(--permukaan-redup);
 
-        color: #a3adb9;
+        color: var(--teks-redup);
 
         display: inline-flex;
 
@@ -501,9 +501,9 @@
 
         border-radius: 50%;
 
-        background: #eef5fb;
+        background: var(--utama-muda);
 
-        color: #4f86ad;
+        color: var(--teks-sekunder);
 
         display: flex;
 
@@ -519,7 +519,7 @@
 
         font-weight: 700;
 
-        color: #365575;
+        color: var(--teks-sekunder);
     }
 
     .empty-description {
@@ -527,7 +527,7 @@
 
         font-size: 10px;
 
-        color: #8493a4;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -589,7 +589,7 @@
         <div class="info-header">
 
             <div class="info-icon">
-                ♟
+                <x-icon name="user-cog" />
             </div>
 
             <div>
@@ -600,7 +600,7 @@
 
                 <div class="info-description">
                     Kelola akun pengguna yang memiliki akses
-                    ke sistem MAGENTA.
+                    ke sistem PILARA.
                 </div>
 
             </div>
@@ -640,7 +640,7 @@
                 <div class="card-heading">
 
                     <div class="card-heading-icon">
-                        ♟
+                        <x-icon name="user-cog" />
                     </div>
 
                     <div>
@@ -650,7 +650,7 @@
                         </div>
 
                         <div class="card-description">
-                            Daftar akun yang terdaftar di sistem MAGENTA.
+                            Daftar akun yang terdaftar di sistem PILARA.
                         </div>
 
                     </div>
@@ -873,7 +873,7 @@
                 <div class="empty-state">
 
                     <div class="empty-icon">
-                        ♟
+                        <x-icon name="user-cog" />
                     </div>
 
                     <div class="empty-title">
@@ -882,7 +882,7 @@
 
                     <div class="empty-description">
                         Belum terdapat akun pengguna lain
-                        di sistem MAGENTA.
+                        di sistem PILARA.
                     </div>
 
                 </div>

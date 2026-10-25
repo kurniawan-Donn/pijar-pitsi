@@ -14,7 +14,7 @@
 
     $banner = isset($banners) && $banners->isNotEmpty() ? $banners->first() : null;
 
-    $namaPerusahaan = $perusahaan?->nama ?: $perusahaan?->nama_perusahaan ?: 'MAGENTA';
+    $namaPerusahaan = $perusahaan?->nama ?: $perusahaan?->nama_perusahaan ?: 'PILARA';
 
     $informasiTerbaruJudul = $pengaturan?->informasi_terbaru_judul ?? 'Informasi Terbaru';
     $informasiTerbaruDeskripsi = $pengaturan?->informasi_terbaru_deskripsi
@@ -45,17 +45,17 @@
 
     $persyaratanItems = [
         [
-            '📄',
+            'file-text',
             $pengaturan?->persyaratan1_judul ?? 'Surat Pengantar',
             $pengaturan?->persyaratan1_deskripsi ?? 'Siapkan surat pengantar atau surat permohonan magang dari kampus sesuai ketentuan yang berlaku.',
         ],
         [
-            '🎓',
+            'graduation-cap',
             $pengaturan?->persyaratan2_judul ?? 'Data Mahasiswa',
             $pengaturan?->persyaratan2_deskripsi ?? 'Siapkan data diri dan informasi akademik yang diperlukan pada saat mengisi formulir pendaftaran.',
         ],
         [
-            '🗂️',
+            'paperclip',
             $pengaturan?->persyaratan3_judul ?? 'Dokumen Pendukung',
             $pengaturan?->persyaratan3_deskripsi ?? 'Siapkan dokumen pendukung lain sesuai dengan persyaratan yang ditentukan oleh perusahaan.',
         ],
@@ -95,10 +95,10 @@
     $telepon = $perusahaan?->telepon ?: $perusahaan?->no_telepon;
 
     $kontakItems = array_filter([
-        $perusahaan?->alamat ? ['📍', 'Alamat', trim($perusahaan->alamat . ($perusahaan->kota ? ', ' . $perusahaan->kota : '')), null] : null,
-        $perusahaan?->email ? ['✉️', 'Email', $perusahaan->email, 'mailto:' . $perusahaan->email] : null,
-        $telepon && $telepon !== '-' ? ['☎️', 'Telepon', $telepon, 'tel:' . preg_replace('/[^0-9+]/', '', $telepon)] : null,
-        $websiteUrl ? ['🌐', 'Website', $perusahaan->website, $websiteUrl] : null,
+        $perusahaan?->alamat ? ['map-pin', 'Alamat', trim($perusahaan->alamat . ($perusahaan->kota ? ', ' . $perusahaan->kota : '')), null] : null,
+        $perusahaan?->email ? ['mail', 'Email', $perusahaan->email, 'mailto:' . $perusahaan->email] : null,
+        $telepon && $telepon !== '-' ? ['phone', 'Telepon', $telepon, 'tel:' . preg_replace('/[^0-9+]/', '', $telepon)] : null,
+        $websiteUrl ? ['globe', 'Website', $perusahaan->website, $websiteUrl] : null,
     ]);
 
     // Alumni & FAQ hanya muncul di menu bila ada data yang ditampilkan.
@@ -119,17 +119,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Pendaftaran dan informasi magang {{ $namaPerusahaan }}. Daftar online, cek status pengajuan, dan lihat persyaratan magang.">
-    <meta name="theme-color" content="#0878a8">
+    <meta name="theme-color" content="#0b6a9c">
 
-    <title>{{ $namaPerusahaan }} - Sistem Informasi Magang</title>
+    <title>{{ config('app.name') }} - Platform Magang {{ $namaPerusahaan }}</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-pitsi-128.png') }}">
+
+    @include('partials.font')
 
     {{-- Tandai JS aktif sedini mungkin agar animasi tidak berkedip. --}}
     <script>document.documentElement.classList.add('js');</script>
 
+    @include('partials.tema')
     @include('website.partials.styles')
 </head>
 
@@ -142,8 +143,8 @@
         <nav class="container nav-inner" aria-label="Navigasi utama">
 
             <a href="#beranda" class="logo">
-                <span class="logo-mark">M</span>
-                MAGENTA
+                <img src="{{ asset('images/logo-pitsi-128.png') }}" alt="Logo PT Pilar Teknotama Sinergi" class="logo-mark" width="40" height="40">
+                <span class="logo-teks">{{ config('app.name') }}<small>Platform Magang PITSI</small></span>
             </a>
 
             <ul class="nav-menu" id="nav-menu">
@@ -156,7 +157,7 @@
             </ul>
 
             <div class="nav-actions">
-                <a href="{{ route('login') }}" class="btn btn-accent nav-cta" title="Login peserta magang, admin, dan super admin">Login</a>
+                <a href="{{ route('login') }}" class="btn btn-primary nav-cta" title="Login peserta magang, admin, dan super admin">Login</a>
             </div>
 
             <button type="button" class="nav-toggle" aria-label="Buka menu" aria-controls="nav-menu" aria-expanded="false">
@@ -217,15 +218,15 @@
                             <img src="{{ asset('storage/' . $banner->gambar) }}" alt="{{ $banner->judul ?: 'Banner ' . $namaPerusahaan }}">
                         @else
                             <div class="hero-placeholder">
-                                <div class="big-mark">M</div>
-                                <strong>MAGENTA</strong>
-                                <span>Sistem Informasi Magang</span>
+                                <div class="big-mark"><img src="{{ asset('images/logo-pitsi-256.png') }}" alt="" width="72" height="72"></div>
+                                <strong>{{ config('app.name') }}</strong>
+                                <span>Tumbuh bersama, kokoh berkarya.</span>
                             </div>
                         @endif
                     </div>
 
                     <div class="float-card float-card-1">
-                        <span class="icon">✓</span>
+                        <span class="icon"><x-icon name="check" :size="20" /></span>
                         <div>
                             @if ($statistik['peserta_aktif'] > 0)
                                 <strong>{{ $statistik['peserta_aktif'] }} peserta</strong>
@@ -238,7 +239,7 @@
                     </div>
 
                     <div class="float-card float-card-2">
-                        <span class="icon">★</span>
+                        <span class="icon"><x-icon name="graduation-cap" :size="20" /></span>
                         <div>
                             @if ($statistik['alumni'] > 0)
                                 <strong>{{ $statistik['alumni'] }} alumni</strong>
@@ -261,21 +262,21 @@
             <div class="container highlight-grid">
 
                 <article class="card highlight-card" data-reveal>
-                    <div class="icon-box">📋</div>
+                    <div class="icon-box"><x-icon name="clipboard-list" :size="24" /></div>
                     <h3>{{ $persyaratanJudul }}</h3>
                     <p>{{ $persyaratanDeskripsi }}</p>
                     <a href="#persyaratan" class="text-link">Lihat persyaratan <span>→</span></a>
                 </article>
 
                 <article class="card highlight-card" data-reveal style="--delay: .1s">
-                    <div class="icon-box">📝</div>
+                    <div class="icon-box"><x-icon name="file-text" :size="24" /></div>
                     <h3>Pendaftaran Online</h3>
                     <p>Isi formulir 3 langkah langsung di website{{ $googleFormUrl ? ' atau lewat Google Form' : '' }}.</p>
                     <a href="#daftar" class="text-link">Daftar sekarang <span>→</span></a>
                 </article>
 
                 <article class="card highlight-card" data-reveal style="--delay: .2s">
-                    <div class="icon-box">🔎</div>
+                    <div class="icon-box"><x-icon name="search" :size="24" /></div>
                     <h3>Cek Status</h3>
                     <p>Pantau hasil verifikasi dan catatan admin dengan kode pengajuan dan email.</p>
                     <a href="#status" class="text-link">Cek status <span>→</span></a>
@@ -298,7 +299,7 @@
 
                 <div class="announcement-grid">
                     <article class="announcement-main" data-reveal>
-                        <span class="badge-soft">📢 PENGUMUMAN</span>
+                        <span class="badge-soft"><x-icon name="megaphone" :size="14" /> PENGUMUMAN</span>
                         <h3>{{ $pengumumanJudul }}</h3>
                         <p>{{ $pengumumanDeskripsi }}</p>
                     </article>
@@ -337,7 +338,7 @@
                     @foreach ($persyaratanItems as $index => [$ikon, $judul, $deskripsi])
                         <article class="card req-card" data-reveal style="--delay: {{ $index * 0.1 }}s">
                             <span class="step">0{{ $index + 1 }}</span>
-                            <div class="icon-box">{{ $ikon }}</div>
+                            <div class="icon-box"><x-icon :name="$ikon" :size="24" /></div>
                             <h3>{{ $judul }}</h3>
                             <p>{{ $deskripsi }}</p>
                         </article>
@@ -413,7 +414,7 @@
                     <div class="contact-list">
                         @forelse ($kontakItems as $index => [$ikon, $label, $nilai, $tautan])
                             <div class="card contact-item" data-reveal style="--delay: {{ $index * 0.08 }}s">
-                                <span class="icon-box">{{ $ikon }}</span>
+                                <span class="icon-box"><x-icon :name="$ikon" :size="22" /></span>
                                 <div>
                                     <small>{{ $label }}</small>
                                     @if ($tautan)
@@ -427,7 +428,7 @@
                             </div>
                         @empty
                             <div class="card contact-item" data-reveal>
-                                <span class="icon-box">ℹ️</span>
+                                <span class="icon-box"><x-icon name="info" :size="22" /></span>
                                 <div>
                                     <small>Kontak</small>
                                     <span>Informasi kontak belum tersedia.</span>
@@ -458,10 +459,10 @@
             <div class="footer-grid">
                 <div>
                     <a href="#beranda" class="logo">
-                        <span class="logo-mark">M</span>
-                        MAGENTA
+                        <img src="{{ asset('images/logo-pitsi-128.png') }}" alt="" class="logo-mark" width="40" height="40">
+                        <span class="logo-teks">{{ config('app.name') }}<small>Tumbuh bersama, kokoh berkarya.</small></span>
                     </a>
-                    <p>Sistem Informasi Magang {{ $namaPerusahaan }}: pendaftaran, verifikasi, dan informasi magang dalam satu tempat.</p>
+                    <p>PILARA adalah platform magang PT Pilar Teknotama Sinergi (PITSI) untuk pendaftaran, biodata, logbook harian, absensi dan uang saku, penilaian, feedback, surat keterangan, hingga alumni.</p>
                 </div>
 
                 <div>
@@ -479,7 +480,7 @@
                         <li><a href="#daftar">Form Pendaftaran</a></li>
                         <li><a href="#status">Cek Status</a></li>
                         @if ($googleFormUrl)
-                            <li><a href="{{ $googleFormUrl }}" target="_blank" rel="noopener noreferrer">Google Form ↗</a></li>
+                            <li><a href="{{ $googleFormUrl }}" target="_blank" rel="noopener noreferrer">Google Form <x-icon name="external-link" :size="13" /></a></li>
                         @endif
                     </ul>
                 </div>
@@ -491,7 +492,7 @@
         </div>
     </footer>
 
-    <button type="button" class="to-top" aria-label="Kembali ke atas">↑</button>
+    <button type="button" class="to-top" aria-label="Kembali ke atas"><x-icon name="arrow-up" :size="20" /></button>
 
     @include('website.partials.scripts')
 

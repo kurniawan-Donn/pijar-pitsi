@@ -22,10 +22,10 @@
     .lb-table th {
         padding: 8px;
 
-        background: #f2f6fa;
-        color: #52646e;
+        background: var(--garis);
+        color: var(--teks-sekunder);
 
-        border: 1px solid #e3e9ef;
+        border: 1px solid var(--garis);
 
         font-size: 11px;
         font-weight: 800;
@@ -36,34 +36,34 @@
     .lb-table td {
         padding: 8px;
 
-        border: 1px solid #edf1f5;
+        border: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         vertical-align: top;
     }
 
     .lb-table tr.lb-libur td {
-        background: #fafbfc;
-        color: #9aa7b4;
+        background: var(--permukaan-redup);
+        color: var(--teks-redup);
     }
 
     .lb-table tr.lb-belum td {
-        background: #fffdf5;
+        background: var(--peringatan-muda);
     }
 
     .lb-table tr:target td,
     .lb-table tr.lb-hari-ini td {
-        background: #eef6fd;
+        background: var(--utama-muda);
     }
 
     .lb-tanggal strong {
         display: block;
 
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .lb-tanggal small {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
     }
 
     .lb-jam {
@@ -85,7 +85,7 @@
 
         margin-top: 4px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         white-space: normal;
     }
@@ -102,19 +102,19 @@
         white-space: nowrap;
     }
 
-    .lb-hadir { background: #e7f6ec; color: #067647; }
-    .lb-izin { background: #eef4ff; color: #3538cd; }
-    .lb-sakit { background: #fff0f0; color: #c62828; }
-    .lb-libur-badge { background: #eef2f6; color: #52646e; }
-    .lb-menunggu { background: #f2f4f7; color: #475467; }
-    .lb-diterima { background: #e7f6ec; color: #067647; }
-    .lb-ditolak { background: #fff0f0; color: #c62828; }
-    .lb-review { background: #fff4e5; color: #b54708; }
+    .lb-hadir { background: var(--sukses-muda); color: var(--sukses); }
+    .lb-izin { background: var(--utama-muda); color: #3538cd; }
+    .lb-sakit { background: var(--bahaya-muda); color: var(--bahaya); }
+    .lb-libur-badge { background: var(--garis); color: var(--teks-sekunder); }
+    .lb-menunggu { background: var(--garis); color: var(--teks); }
+    .lb-diterima { background: var(--sukses-muda); color: var(--sukses); }
+    .lb-ditolak { background: var(--bahaya-muda); color: var(--bahaya); }
+    .lb-review { background: var(--peringatan-muda); color: var(--peringatan); }
 
     .lb-bukti a {
         display: block;
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 11px;
         text-decoration: none;
         word-break: break-all;
@@ -132,11 +132,11 @@
 
         padding: 5px 10px;
 
-        border: 1px solid #cfe0f1;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
-        background: #f2f8fd;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         font-family: inherit;
         font-size: 11px;
@@ -151,7 +151,7 @@
     }
 
     .lb-kunci {
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 11px;
     }
 
@@ -160,7 +160,7 @@
 
         margin-top: 4px;
 
-        color: #b42318;
+        color: var(--bahaya);
         font-size: 11px;
     }
 </style>
@@ -275,9 +275,9 @@
                             @if ($baris['akses'] === 'bisa' && (! $logbook || $logbook->bisaDiubahPeserta()))
                                 <a href="{{ route('peserta.logbook.edit', $kunciTanggal) }}">{{ $logbook ? 'Ubah' : 'Isi' }}</a>
                             @elseif ($baris['akses'] === 'belum_tiba')
-                                <span class="lb-kunci" title="Tanggal belum tiba">🔒 belum tiba</span>
+                                <span class="lb-kunci" title="Tanggal belum tiba"><x-icon name="lock" :size="13" /> belum tiba</span>
                             @elseif ($baris['akses'] === 'lewat_batas' && (! $logbook || $logbook->bisaDiubahPeserta()))
-                                <span class="lb-kunci" title="Melewati batas pengisian">🔒 terkunci</span>
+                                <span class="lb-kunci" title="Melewati batas pengisian"><x-icon name="lock" :size="13" /> terkunci</span>
                             @endif
                         @else
                             @if ($baris['akses'] === 'lewat_batas' && (! $logbook || $logbook->bisaDiubahPeserta()))

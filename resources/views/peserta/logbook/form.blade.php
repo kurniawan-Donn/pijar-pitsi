@@ -24,7 +24,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -33,14 +33,14 @@
     .panel h3 {
         margin-bottom: 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin-bottom: 16px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -60,7 +60,7 @@
 
         padding: 10px 16px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 10px;
 
         font-size: 13px;
@@ -70,19 +70,19 @@
     }
 
     .pilihan label:has(input:checked) {
-        border-color: #1779c9;
-        background: #eef6fd;
-        color: #17324d;
+        border-color: var(--utama);
+        background: var(--utama-muda);
+        color: var(--utama-gelap);
     }
 
     .pilihan input {
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .pilihan a {
         align-self: center;
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 13px;
         font-weight: 700;
         text-decoration: none;
@@ -99,16 +99,16 @@
     .sesi {
         padding: 14px 16px 2px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 11px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
     }
 
     .sesi h4 {
         margin-bottom: 10px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 800;
         text-transform: uppercase;
@@ -123,7 +123,7 @@
     .jam-hint {
         margin-bottom: 16px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -145,7 +145,7 @@
     }
 
     .bukti-lama a {
-        color: #1779c9;
+        color: var(--utama);
     }
 
     .actions {

@@ -25,7 +25,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -34,7 +34,7 @@
     .panel h3 {
         margin-bottom: 14px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -58,9 +58,9 @@
 
         border-radius: 10px;
 
-        background: #f4f8fc;
+        background: var(--utama-muda);
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -86,15 +86,15 @@
 
         padding: 8px;
 
-        background: #eaf3fb;
-        color: #6b7f93;
+        background: var(--utama-muda);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         text-align: center;
     }
 
     .bintang {
-        color: #f5a524;
+        color: var(--peringatan);
     }
 
     .check {
@@ -102,7 +102,7 @@
         align-items: center;
         gap: 8px;
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
         font-weight: 600;
     }
@@ -163,7 +163,7 @@
                             belum ada
                         @endif
                         @unless ($alumni->disetujuiPeserta())
-                            <br><strong style="color: #b54708;">Peserta menarik persetujuan tampil sebagai alumni; alumni tidak akan tampil di website.</strong>
+                            <br><strong style="color: var(--peringatan);">Peserta menarik persetujuan tampil sebagai alumni; alumni tidak akan tampil di website.</strong>
                         @endunless
                     </div>
                 </div>

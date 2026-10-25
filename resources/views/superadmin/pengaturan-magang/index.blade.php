@@ -24,7 +24,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -37,14 +37,14 @@
     }
 
     .panel h3 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
     }
 
     .panel > p {
         margin: 4px 0 18px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -52,7 +52,7 @@
     .panel h4 {
         margin: 6px 0 12px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 800;
         letter-spacing: .4px;
@@ -81,7 +81,7 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .inline-form .x-form-group {
@@ -102,8 +102,8 @@
     th {
         padding: 9px 10px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -115,9 +115,9 @@
     td {
         padding: 9px 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         vertical-align: middle;
     }
 
@@ -133,15 +133,15 @@
 
         border-radius: 999px;
 
-        background: #e7f6ec;
-        color: #067647;
+        background: var(--sukses-muda);
+        color: var(--sukses);
 
         font-size: 11px;
         font-weight: 800;
     }
 
     .muted {
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 12px;
     }
 
@@ -158,8 +158,8 @@
 
         border-radius: 9px;
 
-        background: #f4f7fb;
-        color: #52646e !important;
+        background: var(--latar);
+        color: var(--teks-sekunder) !important;
         font-size: 12.5px;
     }
 
@@ -169,7 +169,7 @@
         border: none;
         background: none;
 
-        color: #c62828;
+        color: var(--bahaya);
         font-family: inherit;
         font-size: 12px;
         font-weight: 700;
@@ -188,10 +188,10 @@
     .ttd-slot {
         padding: 12px 14px 4px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 10px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
     }
 
     .ttd-pratinjau {
@@ -201,11 +201,11 @@
         height: 90px;
         margin-bottom: 10px;
 
-        border: 1px dashed #d7e0eb;
+        border: 1px dashed var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 12px;
     }
 
@@ -223,7 +223,7 @@
 
         margin-bottom: 10px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -239,14 +239,14 @@
     }
 
     .tahun-nav a {
-        color: #1779c9;
+        color: var(--utama);
         text-decoration: none;
     }
 
     .empty {
         padding: 18px;
 
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 13px;
         text-align: center;
     }
@@ -293,7 +293,7 @@
             </p>
 
             @cannot('kelola-pengaturan-magang')
-                <p class="hanya-baca">🔒 Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola hari libur.</p>
+                <p class="hanya-baca"><x-icon name="lock" :size="15" /> Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola hari libur.</p>
             @endcannot
 
             <form method="POST" action="{{ route('superadmin.pengaturan-magang.update') }}" enctype="multipart/form-data">

@@ -38,7 +38,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -47,7 +47,7 @@
     .panel h3 {
         margin-bottom: 12px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -62,8 +62,8 @@
         font-weight: 800;
     }
 
-    .status-draft { background: #fff4e5; color: #b54708; }
-    .status-terbit { background: #e7f6ec; color: #067647; }
+    .status-draft { background: var(--peringatan-muda); color: var(--peringatan); }
+    .status-terbit { background: var(--sukses-muda); color: var(--sukses); }
 
     .syarat {
         margin: 12px 0;
@@ -78,11 +78,11 @@
         padding: 5px 0;
     }
 
-    .syarat .ok { color: #067647; }
-    .syarat .belum { color: #c62828; }
+    .syarat .ok { color: var(--sukses); }
+    .syarat .belum { color: var(--bahaya); }
 
     .info {
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.7;
     }
@@ -101,7 +101,7 @@
         width: 17px;
         height: 17px;
 
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .aksi {
@@ -113,10 +113,10 @@
     .kertas {
         padding: 26px 30px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 8px;
 
-        background: #fffefb;
+        background: var(--peringatan-muda);
 
         font-size: 13px;
         line-height: 1.75;
@@ -212,7 +212,7 @@
                             'Penilaian akhir diisi' => (bool) $pesertaMagang->penilaian,
                             'Feedback dikirim peserta' => (bool) $pesertaMagang->feedback,
                         ] as $label => $ok)
-                            <li class="{{ $ok ? 'ok' : 'belum' }}">{{ $ok ? '✓' : '✗' }} {{ $label }}</li>
+                            <li class="{{ $ok ? 'ok' : 'belum' }}"><x-icon :name="$ok ? 'circle-check' : 'circle-x'" :size="16" /> {{ $label }}</li>
                         @endforeach
                     </ul>
 
@@ -231,12 +231,12 @@
 
                             <div class="aksi">
                                 <x-button>{{ $surat->sudahTerbit() ? 'Terbitkan Ulang' : 'Terbitkan Surat' }}</x-button>
-                                <x-button variant="secondary" :href="route('superadmin.peserta-magang.surat.pdf', $pesertaMagang)">⬇ {{ $surat->sudahTerbit() ? 'Unduh PDF' : 'Pratinjau PDF' }}</x-button>
+                                <x-button variant="secondary" :href="route('superadmin.peserta-magang.surat.pdf', $pesertaMagang)"><x-icon name="download" :size="16" /> {{ $surat->sudahTerbit() ? 'Unduh PDF' : 'Pratinjau PDF' }}</x-button>
                             </div>
                         </form>
                     @else
                         <div class="aksi">
-                            <x-button variant="secondary" :href="route('superadmin.peserta-magang.surat.pdf', $pesertaMagang)">⬇ {{ $surat->sudahTerbit() ? 'Unduh PDF' : 'Pratinjau PDF' }}</x-button>
+                            <x-button variant="secondary" :href="route('superadmin.peserta-magang.surat.pdf', $pesertaMagang)"><x-icon name="download" :size="16" /> {{ $surat->sudahTerbit() ? 'Unduh PDF' : 'Pratinjau PDF' }}</x-button>
                         </div>
                     @endif
                 @endif

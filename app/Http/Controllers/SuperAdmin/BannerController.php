@@ -12,7 +12,7 @@ class BannerController extends Controller
 {
     /**
      * Halaman kelola banner.
-     * MAGENTA hanya menggunakan 1 banner utama.
+     * PILARA hanya menggunakan 1 banner utama.
      */
     public function index()
     {
@@ -109,7 +109,7 @@ class BannerController extends Controller
         | Hapus banner lain jika ternyata ada data lama
         |--------------------------------------------------------------------------
         |
-        | Karena MAGENTA hanya menggunakan 1 banner,
+        | Karena PILARA hanya menggunakan 1 banner,
         | kita pastikan database hanya menyimpan banner utama.
         |
         */

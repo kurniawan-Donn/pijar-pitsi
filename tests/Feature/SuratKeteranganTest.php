@@ -107,7 +107,7 @@ class SuratKeteranganTest extends TestCase
         $this->actingAs($this->admin)
             ->get(route('superadmin.peserta-magang.surat', $this->peserta))
             ->assertOk()
-            ->assertSee('✗ Biodata disetujui')
+            ->assertSeeInOrder(['<li class="belum">', 'Biodata disetujui'], false)
             ->assertDontSee('Terbitkan Surat');
 
         $this->terbitkan($this->peserta)
@@ -199,7 +199,7 @@ class SuratKeteranganTest extends TestCase
             ->get(route('peserta.surat.show'))
             ->assertOk()
             ->assertSee('Surat keterangan belum terbit')
-            ->assertSee('✓ Feedback magang sudah dikirim');
+            ->assertSeeInOrder(['<li class="ok">', 'Feedback magang sudah dikirim'], false);
 
         $this->actingAs($this->akun)
             ->get(route('peserta.surat.unduh'))

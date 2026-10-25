@@ -192,8 +192,8 @@ class TandaTanganDokumenTest extends TestCase
         $this->unggahSemua();
         $dengan = $this->jumlahGambar($this->actingAs($this->admin)->get($url)->getContent());
 
-        $this->assertSame(0, $tanpa);
-        $this->assertGreaterThanOrEqual(3, $dengan);
+        // Logo kop selalu ada; tanda tangan Mengetahui, Menyetujui, dan stempel menambah 3 gambar.
+        $this->assertGreaterThanOrEqual($tanpa + 3, $dengan);
     }
 
     public function test_surat_terbit_menyalin_gambar_dan_diberi_kode_verifikasi_tetap(): void

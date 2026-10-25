@@ -15,17 +15,17 @@
 
 @php
     $icons = [
-        'success' => '✓',
-        'error' => '!',
-        'warning' => '!',
-        'info' => 'i',
+        'success' => 'circle-check',
+        'error' => 'circle-alert',
+        'warning' => 'triangle-alert',
+        'info' => 'info',
     ];
 @endphp
 
 @if ($message || count($messages) || $slot->isNotEmpty())
     <div {{ $attributes->class(['x-alert', 'x-alert-' . $type]) }} role="alert">
 
-        <span class="x-alert-icon">{{ $icons[$type] ?? 'i' }}</span>
+        <x-icon :name="$icons[$type] ?? 'info'" class="x-alert-icon" />
 
         <div>
             @if ($title)

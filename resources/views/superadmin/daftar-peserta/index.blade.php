@@ -31,7 +31,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -51,7 +51,7 @@
 
         margin-bottom: 5px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -62,7 +62,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
@@ -86,8 +86,8 @@
     table.daftar th {
         padding: 9px 10px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -98,22 +98,22 @@
     table.daftar td {
         padding: 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         vertical-align: top;
     }
 
     .nama strong {
         display: block;
 
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .kecil {
         display: block;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
@@ -124,7 +124,7 @@
 
         border-radius: 999px;
 
-        background: #edf1f5;
+        background: var(--garis);
 
         overflow: hidden;
     }
@@ -134,7 +134,7 @@
 
         height: 100%;
 
-        background: linear-gradient(90deg, #1779c9, #19a974);
+        background: linear-gradient(90deg, var(--utama), var(--sukses));
     }
 
     .badge {
@@ -149,10 +149,10 @@
         white-space: nowrap;
     }
 
-    .b-hijau { background: #e7f6ec; color: #067647; }
-    .b-oranye { background: #fff4e5; color: #b54708; }
-    .b-merah { background: #fff0f0; color: #c62828; }
-    .b-abu { background: #eef2f6; color: #52646e; }
+    .b-hijau { background: var(--sukses-muda); color: var(--sukses); }
+    .b-oranye { background: var(--peringatan-muda); color: var(--peringatan); }
+    .b-merah { background: var(--bahaya-muda); color: var(--bahaya); }
+    .b-abu { background: var(--garis); color: var(--teks-sekunder); }
 
     .angka {
         font-variant-numeric: tabular-nums;
@@ -162,12 +162,12 @@
         margin: 0;
         padding-left: 16px;
 
-        color: #8a5a00;
+        color: var(--peringatan);
         font-size: 11.5px;
     }
 
     .aksi a {
-        color: #1779c9;
+        color: var(--utama);
         font-weight: 700;
         text-decoration: none;
         white-space: nowrap;
@@ -176,7 +176,7 @@
     .empty {
         padding: 24px;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -295,7 +295,7 @@
                                             {{ $item['terisi'] }} hari terisi
                                             <span class="kecil">{{ $rekap['belum_diisi'] }} hari kerja belum diisi · {{ $item['periode']['label'] }}</span>
                                             @if ($item['isi_hari_ini'] === true)
-                                                <span class="badge b-hijau">Hari ini ✓</span>
+                                                <span class="badge b-hijau">Hari ini</span>
                                             @elseif ($item['isi_hari_ini'] === false)
                                                 <span class="badge b-merah">Hari ini belum</span>
                                             @endif
@@ -373,7 +373,7 @@
                                                 @endforeach
                                             </ul>
                                         @else
-                                            <span class="badge b-hijau">Lengkap ✓</span>
+                                            <span class="badge b-hijau">Lengkap</span>
                                         @endif
                                     </td>
                                     <td class="aksi"><a href="{{ route('superadmin.peserta-magang.surat', $peserta) }}">{{ $item['keadaan'] === 'siap' ? 'Terbitkan' : 'Buka' }} →</a></td>

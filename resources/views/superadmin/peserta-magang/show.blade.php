@@ -9,9 +9,9 @@
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #263238;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--teks);
         min-height: 100vh;
     }
 
@@ -41,15 +41,15 @@
     }
 
     .heading {
-        font-size: 26px;
+        font-size: 17px;
 
-        color: #17313d;
+        color: var(--teks);
 
         font-weight: 800;
     }
 
     .heading-description {
-        color: #7b8b96;
+        color: var(--teks-sekunder);
 
         font-size: 13px;
 
@@ -90,38 +90,38 @@
     .btn-secondary {
         background: white;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
 
         border:
-            1px solid #dce5ea;
+            1px solid var(--garis);
     }
 
     .btn-secondary:hover {
-        background: #f7fafc;
+        background: var(--permukaan-redup);
     }
 
     .btn-orange {
-        background: #f47b20;
+        background: var(--utama);
         color: white;
     }
 
     .btn-orange:hover {
-        background: #d96512;
+        background: var(--peringatan);
 
         transform: translateY(-1px);
     }
 
     .btn-danger {
-        background: #fff0f0;
+        background: var(--bahaya-muda);
 
-        color: #c62828;
+        color: var(--bahaya);
 
         border:
-            1px solid #ffd1d1;
+            1px solid var(--bahaya-muda);
     }
 
     .btn-danger:hover {
-        background: #ffe1e1;
+        background: var(--bahaya-muda);
     }
 
     /* =====================================================
@@ -147,7 +147,7 @@
         background: white;
 
         border:
-            1px solid #e2eaf0;
+            1px solid var(--garis);
 
         border-radius: 14px;
 
@@ -162,7 +162,7 @@
             21px 23px;
 
         border-bottom:
-            1px solid #edf1f4;
+            1px solid var(--garis);
     }
 
     .card-title {
@@ -170,13 +170,13 @@
 
         font-weight: 800;
 
-        color: #263238;
+        color: var(--teks);
     }
 
     .card-description {
         margin-top: 4px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
     }
@@ -213,8 +213,8 @@
         background:
             linear-gradient(
                 135deg,
-                #0878a8,
-                #0c91be
+                var(--utama),
+                var(--utama)
             );
 
         color: white;
@@ -237,7 +237,7 @@
 
         font-weight: 800;
 
-        color: #17313d;
+        color: var(--teks);
     }
 
     .profile-nim {
@@ -245,7 +245,7 @@
 
         font-size: 12px;
 
-        color: #7b8b96;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -267,7 +267,7 @@
     }
 
     .info-label {
-        color: #8a99a3;
+        color: var(--teks-sekunder);
 
         font-size: 10px;
 
@@ -281,7 +281,7 @@
     }
 
     .info-value {
-        color: #34454f;
+        color: var(--teks);
 
         font-size: 13px;
 
@@ -320,15 +320,15 @@
     }
 
     .status-aktif {
-        background: #eaf8f0;
+        background: var(--sukses-muda);
 
-        color: #16834b;
+        color: var(--sukses);
     }
 
     .status-selesai {
-        background: #eef1f4;
+        background: var(--garis);
 
-        color: #667781;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -339,12 +339,12 @@
         background:
             linear-gradient(
                 135deg,
-                #f8fcfe,
-                #eef8fc
+                var(--utama-muda),
+                var(--utama-muda)
             );
 
         border:
-            1px solid #d8eaf1;
+            1px solid var(--garis-kuat);
 
         border-radius: 12px;
 
@@ -359,7 +359,7 @@
 
         background: #ffffff;
 
-        color: #16834b;
+        color: var(--sukses);
 
         display: flex;
 
@@ -377,13 +377,13 @@
 
         font-weight: 800;
 
-        color: #263238;
+        color: var(--teks);
 
         margin-bottom: 7px;
     }
 
     .sheets-description {
-        color: #71818b;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
 
@@ -398,14 +398,14 @@
         background: white;
 
         border:
-            1px solid #dfe9ee;
+            1px solid var(--garis);
 
         border-radius: 8px;
 
         padding:
             11px 12px;
 
-        color: #0878a8;
+        color: var(--utama);
 
         font-size: 11px;
 
@@ -417,7 +417,7 @@
     }
 
     .sheets-url:hover {
-        border-color: #b9d8e4;
+        border-color: var(--garis-kuat);
     }
 
     .sheets-missing {
@@ -426,12 +426,12 @@
 
         border-radius: 8px;
 
-        background: #fff8ed;
+        background: var(--peringatan-muda);
 
         border:
             1px solid #ffe1b7;
 
-        color: #9a5b12;
+        color: var(--peringatan);
 
         font-size: 11px;
 
@@ -459,11 +459,11 @@
             12px;
 
         border:
-            1px solid #e5edf1;
+            1px solid var(--garis);
 
         border-radius: 9px;
 
-        color: #465762;
+        color: var(--teks);
 
         font-size: 12px;
 
@@ -473,9 +473,9 @@
     }
 
     .action-item:hover {
-        background: #f8fbfd;
+        background: var(--utama-muda);
 
-        border-color: #cfe0e8;
+        border-color: var(--garis-kuat);
     }
 
     .action-icon {
@@ -484,9 +484,9 @@
 
         border-radius: 8px;
 
-        background: #eef8fc;
+        background: var(--utama-muda);
 
-        color: #0878a8;
+        color: var(--utama);
 
         display: flex;
 
@@ -579,7 +579,7 @@
 
         margin-top: 2px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
         font-size: 10px;
         font-weight: 600;
     }
@@ -603,12 +603,12 @@
         margin-bottom: 16px;
         padding: 14px 16px;
 
-        border: 1px dashed #f4a261;
+        border: 1px dashed var(--utama);
         border-radius: 10px;
 
-        background: #fff8f1;
+        background: var(--peringatan-muda);
 
-        color: #7a4a17;
+        color: var(--peringatan);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -620,7 +620,7 @@
 
         background: #ffffff;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
         font-weight: 800;
         letter-spacing: 1px;
@@ -660,7 +660,7 @@
     .akun-hint {
         margin-top: 12px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -694,7 +694,7 @@
                 </div>
 
                 <div class="heading-description">
-                    Detail data peserta magang yang tersimpan pada sistem MAGENTA.
+                    Detail data peserta magang yang tersimpan pada sistem PILARA.
                 </div>
 
             </div>
@@ -932,7 +932,7 @@
                     <div class="sheets-card">
 
                         <div class="sheets-icon">
-                            ▣
+                            <x-icon name="file-spreadsheet" />
                         </div>
 
                         <div class="sheets-title">
@@ -961,7 +961,7 @@
                                 class="btn btn-orange"
                                 style="width:100%;"
                             >
-                                Buka Google Sheets ↗
+                                Buka Google Sheets <x-icon name="external-link" :size="14" />
                             </a>
 
                             <a
@@ -1062,14 +1062,14 @@
                         >
                             @csrf
                             @method('PUT')
-                            <button type="submit" class="btn btn-secondary">↻ Reset Password</button>
+                            <button type="submit" class="btn btn-secondary"><x-icon name="refresh" :size="16" /> Reset Password</button>
                         </form>
 
                         <form method="POST" action="{{ route('superadmin.peserta-magang.akun.status', $pesertaMagang) }}">
                             @csrf
                             @method('PUT')
                             <button type="submit" class="btn btn-secondary">
-                                {{ $akun->aktif ? '⏸ Nonaktifkan Akun' : '▶ Aktifkan Akun' }}
+                                <x-icon :name="$akun->aktif ? 'pause' : 'play'" :size="16" /> {{ $akun->aktif ? 'Nonaktifkan Akun' : 'Aktifkan Akun' }}
                             </button>
                         </form>
 
@@ -1153,7 +1153,7 @@
                     >
 
                         <span class="action-icon">
-                            ✎
+                            <x-icon name="pencil" />
                         </span>
 
                         <span>
@@ -1174,7 +1174,7 @@
                         >
 
                             <span class="action-icon">
-                                ▣
+                                <x-icon name="file-spreadsheet" />
                             </span>
 
                             <span>
@@ -1191,7 +1191,7 @@
                         href="{{ route('superadmin.peserta-magang.biodata', $pesertaMagang) }}"
                         class="action-item"
                     >
-                        <span class="action-icon">☷</span>
+                        <span class="action-icon"><x-icon name="id-card" /></span>
                         <span>
                             Biodata Peserta
                             <small class="action-meta">
@@ -1210,7 +1210,7 @@
                         href="{{ route('superadmin.peserta-magang.surat', $pesertaMagang) }}"
                         class="action-item"
                     >
-                        <span class="action-icon">✉</span>
+                        <span class="action-icon"><x-icon name="file-check" /></span>
                         <span>
                             Surat Keterangan Magang
                             <small class="action-meta">
@@ -1231,7 +1231,7 @@
                         href="{{ route('superadmin.peserta-magang.feedback', $pesertaMagang) }}"
                         class="action-item"
                     >
-                        <span class="action-icon">✎</span>
+                        <span class="action-icon"><x-icon name="message-square" /></span>
                         <span>
                             Feedback Magang
                             <small class="action-meta">
@@ -1246,7 +1246,7 @@
                         href="{{ route('superadmin.peserta-magang.logbook-harian', $pesertaMagang) }}"
                         class="action-item"
                     >
-                        <span class="action-icon">✓</span>
+                        <span class="action-icon"><x-icon name="clipboard-list" /></span>
                         <span>
                             Logbook Harian & Izin
                             <small class="action-meta">Verifikasi, rekap uang saku, dan cetak per periode</small>
@@ -1259,7 +1259,7 @@
                         href="{{ route('superadmin.peserta-magang.penilaian', $pesertaMagang) }}"
                         class="action-item"
                     >
-                        <span class="action-icon">★</span>
+                        <span class="action-icon"><x-icon name="award" /></span>
                         <span>
                             Penilaian Akhir
                             <small class="action-meta">
@@ -1296,7 +1296,7 @@
                     ) }}"
                     class="btn btn-secondary"
                 >
-                    ✎ Edit Peserta
+                    <x-icon name="pencil" :size="16" /> Edit Peserta
                 </a>
 
                 {{-- GOOGLE SHEETS --}}
@@ -1309,7 +1309,7 @@
                         rel="noopener noreferrer"
                         class="btn btn-orange"
                     >
-                        ▣ Google Sheets
+                        <x-icon name="file-spreadsheet" :size="16" /> Google Sheets
                     </a>
 
                 @endif

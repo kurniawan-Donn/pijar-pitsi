@@ -17,7 +17,7 @@
     .panel {
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -33,7 +33,7 @@
 
         padding: 18px 20px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
     }
 
     .filter-form label {
@@ -41,7 +41,7 @@
 
         margin-bottom: 6px;
 
-        color: #4b5d70;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 800;
         text-transform: uppercase;
@@ -53,7 +53,7 @@
 
         padding: 0 11px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
@@ -65,7 +65,7 @@
     .reset {
         align-self: center;
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 12px;
         font-weight: 700;
     }
@@ -82,8 +82,8 @@
     th {
         padding: 11px 16px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -95,16 +95,16 @@
     td {
         padding: 12px 16px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #33475b;
+        color: var(--teks);
 
         font-size: 13px;
         vertical-align: top;
     }
 
     .waktu {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-weight: 700;
         white-space: nowrap;
     }
@@ -112,7 +112,7 @@
     .sub {
         margin-top: 2px;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
@@ -123,8 +123,8 @@
 
         border-radius: 999px;
 
-        background: #eaf3fb;
-        color: #175c95;
+        background: var(--utama-muda);
+        color: var(--utama-gelap);
 
         font-size: 11px;
         font-weight: 800;
@@ -132,12 +132,12 @@
     }
 
     .aksi.hapus {
-        background: #fef3f2;
-        color: #b42318;
+        background: var(--bahaya-muda);
+        color: var(--bahaya);
     }
 
     details summary {
-        color: #1779c9;
+        color: var(--utama);
         font-size: 12px;
         font-weight: 700;
 
@@ -152,7 +152,7 @@
 
         border-radius: 8px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
 
         font-size: 11px;
         white-space: pre-wrap;
@@ -162,7 +162,7 @@
     .empty-state {
         padding: 46px 20px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 

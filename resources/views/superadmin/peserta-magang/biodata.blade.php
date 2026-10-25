@@ -77,7 +77,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -88,14 +88,14 @@
     .panel h3 {
         margin-bottom: 14px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin: -8px 0 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -112,20 +112,20 @@
     dd {
         padding: 9px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
         font-size: 13px;
     }
 
     dt {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-weight: 700;
     }
 
     dd {
         margin: 0;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         overflow-wrap: anywhere;
     }
 
@@ -135,11 +135,11 @@
     }
 
     dd a {
-        color: #1779c9;
+        color: var(--utama);
     }
 
     .kosong {
-        color: #b4c0cc;
+        color: var(--teks-redup);
     }
 
     details.nik summary {
@@ -150,7 +150,7 @@
     details.nik summary::after {
         content: " · tampilkan";
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 12px;
         font-weight: 700;
     }
@@ -170,10 +170,10 @@
         font-weight: 800;
     }
 
-    .badge-draft { background: #eef2f6; color: #52646e; }
-    .badge-diajukan { background: #fff4e5; color: #b54708; }
-    .badge-perlu_revisi { background: #fff0f0; color: #c62828; }
-    .badge-disetujui { background: #e7f6ec; color: #067647; }
+    .badge-draft { background: var(--garis); color: var(--teks-sekunder); }
+    .badge-diajukan { background: var(--peringatan-muda); color: var(--peringatan); }
+    .badge-perlu_revisi { background: var(--bahaya-muda); color: var(--bahaya); }
+    .badge-disetujui { background: var(--sukses-muda); color: var(--sukses); }
 
     .ringkas {
         display: flex;
@@ -182,7 +182,7 @@
 
         margin-bottom: 14px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 13px;
     }
 
@@ -191,7 +191,7 @@
 
         border-radius: 999px;
 
-        background: #edf1f5;
+        background: var(--garis);
 
         overflow: hidden;
     }
@@ -201,7 +201,7 @@
 
         border-radius: 999px;
 
-        background: linear-gradient(90deg, #1779c9, #19a974);
+        background: linear-gradient(90deg, var(--utama), var(--sukses));
     }
 
     .kosong-list {
@@ -210,8 +210,8 @@
 
         border-radius: 9px;
 
-        background: #fff8f1;
-        color: #7a4a17;
+        background: var(--peringatan-muda);
+        color: var(--peringatan);
 
         font-size: 12px;
         line-height: 1.7;
@@ -235,7 +235,7 @@
     }
 
     .keputusan input {
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .x-form-select {
@@ -284,7 +284,7 @@
 
         margin-bottom: 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 

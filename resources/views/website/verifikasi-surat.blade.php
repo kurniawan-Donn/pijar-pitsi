@@ -9,18 +9,12 @@
     <meta name="robots" content="noindex, nofollow">
     <title>Verifikasi Surat Keterangan - {{ config('app.name') }}</title>
 
-    <style>
-        :root {
-            --latar: #f7f9fb;
-            --permukaan: #ffffff;
-            --utama: #2688b4;
-            --utama-gelap: #0b6a9c;
-            --teks: #1f2937;
-            --teks-sekunder: #6b7280;
-            --berhasil: #067647;
-            --gagal: #b42318;
-        }
+    <link rel="icon" type="image/png" href="{{ asset('images/logo-pitsi-128.png') }}">
 
+    @include('partials.font')
+    @include('partials.tema')
+
+    <style>
         * {
             box-sizing: border-box;
         }
@@ -36,7 +30,7 @@
             background: var(--latar);
             color: var(--teks);
 
-            font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+            font-family: var(--font);
             line-height: 1.6;
         }
 
@@ -54,6 +48,10 @@
         }
 
         .perusahaan {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
             margin: 0 0 18px;
 
             color: var(--teks-sekunder);
@@ -71,11 +69,11 @@
         }
 
         .status.asli {
-            color: var(--berhasil);
+            color: var(--sukses);
         }
 
         .status.tidak {
-            color: var(--gagal);
+            color: var(--bahaya);
         }
 
         .status svg {
@@ -121,11 +119,14 @@
 <body>
 
 <main class="kartu">
-    <p class="perusahaan">{{ $namaPerusahaan }}</p>
+    <p class="perusahaan">
+        <img src="{{ asset('images/logo-pitsi-128.png') }}" alt="" width="32" height="32">
+        <span>{{ $namaPerusahaan }} · {{ config('app.name') }}</span>
+    </p>
 
     @if ($surat)
         <h1 class="status asli">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+            <x-icon name="circle-check" :size="24" />
             Surat keterangan asli
         </h1>
         <p class="keterangan">Surat ini tercatat di sistem magang dan diterbitkan oleh {{ $namaPerusahaan }}.</p>
@@ -146,7 +147,7 @@
         </dl>
     @else
         <h1 class="status tidak">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+            <x-icon name="circle-x" :size="24" />
             Surat tidak ditemukan
         </h1>
         <p class="keterangan">

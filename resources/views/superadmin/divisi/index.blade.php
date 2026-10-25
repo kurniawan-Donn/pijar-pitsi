@@ -19,7 +19,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -28,7 +28,7 @@
     .panel > p {
         margin-bottom: 16px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -44,7 +44,7 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .form-baru .x-form-group {
@@ -63,8 +63,8 @@
     th {
         padding: 10px 12px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -76,7 +76,7 @@
     td {
         padding: 10px 12px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
         font-size: 13px;
         vertical-align: middle;
@@ -92,7 +92,7 @@
 
         padding: 0 11px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         font-family: inherit;
@@ -104,7 +104,7 @@
 
         padding: 0 8px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         font-family: inherit;
@@ -126,14 +126,14 @@
     }
 
     .muted {
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 12px;
     }
 
     .empty {
         padding: 18px;
 
-        color: #9aa7b4;
+        color: var(--teks-redup);
         text-align: center;
     }
 

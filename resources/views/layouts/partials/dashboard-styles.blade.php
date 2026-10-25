@@ -1,4 +1,6 @@
-{{-- CSS bersama layout dashboard (sidebar, topbar, dan komponen). --}}
+{{-- CSS bersama layout dashboard (sidebar, topbar, dan komponen). Warna dari partials/tema. --}}
+@include('partials.tema')
+
 <style>
     * {
         margin: 0;
@@ -7,12 +9,16 @@
     }
 
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #1f2937;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--teks);
+        font-size: 14px;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
     }
 
     a {
+        color: var(--utama-gelap);
         text-decoration: none;
     }
 
@@ -20,8 +26,18 @@
         font-family: inherit;
     }
 
+    .x-icon {
+        flex-shrink: 0;
+        vertical-align: middle;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--utama);
+        outline-offset: 2px;
+    }
+
     /* =========================================================
-       SIDEBAR
+       SIDEBAR (terang; ikon & teks abu netral, menu aktif berwarna utama)
     ========================================================== */
 
     .dash-sidebar {
@@ -29,15 +45,15 @@
         top: 0;
         left: 0;
 
-        width: 275px;
+        width: 264px;
         height: 100vh;
 
         overflow-y: auto;
 
-        background: #12345b;
-        color: #ffffff;
+        background: var(--permukaan);
+        border-right: 1px solid var(--garis);
 
-        padding: 24px 18px;
+        padding: 20px 14px;
 
         display: flex;
         flex-direction: column;
@@ -48,28 +64,17 @@
     .dash-brand {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 11px;
 
-        padding: 4px 8px 28px;
-
-        color: #ffffff;
+        padding: 2px 10px 22px;
     }
 
     .dash-brand-logo {
-        width: 42px;
-        height: 42px;
+        width: 38px;
+        height: 38px;
 
-        border-radius: 10px;
-
-        background: #ffffff;
-        color: #12345b;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 18px;
-        font-weight: 800;
+        object-fit: contain;
+        flex-shrink: 0;
     }
 
     .dash-brand-text {
@@ -77,122 +82,122 @@
     }
 
     .dash-brand-title {
-        font-size: 19px;
+        color: var(--utama-gelap);
+
+        font-size: 18px;
         font-weight: 800;
-        letter-spacing: .5px;
+        letter-spacing: 1.5px;
         line-height: 1.2;
     }
 
     .dash-brand-subtitle {
-        margin-top: 4px;
+        margin-top: 2px;
 
-        color: #b8cbe0;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
-        line-height: 1.4;
-    }
-
-    .dash-sidebar-section {
-        margin-top: 8px;
+        line-height: 1.35;
     }
 
     .dash-sidebar-section + .dash-sidebar-section {
-        margin-top: 22px;
+        margin-top: 18px;
     }
 
     .dash-sidebar-section-title {
         padding: 0 12px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
 
-        color: #8eaccb;
+        color: var(--teks-redup);
 
-        font-size: 11px;
+        font-size: 10.5px;
         font-weight: 700;
-        letter-spacing: 1px;
+        letter-spacing: .8px;
         text-transform: uppercase;
     }
 
     .dash-sidebar-menu {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 2px;
     }
 
-    .dash-sidebar-link {
+    .dash-sidebar-link,
+    .dash-logout-button {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 11px;
 
-        min-height: 46px;
+        min-height: 40px;
+        width: 100%;
 
-        padding: 0 13px;
+        padding: 0 12px;
 
-        border-radius: 9px;
+        border: 0;
+        border-radius: var(--radius-kecil);
 
-        color: #d9e6f4;
+        background: transparent;
+        color: var(--teks-sekunder);
 
-        font-size: 14px;
+        font-size: 13.5px;
         font-weight: 600;
+        text-align: left;
 
-        transition: .2s ease;
+        cursor: pointer;
+
+        transition: background .15s ease, color .15s ease;
     }
 
-    .dash-sidebar-link:hover {
-        background: rgba(255, 255, 255, .08);
-        color: #ffffff;
+    .dash-sidebar-link:hover,
+    .dash-logout-button:hover {
+        background: var(--permukaan-redup);
+        color: var(--teks);
     }
 
     .dash-sidebar-link.active {
-        background: #1779c9;
-        color: #ffffff;
-
-        box-shadow: 0 5px 14px rgba(23, 121, 201, .22);
+        background: var(--utama-muda);
+        color: var(--utama-gelap);
     }
 
-    .dash-sidebar-icon {
-        width: 22px;
-        text-align: center;
+    .dash-sidebar-link.active .x-icon {
+        color: var(--utama);
+    }
 
-        font-size: 17px;
+    .dash-sidebar-link .terkunci {
+        margin-left: 2px;
 
-        flex-shrink: 0;
+        color: var(--teks-redup);
+    }
+
+    .dash-sidebar-badge {
+        margin-left: auto;
+
+        min-width: 20px;
+        height: 20px;
+
+        padding: 0 6px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 999px;
+
+        background: var(--aksen);
+        color: #ffffff;
+
+        font-size: 11px;
+        font-weight: 700;
     }
 
     .dash-sidebar-footer {
         margin-top: auto;
-        padding-top: 18px;
+        padding-top: 14px;
 
-        border-top: 1px solid rgba(255, 255, 255, .10);
+        border-top: 1px solid var(--garis);
     }
 
-    .dash-logout-button {
-        width: 100%;
-
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        min-height: 46px;
-
-        padding: 0 13px;
-
-        border: 0;
-        border-radius: 9px;
-
-        background: transparent;
-        color: #d9e6f4;
-
-        font-size: 14px;
-        font-weight: 600;
-
-        cursor: pointer;
-
-        transition: .2s ease;
-    }
-
-    .dash-logout-button:hover {
-        background: rgba(255, 255, 255, .08);
-        color: #ffffff;
+    .dash-overlay {
+        display: none;
     }
 
     /* =========================================================
@@ -200,59 +205,80 @@
     ========================================================== */
 
     .dash-main {
-        margin-left: 275px;
+        margin-left: 264px;
         min-height: 100vh;
     }
 
     .dash-topbar {
-        min-height: 76px;
+        position: sticky;
+        top: 0;
+        z-index: 900;
 
-        padding: 0 32px;
+        min-height: 68px;
 
-        background: #ffffff;
+        padding: 12px 32px;
 
-        border-bottom: 1px solid #e5eaf0;
+        background: var(--permukaan);
+
+        border-bottom: 1px solid var(--garis);
 
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 20px;
+        gap: 16px;
+    }
+
+    .dash-menu-toggle {
+        display: none;
+
+        width: 40px;
+        height: 40px;
+
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--garis);
+        border-radius: var(--radius-kecil);
+
+        background: var(--permukaan);
+        color: var(--teks);
+
+        cursor: pointer;
+    }
+
+    .dash-topbar-left {
+        flex: 1;
+        min-width: 0;
     }
 
     .dash-topbar-left h1 {
-        font-size: 21px;
-        font-weight: 750;
-        color: #17324d;
+        color: var(--teks);
+
+        font-size: 19px;
+        font-weight: 700;
+        line-height: 1.3;
     }
 
     .dash-topbar-left p {
-        margin-top: 4px;
+        margin-top: 2px;
 
-        font-size: 12px;
-        color: #7b8794;
+        color: var(--teks-sekunder);
+        font-size: 12.5px;
     }
 
     .dash-user-info {
         display: flex;
         align-items: center;
-        gap: 11px;
+        gap: 10px;
+
+        padding: 4px 6px;
+
+        border-radius: var(--radius-kecil);
     }
 
-    .dash-user-avatar {
-        width: 40px;
-        height: 40px;
-
-        border-radius: 50%;
-
-        background: #eaf3fb;
-        color: #1779c9;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 15px;
-        font-weight: 800;
+    .dash-user-info:hover {
+        background: var(--permukaan-redup);
     }
 
     .dash-user-text {
@@ -260,16 +286,79 @@
     }
 
     .dash-user-name {
+        color: var(--teks);
+
         font-size: 13px;
         font-weight: 700;
-        color: #23384d;
     }
 
     .dash-user-role {
-        margin-top: 3px;
+        margin-top: 1px;
 
-        font-size: 11px;
-        color: #7b8794;
+        color: var(--teks-sekunder);
+        font-size: 11.5px;
+    }
+
+    /* =========================================================
+       ISI HALAMAN: jarak, panel, judul, tabel, data kosong
+       (dipakai lintas halaman agar seragam)
+    ========================================================== */
+
+    .content {
+        padding: 28px 32px 40px;
+    }
+
+    .panel {
+        background: var(--permukaan);
+
+        border: 1px solid var(--garis);
+        border-radius: var(--radius);
+
+        box-shadow: var(--bayangan);
+    }
+
+    .panel h3,
+    .section-title {
+        color: var(--teks);
+    }
+
+    .table-scroll,
+    .table-wrap,
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .x-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        padding: 36px 20px;
+
+        color: var(--teks-sekunder);
+        font-size: 13px;
+        text-align: center;
+    }
+
+    .x-empty-icon {
+        width: 48px;
+        height: 48px;
+
+        display: grid;
+        place-items: center;
+
+        border-radius: 50%;
+
+        background: var(--permukaan-redup);
+        color: var(--teks-redup);
+    }
+
+    .x-empty-title {
+        color: var(--teks);
+        font-size: 14px;
+        font-weight: 700;
     }
 
     /* =========================================================
@@ -282,18 +371,18 @@
         gap: 10px;
 
         margin-bottom: 20px;
-        padding: 14px 16px;
+        padding: 12px 14px;
 
         border: 1px solid;
-        border-radius: 10px;
+        border-radius: var(--radius-kecil);
 
-        font-size: 14px;
+        font-size: 13.5px;
         line-height: 1.6;
     }
 
     .x-alert-icon {
         flex-shrink: 0;
-        font-weight: 800;
+        margin-top: 2px;
     }
 
     .x-alert ul {
@@ -302,27 +391,27 @@
     }
 
     .x-alert-success {
-        background: #ecfdf3;
+        background: var(--sukses-muda);
         border-color: #abefc6;
-        color: #067647;
+        color: var(--sukses);
     }
 
     .x-alert-error {
-        background: #fef3f2;
+        background: var(--bahaya-muda);
         border-color: #fecdca;
-        color: #b42318;
+        color: var(--bahaya);
     }
 
     .x-alert-warning {
-        background: #fff8f0;
-        border-color: #fbd7ae;
-        color: #a85a12;
+        background: var(--peringatan-muda);
+        border-color: #fedf89;
+        color: var(--peringatan);
     }
 
     .x-alert-info {
-        background: #eaf3fb;
-        border-color: #c4dcf1;
-        color: #175c95;
+        background: var(--info-muda);
+        border-color: #bfdcec;
+        color: var(--info);
     }
 
     /* =========================================================
@@ -332,54 +421,52 @@
     .x-stat-card {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 14px;
 
-        padding: 20px;
+        padding: 18px;
 
-        background: #ffffff;
+        background: var(--permukaan);
 
-        border: 1px solid #e5eaf0;
-        border-radius: 13px;
+        border: 1px solid var(--garis);
+        border-radius: var(--radius);
 
-        box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
+        box-shadow: var(--bayangan);
     }
 
     .x-stat-icon {
-        width: 46px;
-        height: 46px;
+        width: 42px;
+        height: 42px;
 
         flex-shrink: 0;
 
-        border-radius: 11px;
+        border-radius: 10px;
 
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         display: flex;
         align-items: center;
         justify-content: center;
-
-        font-size: 20px;
     }
 
     .x-stat-label {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 600;
     }
 
     .x-stat-value {
-        margin-top: 4px;
+        margin-top: 2px;
 
-        color: #17324d;
-        font-size: 24px;
+        color: var(--teks);
+        font-size: 22px;
         font-weight: 800;
     }
 
     .x-stat-hint {
-        margin-top: 3px;
+        margin-top: 2px;
 
-        color: #8a96a3;
+        color: var(--teks-redup);
         font-size: 11px;
     }
 
@@ -391,54 +478,66 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        gap: 8px;
+        gap: 7px;
 
-        min-width: 120px;
-        height: 40px;
+        min-width: 110px;
+        height: 38px;
         padding: 0 16px;
 
         border: 1px solid transparent;
-        border-radius: 7px;
+        border-radius: var(--radius-kecil);
 
         font-family: inherit;
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
 
         cursor: pointer;
 
-        transition: .2s ease;
+        transition: background .15s ease, border-color .15s ease;
+    }
+
+    .x-btn:disabled,
+    .x-btn[aria-disabled="true"] {
+        opacity: .5;
+        cursor: not-allowed;
     }
 
     .x-btn-primary {
-        background: #1779c9;
-        border-color: #1779c9;
+        background: var(--utama);
+        border-color: var(--utama);
         color: #ffffff;
     }
 
     .x-btn-primary:hover {
-        background: #1269b1;
-        border-color: #1269b1;
+        background: var(--utama-gelap);
+        border-color: var(--utama-gelap);
     }
 
     .x-btn-secondary {
-        background: #ffffff;
-        border-color: #d7e0eb;
-        color: #60758d;
+        background: var(--permukaan);
+        border-color: var(--garis-kuat);
+        color: var(--teks);
     }
 
     .x-btn-secondary:hover {
-        background: #f4f7fb;
+        background: var(--permukaan-redup);
     }
 
     .x-btn-danger {
-        background: #d92d20;
-        border-color: #d92d20;
-        color: #ffffff;
+        background: var(--permukaan);
+        border-color: #fecdca;
+        color: var(--bahaya);
     }
 
     .x-btn-danger:hover {
-        background: #b42318;
-        border-color: #b42318;
+        background: var(--bahaya-muda);
+    }
+
+    .x-btn-accent {
+        background: var(--aksen);
+        border-color: var(--aksen);
+        color: #ffffff;
     }
 
     /* =========================================================
@@ -446,41 +545,46 @@
     ========================================================== */
 
     .x-form-group {
-        margin-bottom: 18px;
+        margin-bottom: 16px;
     }
 
     .x-form-label {
         display: block;
 
-        margin-bottom: 7px;
+        margin-bottom: 6px;
 
-        color: #174a7e;
-        font-size: 12px;
-        font-weight: 700;
+        color: var(--teks);
+        font-size: 12.5px;
+        font-weight: 600;
     }
 
     .x-form-required {
-        color: #e05252;
+        color: var(--bahaya);
     }
 
     .x-form-control {
         width: 100%;
-        height: 42px;
+        height: 40px;
 
         padding: 0 12px;
 
-        border: 1px solid #d7e0eb;
-        border-radius: 7px;
+        border: 1px solid var(--garis-kuat);
+        border-radius: var(--radius-kecil);
 
-        background: #ffffff;
-        color: #243f5c;
+        background: var(--permukaan);
+        color: var(--teks);
 
         font-family: inherit;
-        font-size: 12px;
+        font-size: 13.5px;
 
         outline: none;
 
-        transition: .2s ease;
+        transition: border-color .15s ease, box-shadow .15s ease;
+    }
+
+    input[type="file"].x-form-control {
+        height: auto;
+        padding: 7px 10px;
     }
 
     textarea.x-form-control {
@@ -490,52 +594,57 @@
     }
 
     .x-form-control:focus {
-        border-color: #1779c9;
-        box-shadow: 0 0 0 3px rgba(23, 121, 201, .08);
+        border-color: var(--utama);
+        box-shadow: var(--fokus);
+    }
+
+    .x-form-control:disabled {
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
     }
 
     .x-form-control.is-invalid {
-        border-color: #e05252;
+        border-color: var(--bahaya);
     }
 
     .x-form-hint {
-        margin-top: 6px;
+        margin-top: 5px;
 
-        color: #879bb1;
-        font-size: 10px;
+        color: var(--teks-sekunder);
+        font-size: 11.5px;
         line-height: 1.5;
     }
 
     .x-form-error {
-        margin-top: 6px;
+        margin-top: 5px;
 
-        color: #e05252;
-        font-size: 11px;
+        color: var(--bahaya);
+        font-size: 12px;
         font-weight: 600;
     }
 
     .x-pratinjau-pesan {
         margin-top: 6px;
 
-        color: #b54708;
-        font-size: 11px;
+        color: var(--peringatan);
+        font-size: 11.5px;
         font-weight: 600;
     }
 
     .x-pratinjau-pesan.ok {
-        color: #067647;
+        color: var(--sukses);
     }
 
     .x-hitung-karakter {
         margin-top: 4px;
 
-        color: #879bb1;
-        font-size: 10.5px;
+        color: var(--teks-sekunder);
+        font-size: 11px;
         text-align: right;
     }
 
     .x-hitung-karakter.hampir {
-        color: #b54708;
+        color: var(--peringatan);
         font-weight: 700;
     }
 
@@ -559,16 +668,18 @@
         align-items: center;
         justify-content: center;
 
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama-gelap);
 
         font-size: calc(var(--avatar, 40px) * .4);
-        font-weight: 800;
+        font-weight: 700;
         line-height: 1;
     }
 
     /* =========================================================
        KOMPONEN: BADGE STATUS
+       Nada: menunggu/review (kuning), diterima/disetujui/aktif (hijau),
+       ditolak (merah), selesai (biru), lainnya (abu).
     ========================================================== */
 
     .x-badge {
@@ -576,15 +687,17 @@
         align-items: center;
         gap: 6px;
 
-        padding: 5px 10px;
+        padding: 3px 10px;
 
         border-radius: 999px;
 
-        background: #eef2f6;
-        color: #4b5d70;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
+        box-shadow: inset 0 0 0 1px var(--garis);
 
-        font-size: 11px;
-        font-weight: 800;
+        font-size: 11.5px;
+        font-weight: 600;
+        line-height: 1.5;
         white-space: nowrap;
     }
 
@@ -599,25 +712,37 @@
         background: currentColor;
     }
 
-    .x-badge-menunggu {
-        background: #fff6e8;
-        color: #b4630c;
+    .x-badge-menunggu,
+    .x-badge-diproses,
+    .x-badge-review,
+    .x-badge-diajukan,
+    .x-badge-perlu_revisi {
+        background: var(--peringatan-muda);
+        color: var(--peringatan);
+        box-shadow: inset 0 0 0 1px #fedf89;
     }
 
     .x-badge-disetujui,
-    .x-badge-aktif {
-        background: #ecfdf3;
-        color: #067647;
+    .x-badge-diterima,
+    .x-badge-aktif,
+    .x-badge-terbit {
+        background: var(--sukses-muda);
+        color: var(--sukses);
+        box-shadow: inset 0 0 0 1px #abefc6;
     }
 
-    .x-badge-ditolak {
-        background: #fef3f2;
-        color: #b42318;
+    .x-badge-ditolak,
+    .x-badge-nonaktif,
+    .x-badge-dibatalkan {
+        background: var(--bahaya-muda);
+        color: var(--bahaya);
+        box-shadow: inset 0 0 0 1px #fecdca;
     }
 
     .x-badge-selesai {
-        background: #eaf3fb;
-        color: #175c95;
+        background: var(--info-muda);
+        color: var(--info);
+        box-shadow: inset 0 0 0 1px #bfdcec;
     }
 
     /* =========================================================
@@ -629,23 +754,23 @@
         align-items: center;
         justify-content: space-between;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 12px;
 
-        padding: 16px 20px;
+        padding: 14px 20px;
 
-        border-top: 1px solid #edf1f4;
+        border-top: 1px solid var(--garis);
     }
 
     .x-pagination-info {
-        color: #8998a2;
-        font-size: 12px;
+        color: var(--teks-sekunder);
+        font-size: 12.5px;
     }
 
     .x-pagination-links {
         display: flex;
         align-items: center;
         flex-wrap: wrap;
-        gap: 5px;
+        gap: 4px;
     }
 
     .x-pagination-links a,
@@ -653,25 +778,25 @@
         min-width: 32px;
         height: 32px;
 
-        padding: 0 9px;
+        padding: 0 8px;
 
         display: inline-flex;
         align-items: center;
         justify-content: center;
 
-        border: 1px solid #e1e8ed;
-        border-radius: 7px;
+        border: 1px solid var(--garis);
+        border-radius: var(--radius-kecil);
 
-        background: #ffffff;
-        color: #586a75;
+        background: var(--permukaan);
+        color: var(--teks-sekunder);
 
-        font-size: 12px;
-        font-weight: 700;
+        font-size: 12.5px;
+        font-weight: 600;
     }
 
     .x-pagination-links span[aria-current="page"] {
-        background: #1779c9;
-        border-color: #1779c9;
+        background: var(--utama);
+        border-color: var(--utama);
         color: #ffffff;
     }
 
@@ -680,76 +805,72 @@
     }
 
     .x-pagination-links a:hover {
-        background: #f1f7fa;
+        background: var(--permukaan-redup);
     }
 
     /* =========================================================
-       SIDEBAR BADGE
+       RESPONSIVE: di layar kecil sidebar menjadi panel geser
     ========================================================== */
 
-    .dash-sidebar-badge {
-        margin-left: auto;
-
-        min-width: 22px;
-        height: 22px;
-
-        padding: 0 7px;
-
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        border-radius: 999px;
-
-        background: #f47b20;
-        color: #ffffff;
-
-        font-size: 11px;
-        font-weight: 800;
-    }
-
-    /* =========================================================
-       RESPONSIVE
-    ========================================================== */
-
-    @media (max-width: 800px) {
+    @media (max-width: 960px) {
 
         .dash-sidebar {
-            position: static;
+            transform: translateX(-100%);
+            transition: transform .2s ease;
 
-            width: 100%;
-            height: auto;
-
-            padding: 18px;
+            box-shadow: 0 10px 40px rgba(17, 24, 39, .18);
         }
 
-        .dash-sidebar-footer {
-            margin-top: 20px;
+        body.menu-terbuka .dash-sidebar {
+            transform: none;
+        }
+
+        body.menu-terbuka .dash-overlay {
+            display: block;
+
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+
+            background: rgba(17, 24, 39, .35);
+        }
+
+        body.menu-terbuka {
+            overflow: hidden;
         }
 
         .dash-main {
             margin-left: 0;
         }
 
+        .dash-menu-toggle {
+            display: inline-flex;
+        }
+
         .dash-topbar {
-            padding: 18px 20px;
+            padding: 10px 16px;
+        }
+
+        .content {
+            padding: 20px 16px 32px !important;
         }
     }
 
     @media (max-width: 600px) {
 
-        .dash-topbar {
-            align-items: flex-start;
-            flex-direction: column;
+        .dash-topbar-left h1 {
+            font-size: 16px;
         }
 
-        .dash-user-info {
-            width: 100%;
-            justify-content: flex-start;
-        }
-
+        .dash-topbar-left p,
         .dash-user-text {
-            text-align: left;
+            display: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
         }
     }
 </style>

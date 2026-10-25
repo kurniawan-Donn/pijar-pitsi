@@ -26,21 +26,21 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
     }
 
     .panel h3 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
     }
 
     .panel > p {
         margin: 4px 0 20px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -66,7 +66,7 @@
     .foto-panel p {
         margin: 4px 0 12px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -85,7 +85,7 @@
         border: none;
 
         background: none;
-        color: #c62828;
+        color: var(--bahaya);
 
         font-family: inherit;
         font-size: 12px;
@@ -100,9 +100,9 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
 
-        color: #4b5d70;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 

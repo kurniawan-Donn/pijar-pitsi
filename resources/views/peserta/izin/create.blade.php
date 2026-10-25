@@ -19,7 +19,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -28,7 +28,7 @@
     .panel > p {
         margin-bottom: 16px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -47,7 +47,7 @@
 
         padding: 10px 18px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 10px;
 
         font-size: 13px;
@@ -57,12 +57,12 @@
     }
 
     .pilihan label:has(input:checked) {
-        border-color: #1779c9;
-        background: #eef6fd;
+        border-color: var(--utama);
+        background: var(--utama-muda);
     }
 
     .pilihan input {
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .fields {

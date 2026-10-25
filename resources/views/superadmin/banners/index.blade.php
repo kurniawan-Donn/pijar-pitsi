@@ -4,20 +4,20 @@
 
 @section('title', 'Kelola Banner')
 @section('page_title', 'Kelola Banner')
-@section('page_subtitle', 'Kelola banner utama website MAGENTA')
+@section('page_subtitle', 'Kelola banner utama website PILARA')
 
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #243b5a;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--utama-gelap);
     }
 
     button,
     input,
     textarea {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: var(--font);
     }
 
     /* =====================================================
@@ -61,12 +61,12 @@
 
         border-radius: 9px;
 
-        background: #eaf4ff;
+        background: var(--utama-muda);
 
         border:
-            1px solid #d8eafb;
+            1px solid var(--utama-muda);
 
-        color: #1779c9;
+        color: var(--utama);
 
         display: flex;
 
@@ -78,7 +78,7 @@
     }
 
     .page-header h2 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 17px;
 
@@ -88,7 +88,7 @@
     .page-header p {
         margin-top: 4px;
 
-        color: #7c8da3;
+        color: var(--teks-sekunder);
 
         font-size: 10px;
 
@@ -114,14 +114,14 @@
             1px solid #f3dfb0;
 
         border-left:
-            4px solid #f59e0b;
+            4px solid var(--peringatan);
 
         border-radius: 10px;
 
         background: linear-gradient(
             135deg,
-            #fff8e8,
-            #fffdf7
+            var(--peringatan-muda),
+            var(--peringatan-muda)
         );
     }
 
@@ -136,7 +136,7 @@
 
         background: #fff0c7;
 
-        color: #c27a00;
+        color: var(--peringatan);
 
         display: flex;
 
@@ -154,13 +154,13 @@
 
         margin-bottom: 3px;
 
-        color: #7a5200;
+        color: var(--peringatan);
 
         font-size: 11px;
     }
 
     .notice p {
-        color: #8a6a2b;
+        color: var(--peringatan);
 
         font-size: 9px;
 
@@ -191,7 +191,7 @@
         background: #ffffff;
 
         border:
-            1px solid #e2e9f1;
+            1px solid var(--garis);
 
         border-radius: 12px;
 
@@ -206,11 +206,11 @@
         padding: 17px 20px;
 
         border-bottom:
-            1px solid #edf1f5;
+            1px solid var(--garis);
     }
 
     .card-header h3 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 12px;
 
@@ -220,7 +220,7 @@
     .card-header p {
         margin-top: 4px;
 
-        color: #8996a7;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
 
@@ -248,9 +248,9 @@
 
         border-radius: 20px;
 
-        background: #ecfdf3;
+        background: var(--sukses-muda);
 
-        color: #168044;
+        color: var(--sukses);
 
         font-size: 9px;
 
@@ -261,11 +261,11 @@
         overflow: hidden;
 
         border:
-            1px solid #e2e9f1;
+            1px solid var(--garis);
 
         border-radius: 10px;
 
-        background: #f8fafc;
+        background: var(--permukaan-redup);
     }
 
     .current-banner-image {
@@ -277,7 +277,7 @@
 
         object-fit: cover;
 
-        background: #e9eef4;
+        background: var(--garis);
     }
 
     .no-image {
@@ -293,9 +293,9 @@
 
         justify-content: center;
 
-        background: #f1f5f9;
+        background: var(--garis);
 
-        color: #94a3b8;
+        color: var(--teks-redup);
 
         font-size: 10px;
     }
@@ -313,7 +313,7 @@
     }
 
     .preview-info h4 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 15px;
 
@@ -323,7 +323,7 @@
     .preview-description {
         margin-top: 7px;
 
-        color: #64748b;
+        color: var(--teks-sekunder);
 
         font-size: 10px;
 
@@ -341,7 +341,7 @@
 
         border-radius: 6px;
 
-        background: #f58220;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -353,7 +353,7 @@
     .preview-link {
         margin-top: 7px;
 
-        color: #7c8da3;
+        color: var(--teks-sekunder);
 
         font-size: 8px;
 
@@ -379,7 +379,7 @@
 
         margin-bottom: 6px;
 
-        color: #334155;
+        color: var(--utama-gelap);
 
         font-size: 10px;
 
@@ -387,7 +387,7 @@
     }
 
     .form-group label span {
-        color: #dc3545;
+        color: var(--bahaya);
     }
 
     .form-control {
@@ -398,13 +398,13 @@
         padding: 9px 10px;
 
         border:
-            1px solid #d5dce5;
+            1px solid var(--garis-kuat);
 
         border-radius: 7px;
 
         background: #ffffff;
 
-        color: #1f2937;
+        color: var(--teks);
 
         font-size: 10px;
 
@@ -414,11 +414,11 @@
     }
 
     .form-control:hover {
-        border-color: #b9c5d2;
+        border-color: var(--garis-kuat);
     }
 
     .form-control:focus {
-        border-color: #1779c9;
+        border-color: var(--utama);
 
         box-shadow:
             0 0 0 3px
@@ -436,7 +436,7 @@
     .file-input {
         padding: 8px;
 
-        background: #f8fafc;
+        background: var(--permukaan-redup);
 
         cursor: pointer;
     }
@@ -444,7 +444,7 @@
     .form-help {
         margin-top: 5px;
 
-        color: #8a96a5;
+        color: var(--teks-sekunder);
 
         font-size: 8px;
 
@@ -457,17 +457,17 @@
         padding: 9px;
 
         border:
-            1px solid #e2e9f1;
+            1px solid var(--garis);
 
         border-radius: 7px;
 
-        background: #f8fafc;
+        background: var(--permukaan-redup);
     }
 
     .old-image-title {
         margin-bottom: 7px;
 
-        color: #64748b;
+        color: var(--teks-sekunder);
 
         font-size: 8px;
 
@@ -517,7 +517,7 @@
     }
 
     .btn-primary {
-        background: #1779c9;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -527,19 +527,19 @@
     }
 
     .btn-primary:hover {
-        background: #1265aa;
+        background: var(--utama-gelap);
 
         transform: translateY(-1px);
     }
 
     .btn-danger {
-        background: #dc3545;
+        background: var(--bahaya);
 
         color: #ffffff;
     }
 
     .btn-danger:hover {
-        background: #b91c2c;
+        background: var(--bahaya);
     }
 
     /* =====================================================
@@ -560,11 +560,11 @@
         padding-top: 16px;
 
         border-top:
-            1px solid #edf1f5;
+            1px solid var(--garis);
     }
 
     .form-actions-note {
-        color: #98a2b0;
+        color: var(--teks-redup);
 
         font-size: 8px;
     }
@@ -604,9 +604,9 @@
 
         border-radius: 50%;
 
-        background: #eef6ff;
+        background: var(--utama-muda);
 
-        color: #1779c9;
+        color: var(--utama);
 
         display: flex;
 
@@ -618,7 +618,7 @@
     }
 
     .empty-state h3 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 15px;
     }
@@ -628,7 +628,7 @@
 
         margin: 7px auto 0;
 
-        color: #7c8da3;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
 
@@ -646,7 +646,7 @@
     .foot-note {
         margin-top: 15px;
 
-        color: #98a2b0;
+        color: var(--teks-redup);
 
         font-size: 8px;
 
@@ -725,7 +725,7 @@
         <div class="page-header-left">
 
             <div class="page-header-icon">
-                ▧
+                <x-icon name="image" />
             </div>
 
             <div>
@@ -735,7 +735,7 @@
                 </h2>
 
                 <p>
-                    Website MAGENTA menggunakan satu banner utama
+                    Website PILARA menggunakan satu banner utama
                     yang dapat dikelola dari halaman ini.
                 </p>
 
@@ -774,12 +774,12 @@
         <div>
 
             <strong>
-                Banner utama MAGENTA
+                Banner utama PILARA
             </strong>
 
             <p>
                 Banner digunakan sebagai tampilan utama pada
-                halaman depan website. Karena website MAGENTA
+                halaman depan website. Karena website PILARA
                 menggunakan satu banner utama, banner yang
                 tersimpan akan menjadi banner aktif.
             </p>
@@ -819,7 +819,7 @@
 
                     <div class="current-label">
 
-                        ✓
+                        <x-icon name="check" />
 
                         Banner Aktif
 
@@ -840,7 +840,7 @@
                             <div class="no-image">
 
                                 <div class="no-image-icon">
-                                    ▧
+                                    <x-icon name="image" />
                                 </div>
 
                                 Belum ada gambar banner
@@ -908,7 +908,7 @@
                     </h3>
 
                     <p>
-                        Perbarui informasi banner utama MAGENTA.
+                        Perbarui informasi banner utama PILARA.
                     </p>
 
                 </div>
@@ -943,7 +943,7 @@
                                 name="judul"
                                 class="form-control"
                                 value="{{ old('judul', $banner->judul) }}"
-                                placeholder="Contoh: Selamat Datang di MAGENTA"
+                                placeholder="Contoh: Selamat Datang di PILARA"
                                 required
                             >
 
@@ -1084,7 +1084,7 @@
                                     class="btn btn-primary"
                                 >
 
-                                    ✓
+                                    <x-icon name="check" />
 
                                     Simpan Perubahan
 
@@ -1140,7 +1140,7 @@
             <div class="empty-state">
 
                 <div class="empty-icon">
-                    ▧
+                    <x-icon name="image" />
                 </div>
 
                 <h3>
@@ -1148,7 +1148,7 @@
                 </h3>
 
                 <p>
-                    Website MAGENTA belum memiliki banner utama.
+                    Website PILARA belum memiliki banner utama.
                     Silakan tambahkan banner melalui form di bawah.
                 </p>
 
@@ -1170,7 +1170,7 @@
 
                 <p>
                     Banner ini akan ditampilkan pada halaman
-                    utama website MAGENTA.
+                    utama website PILARA.
                 </p>
 
             </div>
@@ -1205,7 +1205,7 @@
                             name="judul"
                             class="form-control"
                             value="{{ old('judul') }}"
-                            placeholder="Contoh: Selamat Datang di MAGENTA"
+                            placeholder="Contoh: Selamat Datang di PILARA"
                             required
                         >
 
@@ -1305,7 +1305,7 @@
 
                         <div class="form-actions-note">
 
-                            <span style="color:#dc3545;">
+                            <span style="color:var(--bahaya);">
                                 *
                             </span>
 
@@ -1342,7 +1342,7 @@
 
     <div class="foot-note">
 
-        MAGENTA
+        PILARA
         &nbsp;•&nbsp;
         Sistem Informasi Magang
 

@@ -21,8 +21,8 @@
     .penempatan-table th {
         padding: 9px 10px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -34,7 +34,7 @@
     .penempatan-table td {
         padding: 9px 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
         vertical-align: middle;
     }
@@ -46,7 +46,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
@@ -58,12 +58,12 @@
     .penempatan-periode strong {
         display: block;
 
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .penempatan-periode small,
     .penempatan-warisan {
-        color: #9aa7b4;
+        color: var(--teks-redup);
         font-size: 11px;
     }
 
@@ -78,7 +78,7 @@
     }
 
     .penempatan-note {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }

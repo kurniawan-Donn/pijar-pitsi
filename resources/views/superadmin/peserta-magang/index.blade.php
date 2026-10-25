@@ -9,9 +9,9 @@
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #263238;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--teks);
         min-height: 100vh;
     }
 
@@ -45,16 +45,16 @@
 
     .heading {
 
-        font-size: 26px;
+        font-size: 17px;
 
-        color: #17313d;
+        color: var(--teks);
 
         font-weight: 800;
     }
 
     .heading-description {
 
-        color: #7b8b96;
+        color: var(--teks-sekunder);
 
         font-size: 13px;
 
@@ -94,14 +94,14 @@
 
     .btn-primary {
 
-        background: #0878a8;
+        background: var(--utama);
 
         color: white;
     }
 
     .btn-primary:hover {
 
-        background: #075d83;
+        background: var(--utama-gelap);
 
         transform: translateY(-1px);
     }
@@ -115,7 +115,7 @@
         background: white;
 
         border:
-            1px solid #e2eaf0;
+            1px solid var(--garis);
 
         border-radius: 14px;
 
@@ -131,7 +131,7 @@
             20px 22px;
 
         border-bottom:
-            1px solid #edf1f4;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -150,7 +150,7 @@
 
         font-weight: 800;
 
-        color: #263238;
+        color: var(--teks);
     }
 
     .card-info {
@@ -159,7 +159,7 @@
 
         font-size: 11px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -182,7 +182,7 @@
 
     thead {
 
-        background: #f8fafc;
+        background: var(--permukaan-redup);
     }
 
     th {
@@ -194,7 +194,7 @@
 
         font-size: 11px;
 
-        color: #697a85;
+        color: var(--teks-sekunder);
 
         text-transform: uppercase;
 
@@ -203,7 +203,7 @@
         font-weight: 800;
 
         border-bottom:
-            1px solid #e8eef2;
+            1px solid var(--garis);
 
         white-space: nowrap;
     }
@@ -215,17 +215,17 @@
 
         font-size: 13px;
 
-        color: #465762;
+        color: var(--teks);
 
         border-bottom:
-            1px solid #eef2f5;
+            1px solid var(--garis);
 
         vertical-align: middle;
     }
 
     tbody tr:hover {
 
-        background: #fbfdfe;
+        background: var(--utama-muda);
     }
 
     tbody tr:last-child td {
@@ -241,14 +241,14 @@
 
         font-weight: 700;
 
-        color: #263238;
+        color: var(--teks);
     }
 
     .secondary-text {
 
         margin-top: 3px;
 
-        color: #84939d;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
     }
@@ -281,16 +281,16 @@
 
     .status-aktif {
 
-        background: #eaf8f0;
+        background: var(--sukses-muda);
 
-        color: #16834b;
+        color: var(--sukses);
     }
 
     .status-selesai {
 
-        background: #eef1f4;
+        background: var(--garis);
 
-        color: #667781;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -332,37 +332,37 @@
 
     .action-detail {
 
-        background: #eef8fc;
+        background: var(--utama-muda);
 
-        color: #0878a8;
+        color: var(--utama);
 
     }
 
     .action-detail:hover {
 
-        background: #dff2fa;
+        background: var(--utama-muda);
     }
 
     .action-edit {
 
-        background: #fff5e9;
+        background: var(--peringatan-muda);
 
-        color: #c66a19;
+        color: var(--peringatan);
 
     }
 
     .action-edit:hover {
 
-        background: #ffe9cf;
+        background: var(--peringatan-muda);
     }
 
     .action-delete {
 
         border: none;
 
-        background: #fff0f0;
+        background: var(--bahaya-muda);
 
-        color: #c62828;
+        color: var(--bahaya);
 
         cursor: pointer;
 
@@ -370,7 +370,7 @@
 
     .action-delete:hover {
 
-        background: #ffe0e0;
+        background: var(--bahaya-muda);
     }
 
     /* =====================================================
@@ -384,7 +384,7 @@
 
         text-align: center;
 
-        color: #7b8b96;
+        color: var(--teks-sekunder);
     }
 
     .empty-icon {
@@ -397,9 +397,9 @@
 
         border-radius: 15px;
 
-        background: #eef8fc;
+        background: var(--utama-muda);
 
-        color: #0878a8;
+        color: var(--utama);
 
         display: flex;
 
@@ -415,7 +415,7 @@
 
         font-weight: 800;
 
-        color: #34454f;
+        color: var(--teks);
 
         margin-bottom: 6px;
     }
@@ -424,7 +424,7 @@
 
         font-size: 12px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
 
         margin-bottom: 18px;
     }
@@ -439,7 +439,7 @@
             18px 22px;
 
         border-top:
-            1px solid #edf1f4;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -457,7 +457,7 @@
 
         font-size: 11px;
 
-        color: #8998a2;
+        color: var(--teks-sekunder);
     }
 
     .pagination {
@@ -492,25 +492,25 @@
         font-weight: 700;
 
         border:
-            1px solid #e1e8ed;
+            1px solid var(--garis);
 
         background: white;
 
-        color: #586a75;
+        color: var(--teks-sekunder);
     }
 
     .pagination span[aria-current="page"] {
 
-        background: #0878a8;
+        background: var(--utama);
 
-        border-color: #0878a8;
+        border-color: var(--utama);
 
         color: white;
     }
 
     .pagination a:hover {
 
-        background: #f1f7fa;
+        background: var(--utama-muda);
     }
 
     /* =====================================================
@@ -566,7 +566,7 @@
                 </div>
 
                 <div class="heading-description">
-                    Daftar mahasiswa yang terdaftar sebagai peserta magang pada MAGENTA.
+                    Daftar mahasiswa yang terdaftar sebagai peserta magang pada PILARA.
                 </div>
 
             </div>
@@ -956,7 +956,7 @@
                 <div class="empty-state">
 
                     <div class="empty-icon">
-                        ♙
+                        <x-icon name="users" />
                     </div>
 
                     <div class="empty-title">

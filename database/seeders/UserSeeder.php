@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@magenta.local'],
             [
-                'name' => 'Admin MAGENTA',
+                'name' => 'Admin PILARA',
                 'password' => Hash::make('Admin@12345'),
                 'role' => 'admin',
             ]
@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'superadmin@magenta.local'],
             [
-                'name' => 'Super Admin MAGENTA',
+                'name' => 'Super Admin PILARA',
                 'password' => Hash::make('SuperAdmin@12345'),
                 'role' => 'super_admin',
             ]

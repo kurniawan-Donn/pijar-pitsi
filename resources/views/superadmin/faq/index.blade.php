@@ -19,7 +19,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -28,14 +28,14 @@
     .panel h3 {
         margin-bottom: 4px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin-bottom: 16px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -59,7 +59,7 @@
 
         margin-bottom: 6px;
 
-        color: #174a7e;
+        color: var(--utama-gelap);
         font-size: 12px;
         font-weight: 700;
     }
@@ -70,11 +70,11 @@
 
         padding: 10px 12px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
-        color: #243f5c;
+        color: var(--teks);
 
         font-family: inherit;
         font-size: 13px;
@@ -99,7 +99,7 @@
         align-items: center;
         gap: 7px;
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
         font-weight: 600;
     }
@@ -111,18 +111,18 @@
     }
 
     .faq-item {
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 11px;
 
         background: #ffffff;
     }
 
     .faq-item.tersembunyi {
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .faq-item[open] {
-        border-color: #b9d4ee;
+        border-color: var(--garis-kuat);
     }
 
     .faq-item summary {
@@ -145,7 +145,7 @@
 
         width: 26px;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 800;
     }
@@ -154,13 +154,13 @@
         flex: 1;
         min-width: 0;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 13.5px;
         font-weight: 700;
     }
 
     .faq-item.tersembunyi .judul {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
     }
 
     .badge {
@@ -175,8 +175,8 @@
         white-space: nowrap;
     }
 
-    .b-biru { background: #eaf3fb; color: #175c95; }
-    .b-abu { background: #eef2f6; color: #52646e; }
+    .b-biru { background: var(--utama-muda); color: var(--utama-gelap); }
+    .b-abu { background: var(--garis); color: var(--teks-sekunder); }
 
     .geser {
         display: flex;
@@ -191,11 +191,11 @@
         width: 30px;
         height: 30px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
-        color: #52646e;
+        color: var(--teks-sekunder);
 
         cursor: pointer;
     }
@@ -213,7 +213,7 @@
         border: none;
 
         background: none;
-        color: #c62828;
+        color: var(--bahaya);
 
         font-family: inherit;
         font-size: 12px;
@@ -225,7 +225,7 @@
     .empty {
         padding: 24px;
 
-        color: #9aa7b4;
+        color: var(--teks-redup);
         text-align: center;
     }
 
@@ -295,7 +295,7 @@
     {{-- DAFTAR FAQ --}}
     <section class="panel">
         <h3>Daftar FAQ ({{ $faqs->count() }})</h3>
-        <p>Klik pertanyaan untuk mengubah. Gunakan tombol ▲ ▼ untuk mengatur urutan tampil.</p>
+        <p>Klik pertanyaan untuk mengubah. Gunakan tombol panah naik/turun untuk mengatur urutan tampil.</p>
 
         @if ($faqs->isEmpty())
             <div class="empty">Belum ada FAQ. Tambahkan pertanyaan pertama di atas.</div>
@@ -322,13 +322,13 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="arah" value="naik">
-                                    <button type="submit" title="Naikkan" aria-label="Naikkan urutan" @disabled($loop->first)>▲</button>
+                                    <button type="submit" title="Naikkan" aria-label="Naikkan urutan" @disabled($loop->first)><x-icon name="chevron-up" :size="16" /></button>
                                 </form>
                                 <form method="POST" action="{{ route('superadmin.faq.urutan', $faq) }}">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="arah" value="turun">
-                                    <button type="submit" title="Turunkan" aria-label="Turunkan urutan" @disabled($loop->last)>▼</button>
+                                    <button type="submit" title="Turunkan" aria-label="Turunkan urutan" @disabled($loop->last)><x-icon name="chevron-down" :size="16" /></button>
                                 </form>
                             </span>
                         </summary>

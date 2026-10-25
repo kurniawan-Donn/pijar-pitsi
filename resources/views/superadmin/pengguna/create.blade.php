@@ -4,7 +4,7 @@
 
 @section('title', 'Tambah Pengguna')
 @section('page_title', 'Tambah Pengguna')
-@section('page_subtitle', 'Tambahkan akun Admin atau Super Admin ke sistem MAGENTA')
+@section('page_subtitle', 'Tambahkan akun Admin atau Super Admin ke sistem PILARA')
 
 @push('styles')
 <style>
@@ -13,9 +13,9 @@
         margin: 0;
         padding: 0;
         min-height: 100%;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #17365d;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--utama-gelap);
     }
 
     body {
@@ -33,7 +33,7 @@
     .page-intro {
         background: #ffffff;
         border-radius: 10px;
-        border-left: 4px solid #1779c9;
+        border-left: 4px solid var(--utama);
         padding: 20px 22px;
         margin-bottom: 20px;
         box-shadow: 0 3px 12px rgba(19, 52, 91, 0.05);
@@ -42,21 +42,21 @@
     .intro-accent {
         width: 34px;
         height: 3px;
-        background: #f28c28;
+        background: var(--utama);
         margin-bottom: 10px;
     }
 
     .page-intro h1 {
         margin: 0;
         font-size: 21px;
-        color: #174a7e;
+        color: var(--utama-gelap);
     }
 
     .page-intro p {
         margin: 7px 0 0;
         font-size: 12px;
         line-height: 1.6;
-        color: #71869f;
+        color: var(--teks-sekunder);
     }
 
     /* =========================
@@ -72,7 +72,7 @@
 
     .card-header {
         padding: 18px 20px;
-        border-bottom: 1px solid #e8edf3;
+        border-bottom: 1px solid var(--garis);
         display: flex;
         align-items: center;
         gap: 12px;
@@ -82,8 +82,8 @@
         width: 34px;
         height: 34px;
         border-radius: 8px;
-        background: #edf5fc;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -94,13 +94,13 @@
     .card-header h2 {
         margin: 0;
         font-size: 15px;
-        color: #174a7e;
+        color: var(--utama-gelap);
     }
 
     .card-header p {
         margin: 4px 0 0;
         font-size: 11px;
-        color: #7b91aa;
+        color: var(--teks-sekunder);
     }
 
     .card-body {
@@ -120,33 +120,33 @@
         margin-bottom: 7px;
         font-size: 12px;
         font-weight: 700;
-        color: #174a7e;
+        color: var(--utama-gelap);
     }
 
     .required {
-        color: #e05252;
+        color: var(--bahaya);
     }
 
     .form-control {
         width: 100%;
         height: 42px;
         padding: 0 12px;
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
         background: #ffffff;
-        color: #243f5c;
+        color: var(--teks);
         font-size: 12px;
         outline: none;
         transition: 0.2s ease;
     }
 
     .form-control:focus {
-        border-color: #1779c9;
+        border-color: var(--utama);
         box-shadow: 0 0 0 3px rgba(23, 121, 201, 0.08);
     }
 
     .form-control::placeholder {
-        color: #a7b7c9;
+        color: var(--teks-sekunder);
     }
 
     select.form-control {
@@ -156,7 +156,7 @@
     .form-help {
         margin-top: 6px;
         font-size: 10px;
-        color: #879bb1;
+        color: var(--teks-sekunder);
         line-height: 1.5;
     }
 
@@ -176,8 +176,8 @@
         align-items: center;
         gap: 10px;
         padding: 18px 20px;
-        border-top: 1px solid #e8edf3;
-        background: #fbfcfe;
+        border-top: 1px solid var(--garis);
+        background: var(--permukaan-redup);
     }
 
     .button {
@@ -197,23 +197,23 @@
 
     .button-secondary {
         background: #ffffff;
-        color: #60758d;
-        border-color: #d7e0eb;
+        color: var(--teks-sekunder);
+        border-color: var(--garis-kuat);
     }
 
     .button-secondary:hover {
-        background: #f4f7fb;
+        background: var(--latar);
     }
 
     .button-primary {
-        background: #1779c9;
+        background: var(--utama);
         color: #ffffff;
-        border-color: #1779c9;
+        border-color: var(--utama);
     }
 
     .button-primary:hover {
-        background: #1269b1;
-        border-color: #1269b1;
+        background: var(--utama-gelap);
+        border-color: var(--utama-gelap);
     }
 
     /* =========================
@@ -265,7 +265,7 @@
         </h1>
 
         <p>
-            Buat akun pengguna baru untuk mengakses sistem administrasi MAGENTA.
+            Buat akun pengguna baru untuk mengakses sistem administrasi PILARA.
             Pilih role sesuai dengan hak akses yang akan diberikan.
         </p>
 
@@ -324,7 +324,7 @@
                     label="Email"
                     placeholder="contoh@email.com"
                     maxlength="255"
-                    hint="Email digunakan untuk login ke sistem MAGENTA."
+                    hint="Email digunakan untuk login ke sistem PILARA."
                     required
                 />
 

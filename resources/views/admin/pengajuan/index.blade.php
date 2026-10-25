@@ -38,7 +38,7 @@
     .panel {
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -55,7 +55,7 @@
 
         padding: 18px 20px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
     }
 
     .filter-tabs {
@@ -71,11 +71,11 @@
 
         padding: 8px 13px;
 
-        border: 1px solid #e1e8ef;
+        border: 1px solid var(--garis);
         border-radius: 999px;
 
         background: #ffffff;
-        color: #4b5d70;
+        color: var(--teks-sekunder);
 
         font-size: 12px;
         font-weight: 700;
@@ -84,13 +84,13 @@
     }
 
     .filter-tab:hover {
-        border-color: #b9d3ea;
-        color: #1779c9;
+        border-color: var(--garis-kuat);
+        color: var(--utama);
     }
 
     .filter-tab.active {
-        background: #1779c9;
-        border-color: #1779c9;
+        background: var(--utama);
+        border-color: var(--utama);
         color: #ffffff;
     }
 
@@ -121,7 +121,7 @@
 
         padding: 0 13px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         font-family: inherit;
@@ -131,7 +131,7 @@
     }
 
     .search-form input:focus {
-        border-color: #1779c9;
+        border-color: var(--utama);
         box-shadow: 0 0 0 3px rgba(23, 121, 201, .08);
     }
 
@@ -147,8 +147,8 @@
     th {
         padding: 12px 20px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -161,9 +161,9 @@
     td {
         padding: 14px 20px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #33475b;
+        color: var(--teks);
 
         font-size: 13px;
         vertical-align: middle;
@@ -174,29 +174,29 @@
     }
 
     tbody tr:hover {
-        background: #fafcff;
+        background: var(--utama-muda);
     }
 
     .nomor {
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-family: Consolas, monospace;
         font-size: 12px;
     }
 
     .nama {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-weight: 700;
     }
 
     .sub {
         margin-top: 3px;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .detail-link {
-        color: #1779c9;
+        color: var(--utama);
         font-size: 12px;
         font-weight: 700;
         white-space: nowrap;
@@ -209,7 +209,7 @@
     .empty-state {
         padding: 50px 20px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -218,7 +218,7 @@
 
         margin-bottom: 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -255,10 +255,10 @@
 
     {{-- RINGKASAN --}}
     <div class="stat-grid">
-        <x-stat-card label="Total Pengajuan" :value="$totalPengajuan" icon="✉" />
-        <x-stat-card label="Menunggu" :value="$jumlahPerStatus['menunggu'] ?? 0" icon="⏳" hint="Perlu diproses" />
-        <x-stat-card label="Disetujui" :value="$jumlahPerStatus['disetujui'] ?? 0" icon="✓" />
-        <x-stat-card label="Ditolak" :value="$jumlahPerStatus['ditolak'] ?? 0" icon="✕" />
+        <x-stat-card label="Total Pengajuan" :value="$totalPengajuan" icon="inbox" />
+        <x-stat-card label="Menunggu" :value="$jumlahPerStatus['menunggu'] ?? 0" icon="hourglass" hint="Perlu diproses" />
+        <x-stat-card label="Disetujui" :value="$jumlahPerStatus['disetujui'] ?? 0" icon="circle-check" />
+        <x-stat-card label="Ditolak" :value="$jumlahPerStatus['ditolak'] ?? 0" icon="circle-x" />
     </div>
 
     <section class="panel">

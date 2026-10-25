@@ -44,7 +44,7 @@
 
             border-bottom: 1.5px solid #0b6a9c;
 
-            color: #4b5563;
+            color: #6b7280;
             font-size: 8.5px;
             text-align: center;
         }
@@ -68,7 +68,7 @@
         .bergaris td {
             padding: 2px 4px;
 
-            border: 0.75px solid #9aa7b4;
+            border: 0.75px solid #9ca3af;
 
             vertical-align: top;
         }
@@ -85,7 +85,7 @@
         .predikat td {
             padding: 2px 3px;
 
-            border: 0.75px solid #9aa7b4;
+            border: 0.75px solid #9ca3af;
 
             font-size: 7.5px;
             text-align: center;
@@ -100,21 +100,21 @@
         .catatan {
             margin-top: 2px;
 
-            color: #4b5563;
+            color: #6b7280;
             font-size: 7.5px;
         }
 
         .label-kotak {
             margin-top: 3px;
 
-            color: #4b5563;
+            color: #6b7280;
         }
 
         .kotak {
             min-height: 22px;
             padding: 3px 5px;
 
-            border: 0.75px solid #9aa7b4;
+            border: 0.75px solid #9ca3af;
 
             white-space: pre-line;
         }
@@ -171,6 +171,24 @@
             font-weight: bold;
             text-decoration: underline;
         }
+
+        .kop-logo {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        .kop-logo td {
+            vertical-align: middle;
+        }
+
+        .kop-logo-gambar {
+            width: 60px;
+        }
+
+        .kop-logo-teks {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -185,8 +203,17 @@
     $namaPerusahaan = $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name');
 @endphp
 
-<h1>PENILAIAN MAHASISWA MAGANG</h1>
-<div class="perusahaan">{{ $namaPerusahaan }}</div>
+<table class="kop-logo">
+    <tr>
+        <td class="kop-logo-gambar">@include('partials.logo-pdf', ['tinggi' => 30])</td>
+        <td class="kop-logo-teks">
+            <h1>PENILAIAN MAHASISWA MAGANG</h1>
+            <div class="perusahaan" style="border: 0; margin: 0; padding: 0;">{{ $namaPerusahaan }}</div>
+        </td>
+        <td class="kop-logo-gambar"></td>
+    </tr>
+</table>
+<div class="perusahaan"></div>
 
 {{-- Identitas dua kolom agar hemat tempat. --}}
 <table class="identitas">

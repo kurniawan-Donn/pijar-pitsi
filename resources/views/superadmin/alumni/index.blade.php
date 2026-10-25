@@ -19,7 +19,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -28,14 +28,14 @@
     .panel h3 {
         margin-bottom: 4px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin-bottom: 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.6;
     }
@@ -52,7 +52,7 @@
 
         margin-bottom: 6px;
 
-        color: #174a7e;
+        color: var(--utama-gelap);
         font-size: 12px;
         font-weight: 700;
     }
@@ -63,7 +63,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
@@ -73,7 +73,7 @@
     }
 
     .atau {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 40px;
     }
@@ -90,7 +90,7 @@
 
         padding: 12px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     .baris:first-child {
@@ -116,8 +116,8 @@
         display: grid;
         place-items: center;
 
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         font-weight: 800;
     }
@@ -128,19 +128,19 @@
     }
 
     .isi strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 14px;
     }
 
     .isi span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
     .bintang {
-        color: #f5a524;
+        color: var(--peringatan);
         letter-spacing: 1px;
     }
 
@@ -156,10 +156,10 @@
         white-space: nowrap;
     }
 
-    .b-hijau { background: #e7f6ec; color: #067647; }
-    .b-oranye { background: #fff4e5; color: #b54708; }
-    .b-abu { background: #eef2f6; color: #52646e; }
-    .b-biru { background: #eaf3fb; color: #175c95; }
+    .b-hijau { background: var(--sukses-muda); color: var(--sukses); }
+    .b-oranye { background: var(--peringatan-muda); color: var(--peringatan); }
+    .b-abu { background: var(--garis); color: var(--teks-sekunder); }
+    .b-biru { background: var(--utama-muda); color: var(--utama-gelap); }
 
     .aksi {
         display: flex;
@@ -175,11 +175,11 @@
         width: 30px;
         height: 30px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
-        color: #52646e;
+        color: var(--teks-sekunder);
 
         cursor: pointer;
     }
@@ -197,7 +197,7 @@
     .empty {
         padding: 24px;
 
-        color: #9aa7b4;
+        color: var(--teks-redup);
         text-align: center;
     }
 
@@ -257,7 +257,7 @@
     {{-- DAFTAR --}}
     <section class="panel">
         <h3>Daftar Alumni ({{ $alumnis->count() }})</h3>
-        <p>Urutan di bawah sama dengan urutan kartu di website. Gunakan ▲ ▼ untuk menggeser.</p>
+        <p>Urutan di bawah sama dengan urutan kartu di website. Gunakan tombol panah naik/turun untuk menggeser.</p>
 
         @if ($alumnis->isEmpty())
             <div class="empty">Belum ada alumni.</div>
@@ -299,13 +299,13 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="arah" value="naik">
-                                <button type="submit" class="geser" title="Naikkan" aria-label="Naikkan urutan" @disabled($loop->first)>▲</button>
+                                <button type="submit" class="geser" title="Naikkan" aria-label="Naikkan urutan" @disabled($loop->first)><x-icon name="chevron-up" :size="16" /></button>
                             </form>
                             <form method="POST" action="{{ route('superadmin.alumni.urutan', $alumni) }}">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="arah" value="turun">
-                                <button type="submit" class="geser" title="Turunkan" aria-label="Turunkan urutan" @disabled($loop->last)>▼</button>
+                                <button type="submit" class="geser" title="Turunkan" aria-label="Turunkan urutan" @disabled($loop->last)><x-icon name="chevron-down" :size="16" /></button>
                             </form>
                             <x-button variant="secondary" :href="route('superadmin.alumni.edit', $alumni)">Ubah</x-button>
                             <form method="POST" action="{{ route('superadmin.alumni.destroy', $alumni) }}" onsubmit="return confirm('Hapus alumni ini dari website?')">

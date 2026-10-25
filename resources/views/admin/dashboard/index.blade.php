@@ -35,8 +35,8 @@
 
         background: linear-gradient(
             135deg,
-            #12345b 0%,
-            #174c7e 100%
+            var(--utama-gelap) 0%,
+            var(--utama-gelap) 100%
         );
 
         color: #ffffff;
@@ -90,7 +90,7 @@
         border-radius: 999px;
 
         background: rgba(255, 255, 255, .10);
-        color: #dbeaf8;
+        color: var(--utama-muda);
 
         font-size: 10px;
         font-weight: 700;
@@ -110,7 +110,7 @@
 
         margin-top: 9px;
 
-        color: #d9e8f6;
+        color: var(--utama-muda);
 
         font-size: 14px;
         line-height: 1.7;
@@ -132,12 +132,12 @@
     .section-header h3 {
         font-size: 17px;
         font-weight: 750;
-        color: #17324d;
+        color: var(--utama-gelap);
     }
 
     .section-header span {
         font-size: 12px;
-        color: #7b8794;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -157,7 +157,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -168,7 +168,7 @@
     .quick-card:hover {
         transform: translateY(-2px);
 
-        border-color: #c9dceb;
+        border-color: var(--garis-kuat);
 
         box-shadow: 0 8px 22px rgba(15, 40, 65, .07);
     }
@@ -186,8 +186,8 @@
 
         border-radius: 10px;
 
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         display: flex;
         align-items: center;
@@ -205,8 +205,8 @@
 
         border-radius: 999px;
 
-        background: #f1f8f4;
-        color: #2f7b50;
+        background: var(--sukses-muda);
+        color: var(--sukses);
 
         font-size: 9px;
         font-weight: 800;
@@ -222,7 +222,7 @@
 
         border-radius: 50%;
 
-        background: #49a56d;
+        background: var(--sukses);
     }
 
     .quick-card h4 {
@@ -230,13 +230,13 @@
 
         font-size: 15px;
         font-weight: 750;
-        color: #1e3a56;
+        color: var(--utama-gelap);
     }
 
     .quick-card p {
         margin-top: 6px;
 
-        color: #778594;
+        color: var(--teks-sekunder);
 
         font-size: 12px;
         line-height: 1.6;
@@ -247,7 +247,7 @@
 
         margin-top: 11px;
 
-        color: #1779c9;
+        color: var(--utama);
 
         font-size: 12px;
         font-weight: 700;
@@ -271,7 +271,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -284,18 +284,18 @@
 
         padding-bottom: 15px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
     }
 
     .panel-title h3 {
         font-size: 15px;
         font-weight: 750;
-        color: #1e3a56;
+        color: var(--utama-gelap);
     }
 
     .panel-title span {
         font-size: 11px;
-        color: #8a96a3;
+        color: var(--teks-sekunder);
     }
 
     /* =========================================================
@@ -319,7 +319,7 @@
     }
 
     .status-item + .status-item {
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     .status-left {
@@ -338,8 +338,8 @@
 
         border-radius: 9px;
 
-        background: #f4f8fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         display: flex;
         align-items: center;
@@ -353,7 +353,7 @@
     }
 
     .status-info h4 {
-        color: #25415b;
+        color: var(--utama-gelap);
 
         font-size: 13px;
         font-weight: 750;
@@ -362,7 +362,7 @@
     .status-info p {
         margin-top: 4px;
 
-        color: #86919e;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         line-height: 1.5;
@@ -379,8 +379,8 @@
 
         border-radius: 999px;
 
-        background: #f1f8f4;
-        color: #2f7b50;
+        background: var(--sukses-muda);
+        color: var(--sukses);
 
         font-size: 9px;
         font-weight: 800;
@@ -394,7 +394,7 @@
 
         border-radius: 50%;
 
-        background: #49a56d;
+        background: var(--sukses);
     }
 
     /* =========================================================
@@ -408,7 +408,7 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .account-row {
@@ -422,16 +422,16 @@
     }
 
     .account-row + .account-row {
-        border-top: 1px solid #e7edf3;
+        border-top: 1px solid var(--garis);
     }
 
     .account-label {
-        color: #7a8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
     .account-value {
-        color: #253d55;
+        color: var(--utama-gelap);
         font-size: 12px;
         font-weight: 700;
 
@@ -447,8 +447,8 @@
 
         border-radius: 999px;
 
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         font-size: 10px;
         font-weight: 800;
@@ -463,16 +463,16 @@
 
         padding: 15px 17px;
 
-        border-left: 4px solid #f28c28;
+        border-left: 4px solid var(--utama);
         border-radius: 8px;
 
-        background: #fff8f0;
+        background: var(--peringatan-muda);
     }
 
     .notice strong {
         display: block;
 
-        color: #a85a12;
+        color: var(--peringatan);
 
         font-size: 12px;
     }
@@ -480,7 +480,7 @@
     .notice p {
         margin-top: 5px;
 
-        color: #80674f;
+        color: var(--peringatan);
 
         font-size: 11px;
         line-height: 1.6;
@@ -557,7 +557,7 @@
             </h2>
 
             <p>
-                Kelola informasi website MAGENTA melalui panel administrasi.
+                Kelola informasi website PILARA melalui panel administrasi.
                 Gunakan menu yang tersedia untuk memperbarui profil perusahaan,
                 banner, dan konten website.
             </p>
@@ -597,7 +597,7 @@
             <div class="quick-card-top">
 
                 <div class="quick-card-icon">
-                    ▤
+                    <x-icon name="building" />
                 </div>
 
                 <span class="quick-card-status">
@@ -613,7 +613,7 @@
             <p>
                 Kelola identitas, alamat, kontak, website,
                 dan informasi perusahaan yang ditampilkan
-                pada website MAGENTA.
+                pada website PILARA.
             </p>
 
             <span class="quick-card-arrow">
@@ -631,7 +631,7 @@
             <div class="quick-card-top">
 
                 <div class="quick-card-icon">
-                    ▣
+                    <x-icon name="image" />
                 </div>
 
                 <span class="quick-card-status">
@@ -664,7 +664,7 @@
             <div class="quick-card-top">
 
                 <div class="quick-card-icon">
-                    ⚙
+                    <x-icon name="layout-template" />
                 </div>
 
                 <span class="quick-card-status">
@@ -679,7 +679,7 @@
 
             <p>
                 Perbarui pengumuman, persyaratan,
-                alur magang, dan informasi website MAGENTA.
+                alur magang, dan informasi website PILARA.
             </p>
 
             <span class="quick-card-arrow">

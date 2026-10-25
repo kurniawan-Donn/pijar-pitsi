@@ -17,7 +17,7 @@
 
         margin-bottom: 20px;
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 13px;
         font-weight: 700;
     }
@@ -34,7 +34,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -47,14 +47,14 @@
     .panel h3 {
         margin-bottom: 4px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin-bottom: 18px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -66,24 +66,24 @@
 
         padding: 14px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     .aspek-nama {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 14px;
         font-weight: 700;
     }
 
     .aspek-bobot {
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .aspek-row input[type="range"] {
         width: 100%;
 
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .aspek-row input[type="number"] {
@@ -92,7 +92,7 @@
 
         padding: 0 8px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         font-family: inherit;
@@ -102,7 +102,7 @@
     }
 
     .aspek-row input.is-invalid {
-        border-color: #e05252;
+        border-color: var(--bahaya);
     }
 
     .aspek-error {
@@ -110,7 +110,7 @@
 
         margin-top: -8px;
 
-        color: #e05252;
+        color: var(--bahaya);
         font-size: 11px;
         font-weight: 600;
     }
@@ -123,7 +123,7 @@
     }
 
     .result-label {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 800;
         letter-spacing: .5px;
@@ -133,7 +133,7 @@
     .result-nilai {
         margin-top: 8px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 46px;
         font-weight: 800;
         line-height: 1;
@@ -147,7 +147,7 @@
 
         border-radius: 999px;
 
-        background: #1779c9;
+        background: var(--utama);
         color: #ffffff;
 
         font-size: 15px;
@@ -163,16 +163,16 @@
         margin: 18px 0 2px;
         padding-bottom: 6px;
 
-        border-bottom: 2px solid #e8f0f8;
+        border-bottom: 2px solid var(--utama-muda);
     }
 
     .kelompok-head h4 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 14px;
     }
 
     .kelompok-head span {
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -195,7 +195,7 @@
 
         border-radius: 7px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .scale {
@@ -217,20 +217,20 @@
 
         border-radius: 7px;
 
-        background: #f7f9fc;
-        color: #4b5d70;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
     }
 
     .scale div.active {
-        background: #eaf3fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
         font-weight: 800;
     }
 
     .meta {
         margin-top: 18px;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 11px;
         line-height: 1.6;
     }
@@ -365,7 +365,7 @@
                         <div class="form-actions">
                             <x-button variant="secondary" :href="route('superadmin.peserta-magang.show', $pesertaMagang)">Batal</x-button>
                             @if ($penilaian)
-                                <x-button variant="secondary" :href="route('superadmin.peserta-magang.penilaian.cetak', $pesertaMagang)">⬇ Lembar Penilaian (PDF)</x-button>
+                                <x-button variant="secondary" :href="route('superadmin.peserta-magang.penilaian.cetak', $pesertaMagang)"><x-icon name="download" :size="16" /> Lembar Penilaian (PDF)</x-button>
                             @endif
                             <x-button>Simpan Penilaian</x-button>
                         </div>
