@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SimpanFeedbackRequest;
 use App\Models\FeedbackPeserta;
 use App\Models\LogAktivitas;
+use App\Services\FotoAlumni;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,9 +31,9 @@ class FeedbackController extends Controller
         ]);
     }
 
-    public function update(SimpanFeedbackRequest $request): RedirectResponse
+    public function update(SimpanFeedbackRequest $request, FotoAlumni $fotoAlumni): RedirectResponse
     {
-        $peserta = $request->user()->pesertaMagang->load('feedback');
+        $peserta = $request->user()->pesertaMagang->load(['feedback', 'alumni']);
 
         if (! FeedbackPeserta::sudahDibuka($peserta)) {
             return redirect()->route('peserta.feedback.edit')->with('error', 'Feedback belum dibuka.');
@@ -51,11 +52,22 @@ class FeedbackController extends Controller
             'rekomendasi' => $request->input('rekomendasi'),
             'evaluasi_keseluruhan' => $request->input('evaluasi_keseluruhan'),
             'pernyataan' => true,
+            'bersedia_tampil_alumni' => $request->boolean('bersedia_tampil_alumni'),
             'dikirim_pada' => $feedback->dikirim_pada ?? now(),
             'jumlah_kirim' => $feedback->jumlah_kirim + 1,
         ])->save();
 
         LogAktivitas::catat('kirim_feedback', $peserta, ($kirimUlang ? 'Feedback dikirim ulang oleh ' : 'Feedback dikirim oleh ').$peserta->nama);
+
+        // Persetujuan alumni ditarik: alumni langsung disembunyikan dan foto publiknya dihapus.
+        if ($peserta->alumni && ! $feedback->bersedia_tampil_alumni && $peserta->alumni->tampil) {
+            $peserta->alumni->update(['tampil' => false]);
+            LogAktivitas::catat('simpan_alumni', $peserta->alumni, "Alumni {$peserta->alumni->nama} disembunyikan karena peserta menarik persetujuan");
+        }
+
+        if ($peserta->alumni) {
+            $fotoAlumni->sinkron($peserta->alumni->fresh());
+        }
 
         return redirect()
             ->route('peserta.feedback.edit')

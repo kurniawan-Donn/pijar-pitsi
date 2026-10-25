@@ -81,6 +81,14 @@ class PesertaMagang extends Model
         return $this->hasOne(FeedbackPeserta::class);
     }
 
+    /**
+     * Data alumni di website (bila admin sudah menambahkannya).
+     */
+    public function alumni(): HasOne
+    {
+        return $this->hasOne(Alumni::class);
+    }
+
     public function logbookHarians(): HasMany
     {
         return $this->hasMany(LogbookHarian::class);

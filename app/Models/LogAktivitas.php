@@ -35,6 +35,8 @@ class LogAktivitas extends Model
         'hapus_divisi' => 'Hapus divisi',
         'simpan_faq' => 'Simpan FAQ',
         'hapus_faq' => 'Hapus FAQ',
+        'simpan_alumni' => 'Simpan alumni',
+        'hapus_alumni' => 'Hapus alumni',
         'ubah_penempatan' => 'Ubah penempatan divisi',
         'ajukan_biodata' => 'Kirim biodata',
         'ubah_program_biodata' => 'Ubah detail program biodata',

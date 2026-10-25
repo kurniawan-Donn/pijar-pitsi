@@ -781,6 +781,301 @@
     }
 
     /* =========================================================
+       ALUMNI (CAROUSEL + POPUP)
+    ========================================================== */
+
+    .alumni-carousel {
+        position: relative;
+    }
+
+    .alumni-track {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: calc((100% - 3 * 20px) / 4);
+        gap: 20px;
+
+        padding: 8px 4px 22px;
+
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 4px;
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+    }
+
+    .alumni-track:focus-visible {
+        outline: 3px solid var(--primary-soft);
+        border-radius: var(--radius);
+    }
+
+    .alumni-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+
+        padding: 26px 20px 22px;
+
+        color: var(--text);
+
+        font-family: inherit;
+        text-align: center;
+
+        cursor: pointer;
+        scroll-snap-align: start;
+
+        transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+    }
+
+    .alumni-card:hover,
+    .alumni-card:focus-visible {
+        transform: translateY(-6px);
+
+        box-shadow: var(--shadow);
+    }
+
+    .alumni-card:focus-visible {
+        outline: 3px solid var(--primary-soft);
+    }
+
+    .alumni-foto {
+        width: 96px;
+        height: 96px;
+        margin-bottom: 10px;
+
+        border: 4px solid var(--primary-soft);
+        border-radius: 50%;
+
+        object-fit: cover;
+    }
+
+    .alumni-inisial {
+        display: grid;
+        place-items: center;
+
+        background: var(--primary-soft);
+        color: var(--primary);
+
+        font-size: 34px;
+        font-weight: 800;
+    }
+
+    .alumni-nama {
+        color: var(--navy);
+
+        font-size: 17px;
+    }
+
+    .alumni-bintang {
+        color: #f5a524;
+
+        font-size: 16px;
+        letter-spacing: 2px;
+    }
+
+    .alumni-kampus {
+        margin-top: 4px;
+
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .alumni-meta {
+        color: var(--muted);
+
+        font-size: 13px;
+    }
+
+    .alumni-project {
+        margin-top: 12px;
+        padding: 10px 12px;
+
+        width: 100%;
+
+        border-radius: var(--radius-sm);
+
+        background: var(--light);
+        color: var(--navy);
+
+        font-size: 13.5px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .alumni-lihat {
+        margin-top: auto;
+        padding-top: 12px;
+
+        color: var(--primary);
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .alumni-geser {
+        position: absolute;
+        top: 42%;
+        z-index: 2;
+
+        display: grid;
+        place-items: center;
+
+        width: 44px;
+        height: 44px;
+
+        border: 1px solid var(--line);
+        border-radius: 50%;
+
+        background: var(--white);
+        color: var(--navy);
+
+        box-shadow: var(--shadow-sm);
+
+        font-size: 26px;
+        line-height: 1;
+
+        cursor: pointer;
+    }
+
+    .alumni-geser:disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .alumni-geser-kiri {
+        left: -22px;
+    }
+
+    .alumni-geser-kanan {
+        right: -22px;
+    }
+
+    .alumni-dialog {
+        width: min(560px, calc(100% - 32px));
+        max-height: calc(100vh - 48px);
+
+        margin: auto;
+        padding: 30px 28px 26px;
+
+        border: none;
+        border-radius: var(--radius);
+
+        color: var(--text);
+
+        box-shadow: var(--shadow);
+    }
+
+    .alumni-dialog::backdrop {
+        background: rgba(11, 37, 64, .55);
+    }
+
+    .alumni-tutup {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+
+        width: 36px;
+        height: 36px;
+
+        border: none;
+        border-radius: 50%;
+
+        background: var(--light);
+        color: var(--navy);
+
+        font-size: 22px;
+
+        cursor: pointer;
+    }
+
+    .alumni-dialog-kepala {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        margin-bottom: 18px;
+    }
+
+    .alumni-dialog-kepala .alumni-foto {
+        width: 72px;
+        height: 72px;
+        margin: 0;
+    }
+
+    .alumni-dialog-kepala .alumni-inisial {
+        font-size: 26px;
+    }
+
+    .alumni-dialog-kepala strong {
+        display: block;
+
+        color: var(--navy);
+
+        font-size: 18px;
+    }
+
+    .alumni-dialog-kepala span {
+        display: block;
+
+        color: var(--muted);
+
+        font-size: 13px;
+    }
+
+    .alumni-dialog h3 {
+        margin-bottom: 8px;
+
+        color: var(--navy);
+
+        font-size: 17px;
+    }
+
+    .alumni-dialog p {
+        color: var(--muted);
+
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    .alumni-dialog blockquote {
+        margin-top: 18px;
+        padding: 14px 18px;
+
+        border-left: 4px solid var(--accent);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+
+        background: var(--accent-soft);
+        color: var(--text);
+
+        font-size: 15px;
+        font-style: italic;
+        line-height: 1.7;
+    }
+
+    @media (max-width: 1100px) {
+        .alumni-track {
+            grid-auto-columns: calc((100% - 2 * 20px) / 3);
+        }
+    }
+
+    @media (max-width: 800px) {
+        .alumni-track {
+            grid-auto-columns: calc((100% - 20px) / 2);
+        }
+
+        .alumni-geser {
+            display: none;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .alumni-track {
+            grid-auto-columns: 82%;
+        }
+    }
+
+    /* =========================================================
        FAQ (ACCORDION)
     ========================================================== */
 

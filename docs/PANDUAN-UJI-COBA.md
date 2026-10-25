@@ -67,7 +67,7 @@ bisa dibuka admin dan super admin, atau pendaftarnya sendiri lewat tautan di Cek
 | Monitoring, Feedback (rekap), Laporan & export | ✓ | ✓ | – |
 | Hari libur | ✓ | ✓ | – |
 | **Pengaturan** (tarif uang saku, batas isi logbook, periode, penanda tangan) | ✓ | lihat saja | – |
-| Profil perusahaan, banner, konten website, FAQ | ✓ | ✓ | – |
+| Profil perusahaan, banner, konten website, FAQ, alumni | ✓ | ✓ | – |
 | **Kelola pengguna** (akun admin & super admin) | ✓ | – | – |
 | **Aspek penilaian** (kelompok, bobot, predikat) | ✓ | – | – |
 | **Log aktivitas** | ✓ | – | – |
@@ -154,7 +154,8 @@ Centang setiap langkah yang berhasil.
   → Simpan → **Lembar Penilaian (PDF)**.
 
 ### F. Akhir magang
-- [ ] Peserta: menu **Feedback** terbuka (karena tanggal selesai < 1 bulan lagi) → isi → **Kirim**.
+- [ ] Peserta: menu **Feedback** terbuka (karena tanggal selesai < 1 bulan lagi) → isi, centang
+  **bersedia ditampilkan sebagai alumni** → **Kirim**.
 - [ ] Admin: menu **Feedback Magang**: rata-rata & jawaban tampil.
 - [ ] Admin: edit data peserta → ubah **status = Selesai** → otomatis ada **draft surat**.
 - [ ] Detail peserta → **Surat Keterangan Magang**:
@@ -162,6 +163,12 @@ Centang setiap langkah yang berhasil.
   - [ ] **Terbitkan Surat** → nomor `001/SKM/…`.
 - [ ] Peserta: menu **Surat Keterangan** → **Unduh Surat (PDF)**. Menu **Feedback** sekarang terkunci.
 - [ ] Peserta selesai tidak bisa lagi mengubah logbook/biodata (hanya melihat).
+- [ ] Admin: menu **Alumni** → pilih peserta tadi → lengkapi judul & deskripsi project → Simpan.
+  Cek beranda: kartu alumni (rating dari feedback) bisa digeser, dan saat diklik muncul popup.
+- [ ] Coba juga **Input Manual** untuk alumni lama (isi rating & unggah foto sendiri).
+
+> Foto banner dan alumni butuh tautan `public/storage`. Bila foto tidak tampil, jalankan:
+> `C:\laragon\bin\php\php-8.4\php.exe artisan storage:link`
 
 ### G. Laporan & fitur Super Admin
 - [ ] **Laporan** → tab *Kehadiran & Uang Saku* (pilih periode), *Nilai Akhir*, *Feedback*

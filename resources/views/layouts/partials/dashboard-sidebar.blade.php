@@ -187,6 +187,12 @@
                 'active' => ['superadmin.pengaturan.*'],
             ],
             [
+                'label' => 'Alumni',
+                'icon' => '🎓',
+                'route' => 'superadmin.alumni.index',
+                'active' => ['superadmin.alumni.*'],
+            ],
+            [
                 'label' => 'FAQ',
                 'icon' => '?',
                 'route' => 'superadmin.faq.index',

@@ -295,6 +295,14 @@
                     <span>{{ config('feedback.pernyataan') }}</span>
                 </label>
                 @error('pernyataan') <div class="x-form-error">{{ $message }}</div> @enderror
+
+                <label class="pernyataan" style="margin-top: 12px;">
+                    <input type="checkbox" name="bersedia_tampil_alumni" value="1" @checked(old('bersedia_tampil_alumni', $feedback->bersedia_tampil_alumni))>
+                    <span>
+                        Saya bersedia ditampilkan sebagai alumni di website (foto, nama, kampus, divisi, project, dan testimoni).
+                        <small style="display: block; color: #7b8794;">Opsional. Persetujuan bisa dibatalkan selama feedback belum terkunci.</small>
+                    </span>
+                </label>
             </section>
 
             </fieldset>
