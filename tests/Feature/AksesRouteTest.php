@@ -70,6 +70,7 @@ class AksesRouteTest extends TestCase
         'peserta.logbook.edit' => self::PESERTA,
         'peserta.logbook.update' => self::PESERTA,
         'peserta.logbook.destroy' => self::PESERTA,
+        'peserta.rekap' => self::PESERTA,
         'peserta.feedback.edit' => self::PESERTA,
         'peserta.feedback.update' => self::PESERTA,
         'peserta.surat.show' => self::PESERTA,
@@ -109,9 +110,6 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.update' => self::LOGIN,
         'superadmin.peserta-magang.destroy' => self::LOGIN,
         'superadmin.pengaturan-magang.index' => self::LOGIN,
-        'superadmin.pengaturan-magang.update' => self::LOGIN,
-        'superadmin.pengaturan-magang.tarif.store' => self::LOGIN,
-        'superadmin.pengaturan-magang.tarif.destroy' => self::LOGIN,
         'superadmin.pengaturan-magang.libur.store' => self::LOGIN,
         'superadmin.pengaturan-magang.libur.destroy' => self::LOGIN,
         'superadmin.divisi.index' => self::LOGIN,
@@ -140,6 +138,10 @@ class AksesRouteTest extends TestCase
         'superadmin.peserta-magang.penilaian.update' => self::LOGIN,
         'superadmin.peserta-magang.penilaian.cetak' => self::LOGIN,
         'superadmin.monitoring.index' => self::LOGIN,
+        'superadmin.biodata.index' => self::LOGIN,
+        'superadmin.logbook.index' => self::LOGIN,
+        'superadmin.penilaian.index' => self::LOGIN,
+        'superadmin.surat.index' => self::LOGIN,
         'superadmin.peserta-magang.surat' => self::LOGIN,
         'superadmin.peserta-magang.surat.draft' => self::LOGIN,
         'superadmin.peserta-magang.surat.terbitkan' => self::LOGIN,
@@ -164,6 +166,9 @@ class AksesRouteTest extends TestCase
         'superadmin.aspek-penilaian.update' => self::SUPER_ADMIN,
         'superadmin.aspek-penilaian.predikat' => self::SUPER_ADMIN,
         'superadmin.log-aktivitas.index' => self::SUPER_ADMIN,
+        'superadmin.pengaturan-magang.update' => self::SUPER_ADMIN,
+        'superadmin.pengaturan-magang.tarif.store' => self::SUPER_ADMIN,
+        'superadmin.pengaturan-magang.tarif.destroy' => self::SUPER_ADMIN,
     ];
 
     /**

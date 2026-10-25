@@ -63,6 +63,12 @@
                         </a>
                     </div>
                 @endif
+
+                {{-- Login satu pintu untuk semua role (route login). --}}
+                <div class="aside-gform aside-login">
+                    <p>Sudah diterima dan punya akun peserta?</p>
+                    <a href="{{ route('login') }}" class="btn">Login di sini →</a>
+                </div>
             </aside>
 
             {{-- KARTU FORM --}}

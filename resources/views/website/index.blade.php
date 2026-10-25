@@ -152,11 +152,11 @@
                 @endforeach
 
                 {{-- Di layar kecil tombol masuk tampil di dalam menu. --}}
-                <li class="nav-menu-masuk"><a href="{{ route('login') }}">Masuk Peserta →</a></li>
+                <li class="nav-menu-masuk"><a href="{{ route('login') }}">Login →</a></li>
             </ul>
 
             <div class="nav-actions">
-                <a href="{{ route('login') }}" class="btn btn-outline nav-cta" title="Login peserta magang untuk mengisi biodata dan logbook">Masuk Peserta</a>
+                <a href="{{ route('login') }}" class="btn btn-outline nav-cta" title="Login peserta magang, admin, dan super admin">Login</a>
                 <a href="#daftar" class="btn btn-accent nav-cta">Daftar Magang</a>
             </div>
 

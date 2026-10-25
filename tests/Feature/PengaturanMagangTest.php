@@ -20,11 +20,14 @@ class PengaturanMagangTest extends TestCase
 
     private User $admin;
 
+    private User $superAdmin;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->admin = User::factory()->create(['role' => User::ROLE_ADMIN]);
+        $this->superAdmin = User::factory()->create(['role' => User::ROLE_SUPER_ADMIN]);
     }
 
     /**
@@ -60,7 +63,7 @@ class PengaturanMagangTest extends TestCase
 
     public function test_simpan_aturan_umum_dan_tercatat_di_log(): void
     {
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->put(route('superadmin.pengaturan-magang.update'), $this->dataUmum())
             ->assertRedirect(route('superadmin.pengaturan-magang.index'))
             ->assertSessionHas('success');
@@ -75,7 +78,7 @@ class PengaturanMagangTest extends TestCase
 
     public function test_validasi_aturan_umum(): void
     {
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->put(route('superadmin.pengaturan-magang.update'), $this->dataUmum([
                 'tanggal_awal_periode' => 31,
                 'batas_isi_mundur_hari' => -1,
@@ -99,7 +102,7 @@ class PengaturanMagangTest extends TestCase
 
     public function test_tarif_baru_berlaku_mulai_tanggalnya_saja(): void
     {
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->post(route('superadmin.pengaturan-magang.tarif.store'), [
                 'berlaku_mulai' => '2026-09-01',
                 'tarif_hari_penuh' => 60000,
@@ -112,7 +115,7 @@ class PengaturanMagangTest extends TestCase
         $this->assertSame(30000, TarifUangSaku::berlakuPada(CarbonImmutable::parse('2027-01-01'))->tarif_setengah_hari);
 
         $tarif = TarifUangSaku::latest('id')->first();
-        $this->assertSame($this->admin->id, $tarif->dibuat_oleh);
+        $this->assertSame($this->superAdmin->id, $tarif->dibuat_oleh);
         $this->assertDatabaseHas('log_aktivitas', ['aksi' => 'tambah_tarif_uang_saku']);
     }
 
@@ -120,9 +123,9 @@ class PengaturanMagangTest extends TestCase
     {
         $data = ['berlaku_mulai' => '2026-09-01', 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000];
 
-        $this->actingAs($this->admin)->post(route('superadmin.pengaturan-magang.tarif.store'), $data);
+        $this->actingAs($this->superAdmin)->post(route('superadmin.pengaturan-magang.tarif.store'), $data);
 
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->post(route('superadmin.pengaturan-magang.tarif.store'), $data)
             ->assertSessionHasErrorsIn('tarif', 'berlaku_mulai');
 
@@ -133,7 +136,7 @@ class PengaturanMagangTest extends TestCase
     {
         $satuSatunya = TarifUangSaku::firstOrFail();
 
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->delete(route('superadmin.pengaturan-magang.tarif.destroy', $satuSatunya))
             ->assertSessionHas('error');
 
@@ -141,11 +144,45 @@ class PengaturanMagangTest extends TestCase
 
         $baru = TarifUangSaku::create(['berlaku_mulai' => '2026-09-01', 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000]);
 
-        $this->actingAs($this->admin)
+        $this->actingAs($this->superAdmin)
             ->delete(route('superadmin.pengaturan-magang.tarif.destroy', $baru))
             ->assertSessionHas('success');
 
         $this->assertModelMissing($baru);
+    }
+
+    public function test_admin_hanya_melihat_aturan_umum_dan_tarif_tetapi_boleh_kelola_libur(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('superadmin.pengaturan-magang.index'))
+            ->assertOk()
+            ->assertSee('Hanya Super Admin yang dapat mengubah aturan umum dan tarif')
+            ->assertDontSee('Simpan Pengaturan')
+            ->assertDontSee(route('superadmin.pengaturan-magang.tarif.store'))
+            ->assertSee(route('superadmin.pengaturan-magang.libur.store'));
+
+        $this->actingAs($this->admin)
+            ->put(route('superadmin.pengaturan-magang.update'), $this->dataUmum())
+            ->assertForbidden();
+
+        $this->actingAs($this->admin)
+            ->post(route('superadmin.pengaturan-magang.tarif.store'), [
+                'berlaku_mulai' => '2026-09-01',
+                'tarif_hari_penuh' => 60000,
+                'tarif_setengah_hari' => 30000,
+            ])
+            ->assertForbidden();
+
+        $this->actingAs($this->admin)
+            ->delete(route('superadmin.pengaturan-magang.tarif.destroy', TarifUangSaku::first()))
+            ->assertForbidden();
+
+        $this->assertSame(1, TarifUangSaku::count());
+
+        $this->actingAs($this->superAdmin)
+            ->get(route('superadmin.pengaturan-magang.index'))
+            ->assertSee('Simpan Pengaturan')
+            ->assertDontSee('Hanya Super Admin yang dapat mengubah');
     }
 
     public function test_tambah_hari_libur_rentang_melewati_tanggal_yang_sudah_ada(): void

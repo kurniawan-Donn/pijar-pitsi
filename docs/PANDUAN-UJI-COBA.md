@@ -65,17 +65,22 @@ bisa dibuka admin dan super admin, atau pendaftarnya sendiri lewat tautan di Cek
 | Isi penilaian akhir + PDF | ✓ | ✓ | – |
 | Terbitkan surat keterangan | ✓ | ✓ | – |
 | Monitoring, Feedback (rekap), Laporan & export | ✓ | ✓ | – |
-| Pengaturan Magang (tarif, hari libur, periode, penanda tangan) | ✓ | ✓ | – |
+| Hari libur | ✓ | ✓ | – |
+| **Pengaturan** (tarif uang saku, batas isi logbook, periode, penanda tangan) | ✓ | lihat saja | – |
 | Profil perusahaan, banner, konten website | ✓ | ✓ | – |
 | **Kelola pengguna** (akun admin & super admin) | ✓ | – | – |
 | **Aspek penilaian** (kelompok, bobot, predikat) | ✓ | – | – |
 | **Log aktivitas** | ✓ | – | – |
-| Isi biodata, logbook harian, izin/sakit | – | – | ✓ |
+| Isi biodata, logbook harian, izin/sakit, lihat Rekap Kehadiran | – | – | ✓ |
 | Kirim feedback, unduh surat keterangan | – | – | ✓ |
 | Ganti profil & password sendiri | ✓ | ✓ | ✓ |
 
-Ringkasnya: **Super Admin = Admin + 3 menu khusus** (Kelola Pengguna, Aspek Penilaian,
-Log Aktivitas).
+Ringkasnya: **Super Admin = Admin + grup menu Sistem** (Kelola Pengguna, Aspek Penilaian,
+Pengaturan, Log Aktivitas). Admin mengelola hari libur lewat menu **Hari Libur**.
+
+Menu admin dikelompokkan: Utama, Kelola Peserta, Laporan, Konten Website, Sistem. Menu
+Biodata, Logbook & Absensi, Penilaian, dan Surat Keterangan menampilkan daftar semua peserta
+beserta statusnya; klik nama/aksi untuk membuka halaman per peserta.
 
 ---
 
