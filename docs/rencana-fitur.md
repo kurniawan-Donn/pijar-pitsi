@@ -1015,6 +1015,19 @@ Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
   rekap uang saku per periode (28–27) → rotasi divisi → feedback aktif 1 bulan sebelum selesai →
   penilaian → status selesai → surat keterangan dibuat dan ditandatangani → alumni (jika bersedia).
 
+**Hasil (`fase-29-panduan`) ✅**
+
+- `docs/panduan/`: `README.md`, `alur-magang.md` (diagram Mermaid + tabel 19 langkah + aturan
+  penting), `panduan-peserta.md`, `panduan-admin.md`, `panduan-super-admin.md`.
+- 33 screenshot di `public/images/panduan/` (JPG, ±3,3 MB) dari **data contoh fiktif**
+  (`PanduanDemoSeeder`, database terpisah), bukan data asli. Skrip pengambil ulang:
+  `docs/panduan/alat/ambil_screenshot.py`.
+- Menu **Panduan** (`/panduan/{bagian?}`, nama route `panduan`) untuk semua role: peserta → Peserta
+  + Alur; admin → Admin + Alur; super admin → Super Admin + Admin + Alur. Bagian role lain → 404.
+  Isi dibaca langsung dari Markdown (`App\Services\BukuPanduan`, CommonMark bawaan Laravel, HTML
+  mentah dibuang); gambar diarahkan ke `public/`, tautan antar-panduan menjadi tautan menu, dan
+  diagram Mermaid diganti diagram HTML.
+
 ### 9.8 Urutan pengerjaan revisi 5
 
 | Tahap | Branch | Isi |
