@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Alumni magang di website publik: dari peserta (dengan persetujuan di
@@ -113,7 +112,8 @@ class Alumni extends Model
 
     public function urlFoto(): ?string
     {
-        return $this->foto_path ? Storage::disk('public')->url($this->foto_path) : null;
+        // asset() mengikuti alamat yang sedang dibuka; Storage::url() terikat APP_URL.
+        return $this->foto_path ? asset('storage/'.$this->foto_path) : null;
     }
 
     /**

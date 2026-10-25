@@ -347,11 +347,16 @@
 
                     <section class="panel">
                         <h3>Kesimpulan Penilaian</h3>
-                        <p>Mengikuti bagian kesimpulan pada lembar penilaian.</p>
+                        <p>Mengikuti bagian kesimpulan pada lembar penilaian. Isian dibatasi agar lembar penilaian tetap 1 halaman A4.</p>
 
-                        <x-form.input name="kekuatan" type="textarea" label="Kekuatan dan keunggulan mahasiswa magang" :value="$penilaian?->kekuatan" rows="3" maxlength="2000" />
-                        <x-form.input name="aspek_perbaikan" type="textarea" label="Aspek utama yang diperlukan untuk perbaikan" :value="$penilaian?->aspek_perbaikan" rows="3" maxlength="2000" />
-                        <x-form.input name="langkah_perbaikan" type="textarea" label="Langkah penting yang harus diambil untuk perbaikan" :value="$penilaian?->langkah_perbaikan" rows="3" maxlength="2000" />
+                        @php
+                            $maksKesimpulan = \App\Http\Requests\SimpanPenilaianRequest::MAKS_KESIMPULAN;
+                            $petunjukKesimpulan = 'Maksimal '.$maksKesimpulan.' karakter dan '.\App\Http\Requests\SimpanPenilaianRequest::MAKS_BARIS_KESIMPULAN.' baris.';
+                        @endphp
+
+                        <x-form.input name="kekuatan" type="textarea" label="Kekuatan dan keunggulan mahasiswa magang" :value="$penilaian?->kekuatan" rows="3" :maxlength="$maksKesimpulan" data-hitung :hint="$petunjukKesimpulan" />
+                        <x-form.input name="aspek_perbaikan" type="textarea" label="Aspek utama yang diperlukan untuk perbaikan" :value="$penilaian?->aspek_perbaikan" rows="3" :maxlength="$maksKesimpulan" data-hitung :hint="$petunjukKesimpulan" />
+                        <x-form.input name="langkah_perbaikan" type="textarea" label="Langkah penting yang harus diambil untuk perbaikan" :value="$penilaian?->langkah_perbaikan" rows="3" :maxlength="$maksKesimpulan" data-hitung :hint="$petunjukKesimpulan" />
 
                         @if ($penilaian?->catatan_pembimbing)
                             <x-alert type="info" title="Catatan pembimbing (format lama):" :message="$penilaian->catatan_pembimbing" />

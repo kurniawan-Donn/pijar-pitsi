@@ -75,6 +75,24 @@
         object-fit: cover;
     }
 
+    .foto-sekarang {
+        width: 96px;
+        height: 96px;
+    }
+
+    .foto-kosong {
+        display: grid;
+        place-items: center;
+
+        padding: 8px;
+
+        background: #eaf3fb;
+        color: #6b7f93;
+
+        font-size: 11px;
+        text-align: center;
+    }
+
     .bintang {
         color: #f5a524;
     }
@@ -195,10 +213,12 @@
 
                 <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
                     @if ($alumni->urlFoto())
-                        <img src="{{ $alumni->urlFoto() }}" alt="" class="foto-sekarang">
+                        <img src="{{ $alumni->urlFoto() }}" alt="Foto {{ $alumni->nama }}" class="foto-sekarang" id="pratinjau-foto-alumni">
+                    @else
+                        <span class="foto-sekarang foto-kosong" id="pratinjau-foto-alumni">Belum ada foto</span>
                     @endif
                     <div>
-                        <x-form.input name="foto" type="file" label="Unggah Foto" accept="image/jpeg,image/png" hint="JPG/PNG maksimal 2 MB, otomatis dipotong persegi." />
+                        <x-form.input name="foto" type="file" label="Unggah Foto" accept="image/jpeg,image/png" data-pratinjau="#pratinjau-foto-alumni" hint="JPG/PNG maksimal 2 MB, otomatis dipotong persegi." />
                         @if ($alumni->urlFoto())
                             <label class="check"><input type="checkbox" name="hapus_foto" value="1"> Hapus foto</label>
                         @endif

@@ -514,6 +514,31 @@
         font-weight: 600;
     }
 
+    .x-pratinjau-pesan {
+        margin-top: 6px;
+
+        color: #b54708;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .x-pratinjau-pesan.ok {
+        color: #067647;
+    }
+
+    .x-hitung-karakter {
+        margin-top: 4px;
+
+        color: #879bb1;
+        font-size: 10.5px;
+        text-align: right;
+    }
+
+    .x-hitung-karakter.hampir {
+        color: #b54708;
+        font-weight: 700;
+    }
+
     /* =========================================================
        KOMPONEN: AVATAR (foto profil / inisial)
     ========================================================== */

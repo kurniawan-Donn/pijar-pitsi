@@ -138,7 +138,7 @@
     {{-- FOTO PROFIL (untuk peserta sekaligus pas foto biodata) --}}
     @unless ($user->wajib_ganti_password)
         <section class="panel foto-panel">
-            <x-avatar :user="$user" :ukuran="84" class="foto-pratinjau" />
+            <x-avatar :user="$user" :ukuran="84" class="foto-pratinjau" id="pratinjau-foto-profil" />
 
             <div>
                 <h3>Foto Profil</h3>
@@ -153,7 +153,7 @@
                     <form method="POST" action="{{ route('profil.foto') }}" enctype="multipart/form-data" class="foto-form">
                         @csrf
                         @method('PUT')
-                        <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih foto profil">
+                        <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih foto profil" data-pratinjau="#pratinjau-foto-profil">
                         <x-button variant="secondary">{{ $user->foto_path ? 'Ganti Foto' : 'Unggah Foto' }}</x-button>
                     </form>
 

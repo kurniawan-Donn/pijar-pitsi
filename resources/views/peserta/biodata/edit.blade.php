@@ -426,7 +426,7 @@
 
     {{-- PAS FOTO: form terpisah, bisa diganti kapan saja (juga setelah disetujui). --}}
     <section class="section foto-section" id="pas-foto">
-        <x-avatar :user="auth()->user()" :ukuran="96" class="foto-pratinjau" />
+        <x-avatar :user="auth()->user()" :ukuran="96" class="foto-pratinjau" id="pratinjau-pas-foto" />
 
         <div class="foto-isi">
             <h3>Pas Foto *</h3>
@@ -438,7 +438,7 @@
             <form method="POST" action="{{ route('profil.foto') }}" enctype="multipart/form-data" class="foto-form">
                 @csrf
                 @method('PUT')
-                <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih pas foto">
+                <input type="file" name="foto" accept="image/jpeg,image/png" required aria-label="Pilih pas foto" data-pratinjau="#pratinjau-pas-foto">
                 <x-button variant="secondary">{{ auth()->user()->foto_path ? 'Ganti Foto' : 'Unggah Foto' }}</x-button>
             </form>
         </div>

@@ -75,6 +75,8 @@
 
 </div>
 
+@include('layouts.partials.dashboard-scripts')
+
 @stack('scripts')
 
 </body>

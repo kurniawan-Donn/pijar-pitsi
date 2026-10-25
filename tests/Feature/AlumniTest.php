@@ -264,6 +264,28 @@ class AlumniTest extends TestCase
         Storage::disk('public')->assertMissing($alumni->foto_path);
     }
 
+    public function test_url_foto_alumni_mengikuti_alamat_yang_dibuka_bukan_app_url(): void
+    {
+        config(['app.url' => 'http://localhost:8000']);
+        $alumni = Alumni::factory()->create(['tampil' => true, 'foto_path' => 'alumni/budi.jpg']);
+
+        $this->actingAs($this->admin)
+            ->get('http://pilara.test/superadmin/alumni')
+            ->assertSee('src="http://pilara.test/storage/alumni/budi.jpg"', false)
+            ->assertDontSee('localhost:8000/storage', false);
+
+        $this->get('http://pilara.test/')->assertSee('http://pilara.test/storage/alumni/budi.jpg', false);
+        $this->assertNotNull($alumni->fresh()->urlFoto());
+    }
+
+    public function test_form_alumni_punya_pratinjau_foto_sebelum_disimpan(): void
+    {
+        $this->actingAs($this->admin)
+            ->get(route('superadmin.alumni.create'))
+            ->assertSee('id="pratinjau-foto-alumni"', false)
+            ->assertSee('data-pratinjau="#pratinjau-foto-alumni"', false);
+    }
+
     public function test_urutan_alumni(): void
     {
         $a = Alumni::factory()->create(['nama' => 'Alfa']);
