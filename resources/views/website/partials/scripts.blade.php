@@ -373,6 +373,87 @@
     });
 
     /* -----------------------------------------------------------
+       GALERI DOKUMENTASI: geser, keterangan saat disentuh, lightbox
+    ----------------------------------------------------------- */
+    const galeriTrack = document.querySelector('.galeri-track');
+
+    if (galeriTrack) {
+        const itemGaleri = [...galeriTrack.querySelectorAll('.galeri-item')];
+        const tombolGaleri = [...document.querySelectorAll('.galeri-geser')];
+        const lightbox = document.querySelector('.galeri-lightbox');
+        const layarSentuh = window.matchMedia('(hover: none)').matches;
+        let posisiLightbox = 0;
+
+        const aturTombolGaleri = () => {
+            const maks = galeriTrack.scrollWidth - galeriTrack.clientWidth - 8;
+            tombolGaleri.forEach((tombol) => {
+                tombol.disabled = tombol.dataset.arah === '-1' ? galeriTrack.scrollLeft <= 8 : galeriTrack.scrollLeft >= maks;
+            });
+        };
+
+        tombolGaleri.forEach((tombol) => tombol.addEventListener('click', () => {
+            const kolom = itemGaleri[0] ? itemGaleri[0].offsetWidth + 14 : galeriTrack.clientWidth;
+            const maks = galeriTrack.scrollWidth - galeriTrack.clientWidth;
+            const tujuan = Math.min(maks, Math.max(0, galeriTrack.scrollLeft + kolom * 2 * Number(tombol.dataset.arah)));
+            galeriTrack.scrollTo({ left: tujuan, behavior: 'smooth' });
+        }));
+
+        galeriTrack.addEventListener('scroll', aturTombolGaleri, { passive: true });
+        window.addEventListener('resize', aturTombolGaleri);
+        aturTombolGaleri();
+
+        const tampilkan = (index) => {
+            posisiLightbox = (index + itemGaleri.length) % itemGaleri.length;
+            const item = itemGaleri[posisiLightbox].dataset;
+            const gambar = lightbox.querySelector('img');
+
+            gambar.src = item.foto;
+            gambar.alt = item.judul;
+            lightbox.querySelector('figcaption strong').textContent = item.judul;
+            lightbox.querySelector('figcaption small').textContent = item.tanggal || '';
+            lightbox.querySelector('figcaption span').textContent = item.keterangan || '';
+            lightbox.querySelectorAll('.galeri-pindah').forEach((tombol) => {
+                tombol.disabled = itemGaleri.length < 2;
+            });
+        };
+
+        itemGaleri.forEach((item, index) => item.addEventListener('click', () => {
+            // Di layar sentuh: sentuhan pertama menampilkan keterangan, kedua memperbesar.
+            if (layarSentuh && !item.classList.contains('terbuka')) {
+                itemGaleri.forEach((lain) => lain.classList.toggle('terbuka', lain === item));
+                return;
+            }
+
+            if (!lightbox || typeof lightbox.showModal !== 'function') {
+                window.open(item.dataset.foto, '_blank', 'noopener');
+                return;
+            }
+
+            tampilkan(index);
+            lightbox.showModal();
+        }));
+
+        if (lightbox) {
+            lightbox.querySelector('.galeri-tutup').addEventListener('click', () => lightbox.close());
+            lightbox.querySelectorAll('.galeri-pindah').forEach((tombol) => tombol.addEventListener('click', () => {
+                tampilkan(posisiLightbox + Number(tombol.dataset.arah));
+            }));
+            lightbox.addEventListener('click', (event) => {
+                if (event.target === lightbox) {
+                    lightbox.close();
+                }
+            });
+            lightbox.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    tampilkan(posisiLightbox + (event.key === 'ArrowRight' ? 1 : -1));
+                }
+            });
+            lightbox.addEventListener('close', () => itemGaleri[posisiLightbox]?.focus({ preventScroll: true }));
+        }
+    }
+
+    /* -----------------------------------------------------------
        TOMBOL LOADING FORM CEK STATUS
     ----------------------------------------------------------- */
     document.getElementById('form-status')?.addEventListener('submit', (event) => {

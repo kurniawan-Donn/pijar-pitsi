@@ -2645,6 +2645,294 @@
         transform: none;
     }
 
+    /* =========================================================
+       GALERI DOKUMENTASI: 2 baris ke bawah, sisanya memanjang ke kanan
+    ========================================================== */
+
+    .galeri {
+        position: relative;
+    }
+
+    .galeri-track {
+        --tinggi-foto: 190px;
+
+        display: grid;
+        grid-auto-flow: column;
+        grid-template-rows: repeat(2, var(--tinggi-foto));
+        grid-auto-columns: calc((100% - 3 * 14px) / 4);
+        gap: 14px;
+
+        padding: 6px 4px 18px;
+
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: 4px;
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+    }
+
+    /* Foto sedikit: tetap 2 baris, tanpa ruang kosong yang aneh. */
+    .galeri-track:has(> .galeri-item:only-child) {
+        grid-template-rows: var(--tinggi-foto);
+    }
+
+    .galeri-track:focus-visible {
+        outline: 3px solid var(--primary-soft);
+        border-radius: var(--radius);
+    }
+
+    .galeri-item {
+        position: relative;
+
+        overflow: hidden;
+
+        padding: 0;
+
+        border: 0;
+        border-radius: var(--radius-sm);
+
+        background: var(--light);
+
+        font-family: inherit;
+        text-align: left;
+
+        cursor: zoom-in;
+        scroll-snap-align: start;
+    }
+
+    .galeri-item img {
+        width: 100%;
+        height: 100%;
+
+        display: block;
+
+        object-fit: cover;
+
+        transition: transform .5s var(--ease);
+    }
+
+    .galeri-overlay {
+        position: absolute;
+        inset: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 4px;
+
+        padding: 14px;
+
+        background: linear-gradient(180deg, rgba(11, 106, 156, 0) 25%, rgba(8, 47, 73, .88) 100%);
+        color: #ffffff;
+
+        opacity: 0;
+
+        transition: opacity .25s ease;
+    }
+
+    .galeri-overlay strong {
+        font-size: 14px;
+        line-height: 1.35;
+    }
+
+    .galeri-overlay small {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        color: rgba(255, 255, 255, .85);
+        font-size: 12px;
+    }
+
+    .galeri-overlay > span {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+
+        overflow: hidden;
+
+        color: rgba(255, 255, 255, .92);
+        font-size: 12.5px;
+        line-height: 1.45;
+    }
+
+    .galeri-item:hover .galeri-overlay,
+    .galeri-item:focus-visible .galeri-overlay,
+    .galeri-item.terbuka .galeri-overlay {
+        opacity: 1;
+    }
+
+    .galeri-item:hover img,
+    .galeri-item.terbuka img {
+        transform: scale(1.06);
+    }
+
+    .galeri-item:focus-visible {
+        outline: 3px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+    .galeri-geser {
+        position: absolute;
+        top: calc(50% - 10px);
+        z-index: 2;
+
+        width: 42px;
+        height: 42px;
+
+        display: grid;
+        place-items: center;
+
+        border: 1px solid var(--line);
+        border-radius: 50%;
+
+        background: var(--white);
+        color: var(--navy);
+
+        box-shadow: var(--shadow-sm);
+
+        cursor: pointer;
+
+        transform: translateY(-50%);
+    }
+
+    .galeri-geser:disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .galeri-geser-kiri {
+        left: -16px;
+    }
+
+    .galeri-geser-kanan {
+        right: -16px;
+    }
+
+    .galeri-lightbox {
+        width: min(1000px, calc(100% - 24px));
+        max-height: calc(100vh - 24px);
+
+        margin: auto;
+        padding: 0;
+
+        overflow: hidden;
+
+        border: none;
+        border-radius: var(--radius);
+
+        background: #0b1620;
+        color: #ffffff;
+    }
+
+    .galeri-lightbox::backdrop {
+        background: rgba(8, 20, 30, .82);
+    }
+
+    .galeri-lightbox figure {
+        margin: 0;
+    }
+
+    .galeri-lightbox img {
+        width: 100%;
+        max-height: calc(100vh - 170px);
+
+        display: block;
+
+        object-fit: contain;
+
+        background: #000000;
+    }
+
+    .galeri-lightbox figcaption {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+
+        padding: 14px 18px 16px;
+    }
+
+    .galeri-lightbox figcaption strong {
+        font-size: 15px;
+    }
+
+    .galeri-lightbox figcaption small {
+        color: rgba(255, 255, 255, .7);
+        font-size: 12.5px;
+    }
+
+    .galeri-lightbox figcaption span {
+        color: rgba(255, 255, 255, .88);
+        font-size: 13.5px;
+        line-height: 1.55;
+    }
+
+    .galeri-tutup,
+    .galeri-pindah {
+        position: absolute;
+        z-index: 2;
+
+        width: 40px;
+        height: 40px;
+
+        display: grid;
+        place-items: center;
+
+        border: none;
+        border-radius: 50%;
+
+        background: rgba(0, 0, 0, .55);
+        color: #ffffff;
+
+        cursor: pointer;
+    }
+
+    .galeri-tutup {
+        top: 12px;
+        right: 12px;
+    }
+
+    .galeri-pindah {
+        top: calc((100vh - 170px) / 2);
+        max-height: none;
+    }
+
+    .galeri-pindah-kiri {
+        left: 12px;
+    }
+
+    .galeri-pindah-kanan {
+        right: 12px;
+    }
+
+    .galeri-pindah:disabled {
+        display: none;
+    }
+
+    @media (max-width: 1000px) {
+        .galeri-track {
+            grid-auto-columns: calc((100% - 2 * 14px) / 3);
+        }
+    }
+
+    @media (max-width: 700px) {
+        .galeri-track {
+            --tinggi-foto: 140px;
+
+            grid-auto-columns: 62%;
+        }
+
+        .galeri-geser {
+            display: none;
+        }
+
+        .galeri-pindah {
+            top: auto;
+            bottom: 90px;
+        }
+    }
+
     @media (prefers-reduced-motion: reduce) {
         html {
             scroll-behavior: auto;
@@ -2703,8 +2991,9 @@
             padding: 9px 9px;
         }
 
+        /* Tombol Login dirapatkan (jangan disembunyikan: menu lipat baru muncul di ≤ 1024px). */
         .nav-actions .btn {
-            display: none;
+            padding: 0 16px;
         }
     }
 

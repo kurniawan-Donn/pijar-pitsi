@@ -217,6 +217,17 @@ Centang setiap langkah yang berhasil.
 - [ ] Warna oranye hanya ada di tombol **Daftar Magang** (beranda) dan angka badge di sidebar.
 - [ ] Unduh PDF penilaian, logbook, surat keterangan, dan laporan: kop memakai logo PITSI.
 
+### K. Galeri dokumentasi (Revisi 5 tahap 4)
+- [ ] (Admin/Super Admin) Sidebar **Konten Website → Dokumentasi** → **Tambah Dokumentasi**: pilih
+  foto (pratinjau muncul), isi judul, tanggal, dan penjelasan singkat → simpan. Ulangi beberapa kali.
+- [ ] Geser urutan dengan tombol panah kiri/kanan di kartu; sembunyikan satu dengan ikon mata.
+- [ ] Beranda → bagian **Kegiatan Magang**: foto tersusun 2 baris ke bawah lalu memanjang ke kanan
+  (lebih dari 8 foto bisa digeser). Arahkan kursor ke foto: judul, tanggal, dan penjelasan muncul.
+- [ ] Klik foto: foto membesar; pindah dengan tombol atau panah keyboard; tutup dengan tombol ×, Esc,
+  atau klik di luar foto.
+- [ ] Di HP: sentuh foto sekali untuk melihat keterangan, sentuh lagi untuk memperbesar.
+- [ ] Foto yang disembunyikan tidak tampil di beranda; bila semua disembunyikan, bagiannya hilang.
+
 ---
 
 ## 6. Hal yang Sering Membingungkan

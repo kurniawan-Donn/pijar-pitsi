@@ -194,6 +194,12 @@
                 'active' => ['superadmin.alumni.*'],
             ],
             [
+                'label' => 'Dokumentasi',
+                'icon' => 'images',
+                'route' => 'superadmin.dokumentasi.index',
+                'active' => ['superadmin.dokumentasi.*'],
+            ],
+            [
                 'label' => 'FAQ',
                 'icon' => 'circle-help',
                 'route' => 'superadmin.faq.index',

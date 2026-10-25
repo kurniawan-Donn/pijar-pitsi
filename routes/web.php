@@ -19,6 +19,7 @@ use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
 use App\Http\Controllers\SuperAdmin\DaftarPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
+use App\Http\Controllers\SuperAdmin\DokumentasiController;
 use App\Http\Controllers\SuperAdmin\FaqController;
 use App\Http\Controllers\SuperAdmin\FeedbackController;
 use App\Http\Controllers\SuperAdmin\ImporLogbookController;
@@ -226,6 +227,13 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             ->except('show')
             ->parameters(['alumni' => 'alumni']);
         Route::put('/alumni/{alumni}/urutan', [AlumniController::class, 'urutan'])->name('alumni.urutan');
+
+        // Galeri dokumentasi kegiatan di beranda
+        Route::resource('dokumentasi', DokumentasiController::class)
+            ->except('show')
+            ->parameters(['dokumentasi' => 'dokumentasi']);
+        Route::put('/dokumentasi/{dokumentasi}/urutan', [DokumentasiController::class, 'urutan'])->name('dokumentasi.urutan');
+        Route::put('/dokumentasi/{dokumentasi}/tampil', [DokumentasiController::class, 'tampil'])->name('dokumentasi.tampil');
 
         // FAQ website publik
         Route::resource('faq', FaqController::class)->only(['index', 'store', 'update', 'destroy']);

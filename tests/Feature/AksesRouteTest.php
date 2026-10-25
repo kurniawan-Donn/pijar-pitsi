@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Alumni;
 use App\Models\Banner;
 use App\Models\Divisi;
+use App\Models\Dokumentasi;
 use App\Models\Faq;
 use App\Models\HariLibur;
 use App\Models\IzinPeserta;
@@ -133,6 +134,14 @@ class AksesRouteTest extends TestCase
         'superadmin.alumni.update' => self::LOGIN,
         'superadmin.alumni.destroy' => self::LOGIN,
         'superadmin.alumni.urutan' => self::LOGIN,
+        'superadmin.dokumentasi.index' => self::LOGIN,
+        'superadmin.dokumentasi.create' => self::LOGIN,
+        'superadmin.dokumentasi.store' => self::LOGIN,
+        'superadmin.dokumentasi.edit' => self::LOGIN,
+        'superadmin.dokumentasi.update' => self::LOGIN,
+        'superadmin.dokumentasi.destroy' => self::LOGIN,
+        'superadmin.dokumentasi.urutan' => self::LOGIN,
+        'superadmin.dokumentasi.tampil' => self::LOGIN,
         'superadmin.faq.index' => self::LOGIN,
         'superadmin.faq.store' => self::LOGIN,
         'superadmin.faq.update' => self::LOGIN,
@@ -349,6 +358,7 @@ class AksesRouteTest extends TestCase
                 'hariLibur' => HariLibur::create(['tanggal' => fake()->unique()->date(), 'keterangan' => 'Libur Akses']),
                 'faq' => Faq::factory()->create(),
                 'alumni' => Alumni::factory()->create(),
+                'dokumentasi' => Dokumentasi::factory()->create(),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
                 'tanggal' => now()->toDateString(),
                 'kode' => SuratKeterangan::create([
