@@ -867,8 +867,8 @@ Tabel `feedback_pesertas` + kolom `bersedia_tampil_alumni` (boolean, default fal
 
 | Tahap | Branch | Isi | Bergantung pada |
 |---|---|---|---|
-| R0 | `fase-0-keamanan` | Policy pengajuan, pindah path admin, signed URL pendaftar, `serve` dimatikan, test keamanan | – |
-| R1 | `fase-20-login-sidebar` | Login satu pintu, sidebar baru per grup, halaman daftar admin (pertanyaan 3), Rekap Kehadiran peserta, hak Pengaturan (pertanyaan 4) | R0 |
+| R0 ✅ | `fase-0-keamanan` | Policy pengajuan, pindah path admin, signed URL pendaftar, `serve` dimatikan, test keamanan | – |
+| R1 ✅ | `fase-20-login-sidebar` | Login satu pintu, sidebar baru per grup, halaman daftar admin (pertanyaan 3), Rekap Kehadiran peserta, hak Pengaturan (pertanyaan 4) | R0 |
 | R2 | `fase-21-foto-profil` | `users.foto_path`, service `FotoProfil`, pas foto di biodata, `<x-avatar>` | R0 |
 | R3 | `fase-22-dashboard-peserta` | `RingkasanPeserta`, kartu dashboard, kalender mini, test logbook (8.5) | R1 |
 | R4 | `fase-23-faq` | Tabel, CRUD, accordion publik | R1 |

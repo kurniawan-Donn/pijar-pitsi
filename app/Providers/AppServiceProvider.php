@@ -45,6 +45,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('kelola-pengguna', $superAdmin);
         Gate::define('kelola-aspek-penilaian', $superAdmin);
         Gate::define('lihat-log-aktivitas', $superAdmin);
+        // Tarif uang saku, batas isi logbook, periode, dan penanda tangan surat.
+        // Hari libur tetap boleh diatur admin.
+        Gate::define('kelola-pengaturan-magang', $superAdmin);
     }
 
     /**

@@ -9,11 +9,13 @@ use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardControll
 use App\Http\Controllers\Peserta\FeedbackController as PesertaFeedbackController;
 use App\Http\Controllers\Peserta\IzinController as PesertaIzinController;
 use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
+use App\Http\Controllers\Peserta\RekapController as PesertaRekapController;
 use App\Http\Controllers\Peserta\SuratController as PesertaSuratController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
+use App\Http\Controllers\SuperAdmin\DaftarPesertaController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\DivisiController;
 use App\Http\Controllers\SuperAdmin\FeedbackController;
@@ -111,6 +113,9 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
                 Route::put('/{tanggal}', 'update')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('update');
                 Route::delete('/{tanggal}', 'destroy')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('destroy');
             });
+
+        // Rekap kehadiran & uang saku semua periode
+        Route::get('/rekap', PesertaRekapController::class)->name('rekap');
 
         // Feedback program magang (dibuka sebulan sebelum selesai)
         Route::get('/feedback', [PesertaFeedbackController::class, 'edit'])->name('feedback.edit');
@@ -210,15 +215,15 @@ Route::middleware(['auth', 'role:admin,super_admin'])
         Route::resource('peserta-magang', PesertaMagangController::class)
             ->parameters(['peserta-magang' => 'pesertaMagang']);
 
-        // Pengaturan magang: aturan umum, tarif uang saku, hari libur
+        // Pengaturan magang: aturan umum & tarif (khusus super admin), hari libur
         Route::controller(PengaturanMagangController::class)
             ->prefix('/pengaturan-magang')
             ->name('pengaturan-magang.')
             ->group(function () {
                 Route::get('/', 'index')->name('index');
-                Route::put('/', 'update')->name('update');
-                Route::post('/tarif', 'simpanTarif')->name('tarif.store');
-                Route::delete('/tarif/{tarifUangSaku}', 'hapusTarif')->name('tarif.destroy');
+                Route::put('/', 'update')->can('kelola-pengaturan-magang')->name('update');
+                Route::post('/tarif', 'simpanTarif')->can('kelola-pengaturan-magang')->name('tarif.store');
+                Route::delete('/tarif/{tarifUangSaku}', 'hapusTarif')->can('kelola-pengaturan-magang')->name('tarif.destroy');
                 Route::post('/libur', 'simpanLibur')->name('libur.store');
                 Route::delete('/libur/{hariLibur}', 'hapusLibur')->name('libur.destroy');
             });
@@ -287,6 +292,14 @@ Route::middleware(['auth', 'role:admin,super_admin'])
                 Route::put('/terbitkan', 'terbitkan')->name('peserta-magang.surat.terbitkan');
                 Route::get('/pdf', 'pdf')->name('peserta-magang.surat.pdf');
             });
+
+        // Daftar peserta per fitur (menu sidebar Kelola Peserta)
+        Route::controller(DaftarPesertaController::class)->group(function () {
+            Route::get('/biodata', 'biodata')->name('biodata.index');
+            Route::get('/logbook', 'logbook')->name('logbook.index');
+            Route::get('/penilaian', 'penilaian')->name('penilaian.index');
+            Route::get('/surat-keterangan', 'surat')->name('surat.index');
+        });
 
         // Monitoring peserta (biodata, logbook, verifikasi)
         Route::get('/monitoring', MonitoringController::class)->name('monitoring.index');

@@ -200,7 +200,7 @@ class KelolaPengajuanTest extends TestCase
 
         $this->actingAs($this->pengelola('super_admin'))
             ->get(route('superadmin.dashboard'))
-            ->assertSee('Pengajuan Magang')
+            ->assertSee('<span>Pengajuan</span>', false)
             ->assertSee('<span class="dash-sidebar-badge" title="Pengajuan menunggu diproses">3</span>', false);
     }
 }

@@ -145,6 +145,24 @@
         font-size: 12px;
     }
 
+    .fieldset-polos {
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+
+        border: none;
+    }
+
+    .hanya-baca {
+        padding: 10px 14px;
+
+        border-radius: 9px;
+
+        background: #f4f7fb;
+        color: #52646e !important;
+        font-size: 12.5px;
+    }
+
     .link-hapus {
         padding: 0;
 
@@ -223,9 +241,15 @@
                 Mengubah tanggal awal periode memengaruhi pengelompokan penempatan divisi yang sudah ada.
             </p>
 
+            @cannot('kelola-pengaturan-magang')
+                <p class="hanya-baca">🔒 Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola hari libur.</p>
+            @endcannot
+
             <form method="POST" action="{{ route('superadmin.pengaturan-magang.update') }}">
                 @csrf
                 @method('PUT')
+
+                <fieldset class="fieldset-polos" @disabled(auth()->user()->cannot('kelola-pengaturan-magang'))>
 
                 <div class="fields">
                     <x-form.input name="batas_isi_mundur_hari" type="number" label="Batas Isi Logbook Mundur (hari)" :value="$pengaturan->batas_isi_mundur_hari" min="0" max="60" required hint="0 = hanya hari ini. Tanggal yang lebih lama dikunci kecuali dibuka admin." />
@@ -243,9 +267,12 @@
                     <x-form.input name="menyetujui_jabatan" label="Menyetujui — Jabatan" :value="$pengaturan->menyetujui_jabatan" maxlength="255" />
                 </div>
 
-                <div class="actions">
-                    <x-button>Simpan Pengaturan</x-button>
-                </div>
+                @can('kelola-pengaturan-magang')
+                    <div class="actions">
+                        <x-button>Simpan Pengaturan</x-button>
+                    </div>
+                @endcan
+                </fieldset>
             </form>
         </section>
 
@@ -261,13 +288,15 @@
 
             <x-alert type="error" title="Tarif belum disimpan:" :messages="$errors->tarif->all()" />
 
-            <form method="POST" action="{{ route('superadmin.pengaturan-magang.tarif.store') }}" class="inline-form">
-                @csrf
-                <x-form.input name="berlaku_mulai" type="date" label="Berlaku Mulai" :value="now()->toDateString()" required />
-                <x-form.input name="tarif_hari_penuh" type="number" label="Hari Penuh (Rp)" min="0" step="500" required />
-                <x-form.input name="tarif_setengah_hari" type="number" label="Setengah Hari (Rp)" min="0" step="500" required />
-                <x-button>+ Tambah</x-button>
-            </form>
+            @can('kelola-pengaturan-magang')
+                <form method="POST" action="{{ route('superadmin.pengaturan-magang.tarif.store') }}" class="inline-form">
+                    @csrf
+                    <x-form.input name="berlaku_mulai" type="date" label="Berlaku Mulai" :value="now()->toDateString()" required />
+                    <x-form.input name="tarif_hari_penuh" type="number" label="Hari Penuh (Rp)" min="0" step="500" required />
+                    <x-form.input name="tarif_setengah_hari" type="number" label="Setengah Hari (Rp)" min="0" step="500" required />
+                    <x-button>+ Tambah</x-button>
+                </form>
+            @endcan
 
             <div class="table-scroll">
                 <table>
@@ -294,7 +323,7 @@
                                 <td>Rp {{ number_format($tarif->tarif_hari_penuh, 0, ',', '.') }}</td>
                                 <td>Rp {{ number_format($tarif->tarif_setengah_hari, 0, ',', '.') }}</td>
                                 <td>
-                                    @if ($tarifs->count() > 1)
+                                    @if ($tarifs->count() > 1 && auth()->user()->can('kelola-pengaturan-magang'))
                                         <form method="POST" action="{{ route('superadmin.pengaturan-magang.tarif.destroy', $tarif) }}" onsubmit="return confirm('Hapus tarif ini? Rekap pada tanggal terkait akan memakai tarif sebelumnya.')">
                                             @csrf
                                             @method('DELETE')
