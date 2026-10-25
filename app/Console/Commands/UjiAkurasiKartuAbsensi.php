@@ -17,8 +17,8 @@ use Illuminate\Http\UploadedFile;
  */
 #[Signature('kartu:uji-akurasi
     {--ulang=1 : Berapa kali setiap foto dibaca (melihat konsistensi)}
-    {--harga-masuk=0.30 : USD per 1 juta token masukan}
-    {--harga-keluar=2.50 : USD per 1 juta token keluaran (termasuk token berpikir)}
+    {--harga-masuk=0.75 : USD per 1 juta token masukan (gemini-3.8-flash, s.d. 31 Des 2026)}
+    {--harga-keluar=3.75 : USD per 1 juta token keluaran termasuk token berpikir (gemini-3.8-flash)}
     {--kurs=16500 : Rupiah per USD}')]
 #[Description('Uji akurasi baca kartu absensi dengan dua foto contoh (memanggil Gemini, berbayar)')]
 class UjiAkurasiKartuAbsensi extends Command
@@ -44,6 +44,7 @@ class UjiAkurasiKartuAbsensi extends Command
     {
         $this->info('Model: '.config('services.gemini.model'));
         $totalBenar = $totalNilai = $totalMasuk = $totalKeluar = $jumlahPanggilan = 0;
+        $totalDetik = [];
 
         foreach (self::CONTOH as $nama => [$path, $sisi, $kunci]) {
             if (! is_file(base_path($path))) {
@@ -56,6 +57,8 @@ class UjiAkurasiKartuAbsensi extends Command
             $jpeg = $baca->siapkanFoto(new UploadedFile(base_path($path), basename($path), null, null, true));
 
             for ($i = 1; $i <= (int) $this->option('ulang'); $i++) {
+                $mulai = microtime(true);
+
                 try {
                     $bacaan = $gemini->baca($jpeg, $baca->prompt($scan));
                 } catch (GagalBacaKartuException $e) {
@@ -64,6 +67,8 @@ class UjiAkurasiKartuAbsensi extends Command
                     return self::FAILURE;
                 }
 
+                $detik = round(microtime(true) - $mulai, 1);
+                $totalDetik[] = $detik;
                 $hasil = collect($baca->validasi($bacaan['baris'], $scan))->keyBy('tanggal');
                 [$awal, $akhir] = $scan->rentang();
                 $baris = [];
@@ -94,7 +99,7 @@ class UjiAkurasiKartuAbsensi extends Command
                 }
 
                 $this->newLine();
-                $this->line("<options=bold>Sisi {$nama} (percobaan {$i})</>: {$benar}/{$nilai} jam benar (".round($benar / max(1, $nilai) * 100, 1).'%) · token '.$bacaan['token_masuk'].' masuk / '.$bacaan['token_keluar'].' keluar');
+                $this->line("<options=bold>Sisi {$nama} (percobaan {$i})</>: {$benar}/{$nilai} jam benar (".round($benar / max(1, $nilai) * 100, 1).'%) · token '.$bacaan['token_masuk'].' masuk / '.$bacaan['token_keluar'].' keluar · '.$detik.' detik');
                 $this->table(['Tgl', 'Kunci', 'Hasil', 'Yakin', ''], $baris);
 
                 $totalBenar += $benar;
@@ -113,6 +118,7 @@ class UjiAkurasiKartuAbsensi extends Command
         $this->info(sprintf('Rata-rata per scan: %d token masuk, %d token keluar ≈ US$%.5f ≈ Rp%s',
             $totalMasuk / $jumlahPanggilan, $totalKeluar / $jumlahPanggilan, $biayaUsd,
             number_format($biayaUsd * (float) $this->option('kurs'), 0, ',', '.')));
+        $this->info('Waktu baca: rata-rata '.round(array_sum($totalDetik) / count($totalDetik), 1).' detik, terlama '.max($totalDetik).' detik');
 
         return self::SUCCESS;
     }

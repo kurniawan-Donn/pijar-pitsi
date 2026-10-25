@@ -25,8 +25,10 @@ return [
     // Membaca jam dari foto kartu absensi (Revisi 6). Kunci API hanya di .env.
     'gemini' => [
         'key' => env('GEMINI_API_KEY'),
-        'model' => env('GEMINI_MODEL', 'gemini-2.5-flash'),
-        'timeout' => (int) env('GEMINI_TIMEOUT', 60),
+        // gemini-2.5-flash sudah tidak tersedia untuk pengguna baru (Oktober 2026).
+        'model' => env('GEMINI_MODEL', 'gemini-3.8-flash'),
+        // Sisi kartu yang cetakannya meleset bisa butuh 30–60 detik.
+        'timeout' => (int) env('GEMINI_TIMEOUT', 120),
     ],
 
     'ses' => [

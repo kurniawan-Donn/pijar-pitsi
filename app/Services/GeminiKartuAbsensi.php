@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Panggilan ke Gemini (REST generateContent) untuk membaca jam dari foto kartu absensi.
- * Keluaran dipaksa JSON lewat responseSchema; kunci API dari config/services.php (.env).
+ * Keluaran dipaksa JSON lewat responseJsonSchema; kunci API dari config/services.php (.env).
  */
 class GeminiKartuAbsensi
 {
@@ -44,7 +44,7 @@ class GeminiKartuAbsensi
                     'generationConfig' => [
                         'temperature' => 0,
                         'responseMimeType' => 'application/json',
-                        'responseSchema' => $this->skema(),
+                        'responseJsonSchema' => $this->skema(),
                     ],
                 ]);
         } catch (ConnectionException) {
@@ -73,7 +73,7 @@ class GeminiKartuAbsensi
             'baris' => array_values(array_filter($data['baris'], 'is_array')),
             'model' => (string) ($respons->json('modelVersion') ?: $model),
             'token_masuk' => $pemakaian['promptTokenCount'] ?? null,
-            // Token "berpikir" model 2.5 ditagih sebagai keluaran.
+            // Token "berpikir" ditagih sebagai keluaran.
             'token_keluar' => isset($pemakaian['candidatesTokenCount']) || isset($pemakaian['thoughtsTokenCount'])
                 ? ($pemakaian['candidatesTokenCount'] ?? 0) + ($pemakaian['thoughtsTokenCount'] ?? 0)
                 : null,
@@ -81,27 +81,36 @@ class GeminiKartuAbsensi
     }
 
     /**
-     * Skema JSON keluaran: satu baris per tanggal yang punya cetakan jam.
+     * Skema keluaran (JSON Schema standar): satu baris per tanggal yang punya cetakan jam.
+     * Kolom jam dibatasi pola HH:MM agar model tidak menulis penjelasan di dalamnya.
      *
      * @return array<string, mixed>
      */
     private function skema(): array
     {
+        $jam = [
+            'anyOf' => [
+                ['type' => 'string', 'pattern' => '^([01][0-9]|2[0-3]):[0-5][0-9]$'],
+                ['type' => 'null'],
+            ],
+        ];
+
         return [
-            'type' => 'OBJECT',
+            'type' => 'object',
             'properties' => [
                 'baris' => [
-                    'type' => 'ARRAY',
+                    'type' => 'array',
                     'items' => [
-                        'type' => 'OBJECT',
+                        'type' => 'object',
                         'properties' => [
-                            'tanggal' => ['type' => 'INTEGER', 'description' => 'Tanggal (1–31) tempat jam ini paling masuk akal.'],
-                            'jam_masuk' => ['type' => 'STRING', 'nullable' => true, 'description' => 'Pagi Masuk, format HH:MM 24 jam, atau null.'],
-                            'jam_keluar' => ['type' => 'STRING', 'nullable' => true, 'description' => 'Siang Keluar, format HH:MM 24 jam, atau null.'],
-                            'keyakinan' => ['type' => 'NUMBER', 'description' => 'Keyakinan 0–1 bahwa tanggal dan jam baris ini benar.'],
-                            'catatan' => ['type' => 'STRING', 'nullable' => true, 'description' => 'Alasan singkat bila ragu, mis. cetakan meleset.'],
+                            'tanggal' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 31, 'description' => 'Tanggal (1–31) tempat jam ini paling masuk akal.'],
+                            'jam_masuk' => $jam + ['description' => 'Pagi Masuk, HH:MM 24 jam, atau null.'],
+                            'jam_keluar' => $jam + ['description' => 'Siang Keluar, HH:MM 24 jam, atau null.'],
+                            'keyakinan' => ['type' => 'number', 'minimum' => 0, 'maximum' => 1],
+                            'catatan' => ['type' => ['string', 'null'], 'description' => 'Alasan singkat (maks. 15 kata) bila ragu.'],
                         ],
-                        'required' => ['tanggal', 'keyakinan'],
+                        'required' => ['tanggal', 'jam_masuk', 'jam_keluar', 'keyakinan', 'catatan'],
+                        'propertyOrdering' => ['tanggal', 'jam_masuk', 'jam_keluar', 'keyakinan', 'catatan'],
                     ],
                 ],
             ],

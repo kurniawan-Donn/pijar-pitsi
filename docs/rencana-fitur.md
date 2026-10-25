@@ -1083,10 +1083,10 @@ Baris tanggal 12–15 sisi depan adalah kasus sulit (meleset); kunci jawaban sud
 ### 10.2 Cara baca (Gemini)
 
 - `GEMINI_API_KEY` dan `GEMINI_MODEL` di `.env` (tidak di-commit); `.env.example` hanya berisi nama kuncinya.
-  Per 26-10-2026 keduanya **belum ada** di `.env`.
+  Sudah diisi di `.env` per 26-10-2026.
 - Panggilan lewat `Http` facade Laravel ke REST API Gemini (tanpa package baru), timeout + retry singkat.
 - Foto dikecilkan di server (sisi terpanjang ±1600 px, JPG, EXIF dibuang) sebelum dikirim.
-- Prompt meminta **JSON terstruktur** (`responseMimeType: application/json` + `responseSchema`):
+- Prompt meminta **JSON terstruktur** (`responseMimeType: application/json` + `responseJsonSchema`):
   `[{tanggal, jam_masuk, jam_keluar, keyakinan (0–1), catatan}]`. Prompt menjelaskan: sisi kartu dan
   rentang tanggalnya, kolom yang dipakai, kode tanggal di depan jam, cetakan bisa meleset sehingga
   harus dipasangkan ke tanggal paling masuk akal, serta **kalender bulan itu** (hari Sabtu/Minggu dan
@@ -1172,9 +1172,16 @@ masuk test otomatis.
 - Logbook dari scan di luar batas isi mundur tetap boleh dibuka peserta untuk melengkapi activity
   (tanggal lewat batas lain tetap terkunci).
 - Admin tidak bisa menerima logbook Hadir tanpa activity; hari lain dalam pilihan yang sama tetap diproses.
-- Biaya: Gemini 2.5 Flash tier berbayar US$0,30 per 1 juta token masukan dan US$2,50 per 1 juta token
-  keluaran (termasuk token berpikir), menurut halaman harga resmi per 26-10-2026. Token per scan dicatat
-  di `scan_kartu_absensis` (`token_masuk`, `token_keluar`).
+- Model: `gemini-2.5-flash` sudah tidak tersedia untuk pengguna baru (404), jadi bawaannya
+  `gemini-3.8-flash`. Skema keluaran memakai `responseJsonSchema` (JSON Schema standar, kolom jam
+  dibatasi pola `HH:MM`); dengan `responseSchema` lama model menulis penjelasan di kolom jam.
+- Biaya: Gemini 3.8 Flash US$0,75 per 1 juta token masukan dan US$3,75 per 1 juta token keluaran
+  (termasuk token berpikir) s.d. 31-12-2026, lalu US$1,50 / US$7,50 mulai 1-1-2027 (halaman harga
+  resmi per 26-10-2026). Token per scan dicatat di `scan_kartu_absensis` (`token_masuk`, `token_keluar`).
+- Hasil uji akurasi 26-10-2026 (`kartu:uji-akurasi --ulang=3`): 95/96 jam benar (99%); satu salah
+  baca (13 keluar 16:40, seharusnya 16:43) pada satu percobaan sisi depan. Rata-rata 1.648 token masuk
+  dan 2.891 token keluar ≈ US$0,012 ≈ Rp199 per scan. Sisi depan (cetakan meleset) butuh 30–60 detik,
+  jadi timeout bawaan 120 detik dan batas eksekusi PHP dinaikkan saat scan.
 
 ### 10.11 Urutan pengerjaan
 

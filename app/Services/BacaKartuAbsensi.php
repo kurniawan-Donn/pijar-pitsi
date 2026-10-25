@@ -38,6 +38,9 @@ class BacaKartuAbsensi
      */
     public function scan(PesertaMagang $peserta, string $sisi, int $tahun, int $bulan, UploadedFile $foto): ScanKartuAbsensi
     {
+        // Membaca kartu bisa lebih lama dari batas eksekusi PHP bawaan (30 detik).
+        set_time_limit(config('services.gemini.timeout') + 60);
+
         $jpeg = $this->siapkanFoto($foto);
         $path = ScanKartuAbsensi::FOLDER.'/'.$peserta->id.'/'.Str::random(24).'.jpg';
         Storage::disk('local')->put($path, $jpeg);
