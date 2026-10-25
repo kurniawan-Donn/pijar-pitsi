@@ -177,6 +177,56 @@
         cursor: pointer;
     }
 
+    .ttd-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+
+        margin-bottom: 14px;
+    }
+
+    .ttd-slot {
+        padding: 12px 14px 4px;
+
+        border: 1px solid #e5eaf0;
+        border-radius: 10px;
+
+        background: #fbfcfe;
+    }
+
+    .ttd-pratinjau {
+        display: grid;
+        place-items: center;
+
+        height: 90px;
+        margin-bottom: 10px;
+
+        border: 1px dashed #d7e0eb;
+        border-radius: 8px;
+
+        background: #ffffff;
+        color: #9aa7b4;
+        font-size: 12px;
+    }
+
+    .ttd-pratinjau img {
+        max-width: 100%;
+        max-height: 80px;
+
+        object-fit: contain;
+    }
+
+    .check-kecil {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        margin-bottom: 10px;
+
+        color: #52646e;
+        font-size: 12px;
+    }
+
     .tahun-nav {
         display: flex;
         align-items: center;
@@ -203,7 +253,8 @@
 
     @media (max-width: 1000px) {
         .grid,
-        .fields {
+        .fields,
+        .ttd-grid {
             grid-template-columns: 1fr;
         }
     }
@@ -245,7 +296,7 @@
                 <p class="hanya-baca">🔒 Hanya Super Admin yang dapat mengubah aturan umum dan tarif. Admin dapat mengelola hari libur.</p>
             @endcannot
 
-            <form method="POST" action="{{ route('superadmin.pengaturan-magang.update') }}">
+            <form method="POST" action="{{ route('superadmin.pengaturan-magang.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -266,6 +317,37 @@
                     <x-form.input name="menyetujui_nama" label="Menyetujui — Nama" :value="$pengaturan->menyetujui_nama" maxlength="255" />
                     <x-form.input name="menyetujui_jabatan" label="Menyetujui — Jabatan" :value="$pengaturan->menyetujui_jabatan" maxlength="255" />
                 </div>
+
+                @can('kelola-pengaturan-magang')
+                    <h4>Gambar Tanda Tangan &amp; Stempel</h4>
+                    <p class="muted" style="margin: -6px 0 12px;">
+                        Tercetak otomatis di lembar penilaian (Mengetahui, Menyetujui + stempel) dan surat keterangan
+                        (Menyetujui + stempel). Pakai PNG berlatar transparan, maksimal 1 MB. Surat yang sudah terbit tetap
+                        memakai gambar saat diterbitkan.
+                    </p>
+
+                    <div class="ttd-grid">
+                        @foreach (\App\Services\TandaTanganDokumen::LABEL as $jenis => $label)
+                            @php
+                                $pathGambar = $pengaturan->{\App\Services\TandaTanganDokumen::KOLOM[$jenis]};
+                            @endphp
+
+                            <div class="ttd-slot">
+                                <div class="ttd-pratinjau">
+                                    @if ($pathGambar)
+                                        <img src="{{ route('superadmin.pengaturan-magang.gambar', ['jenis' => $jenis, 'v' => substr(md5($pathGambar), 0, 8)]) }}" alt="{{ $label }}" id="pratinjau-{{ $jenis }}">
+                                    @else
+                                        <span id="pratinjau-{{ $jenis }}">Belum ada</span>
+                                    @endif
+                                </div>
+                                <x-form.input :name="$jenis" type="file" :label="$label" accept="image/png,image/jpeg" :data-pratinjau="'#pratinjau-'.$jenis" data-maks-mb="1" />
+                                @if ($pathGambar)
+                                    <label class="check-kecil"><input type="checkbox" name="hapus_{{ $jenis }}" value="1"> Hapus gambar</label>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @endcan
 
                 @can('kelola-pengaturan-magang')
                     <div class="actions">

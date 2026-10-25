@@ -934,13 +934,26 @@ lalu menunggu konfirmasi pemilik sebelum lanjut.
   Baris baru dari browser (CRLF) dihitung 1 karakter. Penilaian lama yang lebih panjang perlu diringkas saat disimpan ulang.
 - Test: PDF dengan isian terpanjang yang diizinkan (satu paragraf penuh dan 5 paragraf yang terlipat) harus 1 halaman.
 
-### 9.4 Tahap 2: Tanda tangan dokumen
+### 9.4 Tahap 2: Tanda tangan dokumen (`fase-26-tanda-tangan`) ✅
 
-- Super Admin mengatur nama penanda tangan, jabatan, gambar tanda tangan, dan stempel. Semuanya
-  tercetak otomatis di PDF penilaian dan surat keterangan.
-- Surat keterangan diberi QR code ke halaman publik verifikasi (hanya nama, periode, nomor surat).
-- Perlu keputusan: penanda tangan mana yang memakai gambar (sekarang ada 3 kolom: Penilai,
-  Mengetahui, Menyetujui), dan library QR (dependency baru, butuh persetujuan).
+Keputusan: **1A, 2A, 3A**.
+
+- Super Admin mengatur nama, jabatan, gambar tanda tangan, dan stempel di Pengaturan Magang.
+  Semuanya tercetak otomatis di PDF penilaian dan surat keterangan.
+- **1A:** Mengetahui dan Menyetujui masing-masing punya gambar tanda tangan; stempel satu, di
+  Menyetujui. Surat keterangan memakai Menyetujui + stempel. Kolom Penilai (mentor) tetap kosong
+  untuk tanda tangan basah.
+- Gambar disimpan di disk privat (`tanda-tangan/`) sebagai PNG (transparansi dipertahankan,
+  diperkecil maks 600×300 / stempel 400×400), disisipkan ke PDF sebagai data URI. Hanya Super Admin
+  yang bisa melihat dan mengubahnya (`kelola-pengaturan-magang`).
+- Surat terbit menyalin path gambar ke datanya, jadi mengganti tanda tangan tidak mengubah surat
+  lama. File lama tidak dihapus selama masih dipakai surat terbit.
+- **2A:** QR dibuat di server dengan `chillerlan/php-qrcode` (dependency baru, disetujui).
+- QR mengarah ke `/verifikasi-surat/{kode}` (publik, `throttle:30,1`, kode acak 32 karakter) yang
+  hanya menampilkan nama, periode, dan nomor surat. Draft atau kode salah → "Surat tidak ditemukan".
+- **3A:** surat yang sudah terbit sebelum fitur ini langsung diberi kode lewat migration, sehingga
+  QR ikut tercetak saat diunduh ulang. Karena datanya belum menyimpan gambar, tanda tangan dan
+  stempel hanya dipakai bila nama penanda tangannya masih sama dengan pengaturan sekarang.
 
 ### 9.5 Tahap 3: Upgrade UI/UX
 

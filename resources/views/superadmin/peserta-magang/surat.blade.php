@@ -197,6 +197,9 @@
                             Nomor <strong>{{ $surat->nomor_surat }}</strong>, tanggal {{ $surat->tanggal_surat?->translatedFormat('d F Y') }}.<br>
                             Diterbitkan {{ $surat->diterbitkan_pada?->translatedFormat('d F Y H:i') }}{{ $surat->penerbit ? ' oleh '.$surat->penerbit->name : '' }}.
                             Peserta sudah bisa mengunduh surat, dan feedback peserta terkunci.
+                            @if ($surat->urlVerifikasi())
+                                <br>Halaman verifikasi (QR di surat): <a href="{{ $surat->urlVerifikasi() }}" target="_blank" rel="noopener">buka</a>
+                            @endif
                         </p>
                     @else
                         <p class="info">Nomor diberikan saat terbit, mis. <strong>{{ $contohNomor }}</strong> (format di Pengaturan Magang).</p>

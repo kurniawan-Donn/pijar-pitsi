@@ -191,6 +191,21 @@ Centang setiap langkah yang berhasil.
 - [ ] Isi ketiga kolom kesimpulan sampai penuh → **Unduh PDF**: lembar penilaian tetap 1 halaman A4,
   tanda tangan di halaman yang sama.
 
+### I. Tanda tangan, stempel, dan QR surat (Revisi 5 tahap 2)
+- [ ] (Super Admin) **Pengaturan Magang** → bagian *Gambar Tanda Tangan & Stempel*: unggah tanda
+  tangan Mengetahui, tanda tangan Menyetujui, dan stempel (PNG transparan paling bagus). Pratinjau
+  muncul sebelum disimpan → **Simpan Pengaturan**.
+- [ ] Login sebagai **Admin**: bagian gambar tanda tangan tidak terlihat.
+- [ ] **Penilaian** peserta → **Unduh PDF**: tanda tangan di kolom Mengetahui dan Menyetujui, stempel
+  di Menyetujui, tetap 1 halaman.
+- [ ] **Surat Keterangan** → terbitkan → unduh PDF: ada tanda tangan + stempel Menyetujui dan QR di
+  kiri bawah.
+- [ ] Pindai QR dengan HP (atau klik link *Halaman verifikasi* di halaman surat admin): muncul
+  "Surat keterangan asli" dengan nama, periode, dan nomor surat saja.
+- [ ] Ubah satu huruf kode di alamat verifikasi: muncul "Surat tidak ditemukan".
+- [ ] Ganti gambar tanda tangan Menyetujui, lalu unduh ulang surat yang sudah terbit: tetap memakai
+  tanda tangan lama.
+
 ---
 
 ## 6. Hal yang Sering Membingungkan

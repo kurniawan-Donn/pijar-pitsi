@@ -36,6 +36,7 @@ use App\Http\Controllers\SuperAdmin\SuratKeteranganController;
 use App\Http\Controllers\SuperAdmin\UserController;
 use App\Http\Controllers\Website\HomeController;
 use App\Http\Controllers\Website\PendaftaranController;
+use App\Http\Controllers\Website\VerifikasiSuratController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +60,12 @@ Route::post('/pengajuan/status', [PendaftaranController::class, 'cekStatus'])
 Route::get('/pengajuan/dokumen/{pengajuanMagang}', [PendaftaranController::class, 'dokumen'])
     ->middleware(['signed', 'throttle:30,1'])
     ->name('pengajuan.dokumen');
+
+// Verifikasi keaslian surat keterangan dari QR (publik; hanya nama, periode, nomor surat).
+Route::get('/verifikasi-surat/{kode}', [VerifikasiSuratController::class, 'show'])
+    ->where('kode', '[A-Za-z0-9]{32}')
+    ->middleware('throttle:30,1')
+    ->name('verifikasi-surat');
 
 /*
 |--------------------------------------------------------------------------
@@ -241,6 +248,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             ->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::put('/', 'update')->can('kelola-pengaturan-magang')->name('update');
+                Route::get('/gambar/{jenis}', 'gambar')->can('kelola-pengaturan-magang')->name('gambar');
                 Route::post('/tarif', 'simpanTarif')->can('kelola-pengaturan-magang')->name('tarif.store');
                 Route::delete('/tarif/{tarifUangSaku}', 'hapusTarif')->can('kelola-pengaturan-magang')->name('tarif.destroy');
                 Route::post('/libur', 'simpanLibur')->name('libur.store');
