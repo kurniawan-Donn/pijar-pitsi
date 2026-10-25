@@ -51,6 +51,11 @@ Route::post('/pengajuan/status', [PendaftaranController::class, 'cekStatus'])
     ->middleware('throttle:cek-status')
     ->name('pengajuan.status');
 
+// Pendaftar membuka surat pengantarnya sendiri lewat signed URL dari hasil cek status.
+Route::get('/pengajuan/dokumen/{pengajuanMagang}', [PendaftaranController::class, 'dokumen'])
+    ->middleware(['signed', 'throttle:30,1'])
+    ->name('pengajuan.dokumen');
+
 /*
 |--------------------------------------------------------------------------
 | LOGIN
@@ -148,14 +153,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 | PENGAJUAN MAGANG (ADMIN + SUPER ADMIN)
 |--------------------------------------------------------------------------
 |
-| Nama route admin.pengajuan.* dipertahankan. Penyimpanan pengajuan dari
-| website dipindah ke route publik pengajuan.store (lihat di atas).
+| Nama route admin.pengajuan.* dipertahankan. Path berada di /admin/pengajuan
+| agar tidak tercampur dengan route publik /pengajuan. Akses dijaga middleware
+| role dan PengajuanMagangPolicy.
 |
 */
 
 Route::middleware(['auth', 'role:admin,super_admin'])
     ->controller(PengajuanMagangController::class)
-    ->prefix('pengajuan')
+    ->prefix('admin/pengajuan')
     ->name('admin.pengajuan.')
     ->group(function () {
         Route::get('/', 'index')->name('index');

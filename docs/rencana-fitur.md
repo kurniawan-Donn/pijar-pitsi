@@ -1,7 +1,8 @@
 # Rencana Fitur: Memindahkan Buku Kerja Magang ke Website
 
-Status: **rancangan revisi 3, belum dikerjakan.** Semua pertanyaan sudah dijawab (lihat
-[bagian 7](#7-keputusan-revisi-2)). Coding menunggu persetujuan untuk mulai tahap 1.
+Status: tahap 1–11 (Fase 8–18) **sudah selesai** dan sudah di-merge ke `main`.
+**Revisi 4** ([bagian 8](#8-revisi-4-keamanan-dan-fitur-tambahan)) sudah disetujui
+dengan jawaban 1A, 2A, 3A, 4B, 5A. Pengerjaan dimulai dari Fase 0 (`fase-0-keamanan`).
 
 Acuan: buku kerja `docs/reverensi/absensi-contoh.xlsx.xlsx`. Tujuannya, semua isi buku
 kerja itu bisa diisi dan dipantau langsung di website.
@@ -537,3 +538,342 @@ Form tetap memiliki 4 kolom jam:
 - bukti jpg/png/pdf, maksimal 3 file per hari, masing-masing 2 MB;
 - Pengaturan Magang bisa diubah admin dan super admin, dan setiap perubahan tercatat di Log
   Aktivitas.
+
+---
+
+## 8. Revisi 4: Keamanan dan Fitur Tambahan
+
+Sumber: hasil review website oleh pemilik proyek, 25 Oktober 2026. Fase 0 dikerjakan
+**paling awal** dan terpisah dari fitur baru. Pertanyaan yang masih perlu diputuskan ada di
+[8.9](#89-pertanyaan-revisi-4).
+
+### 8.1 Hasil pemeriksaan route berbasis ID
+
+Ada 106 route. Yang diperiksa adalah setiap route yang membuka data atau file berdasarkan ID
+atau parameter di URL. Pemeriksaan dilakukan dengan membaca kode dan menjalankan
+`AksesRouteTest` (107 test lulus).
+
+**Temuan utama: `/pengajuan/{id}/dokumen` (`admin.pengajuan.dokumen`)**
+
+- Route ini sudah dijaga `auth` + `role:admin,super_admin`:
+  - tamu diarahkan ke `/login`;
+  - peserta mendapat 403.
+- Saat login sebagai admin, mengganti angka 3 menjadi 2 memang membuka dokumen orang lain.
+  Ini **sesuai aturan**, karena admin dan super admin boleh membuka semua dokumen.
+- Yang perlu diperbaiki:
+  1. Path `/pengajuan/...` terlihat seperti halaman publik. Path dipindah ke
+     `/admin/pengajuan/...`; **nama route tetap** `admin.pengajuan.*`.
+  2. Belum ada lapisan kedua. Tambah `PengajuanMagangPolicy` (`view`, `update`, `delete`)
+     dan `Gate::authorize` di controller, supaya akses tetap tertolak bila suatu saat ada
+     salah konfigurasi middleware.
+  3. Pendaftar sama sekali belum bisa melihat dokumennya. Akan ditambah signed URL
+     (lihat 8.2).
+- Kode pengajuan `MG-000003` = ID 3 dengan angka nol di depan, jadi **mudah ditebak**. Kode
+  ini tidak boleh dipakai sebagai satu-satunya kunci akses.
+
+**Daftar route lain**
+
+| Route | Parameter | Penjaga sekarang | Hasil | Tindakan |
+|---|---|---|---|---|
+| `admin.pengajuan.show/status/peserta/destroy` | `{pengajuanMagang}` | role admin & super admin | Aman | Tambah policy (lapisan kedua) |
+| `peserta.logbook.bukti` | `{logbookBukti}` | `LogbookHarianPolicy@view` (pemilik/admin) | Aman | Tambah test peserta lain → 403 |
+| `peserta.logbook.edit/update/destroy` | `{tanggal}` | query dibatasi `peserta_magang_id` milik sendiri | Aman | – |
+| `hapus_bukti[]` di `peserta.logbook.update` | ID di form | dibatasi `$logbook->buktis()` | Aman | Tambah test ID bukti milik orang lain diabaikan |
+| `peserta.izin.destroy`, `peserta.izin.bukti` | `{izinPeserta}` | `IzinPesertaPolicy@view` | Aman | Pakai ability `delete` terpisah untuk hapus; tambah test |
+| `superadmin.peserta-magang.*` (biodata, logbook, penilaian, feedback, surat, akun, penempatan, impor) | `{pesertaMagang}` | role admin & super admin | Aman | – |
+| `peserta-magang.izin.verifikasi` | `{pesertaMagang}/{izinPeserta}` | cek izin milik peserta (404) | Aman | – |
+| `peserta-magang.logbook-harian.verifikasi` | ID logbook di form | dibatasi `peserta_magang_id` | Aman | – |
+| `superadmin.logbook-bukti.show`, `superadmin.izin-bukti.show` | `{logbookBukti}`, `{izinPeserta}` | role admin & super admin | Aman | Tambah `Gate::authorize('view')` agar sama dengan route peserta |
+| `superadmin.pengguna.edit/update/destroy` | `{user}` | super admin + `can:kelola-pengguna`, akun peserta → 404 | Aman | – |
+| `banners`, `divisi`, `tarif`, `libur` | ID data pengaturan | role admin & super admin | Aman | – |
+| `storage.local` (bawaan Laravel) | path file | wajib signature | Aman, tapi tidak dipakai | Matikan `serve` di disk `local` agar file privat hanya lewat controller |
+| `/login` | – | tanpa `guest` | Bukan celah | Pengguna yang sudah login diarahkan ke dashboardnya |
+
+**Kesimpulan:** tidak ditemukan route yang bisa dibuka tamu atau peserta untuk data orang
+lain. Perbaikan Fase 0 bersifat penguatan (policy, path, signed URL, `serve` dimatikan) dan
+menambah test pembuktian.
+
+### 8.2 Fase 0: Perbaikan keamanan
+
+**Aturan akses dokumen pengajuan**
+
+| Siapa | Boleh membuka | Cara |
+|---|---|---|
+| Admin, Super Admin | semua dokumen | `admin.pengajuan.dokumen` + policy |
+| Pendaftar (tanpa akun) | dokumennya sendiri | tautan signed URL dari hasil Cek Status, berlaku 30 menit |
+| Lainnya | – | 403 (login tanpa hak, signature salah, atau kedaluwarsa) |
+
+**Route**
+
+| Method | Path | Nama | Catatan |
+|---|---|---|---|
+| GET | `/admin/pengajuan/{pengajuanMagang}/dokumen` | `admin.pengajuan.dokumen` (tetap) | path pindah dari `/pengajuan/...`; semua route `admin.pengajuan.*` ikut pindah, namanya tetap |
+| GET | `/pengajuan/dokumen/{pengajuanMagang}` | `pengajuan.dokumen` (baru) | middleware `signed` + `throttle`; dibuat dengan `URL::temporarySignedRoute()` |
+
+Route publik `pengajuan.store` dan `pengajuan.status` tetap di `/pengajuan`.
+
+**Perubahan kode**
+
+- `app/Policies/PengajuanMagangPolicy.php` (baru).
+- `PengajuanMagangController`: `Gate::authorize` di `show`, `dokumen`, `updateStatus`,
+  `buatPeserta`, `destroy`.
+- `PendaftaranController::dokumen()` (baru) dan link "Lihat dokumen" di hasil Cek Status
+  (`website/partials/cek-status.blade.php`).
+- `LogbookHarianController::bukti/buktiIzin`: `Gate::authorize('view')`.
+- `IzinPesertaPolicy@delete`.
+- `config/filesystems.php`: `local.serve = false`.
+- `AuthController::showLogin`: pengguna login diarahkan ke `routeDashboard()`.
+
+**Test baru (`tests/Feature/KeamananAksesDataTest.php`)**
+
+- Tamu dan peserta tidak bisa membuka `admin.pengajuan.show/dokumen` (redirect login / 403).
+- Signed URL pendaftar:
+  - berlaku untuk dokumennya;
+  - ditolak bila ID diganti (signature tidak cocok), kedaluwarsa, atau tanpa signature.
+- Peserta A tidak bisa membuka:
+  - bukti logbook peserta B;
+  - bukti izin peserta B;
+  - izin peserta B (lihat/hapus).
+- `hapus_bukti[]` berisi ID milik peserta B tidak menghapus apa pun.
+- File di `storage/app/private` tidak bisa dibuka lewat URL langsung.
+
+Database: tidak ada perubahan.
+
+### 8.3 Login satu pintu
+
+Kondisi sekarang: hanya ada satu route `GET/POST /login`, dan redirect sudah sesuai role
+(`User::routeDashboard()`). Tidak ada route login lain yang perlu dihapus.
+
+Perubahan:
+
+- teks tombol navbar "Masuk Peserta" menjadi **Login**, tetap ke `route('login')`;
+- tambah tautan "Sudah diterima? Login di sini" di bagian Daftar
+  (`website/partials/pendaftaran.blade.php`);
+- `/login` saat sudah login → dashboard sesuai role (lihat 8.2);
+- test: tidak ada route lain ber-URI `login`, dan setiap role diarahkan ke dashboardnya.
+
+### 8.4 Foto profil
+
+| Hal | Rancangan |
+|---|---|
+| Penyimpanan | Kolom baru `users.foto_path` (nullable), file di disk privat `local` folder `foto-profil/` |
+| Proses | Service `FotoProfil`: validasi jpg/png maksimal 2 MB, potong tengah jadi persegi, ubah ukuran 400×400, simpan ulang sebagai JPG (sekaligus membuang data EXIF/lokasi). Memakai ekstensi GD yang sudah aktif, **tanpa paket baru** |
+| Peserta | Field "Pas foto" di form biodata otomatis menjadi foto profil (lihat pertanyaan 2). Boleh diganti kapan saja, juga setelah biodata disetujui, tanpa persetujuan ulang. Setiap penggantian dicatat di Log Aktivitas (`ganti_foto_profil`) |
+| Admin & Super Admin | Upload/hapus foto di halaman Profil |
+| Tampil di | sidebar & topbar (`layouts/dashboard`), tabel Data Peserta, Monitoring, detail peserta. Tanpa foto → inisial seperti sekarang |
+| Akses file | Pemilik foto, admin, dan super admin. Selain itu 403 |
+
+Route baru:
+
+| Method | Path | Nama |
+|---|---|---|
+| PUT | `/profil/foto` | `profil.foto` |
+| DELETE | `/profil/foto` | `profil.foto.hapus` |
+| GET | `/foto-profil/{user}` | `foto-profil.show` (auth + policy, `Cache-Control: private`) |
+
+Komponen Blade `<x-avatar :user="..." />` dipakai di semua tempat yang menampilkan inisial.
+
+### 8.5 Logbook: hak ubah
+
+Aturan ini **sudah berjalan** sejak Fase 12:
+
+- peserta boleh mengubah logbook miliknya selama belum Diterima (`bisaDiubahPeserta()`);
+- status verifikasi tidak ada di `SimpanLogbookHarianRequest`, jadi hanya admin yang bisa
+  mengubahnya lewat `peserta-magang.logbook-harian.verifikasi`;
+- setelah peserta mengubah data yang Ditolak atau Review, statusnya kembali ke Menunggu.
+
+Yang ditambah hanya test pembuktian:
+
+- peserta mengirim `status_verifikasi=diterima` di form → diabaikan;
+- logbook Diterima → `edit/update/destroy` ditolak.
+
+Label "Review" dan "Menunggu" tetap dua status berbeda.
+
+### 8.6 Dashboard peserta
+
+Service baru `RingkasanPeserta` merangkai data yang sudah ada (`KalenderLogbook`,
+`PeriodeMagang`, `BiodataPeserta`, `FeedbackPeserta`, `SuratKeterangan`). Tidak ada tabel
+baru.
+
+| Kartu | Isi |
+|---|---|
+| Logbook hari ini | Sudah/belum diisi + tombol **Isi sekarang** ke `peserta.logbook.edit` (tanggal hari ini). Hari libur → "Hari libur" |
+| Ringkasan periode berjalan (28–27) | Hadir penuh, setengah hari, izin/sakit, perkiraan uang saku (tarif sesuai tanggal) |
+| Perlu diperbaiki | Logbook Ditolak/Review beserta catatan admin, tautan ke tanggalnya |
+| Biodata | Progres % dan status (Draft / Menunggu tinjauan / Perlu revisi / Disetujui) |
+| Penempatan | Divisi dan mentor periode ini, sisa hari magang |
+| Kalender mini | Satu periode, warna per status (Diterima, Menunggu/Review, Ditolak, Izin/Sakit, Libur, Belum diisi, Terkunci) |
+| Pengingat | Feedback sudah dibuka (dan sisa hari sebelum terkunci); surat keterangan sudah terbit |
+
+Tambahan usulan:
+
+- **Hampir terkunci:** tanggal yang belum diisi dan akan melewati batas isi mundur dalam
+  2 hari ke depan.
+- **Izin menunggu verifikasi:** jumlah dan tautannya.
+- **Tombol cepat:** Ajukan Izin/Sakit, Unduh rekap PDF.
+
+### 8.7 Sidebar dan navbar publik
+
+**Sidebar Admin / Super Admin**
+
+| Grup | Menu | Halaman |
+|---|---|---|
+| Utama | Dashboard, Monitoring | sudah ada |
+| Kelola Peserta | Pengajuan, Data Peserta | sudah ada |
+| | Biodata, Logbook & Absensi, Penilaian, Feedback, Surat Keterangan | Feedback sudah ada; sisanya halaman daftar baru (pertanyaan 3) |
+| | Divisi | sudah ada, dipindah ke grup ini |
+| Laporan | Rekap Uang Saku | tautan ke `superadmin.laporan.index` tab Kehadiran & Uang Saku (tanpa halaman baru) |
+| | Laporan & Export | sudah ada |
+| Konten Website | Profil Perusahaan, Banner, Konten | sudah ada |
+| | Alumni, FAQ | baru (8.8) |
+| Sistem (khusus Super Admin) | Kelola Pengguna, Aspek Penilaian, Log Aktivitas | sudah ada |
+| | Pengaturan (tarif, hari libur, batas isi logbook) | sudah ada sebagai Pengaturan Magang (pertanyaan 4) |
+
+**Sidebar Peserta**
+
+| Grup | Menu |
+|---|---|
+| Utama | Dashboard |
+| Data Saya | Biodata |
+| Kegiatan | Logbook Harian, Ajukan Izin/Sakit, Rekap Kehadiran |
+| Akhir Magang | Feedback, Surat Keterangan |
+| Akun | Profil |
+
+- **Rekap Kehadiran** adalah halaman baru `GET /peserta/rekap` (`peserta.rekap`). Halaman
+  ini memakai partial rekap yang sudah ada, ditambah pilihan periode dan tombol PDF.
+- "Ajukan Izin/Sakit" ditambahkan karena menu itu ada di kode dan sekarang hanya bisa
+  dibuka dari halaman logbook.
+
+**Navbar halaman publik**
+
+`Beranda · Tentang · Alumni · FAQ · Daftar Magang · Cek Status · Login`
+
+- **Tentang** → bagian Persyaratan + Alur, digabung di bawah `id="tentang"`.
+- Pengumuman dan Kontak tetap ada di halaman (Kontak di footer), tetapi keluar dari navbar.
+- Alumni dan FAQ hanya tampil di navbar bila ada data yang ditampilkan.
+- Breakpoint 1200px/1024px dari Fase 19 tetap dipakai.
+
+### 8.8 Fitur baru: FAQ dan Alumni
+
+**FAQ**
+
+Tabel `faqs`:
+
+| Kolom | Tipe |
+|---|---|
+| `id` | bigint |
+| `pertanyaan` | string 255 |
+| `jawaban` | text |
+| `kategori` | string 100, nullable |
+| `urutan` | unsigned int |
+| `tampil` | boolean, default true |
+| timestamps | |
+
+| Method | Path | Nama |
+|---|---|---|
+| resource (tanpa show) | `/superadmin/faq` | `superadmin.faq.*` |
+| PUT | `/superadmin/faq-urutan` | `superadmin.faq.urutan` |
+
+- Halaman publik: bagian `#faq` di beranda, berupa accordion `<details>` (tanpa library),
+  dikelompokkan per kategori bila ada.
+- Seeder: 5 FAQ awal yang diambil dari teks Persyaratan/Alur.
+
+**Alumni**
+
+Tabel `alumnis`:
+
+| Kolom | Tipe | Catatan |
+|---|---|---|
+| `id` | bigint | |
+| `peserta_magang_id` | FK nullable, unique, `nullOnDelete` | kosong untuk alumni manual |
+| `nama` | string | |
+| `foto_path` | string nullable | disk `public` folder `alumni/` (hanya foto yang disetujui tampil) |
+| `universitas`, `program_studi`, `divisi` | string | |
+| `periode` | string | contoh "Juni – November 2026" |
+| `rating` | tinyint nullable (1–5) | hanya untuk alumni manual |
+| `judul_project` | string 150 | |
+| `deskripsi_project` | text | |
+| `testimoni` | text nullable | |
+| `urutan` | unsigned int | |
+| `tampil` | boolean, default false | |
+| timestamps | | |
+
+Tabel `feedback_pesertas` + kolom `bersedia_tampil_alumni` (boolean, default false).
+
+- **Rating:** dari jawaban feedback pertanyaan skala no. 10 ("Secara keseluruhan saya puas…",
+  skala 1–5), dibaca langsung dari feedback sehingga selalu sesuai. **Bukan** dari nilai
+  penilaian. Alumni manual memakai kolom `rating`.
+- **Persetujuan:**
+  - form feedback mendapat centang "Saya bersedia ditampilkan sebagai alumni" (tetap bisa
+    diubah selama feedback belum terkunci);
+  - alumni dari peserta hanya tampil bila centang itu aktif **dan** `tampil = true`;
+  - bila peserta menarik persetujuan, alumni otomatis disembunyikan.
+- **Dari peserta:**
+  - admin memilih dari daftar peserta yang `selesai` dan bersedia;
+  - nama, foto profil, universitas, prodi, divisi terakhir, periode, dan testimoni (dari
+    jawaban "paling disukai") terisi otomatis dan boleh disunting;
+  - admin melengkapi judul dan deskripsi project.
+- **Manual:** semua field diisi admin, untuk alumni sebelum sistem ini ada.
+- Admin bisa mengatur urutan dan menyembunyikan alumni. Setiap tambah/ubah/hapus dicatat di
+  Log Aktivitas.
+
+| Method | Path | Nama |
+|---|---|---|
+| resource (tanpa show) | `/superadmin/alumni` | `superadmin.alumni.*` |
+| POST | `/superadmin/alumni/dari-peserta` | `superadmin.alumni.dari-peserta` |
+| PUT | `/superadmin/alumni-urutan` | `superadmin.alumni.urutan` |
+
+- Halaman publik: bagian `#alumni` di beranda, berupa carousel kartu (CSS scroll-snap +
+  tombol geser, tanpa library baru).
+- Klik kartu → popup `<dialog>` berisi deskripsi project dan testimoni.
+- Bisa dipakai dengan keyboard; di HP digeser dengan jari.
+
+### 8.9 Pertanyaan revisi 4
+
+**Keputusan (25 Oktober 2026): 1A, 2A, 3A, 4B, 5A**, semuanya mengikuti rekomendasi.
+
+1. **Cek status pendaftar memakai apa?**
+   Sekarang memakai NIM + email. Kode `MG-000003` hanya ID berurutan, jadi mudah ditebak.
+   - **A (rekomendasi):** kode MG + email. Hasil cek status menampilkan tautan dokumen
+     (signed URL 30 menit).
+   - B: tetap NIM + email (kode MG hanya ditampilkan), dengan tautan dokumen yang sama.
+   - C: kode MG saja (tidak disarankan, karena orang lain bisa menebak kode).
+2. **Pas foto di biodata.**
+   Biodata sekarang **belum punya** field pas foto.
+   - **A (rekomendasi):** tambah field pas foto di form biodata yang disimpan sebagai foto
+     profil (`users.foto_path`), dan **wajib** ikut hitungan progres biodata.
+   - B: sama dengan A, tapi opsional (tidak memengaruhi progres).
+   - C: foto hanya diunggah dari halaman Profil, tidak ada di biodata.
+3. **Menu Biodata, Logbook & Absensi, Penilaian, Surat Keterangan di sidebar admin.**
+   Sekarang keempatnya hanya ada per peserta (di detail peserta).
+   - **A (rekomendasi):** buat halaman daftar ringan per menu. Isinya semua peserta beserta
+     statusnya (misalnya biodata menunggu tinjauan, logbook belum diverifikasi) dengan
+     tautan ke halaman per peserta.
+   - B: keempat menu mengarah ke Data Peserta dengan filter, tanpa halaman baru.
+4. **Pengaturan Magang khusus Super Admin?**
+   Sekarang admin juga bisa mengubah tarif, hari libur, dan batas isi logbook.
+   - **A:** ikut usulan, hanya Super Admin. Admin kehilangan akses (Divisi tetap bisa
+     dikelola admin).
+   - **B (rekomendasi):** Hari Libur tetap boleh diatur admin (sering berubah), sedangkan
+     tarif dan batas isi hanya Super Admin.
+   - C: tetap seperti sekarang (admin & super admin), hanya letak menunya di grup Sistem.
+5. **Foto alumni dari peserta.**
+   - **A (rekomendasi):** foto profil peserta disalin ke disk publik saat alumni ditampilkan,
+     dan dihapus bila disembunyikan atau persetujuan ditarik.
+   - B: admin selalu mengunggah foto alumni terpisah (foto profil tidak pernah dipakai di
+     halaman publik).
+
+### 8.10 Urutan pengerjaan revisi 4
+
+| Tahap | Branch | Isi | Bergantung pada |
+|---|---|---|---|
+| R0 | `fase-0-keamanan` | Policy pengajuan, pindah path admin, signed URL pendaftar, `serve` dimatikan, test keamanan | – |
+| R1 | `fase-20-login-sidebar` | Login satu pintu, sidebar baru per grup, halaman daftar admin (pertanyaan 3), Rekap Kehadiran peserta, hak Pengaturan (pertanyaan 4) | R0 |
+| R2 | `fase-21-foto-profil` | `users.foto_path`, service `FotoProfil`, pas foto di biodata, `<x-avatar>` | R0 |
+| R3 | `fase-22-dashboard-peserta` | `RingkasanPeserta`, kartu dashboard, kalender mini, test logbook (8.5) | R1 |
+| R4 | `fase-23-faq` | Tabel, CRUD, accordion publik | R1 |
+| R5 | `fase-24-alumni` | Tabel, centang di feedback, CRUD + dari peserta, carousel + popup, navbar publik baru | R2, R4 |
+
+- Setiap tahap memperbarui matriks `AksesRouteTest` dan `docs/PANDUAN-UJI-COBA.md`.
+- Fase 7 (deploy) tetap dikerjakan setelah R5.
+- Tidak ada dependency baru.

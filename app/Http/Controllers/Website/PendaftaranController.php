@@ -11,9 +11,16 @@ use App\Models\Perusahaan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PendaftaranController extends Controller
 {
+    /**
+     * Masa berlaku tautan dokumen di hasil cek status (menit).
+     */
+    public const MASA_BERLAKU_DOKUMEN = 30;
+
     /**
      * Simpan pendaftaran magang dari form website.
      */
@@ -65,29 +72,30 @@ class PendaftaranController extends Controller
     }
 
     /**
-     * Cek status pengajuan berdasarkan NIM + email.
+     * Cek status pengajuan berdasarkan kode pengajuan + email.
+     *
+     * Kode MG berurutan dan mudah ditebak, jadi email wajib cocok. Pesan gagal
+     * dibuat sama agar tidak membocorkan kode mana yang ada.
      */
     public function cekStatus(CekStatusPengajuanRequest $request): RedirectResponse
     {
         $validated = $request->validated();
 
-        $pengajuans = PengajuanMagang::query()
-            ->whereHas('mahasiswa', fn ($query) => $query
-                ->where('nim', $validated['status_nim'])
-                ->where('email', $validated['status_email']))
-            ->latest()
-            ->get();
+        $pengajuan = PengajuanMagang::query()
+            ->whereKey(PengajuanMagang::idDariNomor($validated['status_kode']))
+            ->whereHas('mahasiswa', fn ($query) => $query->where('email', $validated['status_email']))
+            ->first();
 
         $redirect = redirect()->to(route('home').'#status')->withInput();
 
-        if ($pengajuans->isEmpty()) {
+        if (! $pengajuan) {
             return $redirect->with(
                 'status_tidak_ditemukan',
-                'Pengajuan tidak ditemukan. Pastikan NIM dan email sama dengan saat mendaftar.'
+                'Pengajuan tidak ditemukan. Pastikan kode pengajuan dan email sama dengan saat mendaftar.'
             );
         }
 
-        return $redirect->with('status_pengajuan', $pengajuans->map(fn (PengajuanMagang $pengajuan) => [
+        return $redirect->with('status_pengajuan', [[
             'nomor' => $pengajuan->nomor(),
             'posisi' => $pengajuan->posisi,
             'status' => $pengajuan->status,
@@ -96,6 +104,18 @@ class PendaftaranController extends Controller
                 .' – '.$pengajuan->tanggal_selesai->translatedFormat('d M Y'),
             'diajukan' => $pengajuan->created_at->translatedFormat('d M Y'),
             'catatan' => $pengajuan->catatan_admin,
-        ])->all());
+            'dokumen_url' => $pengajuan->dokumen_path
+                ? URL::temporarySignedRoute('pengajuan.dokumen', now()->addMinutes(self::MASA_BERLAKU_DOKUMEN), $pengajuan)
+                : null,
+        ]]);
+    }
+
+    /**
+     * Surat pengantar milik pendaftar. Route dijaga middleware signed, jadi
+     * mengganti ID di URL membuat signature tidak cocok (403).
+     */
+    public function dokumen(PengajuanMagang $pengajuanMagang): StreamedResponse
+    {
+        return $pengajuanMagang->responDokumen();
     }
 }

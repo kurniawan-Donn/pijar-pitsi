@@ -15,6 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Route as RouteFacade;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
@@ -51,6 +52,7 @@ class AksesRouteTest extends TestCase
         'login.process' => self::PUBLIK,
         'pengajuan.store' => self::PUBLIK,
         'pengajuan.status' => self::PUBLIK,
+        'pengajuan.dokumen' => self::PUBLIK, // signed URL, lihat KeamananAksesDataTest
 
         // Semua pengguna login (termasuk peserta)
         'logout' => self::SEMUA,
@@ -217,7 +219,12 @@ class AksesRouteTest extends TestCase
                 $this->actingAs($login);
             }
 
-            $response = $this->call($method, route($nama, $parameter));
+            // Route bertanda tangan diuji dengan URL yang sah.
+            $url = in_array('signed', $route->gatherMiddleware(), true)
+                ? URL::temporarySignedRoute($nama, now()->addMinutes(5), $parameter)
+                : route($nama, $parameter);
+
+            $response = $this->call($method, $url);
             $label = "{$nama} sebagai ".($role ?? 'tamu');
 
             $boleh = match ($akses) {

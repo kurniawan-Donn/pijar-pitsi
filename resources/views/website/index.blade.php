@@ -278,7 +278,7 @@
                 <article class="card highlight-card" data-reveal style="--delay: .2s">
                     <div class="icon-box">🔎</div>
                     <h3>Cek Status</h3>
-                    <p>Pantau hasil verifikasi dan catatan admin hanya dengan NIM dan email.</p>
+                    <p>Pantau hasil verifikasi dan catatan admin dengan kode pengajuan dan email.</p>
                     <a href="#status" class="text-link">Cek status <span>→</span></a>
                 </article>
 

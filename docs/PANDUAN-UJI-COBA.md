@@ -45,7 +45,11 @@ sebagai **admin** dan **peserta** bersamaan.
 | Super Admin | `superadmin@magenta.local` | lihat `database/seeders/UserSeeder.php` baris 31 |
 | Peserta | dibuat admin saat uji coba (langkah 4 di bawah) | password sementara muncul sekali di layar |
 
-Halaman login: **/login**. Link login memang tidak ada di website publik.
+Halaman login: **/login**, untuk semua role. Bisa juga dibuka lewat tombol **Masuk Peserta**
+di navbar website.
+
+Halaman admin pengajuan sekarang berada di **/admin/pengajuan**. Dokumen pengajuan hanya
+bisa dibuka admin dan super admin, atau pendaftarnya sendiri lewat tautan di Cek Status.
 
 ---
 
@@ -103,7 +107,9 @@ Centang setiap langkah yang berhasil.
 
 ### B. Pendaftaran (tanpa login)
 - [ ] Buka halaman utama → bagian **Daftar**, lalu isi form sampai muncul nomor **MG-00000x**.
-- [ ] Bagian **Cek Status**: masukkan NIM + email, status tampil "Menunggu".
+- [ ] Bagian **Cek Status**: masukkan **kode pengajuan** (MG-00000x) + email. Status tampil
+  "Menunggu", lengkap dengan tautan **Lihat surat pengantar** yang berlaku 30 menit.
+- [ ] (Keamanan) Salin tautan itu, ganti angka ID di URL, lalu buka: hasilnya **403**.
 
 ### C. Admin memproses (login **Admin**)
 - [ ] **Pengajuan Magang** → buka pengajuan tadi → ubah status **Disetujui**.

@@ -17,6 +17,7 @@ use Carbon\CarbonImmutable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -164,6 +165,8 @@ class LogbookHarianController extends Controller
 
     public function bukti(LogbookBukti $logbookBukti): Response
     {
+        Gate::authorize('view', $logbookBukti->logbookHarian);
+
         abort_unless(Storage::disk('local')->exists($logbookBukti->path), 404);
 
         return Storage::disk('local')->response($logbookBukti->path, $logbookBukti->nama_asli);
@@ -171,6 +174,8 @@ class LogbookHarianController extends Controller
 
     public function buktiIzin(IzinPeserta $izinPeserta): Response
     {
+        Gate::authorize('view', $izinPeserta);
+
         abort_unless($izinPeserta->bukti_path && Storage::disk('local')->exists($izinPeserta->bukti_path), 404);
 
         return Storage::disk('local')->response($izinPeserta->bukti_path, $izinPeserta->bukti_nama);

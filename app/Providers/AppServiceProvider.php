@@ -67,7 +67,7 @@ class AppServiceProvider extends ServiceProvider
                 ->response(fn () => redirect()
                     ->to(route('home').'#status')
                     ->withInput()
-                    ->withErrors(['status_nim' => 'Terlalu banyak pengecekan. Silakan coba lagi dalam 1 menit.']));
+                    ->withErrors(['status_kode' => 'Terlalu banyak pengecekan. Silakan coba lagi dalam 1 menit.']));
         });
     }
 }

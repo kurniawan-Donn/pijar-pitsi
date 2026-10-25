@@ -174,7 +174,7 @@ class PendaftaranMagangTest extends TestCase
         $pengajuan = PengajuanMagang::factory()->ditolak()->for($mahasiswa)->create();
 
         $response = $this->post(route('pengajuan.status'), [
-            'status_nim' => '2201000001',
+            'status_kode' => strtolower($pengajuan->nomor()),
             'status_email' => 'RINA@contoh.test',
         ]);
 
@@ -184,23 +184,45 @@ class PendaftaranMagangTest extends TestCase
 
         $this->followingRedirects()
             ->post(route('pengajuan.status'), [
-                'status_nim' => '2201000001',
+                'status_kode' => $pengajuan->nomor(),
                 'status_email' => 'rina@contoh.test',
             ])
             ->assertSee($pengajuan->nomor())
             ->assertSee('Kuota bidang ini sudah penuh.');
     }
 
+    public function test_cek_status_hanya_menampilkan_pengajuan_dengan_kode_itu(): void
+    {
+        $mahasiswa = Mahasiswa::factory()->create(['email' => 'rina@contoh.test']);
+        $lama = PengajuanMagang::factory()->ditolak()->for($mahasiswa)->create();
+        $baru = PengajuanMagang::factory()->for($mahasiswa)->create();
+
+        $this->post(route('pengajuan.status'), [
+            'status_kode' => str_replace('-', '', $baru->nomor()),
+            'status_email' => 'rina@contoh.test',
+        ])
+            ->assertSessionHas('status_pengajuan', fn (array $hasil) => count($hasil) === 1 && $hasil[0]['nomor'] === $baru->nomor())
+            ->assertSessionHas('status_pengajuan.0.nomor', fn (string $nomor) => $nomor !== $lama->nomor());
+    }
+
     public function test_cek_status_dengan_email_salah_tidak_membocorkan_data(): void
     {
         $mahasiswa = Mahasiswa::factory()->create(['nim' => '2201000001', 'email' => 'rina@contoh.test']);
-        PengajuanMagang::factory()->for($mahasiswa)->create();
+        $pengajuan = PengajuanMagang::factory()->for($mahasiswa)->create();
 
         $this->post(route('pengajuan.status'), [
-            'status_nim' => '2201000001',
+            'status_kode' => $pengajuan->nomor(),
             'status_email' => 'orang-lain@contoh.test',
         ])
             ->assertSessionHas('status_tidak_ditemukan')
             ->assertSessionMissing('status_pengajuan');
+    }
+
+    public function test_cek_status_menolak_kode_tidak_sah(): void
+    {
+        $this->post(route('pengajuan.status'), [
+            'status_kode' => '2201000001',
+            'status_email' => 'rina@contoh.test',
+        ])->assertSessionHasErrors(['status_kode' => 'Format kode pengajuan seperti MG-000012.']);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\PengajuanMagang;
 use App\Models\PesertaMagang;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -20,6 +21,8 @@ class PengajuanMagangController extends Controller
      */
     public function index(Request $request): View
     {
+        Gate::authorize('viewAny', PengajuanMagang::class);
+
         $status = $request->query('status');
         $cari = $request->query('cari');
 
@@ -56,6 +59,8 @@ class PengajuanMagangController extends Controller
      */
     public function show(PengajuanMagang $pengajuanMagang): View
     {
+        Gate::authorize('view', $pengajuanMagang);
+
         $pengajuanMagang->load(['mahasiswa', 'perusahaan', 'pesertaMagang']);
 
         return view('admin.pengajuan.show', compact('pengajuanMagang'));
@@ -66,19 +71,9 @@ class PengajuanMagangController extends Controller
      */
     public function dokumen(PengajuanMagang $pengajuanMagang): StreamedResponse
     {
-        abort_unless(
-            $pengajuanMagang->dokumen_path
-                && Storage::disk('local')->exists($pengajuanMagang->dokumen_path),
-            404,
-            'Dokumen tidak ditemukan.'
-        );
+        Gate::authorize('view', $pengajuanMagang);
 
-        $extension = pathinfo($pengajuanMagang->dokumen_path, PATHINFO_EXTENSION);
-
-        return Storage::disk('local')->response(
-            $pengajuanMagang->dokumen_path,
-            "surat-pengantar-{$pengajuanMagang->nomor()}.{$extension}"
-        );
+        return $pengajuanMagang->responDokumen();
     }
 
     /**
@@ -88,6 +83,8 @@ class PengajuanMagangController extends Controller
         UpdateStatusPengajuanRequest $request,
         PengajuanMagang $pengajuanMagang
     ): RedirectResponse {
+        Gate::authorize('update', $pengajuanMagang);
+
         $statusLama = $pengajuanMagang->status;
 
         $pengajuanMagang->update($request->validated());
@@ -109,6 +106,8 @@ class PengajuanMagangController extends Controller
      */
     public function buatPeserta(PengajuanMagang $pengajuanMagang): RedirectResponse
     {
+        Gate::authorize('update', $pengajuanMagang);
+
         $pengajuanMagang->load(['mahasiswa', 'pesertaMagang']);
 
         if ($pengajuanMagang->status !== PengajuanMagang::STATUS_DISETUJUI) {
@@ -146,6 +145,8 @@ class PengajuanMagangController extends Controller
      */
     public function destroy(PengajuanMagang $pengajuanMagang): RedirectResponse
     {
+        Gate::authorize('delete', $pengajuanMagang);
+
         if ($pengajuanMagang->dokumen_path) {
             Storage::disk('local')->delete($pengajuanMagang->dokumen_path);
         }
