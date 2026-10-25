@@ -249,6 +249,7 @@
 
         font-size: 14px;
         font-weight: 600;
+        white-space: nowrap;
 
         transition: color .2s, background .2s;
     }
@@ -284,6 +285,17 @@
         padding: 0 20px;
 
         font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nav-menu-masuk {
+        display: none;
     }
 
     .nav-toggle {
@@ -2251,7 +2263,18 @@
         }
     }
 
-    @media (max-width: 880px) {
+    /* Navbar: menu dirapatkan, lalu dilipat menjadi tombol menu. */
+    @media (max-width: 1200px) {
+        .nav-menu a {
+            padding: 9px 9px;
+        }
+
+        .nav-actions .btn-accent {
+            display: none;
+        }
+    }
+
+    @media (max-width: 1024px) {
         .nav-toggle {
             display: block;
         }
@@ -2304,11 +2327,27 @@
             display: none;
         }
 
+        .nav-menu-masuk {
+            display: block;
+
+            margin-top: 6px;
+            padding-top: 6px;
+
+            border-top: 1px solid var(--line);
+        }
+
+        .nav-menu-masuk a {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
         .navbar {
             background: rgba(255, 255, 255, .9);
             backdrop-filter: blur(14px);
         }
+    }
 
+    @media (max-width: 880px) {
         .highlight-grid,
         .req-grid {
             grid-template-columns: 1fr;

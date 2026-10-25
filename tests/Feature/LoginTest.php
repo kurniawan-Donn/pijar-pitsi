@@ -27,11 +27,12 @@ class LoginTest extends TestCase
         ]);
     }
 
-    public function test_website_publik_tidak_menampilkan_link_login(): void
+    public function test_website_menampilkan_tombol_masuk_peserta_bukan_login_admin(): void
     {
         $this->get(route('home'))
             ->assertOk()
-            ->assertDontSee(route('login'))
+            ->assertSee('Masuk Peserta')
+            ->assertSee('href="'.route('login').'"', false)
             ->assertDontSee('Login Admin');
     }
 
