@@ -1,5 +1,8 @@
 {{-- resources/views/penilaian/cetak.blade.php --}}
-{{-- Lembar penilaian (format sheet PENILAIAN MHS MAGANG) untuk dompdf: pakai tabel, tanpa flexbox/grid. --}}
+{{--
+    Lembar penilaian (format sheet PENILAIAN MHS MAGANG) untuk dompdf: pakai tabel, tanpa flexbox/grid.
+    Harus selalu muat 1 halaman A4; panjang kolom kesimpulan dibatasi SimpanPenilaianRequest::MAKS_KESIMPULAN.
+--}}
 <!DOCTYPE html>
 <html lang="id">
 
@@ -9,36 +12,40 @@
 
     <style>
         @page {
-            margin: 28px 34px 36px;
+            margin: 22px 30px 20px;
         }
 
         body {
             font-family: 'DejaVu Sans', sans-serif;
             color: #1f2937;
-            font-size: 9px;
-            line-height: 1.45;
+            font-size: 8px;
+            line-height: 1.35;
         }
 
         h1 {
-            margin: 0 0 2px;
+            margin: 0;
 
-            color: #12345b;
-            font-size: 14px;
+            color: #0b6a9c;
+            font-size: 12.5px;
             text-align: center;
+            letter-spacing: .5px;
         }
 
         h2 {
-            margin: 12px 0 5px;
+            margin: 8px 0 3px;
 
-            color: #12345b;
-            font-size: 10.5px;
+            color: #0b6a9c;
+            font-size: 9px;
         }
 
         .perusahaan {
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+            padding-bottom: 5px;
 
-            color: #4b5d70;
-            font-size: 10px;
+            border-bottom: 1.5px solid #0b6a9c;
+
+            color: #4b5563;
+            font-size: 8.5px;
             text-align: center;
         }
 
@@ -48,69 +55,94 @@
         }
 
         .identitas td {
-            padding: 1px 0;
+            padding: 0.5px 0;
+            vertical-align: top;
         }
 
         .identitas .label {
-            width: 110px;
-            color: #4b5d70;
+            width: 92px;
+            color: #6b7280;
         }
 
         .bergaris th,
         .bergaris td {
-            padding: 3px 5px;
+            padding: 2px 4px;
 
-            border: 1px solid #9aa7b4;
+            border: 0.75px solid #9aa7b4;
 
             vertical-align: top;
         }
 
         .bergaris th {
-            background: #e8eef5;
+            background: #e8f1f7;
             text-align: left;
         }
 
         .tengah {
+            text-align: center !important;
+        }
+
+        .predikat td {
+            padding: 2px 3px;
+
+            border: 0.75px solid #9aa7b4;
+
+            font-size: 7.5px;
             text-align: center;
         }
 
-        .aktif td {
-            background: #eaf3fb;
+        .predikat .aktif {
+            background: #0b6a9c;
+            color: #ffffff;
             font-weight: bold;
         }
 
-        .kotak {
-            min-height: 30px;
-            padding: 5px 7px;
+        .catatan {
+            margin-top: 2px;
 
-            border: 1px solid #9aa7b4;
+            color: #4b5563;
+            font-size: 7.5px;
+        }
+
+        .label-kotak {
+            margin-top: 3px;
+
+            color: #4b5563;
+        }
+
+        .kotak {
+            min-height: 22px;
+            padding: 3px 5px;
+
+            border: 0.75px solid #9aa7b4;
 
             white-space: pre-line;
         }
 
         .hasil {
-            margin-top: 10px;
-            padding: 7px 9px;
+            margin-top: 6px;
+            padding: 4px 6px;
 
-            border: 1px solid #12345b;
+            border: 0.75px solid #0b6a9c;
 
-            background: #f3f7fb;
+            background: #f1f7fb;
         }
 
-        .ttd {
-            margin-top: 18px;
+        .blok-ttd {
+            margin-top: 6px;
 
-            text-align: center;
+            page-break-inside: avoid;
         }
 
         .ttd td {
             width: 33%;
 
+            text-align: center;
             vertical-align: top;
         }
 
         .ttd .ruang {
-            height: 46px;
+            height: 40px;
         }
 
         .ttd .nama {
@@ -127,99 +159,115 @@
     $perKelompok = $penilaian->nilaiPerKelompok();
     $detailPerKelompok = $penilaian->details->groupBy(fn ($detail) => $detail->kelompok ?? 'Aspek');
     $daftarPredikat = $predikats->values();
+    $predikatAktif = $daftarPredikat->firstWhere('nama', $penilaian->predikat);
+    $namaPerusahaan = $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name');
 @endphp
 
 <h1>PENILAIAN MAHASISWA MAGANG</h1>
-<div class="perusahaan">{{ $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name') }}</div>
+<div class="perusahaan">{{ $namaPerusahaan }}</div>
 
+{{-- Identitas dua kolom agar hemat tempat. --}}
 <table class="identitas">
-    <tr><td class="label">Nama</td><td>: {{ $biodata->nama_lengkap ?: $peserta->nama }}</td></tr>
-    <tr><td class="label">NIM</td><td>: {{ $biodata->nim ?: ($peserta->nim ?? '-') }}</td></tr>
-    <tr><td class="label">Asal Kampus</td><td>: {{ $biodata->perguruan_tinggi ?: ($peserta->asal_kampus ?? '-') }}</td></tr>
-    <tr><td class="label">Fakultas / Jurusan</td><td>: {{ $biodata->fakultas_jurusan ?: ($peserta->program_studi ?? '-') }}</td></tr>
-    <tr><td class="label">Program Pendidikan</td><td>: {{ $biodata->labelJenisProgram() ?? '-' }}</td></tr>
     <tr>
+        <td class="label">Nama</td><td style="width: 42%;">: {{ $biodata->nama_lengkap ?: $peserta->nama }}</td>
+        <td class="label">Fakultas / Jurusan</td><td>: {{ $biodata->fakultas_jurusan ?: ($peserta->program_studi ?? '-') }}</td>
+    </tr>
+    <tr>
+        <td class="label">NIM</td><td>: {{ $biodata->nim ?: ($peserta->nim ?? '-') }}</td>
+        <td class="label">Program Pendidikan</td><td>: {{ $biodata->labelJenisProgram() ?? '-' }}</td>
+    </tr>
+    <tr>
+        <td class="label">Asal Kampus</td><td>: {{ $biodata->perguruan_tinggi ?: ($peserta->asal_kampus ?? '-') }}</td>
         <td class="label">Periode Magang</td>
         <td>: {{ $peserta->periode_mulai?->translatedFormat('d F Y') ?? '-' }} s.d. {{ $peserta->periode_selesai?->translatedFormat('d F Y') ?? '-' }}</td>
     </tr>
 </table>
 
-<h2>Bobot Penilaian</h2>
+<h2>Bobot dan Predikat Penilaian</h2>
 <div>
-    Penilaian menggunakan skala 1–100. Nilai setiap kelompok adalah rata-rata aspek di dalamnya. Nilai akhir =
+    Skala 1–100. Nilai kelompok = rata-rata aspek di dalamnya. Nilai akhir =
     {{ collect($perKelompok)->map(fn ($data, $nama) => '(rata-rata '.$nama.' × '.$data['bobot'].'%)')->implode(' + ') }}.
 </div>
 
-<table class="bergaris" style="margin-top: 6px;">
-    <tr><th style="width: 70px;">Nilai Akhir</th><th style="width: 100px;">Predikat</th><th>Keterangan</th></tr>
-    @foreach ($daftarPredikat as $i => $predikat)
-        <tr @class(['aktif' => $penilaian->predikat === $predikat->nama])>
-            <td class="tengah">{{ $predikat->rentang($daftarPredikat[$i + 1] ?? null) }}</td>
-            <td>{{ $predikat->nama }}</td>
-            <td>{{ $predikat->keterangan }}</td>
-        </tr>
-    @endforeach
+{{-- Predikat diringkas menjadi satu baris; keterangan hanya untuk predikat yang diperoleh. --}}
+<table class="predikat" style="margin-top: 3px;">
+    <tr>
+        @foreach ($daftarPredikat as $i => $predikat)
+            <td @class(['aktif' => $penilaian->predikat === $predikat->nama])>
+                {{ $predikat->rentang($daftarPredikat[$i + 1] ?? null) }}<br>{{ $predikat->nama }}
+            </td>
+        @endforeach
+    </tr>
 </table>
+@if ($predikatAktif?->keterangan)
+    <div class="catatan"><strong>{{ $predikatAktif->nama }}:</strong> {{ $predikatAktif->keterangan }}</div>
+@endif
 
 <h2>Indikator Penilaian</h2>
 <table>
     <tr>
         @foreach ($detailPerKelompok as $kelompok => $details)
-            <td style="vertical-align: top; width: {{ floor(100 / max(1, $detailPerKelompok->count())) }}%; padding-right: 6px;">
+            <td style="vertical-align: top; width: {{ floor(100 / max(1, $detailPerKelompok->count())) }}%; padding: 0 {{ $loop->last ? 0 : 4 }}px 0 {{ $loop->first ? 0 : 4 }}px;">
                 <table class="bergaris">
-                    <tr><th>{{ $kelompok }} ({{ $perKelompok[$kelompok]['bobot'] }}%)</th><th style="width: 34px;" class="tengah">Nilai</th></tr>
+                    <tr><th>{{ $kelompok }} ({{ $perKelompok[$kelompok]['bobot'] }}%)</th><th style="width: 28px;" class="tengah">Nilai</th></tr>
                     @foreach ($details as $detail)
                         <tr><td>{{ $loop->iteration }}. {{ $detail->nama_aspek }}</td><td class="tengah">{{ $detail->nilai }}</td></tr>
                     @endforeach
-                    <tr><th>Nilai Total</th><th class="tengah">{{ $perKelompok[$kelompok]['total'] }}</th></tr>
-                    <tr><th>Nilai Rata-rata</th><th class="tengah">{{ $angka($perKelompok[$kelompok]['rata_rata']) }}</th></tr>
+                    <tr><th>Total / Rata-rata</th><th class="tengah" style="white-space: nowrap;">{{ $perKelompok[$kelompok]['total'] }} / {{ $angka($perKelompok[$kelompok]['rata_rata']) }}</th></tr>
                 </table>
             </td>
         @endforeach
     </tr>
 </table>
 
-<table class="bergaris" style="margin-top: 6px;">
-    <tr><th>Grand Total Nilai (Nilai Akhir)</th><th style="width: 120px;" class="tengah">{{ $angka($penilaian->nilai_akhir) }}</th></tr>
+<table class="bergaris" style="margin-top: 4px;">
+    <tr>
+        <th>Grand Total Nilai (Nilai Akhir)</th>
+        <th style="width: 90px;" class="tengah">{{ $angka($penilaian->nilai_akhir) }}</th>
+        <th style="width: 110px;" class="tengah">{{ $penilaian->predikat }}</th>
+    </tr>
 </table>
 
 <h2>Kesimpulan Penilaian Mahasiswa Magang</h2>
-<div>Kekuatan dan keunggulan mahasiswa magang:</div>
+<div class="label-kotak">Kekuatan dan keunggulan mahasiswa magang:</div>
 <div class="kotak">{{ $penilaian->kekuatan }}</div>
-<div style="margin-top: 5px;">Aspek utama yang diperlukan untuk perbaikan mahasiswa magang:</div>
+<div class="label-kotak">Aspek utama yang diperlukan untuk perbaikan mahasiswa magang:</div>
 <div class="kotak">{{ $penilaian->aspek_perbaikan }}</div>
-<div style="margin-top: 5px;">Langkah penting yang harus diambil untuk perbaikan bagi mahasiswa magang:</div>
+<div class="label-kotak">Langkah penting yang harus diambil untuk perbaikan bagi mahasiswa magang:</div>
 <div class="kotak">{{ $penilaian->langkah_perbaikan }}</div>
 
 <div class="hasil">
     <strong>Hasil Penilaian:</strong>
     Berdasarkan hasil penilaian yang telah dilakukan, mahasiswa dinyatakan telah menyelesaikan Program Magang
-    di {{ $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name') }} dengan memperoleh nilai akhir sebesar
+    di {{ $namaPerusahaan }} dengan memperoleh nilai akhir sebesar
     <strong>{{ $angka($penilaian->nilai_akhir) }}</strong> sehingga memperoleh predikat <strong>{{ $penilaian->predikat }}</strong>.
 </div>
 
-<div style="margin-top: 12px;">
-    {{ $pengaturan->kota_surat ?: '........................' }}, {{ ($penilaian->dinilai_pada ?? now())->translatedFormat('d F Y') }}
-</div>
+{{-- Blok tanggal + tanda tangan tidak boleh terpotong ke halaman berikutnya. --}}
+<div class="blok-ttd">
+    <div style="margin-bottom: 4px; text-align: right;">
+        {{ $pengaturan->kota_surat ?: '........................' }}, {{ ($penilaian->dinilai_pada ?? now())->translatedFormat('d F Y') }}
+    </div>
 
-<table class="ttd">
-    <tr>
-        <td>Penilai,</td>
-        <td>Mengetahui,</td>
-        <td>Menyetujui,</td>
-    </tr>
-    <tr><td class="ruang"></td><td class="ruang"></td><td class="ruang"></td></tr>
-    <tr>
-        <td class="nama">{{ $penempatan?->mentor_nama ?: ($biodata->mentor_magang ?: '(Pembimbing / Mentor)') }}</td>
-        <td class="nama">{{ $pengaturan->mengetahui_nama ?: '(........................)' }}</td>
-        <td class="nama">{{ $pengaturan->menyetujui_nama ?: '(........................)' }}</td>
-    </tr>
-    <tr>
-        <td>{{ $penempatan?->mentor_jabatan ?: '' }}</td>
-        <td>{{ $pengaturan->mengetahui_jabatan }}</td>
-        <td>{{ $pengaturan->menyetujui_jabatan }}</td>
-    </tr>
-</table>
+    <table class="ttd">
+        <tr>
+            <td>Penilai,</td>
+            <td>Mengetahui,</td>
+            <td>Menyetujui,</td>
+        </tr>
+        <tr><td class="ruang"></td><td class="ruang"></td><td class="ruang"></td></tr>
+        <tr>
+            <td class="nama">{{ $penempatan?->mentor_nama ?: ($biodata->mentor_magang ?: '(Pembimbing / Mentor)') }}</td>
+            <td class="nama">{{ $pengaturan->mengetahui_nama ?: '(........................)' }}</td>
+            <td class="nama">{{ $pengaturan->menyetujui_nama ?: '(........................)' }}</td>
+        </tr>
+        <tr>
+            <td>{{ $penempatan?->mentor_jabatan ?: '' }}</td>
+            <td>{{ $pengaturan->mengetahui_jabatan }}</td>
+            <td>{{ $pengaturan->menyetujui_jabatan }}</td>
+        </tr>
+    </table>
+</div>
 
 </body>
 

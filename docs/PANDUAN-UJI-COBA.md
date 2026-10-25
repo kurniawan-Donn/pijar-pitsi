@@ -180,6 +180,17 @@ Centang setiap langkah yang berhasil.
 - [ ] (Opsional) Logbook Harian → **Impor Riwayat**: upload buku kerja `.xlsx` lama untuk peserta
   yang periode magangnya mencakup tanggal di buku kerja.
 
+### H. Upload foto dan lembar penilaian (Revisi 5 tahap 1)
+- [ ] **Alumni** → Input Manual → pilih foto: pratinjau langsung muncul di kotak kiri sebelum disimpan.
+  Setelah disimpan, foto tampil di daftar alumni dan carousel beranda, apa pun alamat yang dipakai
+  untuk membuka web (Laragon `.test`, `localhost:8000`, port lain).
+- [ ] Pratinjau yang sama berlaku untuk **foto profil** (menu Profil) dan **pas foto** (Biodata
+  peserta). Pilih file PDF atau gambar > 2 MB: muncul pesan peringatan oranye.
+- [ ] **Penilaian** → kolom kesimpulan menampilkan penghitung `0 / 600 karakter` (oranye bila hampir
+  penuh). Lebih dari 5 baris ditolak dengan pesan.
+- [ ] Isi ketiga kolom kesimpulan sampai penuh → **Unduh PDF**: lembar penilaian tetap 1 halaman A4,
+  tanda tangan di halaman yang sama.
+
 ---
 
 ## 6. Hal yang Sering Membingungkan

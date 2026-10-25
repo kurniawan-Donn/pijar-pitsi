@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Http\Requests\SimpanPenilaianRequest;
 use App\Models\AspekPenilaian;
 use App\Models\KelompokPenilaian;
+use App\Models\PengaturanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\PesertaMagang;
 use App\Models\User;
@@ -219,6 +221,102 @@ class PenilaianTest extends TestCase
         $pdf->assertOk();
         $this->assertStringStartsWith('%PDF-', $pdf->getContent());
         $this->assertStringContainsString('penilaian-peserta-dinilai.pdf', $pdf->headers->get('content-disposition'));
+    }
+
+    /**
+     * Isian terpanjang yang lolos validasi: satu paragraf penuh, atau paragraf maksimal
+     * yang masing-masing sedikit lebih panjang dari satu baris cetak (paling boros tempat).
+     *
+     * @return array<string, array{string}>
+     */
+    public static function isianTerpanjang(): array
+    {
+        return [
+            'satu paragraf' => ['paragraf'],
+            'banyak baris' => ['baris'],
+        ];
+    }
+
+    #[DataProvider('isianTerpanjang')]
+    public function test_lembar_penilaian_isian_terpanjang_tetap_satu_halaman(string $bentuk): void
+    {
+        $user = $this->user();
+        $maks = SimpanPenilaianRequest::MAKS_KESIMPULAN;
+        $maksBaris = SimpanPenilaianRequest::MAKS_BARIS_KESIMPULAN;
+        $isian = function (string $awal) use ($bentuk, $maks, $maksBaris): string {
+            $kalimat = str_repeat($awal.' kalimat penjelasan yang cukup panjang untuk mengisi kolom. ', 100);
+
+            if ($bentuk === 'paragraf') {
+                return mb_substr($kalimat, 0, $maks);
+            }
+
+            // Satu baris cetak memuat ±170 karakter; paragraf 175 karakter terlipat menjadi 2 baris.
+            $paragraf = [];
+            $sisa = $maks;
+
+            while (count($paragraf) < $maksBaris && $sisa > 1) {
+                $panjang = min(175, $sisa - ($paragraf ? 1 : 0));
+                $paragraf[] = mb_substr($kalimat, 0, $panjang);
+                $sisa -= $panjang + ($paragraf ? 1 : 0);
+            }
+
+            return implode("\n", $paragraf);
+        };
+
+        $this->peserta->update([
+            'nama' => 'Muhammad Abdurrahman Al-Fatih Wicaksono Putra Pratama',
+            'asal_kampus' => 'Universitas Pembangunan Nasional Veteran Yogyakarta',
+            'program_studi' => 'Teknik Informatika dan Sistem Informasi',
+        ]);
+        PengaturanMagang::ambil()->update([
+            'kota_surat' => 'Yogyakarta',
+            'mengetahui_nama' => 'Nama Penanda Tangan Mengetahui Yang Panjang',
+            'mengetahui_jabatan' => 'Manajer Sumber Daya Manusia dan Umum',
+            'menyetujui_nama' => 'Nama Penanda Tangan Menyetujui Yang Panjang',
+            'menyetujui_jabatan' => 'Direktur Utama',
+        ]);
+
+        $this->actingAs($user)
+            ->put(route('superadmin.peserta-magang.penilaian.update', $this->peserta), [
+                'nilai' => $this->nilai(85, 82),
+                'kekuatan' => $isian('Kekuatan'),
+                'aspek_perbaikan' => $isian('Perbaikan'),
+                'langkah_perbaikan' => $isian('Langkah'),
+            ])
+            ->assertSessionHasNoErrors();
+
+        $pdf = $this->actingAs($user)->get(route('superadmin.peserta-magang.penilaian.cetak', $this->peserta));
+
+        $pdf->assertOk();
+        $this->assertSame(1, preg_match_all('#/Type\s*/Page[^s]#', $pdf->getContent()), 'Lembar penilaian harus muat 1 halaman A4.');
+    }
+
+    public function test_kesimpulan_tidak_boleh_melebihi_batas_karakter(): void
+    {
+        $this->actingAs($this->user())
+            ->put(route('superadmin.peserta-magang.penilaian.update', $this->peserta), [
+                'nilai' => $this->nilai(85, 82),
+                'kekuatan' => str_repeat('a', SimpanPenilaianRequest::MAKS_KESIMPULAN + 1),
+            ])
+            ->assertSessionHasErrors('kekuatan');
+
+        $this->assertNull($this->peserta->fresh()->penilaian);
+    }
+
+    public function test_kesimpulan_dibatasi_jumlah_baris_dan_crlf_dihitung_satu_karakter(): void
+    {
+        $maksBaris = SimpanPenilaianRequest::MAKS_BARIS_KESIMPULAN;
+        $kirim = fn (string $isi) => $this->actingAs($this->user())
+            ->put(route('superadmin.peserta-magang.penilaian.update', $this->peserta), [
+                'nilai' => $this->nilai(85, 82),
+                'kekuatan' => $isi,
+            ]);
+
+        $kirim(implode("\n", array_fill(0, $maksBaris + 1, 'baris')))->assertSessionHasErrors('kekuatan');
+
+        // Pas batas: baris baru dari browser (CRLF) dihitung 1 karakter, sama seperti penghitung di form.
+        $pasBatas = str_repeat('a', SimpanPenilaianRequest::MAKS_KESIMPULAN - 1);
+        $kirim(substr($pasBatas, 0, 10)."\r\n".substr($pasBatas, 10))->assertSessionHasNoErrors();
     }
 
     public function test_penilaian_lama_format_huruf_tetap_tampil(): void

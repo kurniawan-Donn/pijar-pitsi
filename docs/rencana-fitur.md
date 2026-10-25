@@ -884,3 +884,94 @@ bukan route `dari-peserta` terpisah. Foto alumni ada di disk `public`, jadi serv
 - Setiap tahap memperbarui matriks `AksesRouteTest` dan `docs/PANDUAN-UJI-COBA.md`.
 - Fase 7 (deploy) tetap dikerjakan setelah R5.
 - Tidak ada dependency baru.
+
+
+## 9. Revisi 5: PILARA, Perbaikan, Tanda Tangan, UI/UX, Dokumentasi, Panduan
+
+Dikerjakan tahap demi tahap. Setelah tiap tahap: semua test dijalankan, hasil dilaporkan,
+lalu menunggu konfirmasi pemilik sebelum lanjut.
+
+### 9.1 Identitas produk
+
+- **Nama:** PILARA (dari nilai PILAR: Profesional, Integrity, Loyalty, Accountability, Responsibility).
+- **Tagline:** "Tumbuh bersama, kokoh berkarya."
+- **Deskripsi:** "PILARA adalah platform magang PT Pilar Teknotama Sinergi (PITSI) untuk pendaftaran,
+  biodata, logbook harian, absensi dan uang saku, penilaian, feedback, surat keterangan, hingga alumni."
+- Nama lama (Magenta) diganti di APP_NAME, judul halaman, header, footer, email, PDF, dan README.
+  Nama database, folder, dan namespace kode **tidak** diubah.
+- Logo: `public/images/logo-pitsi.png`, dipakai di navbar publik, login, sidebar, dan kop PDF.
+  (Per 25-10-2026 file ini belum ada di repo; perlu disalin pemilik sebelum Tahap 3.)
+
+### 9.2 Palet warna (token, ditulis sekali)
+
+| Token | Nilai | Pemakaian |
+|---|---|---|
+| `--latar` | `#F7F9FB` | latar halaman |
+| `--permukaan` | `#FFFFFF` | kartu, tabel, form |
+| `--utama` | `#2688B4` | warna utama |
+| `--utama-gelap` | `#0B6A9C` | judul, hover, menu aktif |
+| `--aksen` | `#EE7623` | sangat terbatas: tombol "Daftar Magang", badge penting |
+| `--teks` | `#1F2937` | teks |
+| `--teks-sekunder` | `#6B7280` | teks sekunder |
+
+### 9.3 Tahap 1: Perbaikan bug (`fase-25-perbaikan-bug`) ✅
+
+**a. Foto alumni tidak tampil.**
+- Penyebab: `Alumni::urlFoto()` memakai `Storage::disk('public')->url()`, yang membentuk URL dari
+  `APP_URL` (`http://localhost:8000`). Bila web dibuka dari alamat lain (Laragon `.test`, port 8010,
+  atau server), gambar mengarah ke host yang salah sehingga tidak muncul. `storage:link` dan file
+  sudah benar; banner tidak terkena karena memakai `asset('storage/...')`.
+- Perbaikan: URL foto alumni memakai `asset()` (mengikuti alamat yang sedang dibuka), sama seperti banner.
+- Pratinjau sebelum disimpan: satu skrip umum di layout dashboard untuk
+  `<input type="file" data-pratinjau="...">`, dipakai di foto alumni, foto profil, dan pas foto
+  biodata (nanti juga dokumentasi). Pratinjau juga memberi peringatan bila file bukan JPG/PNG atau
+  lebih dari 2 MB.
+
+**b. PDF penilaian lebih dari 1 halaman.**
+- Selalu 1 halaman A4: margin dan huruf dirapatkan, hard skill dan soft skill berdampingan, tabel
+  predikat diringkas, blok tanda tangan `page-break-inside: avoid`.
+- Kolom kesimpulan dibatasi 600 karakter dan 5 baris (sebelumnya 2000), plus penghitung karakter di form.
+  Baris baru dari browser (CRLF) dihitung 1 karakter. Penilaian lama yang lebih panjang perlu diringkas saat disimpan ulang.
+- Test: PDF dengan isian terpanjang yang diizinkan (satu paragraf penuh dan 5 paragraf yang terlipat) harus 1 halaman.
+
+### 9.4 Tahap 2: Tanda tangan dokumen
+
+- Super Admin mengatur nama penanda tangan, jabatan, gambar tanda tangan, dan stempel. Semuanya
+  tercetak otomatis di PDF penilaian dan surat keterangan.
+- Surat keterangan diberi QR code ke halaman publik verifikasi (hanya nama, periode, nomor surat).
+- Perlu keputusan: penanda tangan mana yang memakai gambar (sekarang ada 3 kolom: Penilai,
+  Mengetahui, Menyetujui), dan library QR (dependency baru, butuh persetujuan).
+
+### 9.5 Tahap 3: Upgrade UI/UX
+
+- Satu set ikon outline (Lucide/Tabler/Heroicons) sebagai SVG inline lewat komponen Blade (tanpa
+  npm), ketebalan garis sama, tanpa emoji. Warna ikon ikut teks menu; hanya menu aktif berwarna utama.
+- Seragamkan jarak, judul, tombol, tabel, form, badge status, dan tampilan data kosong.
+- Rapi di HP. Terapkan palet dan identitas PILARA.
+
+### 9.6 Tahap 4: Galeri dokumentasi (Beranda)
+
+- Thumbnail 2 baris ke bawah, sisanya memanjang ke kanan dan bisa digeser (seperti carousel alumni).
+- Hover: lapisan transparan berisi judul, tanggal, penjelasan singkat. Di HP muncul saat disentuh.
+- Klik untuk memperbesar (lightbox).
+- Dikelola admin dan super admin: upload, judul, keterangan, tanggal kegiatan, urutan,
+  tampil/sembunyikan. Masuk grup sidebar "Konten Website".
+
+### 9.7 Tahap 5: Buku panduan dan buku alur (terakhir, setelah UI final)
+
+- Menu "Panduan" di web sesuai role yang login, plus file Markdown di `docs/panduan/`.
+- Panduan per aktor (Peserta, Admin, Super Admin) langkah demi langkah dengan screenshot.
+- Buku alur lengkap dengan diagram: daftar → cek status → admin menyetujui → data peserta dan akun
+  dibuat → login dan ganti password → biodata dan verifikasi → logbook harian dan verifikasi →
+  rekap uang saku per periode (28–27) → rotasi divisi → feedback aktif 1 bulan sebelum selesai →
+  penilaian → status selesai → surat keterangan dibuat dan ditandatangani → alumni (jika bersedia).
+
+### 9.8 Urutan pengerjaan revisi 5
+
+| Tahap | Branch | Isi |
+|---|---|---|
+| 1 | `fase-25-perbaikan-bug` | URL foto alumni, pratinjau upload, PDF penilaian 1 halaman, batas kesimpulan |
+| 2 | `fase-26-tanda-tangan` | Pengaturan penanda tangan, gambar TTD + stempel, QR verifikasi surat |
+| 3 | `fase-27-ui-pilara` | Identitas PILARA, token warna, ikon seragam, komponen UI, tampilan HP |
+| 4 | `fase-28-dokumentasi` | Tabel + CRUD dokumentasi, galeri Beranda, lightbox |
+| 5 | `fase-29-panduan` | Menu Panduan per role, `docs/panduan/`, buku alur + diagram |
