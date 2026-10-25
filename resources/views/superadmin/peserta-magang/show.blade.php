@@ -200,6 +200,10 @@
         margin-bottom: 24px;
     }
 
+    .profile-foto {
+        border-radius: 15px;
+    }
+
     .profile-avatar {
         width: 62px;
         height: 62px;
@@ -730,9 +734,13 @@
 
                     <div class="profile-top">
 
-                        <div class="profile-avatar">
-                            {{ $pesertaInitial }}
-                        </div>
+                        @if ($pesertaMagang->user?->foto_path)
+                            <x-avatar :user="$pesertaMagang->user" :nama="$pesertaMagang->nama" :ukuran="62" class="profile-foto" />
+                        @else
+                            <div class="profile-avatar">
+                                {{ $pesertaInitial }}
+                            </div>
+                        @endif
 
                         <div>
 

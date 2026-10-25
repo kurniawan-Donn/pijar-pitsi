@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\BiodataPeserta;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 /**
  * Simpan draft (format saja) atau kirim biodata (semua field wajib harus terisi).
@@ -29,6 +30,23 @@ class SimpanBiodataRequest extends FormRequest
     public function dikirim(): bool
     {
         return $this->input('aksi') === 'kirim';
+    }
+
+    /**
+     * Pas foto diunggah terpisah (menjadi foto profil), tetapi wajib ada
+     * sebelum biodata dikirim.
+     *
+     * @return array<int, \Closure>
+     */
+    public function after(): array
+    {
+        return [
+            function (Validator $validator): void {
+                if ($this->dikirim() && ! $this->user()->foto_path) {
+                    $validator->errors()->add('pas_foto', 'Unggah pas foto sebelum biodata dikirim.');
+                }
+            },
+        ];
     }
 
     /**

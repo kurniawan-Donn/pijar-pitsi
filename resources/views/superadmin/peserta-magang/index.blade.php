@@ -235,6 +235,10 @@
 
     .name-cell {
 
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
         font-weight: 700;
 
         color: #263238;
@@ -675,6 +679,8 @@
                                     <td>
 
                                         <div class="name-cell">
+
+                                            <x-avatar :user="$peserta->user" :nama="$peserta->nama" :ukuran="32" />
 
                                             {{ $peserta->nama }}
 

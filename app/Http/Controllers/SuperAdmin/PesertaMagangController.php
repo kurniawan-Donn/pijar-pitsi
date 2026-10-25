@@ -19,7 +19,7 @@ class PesertaMagangController extends Controller
      */
     public function index(): View
     {
-        $pesertaMagangs = PesertaMagang::with('penilaian')
+        $pesertaMagangs = PesertaMagang::with(['penilaian', 'user'])
             ->orderBy('nama', 'asc')
             ->paginate(10);
 

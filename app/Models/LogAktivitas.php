@@ -49,6 +49,8 @@ class LogAktivitas extends Model
         'ubah_pengguna' => 'Ubah pengguna',
         'hapus_banner' => 'Hapus banner',
         'ubah_password' => 'Ganti password',
+        'ganti_foto_profil' => 'Ganti foto profil',
+        'hapus_foto_profil' => 'Hapus foto profil',
     ];
 
     public const UPDATED_AT = null;

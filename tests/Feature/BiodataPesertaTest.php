@@ -26,6 +26,8 @@ class BiodataPesertaTest extends TestCase
         parent::setUp();
 
         $this->akun = User::factory()->create(['role' => User::ROLE_PESERTA, 'email' => 'rina@contoh.test']);
+        // Pas foto (= foto profil) wajib sebelum biodata dikirim.
+        $this->akun->forceFill(['foto_path' => 'foto-profil/rina.jpg'])->save();
         $this->peserta = PesertaMagang::create([
             'nama' => 'Rina',
             'nim' => '111',

@@ -275,6 +275,25 @@
 </style>
 @endpush
 
+@push('styles')
+<style>
+    .pas-foto {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        margin-bottom: 14px;
+
+        color: #7b8794;
+        font-size: 12px;
+    }
+
+    .pas-foto-gambar {
+        border-radius: 12px;
+    }
+</style>
+@endpush
+
 @section('content')
 
 <div class="content">
@@ -352,6 +371,11 @@
         <div>
             <section class="panel" id="tinjau">
                 <h3>Status &amp; Tinjauan</h3>
+
+                <div class="pas-foto">
+                    <x-avatar :user="$pesertaMagang->user" :nama="$pesertaMagang->nama" :ukuran="88" class="pas-foto-gambar" />
+                    <span>{{ $pesertaMagang->user?->foto_path ? 'Pas foto / foto profil' : 'Belum ada pas foto' }}</span>
+                </div>
 
                 <div class="ringkas">
                     <div>

@@ -59,6 +59,10 @@ class AksesRouteTest extends TestCase
         'profil.edit' => self::SEMUA,
         'profil.update' => self::SEMUA,
         'profil.password' => self::SEMUA,
+        'profil.foto' => self::SEMUA,
+        'profil.foto.hapus' => self::SEMUA,
+        // Foto akun lain: hanya admin & super admin (pemilik dibahas di FotoProfilTest).
+        'foto-profil.show' => self::LOGIN,
 
         // Khusus peserta
         'peserta.dashboard' => self::PESERTA,
@@ -315,7 +319,13 @@ class AksesRouteTest extends TestCase
                 ),
                 'pesertaMagang' => $peserta = PesertaMagang::create($this->dataPeserta()),
                 'banner' => Banner::create(['judul' => 'Banner Akses', 'status' => 'aktif']),
-                'user' => User::factory()->create(['role' => 'admin']),
+                'user' => tap(
+                    User::factory()->create(['role' => 'admin']),
+                    function (User $user) {
+                        $user->forceFill(['foto_path' => "foto-profil/{$user->id}.jpg"])->save();
+                        Storage::disk('local')->put($user->foto_path, 'jpg-uji');
+                    }
+                ),
                 'tarifUangSaku' => TarifUangSaku::create(['berlaku_mulai' => fake()->unique()->date(), 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000]),
                 'hariLibur' => HariLibur::create(['tanggal' => fake()->unique()->date(), 'keterangan' => 'Libur Akses']),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),

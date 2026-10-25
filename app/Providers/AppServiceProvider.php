@@ -48,6 +48,9 @@ class AppServiceProvider extends ServiceProvider
         // Tarif uang saku, batas isi logbook, periode, dan penanda tangan surat.
         // Hari libur tetap boleh diatur admin.
         Gate::define('kelola-pengaturan-magang', $superAdmin);
+
+        // Foto profil: pemiliknya sendiri, admin, dan super admin.
+        Gate::define('lihat-foto-profil', fn (User $user, User $pemilik): bool => $user->is($pemilik) || ! $user->isPeserta());
     }
 
     /**

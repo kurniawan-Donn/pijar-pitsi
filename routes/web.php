@@ -80,7 +80,14 @@ Route::middleware(['auth', 'role:admin,super_admin,peserta'])
         Route::get('/', 'edit')->name('edit');
         Route::put('/', 'update')->name('update');
         Route::put('/password', 'updatePassword')->name('password');
+        Route::put('/foto', 'updateFoto')->name('foto');
+        Route::delete('/foto', 'hapusFoto')->name('foto.hapus');
     });
+
+// Foto profil di disk privat: pemiliknya, admin, dan super admin.
+Route::get('/foto-profil/{user}', [ProfilController::class, 'foto'])
+    ->middleware('auth')
+    ->name('foto-profil.show');
 
 /*
 |--------------------------------------------------------------------------
