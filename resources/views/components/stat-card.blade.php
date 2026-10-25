@@ -2,7 +2,9 @@
     Kartu statistik.
 
     Contoh:
-    <x-stat-card label="Peserta Aktif" :value="$jumlahAktif" icon="♙" hint="Periode berjalan" />
+    <x-stat-card label="Peserta Aktif" :value="$jumlahAktif" icon="users" hint="Periode berjalan" />
+
+    "icon" adalah nama ikon <x-icon>.
 --}}
 @props([
     'label',
@@ -14,7 +16,7 @@
 <div {{ $attributes->class(['x-stat-card']) }}>
 
     @if ($icon)
-        <div class="x-stat-icon">{{ $icon }}</div>
+        <div class="x-stat-icon"><x-icon :name="$icon" :size="20" /></div>
     @endif
 
     <div>

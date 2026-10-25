@@ -24,7 +24,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -33,14 +33,14 @@
     .panel h3 {
         margin-bottom: 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel > p {
         margin-bottom: 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -60,12 +60,12 @@
 
         margin: 10px 0 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
     }
 
     .terkunci p {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
     }
 
@@ -84,8 +84,8 @@
     table.skala th {
         padding: 8px 6px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 10.5px;
         font-weight: 800;
@@ -100,9 +100,9 @@
     table.skala td {
         padding: 10px 6px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         vertical-align: middle;
     }
 
@@ -116,12 +116,12 @@
         width: 18px;
         height: 18px;
 
-        accent-color: #1779c9;
+        accent-color: var(--utama);
         cursor: pointer;
     }
 
     table.skala tr.salah td {
-        background: #fff6f6;
+        background: var(--bahaya-muda);
     }
 
     .rekomendasi {
@@ -137,7 +137,7 @@
 
         padding: 10px 14px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 10px;
 
         font-size: 13px;
@@ -147,13 +147,13 @@
     }
 
     .rekomendasi label:has(input:checked) {
-        border-color: #1779c9;
-        background: #eef6fd;
+        border-color: var(--utama);
+        background: var(--utama-muda);
     }
 
     .rekomendasi input,
     .pernyataan input {
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .pernyataan {
@@ -201,7 +201,7 @@
     @if (! $dibuka)
 
         <section class="panel terkunci">
-            <div class="ikon">🔒</div>
+            <div class="ikon"><x-icon name="lock" :size="28" /></div>
             <strong>Feedback belum dibuka</strong>
             <p>
                 @if ($dibukaPada)
@@ -300,7 +300,7 @@
                     <input type="checkbox" name="bersedia_tampil_alumni" value="1" @checked(old('bersedia_tampil_alumni', $feedback->bersedia_tampil_alumni))>
                     <span>
                         Saya bersedia ditampilkan sebagai alumni di website (foto, nama, kampus, divisi, project, dan testimoni).
-                        <small style="display: block; color: #7b8794;">Opsional. Persetujuan bisa dibatalkan selama feedback belum terkunci.</small>
+                        <small style="display: block; color: var(--teks-sekunder);">Opsional. Persetujuan bisa dibatalkan selama feedback belum terkunci.</small>
                     </span>
                 </label>
             </section>

@@ -4,19 +4,16 @@
 
 @section('title', 'Kelola Konten')
 @section('page_title', 'Kelola Konten')
-@section('page_subtitle', 'Edit seluruh konten yang tampil pada halaman utama MAGENTA')
+@section('page_subtitle', 'Edit seluruh konten yang tampil pada halaman utama PILARA')
 
 @push('styles')
 <style>
     body {
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
+        font-family: var(--font);
 
-        background: #f4f7fb;
+        background: var(--latar);
 
-        color: #173f70;
+        color: var(--utama-gelap);
     }
 
     /* =====================================================
@@ -36,7 +33,7 @@
         background: #ffffff;
 
         border-left:
-            4px solid #1779c9;
+            4px solid var(--utama);
 
         border-radius: 12px;
 
@@ -55,7 +52,7 @@
 
         height: 3px;
 
-        background: #f47b20;
+        background: var(--utama);
 
         margin-bottom: 12px;
     }
@@ -65,7 +62,7 @@
 
         font-weight: 800;
 
-        color: #245b9d;
+        color: var(--utama-gelap);
 
         margin-bottom: 7px;
     }
@@ -75,7 +72,7 @@
 
         line-height: 1.7;
 
-        color: #71849c;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -105,7 +102,7 @@
             18px 22px;
 
         border-bottom:
-            1px solid #e8edf4;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -123,9 +120,9 @@
 
         border-radius: 9px;
 
-        background: #edf5ff;
+        background: var(--utama-muda);
 
-        color: #2470b8;
+        color: var(--utama);
 
         display: flex;
 
@@ -143,7 +140,7 @@
 
         font-weight: 800;
 
-        color: #173f70;
+        color: var(--utama-gelap);
     }
 
     .section-description {
@@ -151,7 +148,7 @@
 
         font-size: 12px;
 
-        color: #8092a9;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -184,11 +181,11 @@
 
         font-weight: 700;
 
-        color: #173f70;
+        color: var(--utama-gelap);
     }
 
     .required {
-        color: #ef4f42;
+        color: var(--bahaya);
     }
 
     input,
@@ -196,18 +193,15 @@
         width: 100%;
 
         border:
-            1px solid #d6dfeb;
+            1px solid var(--garis-kuat);
 
         border-radius: 8px;
 
         background: #ffffff;
 
-        color: #284765;
+        color: var(--utama-gelap);
 
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
+        font-family: var(--font);
 
         font-size: 13px;
 
@@ -238,12 +232,12 @@
 
     input::placeholder,
     textarea::placeholder {
-        color: #a1afbf;
+        color: var(--teks-redup);
     }
 
     input:focus,
     textarea:focus {
-        border-color: #3579c6;
+        border-color: var(--utama);
 
         box-shadow:
             0 0 0 3px
@@ -255,7 +249,7 @@
 
         font-size: 11px;
 
-        color: #8498b0;
+        color: var(--teks-redup);
     }
 
     /* =====================================================
@@ -263,10 +257,10 @@
     ===================================================== */
 
     .sub-card {
-        background: #f8fafc;
+        background: var(--permukaan-redup);
 
         border:
-            1px solid #e4eaf2;
+            1px solid var(--garis);
 
         border-radius: 10px;
 
@@ -289,7 +283,7 @@
 
         font-weight: 800;
 
-        color: #23568f;
+        color: var(--utama-gelap);
 
         margin-bottom: 14px;
     }
@@ -322,7 +316,7 @@
 
         border-radius: 50%;
 
-        background: #177eb7;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -358,7 +352,7 @@
 
         border-radius: 8px;
 
-        background: #f47b20;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -374,7 +368,7 @@
     }
 
     .save-btn:hover {
-        background: #e96c12;
+        background: var(--peringatan);
 
         transform: translateY(-1px);
     }
@@ -1398,7 +1392,7 @@
                     >
 
                     @error('google_form_url')
-                        <div class="field-help" style="color:#b42318;">
+                        <div class="field-help" style="color:var(--bahaya);">
                             {{ $message }}
                         </div>
                     @enderror

@@ -70,7 +70,7 @@ class DashboardPesertaTest extends TestCase
         $this->logbook('2026-08-12');
 
         $this->dashboard()
-            ->assertSee('✓ Sudah diisi · Menunggu')
+            ->assertSee('Sudah diisi · Menunggu')
             ->assertDontSee('<strong>Belum diisi</strong>', false);
     }
 

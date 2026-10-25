@@ -1,26 +1,27 @@
-{{-- CSS website publik MAGENTA. --}}
+{{-- CSS website publik PILARA. --}}
 <style>
+    /* Nama variabel lama dipertahankan; nilainya dari token PILARA (partials/tema). */
     :root {
-        --primary: #0878a8;
-        --primary-dark: #075d83;
-        --primary-soft: #e6f3f9;
-        --navy: #0b2540;
-        --accent: #f47b20;
-        --accent-dark: #d96512;
-        --accent-soft: #fff1e6;
-        --success: #12805c;
-        --success-soft: #e8f7f0;
-        --danger: #c62f2f;
-        --danger-soft: #fdecec;
-        --text: #1f2d3a;
-        --muted: #64748b;
-        --line: #e3eaf1;
-        --light: #f5f9fc;
+        --primary: var(--utama);
+        --primary-dark: var(--utama-gelap);
+        --primary-soft: var(--utama-muda);
+        --navy: var(--utama-gelap);
+        --accent: var(--aksen);
+        --accent-dark: var(--aksen-gelap);
+        --accent-soft: var(--aksen-muda);
+        --success: var(--sukses);
+        --success-soft: var(--sukses-muda);
+        --danger: var(--bahaya);
+        --danger-soft: var(--bahaya-muda);
+        --text: var(--teks);
+        --muted: var(--teks-sekunder);
+        --line: var(--garis);
+        --light: var(--latar);
         --white: #ffffff;
         --radius: 18px;
         --radius-sm: 12px;
-        --shadow-sm: 0 4px 14px rgba(11, 37, 64, .06);
-        --shadow: 0 18px 45px rgba(11, 37, 64, .10);
+        --shadow-sm: 0 4px 14px rgba(11, 106, 156, .06);
+        --shadow: 0 18px 45px rgba(11, 106, 156, .10);
         --ease: cubic-bezier(.22, .8, .24, 1);
     }
 
@@ -38,11 +39,14 @@
     }
 
     body {
-        font-family: 'Plus Jakarta Sans', Arial, Helvetica, sans-serif;
+        font-family: var(--font);
         color: var(--text);
         background: var(--white);
         line-height: 1.65;
         -webkit-font-smoothing: antialiased;
+
+        /* Animasi masuk tidak boleh menimbulkan scroll horizontal. */
+        overflow-x: clip;
     }
 
     a {
@@ -64,7 +68,7 @@
     }
 
     :focus-visible {
-        outline: 3px solid rgba(8, 120, 168, .35);
+        outline: 3px solid rgba(38, 136, 180, .35);
         outline-offset: 2px;
     }
 
@@ -117,18 +121,18 @@
     .btn-accent {
         background: var(--accent);
         color: var(--white);
-        box-shadow: 0 10px 24px rgba(244, 123, 32, .30);
+        box-shadow: 0 10px 24px rgba(238, 118, 35, .30);
     }
 
     .btn-accent:hover {
         background: var(--accent-dark);
-        box-shadow: 0 14px 30px rgba(244, 123, 32, .38);
+        box-shadow: 0 14px 30px rgba(238, 118, 35, .38);
     }
 
     .btn-primary {
         background: var(--primary);
         color: var(--white);
-        box-shadow: 0 10px 24px rgba(8, 120, 168, .25);
+        box-shadow: 0 10px 24px rgba(38, 136, 180, .25);
     }
 
     .btn-primary:hover {
@@ -189,7 +193,7 @@
 
         background: rgba(255, 255, 255, .86);
         backdrop-filter: blur(14px);
-        box-shadow: 0 6px 24px rgba(11, 37, 64, .08);
+        box-shadow: 0 6px 24px rgba(11, 106, 156, .08);
     }
 
     .nav-inner {
@@ -215,17 +219,23 @@
         width: 40px;
         height: 40px;
 
-        display: grid;
-        place-items: center;
+        object-fit: contain;
+    }
 
-        border-radius: 12px;
+    .logo-teks {
+        display: flex;
+        flex-direction: column;
 
-        background: linear-gradient(135deg, var(--primary), var(--navy));
-        color: var(--white);
+        line-height: 1.1;
+        letter-spacing: 1.5px;
+    }
 
-        font-size: 18px;
+    .logo-teks small {
+        color: var(--muted);
 
-        box-shadow: 0 8px 18px rgba(8, 120, 168, .30);
+        font-size: 10.5px;
+        font-weight: 600;
+        letter-spacing: 0;
     }
 
     .nav-menu {
@@ -245,7 +255,7 @@
 
         border-radius: 999px;
 
-        color: #3c4d5f;
+        color: var(--teks);
 
         font-size: 14px;
         font-weight: 600;
@@ -275,7 +285,7 @@
 
         border-radius: 3px;
 
-        background: var(--accent);
+        background: var(--primary);
 
         transform: translateX(-50%);
     }
@@ -350,8 +360,8 @@
         padding: 150px 0 110px;
 
         background:
-            radial-gradient(circle at 12% 18%, rgba(8, 120, 168, .12), transparent 42%),
-            radial-gradient(circle at 88% 12%, rgba(244, 123, 32, .12), transparent 38%),
+            radial-gradient(circle at 12% 18%, rgba(38, 136, 180, .12), transparent 42%),
+            radial-gradient(circle at 88% 12%, rgba(238, 118, 35, .12), transparent 38%),
             linear-gradient(180deg, #f3f9fd 0%, #ffffff 100%);
     }
 
@@ -376,7 +386,7 @@
         width: 260px;
         height: 260px;
 
-        background: radial-gradient(circle, rgba(8, 120, 168, .25), transparent 70%);
+        background: radial-gradient(circle, rgba(38, 136, 180, .25), transparent 70%);
     }
 
     .blob-2 {
@@ -386,7 +396,7 @@
         width: 220px;
         height: 220px;
 
-        background: radial-gradient(circle, rgba(244, 123, 32, .22), transparent 70%);
+        background: radial-gradient(circle, rgba(238, 118, 35, .22), transparent 70%);
 
         animation-delay: -6s;
     }
@@ -417,7 +427,7 @@
 
         padding: 7px 14px 7px 8px;
 
-        border: 1px solid rgba(8, 120, 168, .18);
+        border: 1px solid rgba(38, 136, 180, .18);
         border-radius: 999px;
 
         background: var(--white);
@@ -494,7 +504,7 @@
 
         border-radius: 6px;
 
-        background: rgba(244, 123, 32, .28);
+        background: rgba(238, 118, 35, .28);
     }
 
     .hero-text {
@@ -530,28 +540,26 @@
         align-items: center;
         gap: 8px;
 
-        color: #3c4d5f;
+        color: var(--teks);
 
         font-size: 14px;
         font-weight: 600;
     }
 
+    /* Lingkaran hijau dengan centang garis (tanpa karakter simbol). */
     .hero-points li::before {
-        content: "✓";
+        content: "";
 
         width: 22px;
         height: 22px;
 
-        display: grid;
-        place-items: center;
+        flex-shrink: 0;
 
         border-radius: 50%;
 
-        background: var(--success-soft);
-        color: var(--success);
-
-        font-size: 12px;
-        font-weight: 800;
+        background:
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23067647' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / 12px no-repeat,
+            var(--success-soft);
     }
 
     .hero-visual {
@@ -703,8 +711,8 @@
     }
 
     .float-card-2 .icon {
-        background: var(--accent-soft);
-        color: var(--accent);
+        background: var(--primary-soft);
+        color: var(--primary);
     }
 
     @keyframes bob {
@@ -745,8 +753,8 @@
 
         border-radius: 999px;
 
-        background: var(--accent-soft);
-        color: var(--accent-dark);
+        background: var(--primary-soft);
+        color: var(--primary-dark);
 
         font-size: 12px;
         font-weight: 800;
@@ -967,7 +975,7 @@
     }
 
     .alumni-dialog::backdrop {
-        background: rgba(11, 37, 64, .55);
+        background: rgba(11, 106, 156, .55);
     }
 
     .alumni-tutup {
@@ -1042,10 +1050,10 @@
         margin-top: 18px;
         padding: 14px 18px;
 
-        border-left: 4px solid var(--accent);
+        border-left: 4px solid var(--primary);
         border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 
-        background: var(--accent-soft);
+        background: var(--primary-soft);
         color: var(--text);
 
         font-size: 15px;
@@ -1241,7 +1249,7 @@
         width: 100%;
         height: 4px;
 
-        background: linear-gradient(90deg, var(--primary), var(--accent));
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
 
         transform: scaleX(0);
         transform-origin: left;
@@ -1269,6 +1277,7 @@
         border-radius: 16px;
 
         background: var(--primary-soft);
+        color: var(--primary);
 
         font-size: 24px;
 
@@ -1414,8 +1423,8 @@
 
         border-radius: 12px;
 
-        background: var(--accent-soft);
-        color: var(--accent-dark);
+        background: var(--primary-soft);
+        color: var(--primary-dark);
 
         font-weight: 800;
     }
@@ -1471,7 +1480,7 @@
     }
 
     .req-card:hover .step {
-        color: rgba(244, 123, 32, .25);
+        color: rgba(238, 118, 35, .25);
     }
 
     .req-card h3 {
@@ -1516,7 +1525,7 @@
 
         border-radius: 3px;
 
-        background: linear-gradient(90deg, var(--primary), var(--accent));
+        background: linear-gradient(90deg, var(--primary), var(--primary-dark));
 
         transform: scaleX(var(--progress, 0));
         transform-origin: left;
@@ -1809,7 +1818,7 @@
         border-color: var(--primary);
         background: var(--primary);
         color: var(--white);
-        box-shadow: 0 0 0 5px rgba(8, 120, 168, .14);
+        box-shadow: 0 0 0 5px rgba(38, 136, 180, .14);
     }
 
     .stepper li.done .bullet {
@@ -1903,7 +1912,7 @@
         outline: none;
         border-color: var(--primary);
         background: var(--white);
-        box-shadow: 0 0 0 4px rgba(8, 120, 168, .12);
+        box-shadow: 0 0 0 4px rgba(38, 136, 180, .12);
     }
 
     .field.has-error input,
@@ -2039,7 +2048,7 @@
 
         background: var(--light);
 
-        color: #3c4d5f;
+        color: var(--teks);
 
         font-size: 14px;
 
@@ -2202,7 +2211,7 @@
         margin: 24px 0;
         padding: 16px 30px;
 
-        border: 2px dashed rgba(8, 120, 168, .35);
+        border: 2px dashed rgba(38, 136, 180, .35);
         border-radius: 16px;
 
         background: var(--primary-soft);
@@ -2597,12 +2606,12 @@
         border: 0;
         border-radius: 50%;
 
-        background: var(--accent);
+        background: var(--primary);
         color: var(--white);
 
         font-size: 20px;
 
-        box-shadow: 0 10px 24px rgba(244, 123, 32, .35);
+        box-shadow: 0 10px 24px rgba(238, 118, 35, .35);
 
         cursor: pointer;
 
@@ -2694,7 +2703,7 @@
             padding: 9px 9px;
         }
 
-        .nav-actions .btn-accent {
+        .nav-actions .btn {
             display: none;
         }
     }

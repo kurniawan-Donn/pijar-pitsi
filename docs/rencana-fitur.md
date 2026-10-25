@@ -955,12 +955,32 @@ Keputusan: **1A, 2A, 3A**.
   QR ikut tercetak saat diunduh ulang. Karena datanya belum menyimpan gambar, tanda tangan dan
   stempel hanya dipakai bila nama penanda tangannya masih sama dengan pengaturan sekarang.
 
-### 9.5 Tahap 3: Upgrade UI/UX
+### 9.5 Tahap 3: Upgrade UI/UX (`fase-27-ui-pilara`) ✅
 
-- Satu set ikon outline (Lucide/Tabler/Heroicons) sebagai SVG inline lewat komponen Blade (tanpa
-  npm), ketebalan garis sama, tanpa emoji. Warna ikon ikut teks menu; hanya menu aktif berwarna utama.
-- Seragamkan jarak, judul, tombol, tabel, form, badge status, dan tampilan data kosong.
-- Rapi di HP. Terapkan palet dan identitas PILARA.
+Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
+
+- **Token warna** satu sumber di `resources/views/partials/tema.blade.php` (palet 9.2 + turunan
+  netral dan status). Dipakai dashboard, login, verifikasi surat, dan website publik (variabel lama
+  website `--primary` dst. diarahkan ke token). Sekitar 1.070 kode warna lama di halaman dashboard
+  diganti `var(--…)`. PDF tetap memakai kode warna langsung (dompdf tidak mendukung `var()`).
+- **Ikon:** komponen `<x-icon name="…">` (SVG inline, warna `currentColor`). Sidebar, kartu
+  statistik, alert, pagination, tombol unduh/cetak, dan website publik tidak lagi memakai emoji.
+  Bintang rating dan panah teks (→) tetap sebagai teks.
+- **Sidebar** terang: teks dan ikon abu netral, hanya menu aktif berwarna utama; logo PITSI dan
+  tagline. Di layar ≤ 960 px sidebar menjadi panel geser (tombol menu di topbar, overlay, tombol Esc).
+- **Seragam:** huruf Plus Jakarta Sans di semua halaman, komponen tombol/form/alert/badge/pagination
+  dari token, badge status per nada (menunggu/diajukan = kuning, disetujui/aktif/terbit = hijau,
+  ditolak = merah, selesai = biru), komponen `<x-empty>` untuk data kosong, judul halaman lama
+  disamakan 17 px.
+- **Aksen oranye** hanya untuk tombol "Daftar Magang" dan badge jumlah di sidebar; dekorasi lain
+  memakai warna utama. Tombol Login navbar memakai warna utama.
+- **Identitas PILARA:** `APP_NAME=PILARA` (.env, .env.example, bawaan config), judul tab, sidebar,
+  login, navbar dan footer publik, footer laporan, judul halaman cetak. Logo versi kecil
+  `logo-pitsi-128.png` (web, favicon) dan `logo-pitsi-256.png` (PDF) dibuat dari logo asli. Kop PDF
+  penilaian, logbook, surat keterangan, dan laporan memakai logo.
+- Tidak diubah: nama database, folder, namespace, email akun uji di seeder (hanya nama tampilannya).
+- Catatan: mengganti `APP_NAME` mengganti nama cookie sesi, jadi semua pengguna perlu login ulang
+  sekali.
 
 ### 9.6 Tahap 4: Galeri dokumentasi (Beranda)
 

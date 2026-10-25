@@ -23,20 +23,20 @@
             padding-bottom: 8px;
             margin-bottom: 18px;
 
-            border-bottom: 3px double #12345b;
+            border-bottom: 3px double #0b6a9c;
 
             text-align: center;
         }
 
         .kop .nama {
-            color: #12345b;
+            color: #0b6a9c;
             font-size: 16px;
             font-weight: bold;
             letter-spacing: .5px;
         }
 
         .kop .alamat {
-            color: #4b5563;
+            color: #6b7280;
             font-size: 9.5px;
             line-height: 1.5;
         }
@@ -91,7 +91,7 @@
         .verifikasi {
             width: 50%;
 
-            color: #4b5563;
+            color: #6b7280;
             font-size: 8px;
             line-height: 1.4;
         }
@@ -148,6 +148,24 @@
 
             transform: rotate(-30deg);
         }
+
+        .kop-logo {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        .kop-logo td {
+            vertical-align: middle;
+        }
+
+        .kop-logo-gambar {
+            width: 60px;
+        }
+
+        .kop-logo-teks {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -168,13 +186,21 @@
 @endif
 
 <div class="kop">
-    <div class="nama">{{ strtoupper($perusahaan['nama']) }}</div>
-    @if ($perusahaan['alamat'])
-        <div class="alamat">{{ $perusahaan['alamat'] }}{{ $perusahaan['kota'] ? ', '.$perusahaan['kota'] : '' }}</div>
-    @endif
-    @if ($kontak)
-        <div class="alamat">{{ $kontak }}</div>
-    @endif
+    <table class="kop-logo">
+        <tr>
+            <td class="kop-logo-gambar">@include('partials.logo-pdf', ['tinggi' => 50])</td>
+            <td class="kop-logo-teks">
+            <div class="nama">{{ strtoupper($perusahaan['nama']) }}</div>
+            @if ($perusahaan['alamat'])
+                <div class="alamat">{{ $perusahaan['alamat'] }}{{ $perusahaan['kota'] ? ', '.$perusahaan['kota'] : '' }}</div>
+            @endif
+            @if ($kontak)
+                <div class="alamat">{{ $kontak }}</div>
+            @endif
+            </td>
+            <td class="kop-logo-gambar"></td>
+        </tr>
+    </table>
 </div>
 
 <h1>SURAT KETERANGAN MAHASISWA MAGANG</h1>

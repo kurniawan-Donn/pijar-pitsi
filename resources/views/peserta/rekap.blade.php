@@ -37,7 +37,7 @@
 
         margin-bottom: 6px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -48,7 +48,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
@@ -69,7 +69,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -78,14 +78,14 @@
     .panel h3 {
         margin-bottom: 12px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel-note {
         margin: -6px 0 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -105,8 +105,8 @@
     table.rekap-periode th {
         padding: 9px 10px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -117,25 +117,25 @@
     table.rekap-periode td {
         padding: 10px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         font-variant-numeric: tabular-nums;
     }
 
     table.rekap-periode tr.aktif td {
-        background: #f3f8fd;
+        background: var(--utama-muda);
     }
 
     table.rekap-periode tfoot td {
-        border-top: 2px solid #d7e0eb;
+        border-top: 2px solid var(--garis-kuat);
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-weight: 800;
     }
 
     table.rekap-periode a {
-        color: #1779c9;
+        color: var(--utama);
         font-weight: 700;
         text-decoration: none;
     }
@@ -143,14 +143,14 @@
     .kecil {
         display: block;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
     .empty {
         padding: 30px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -198,7 +198,7 @@
 
             <div class="toolbar-actions">
                 <x-button variant="secondary" :href="route('peserta.logbook.index', ['periode' => $periode['kunci']])">Lihat Logbook</x-button>
-                <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $periode['kunci']])">⬇ Unduh PDF</x-button>
+                <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $periode['kunci']])"><x-icon name="download" :size="16" /> Unduh PDF</x-button>
             </div>
         </div>
 

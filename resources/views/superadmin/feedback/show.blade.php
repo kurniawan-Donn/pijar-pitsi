@@ -28,7 +28,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -37,7 +37,7 @@
     .panel h3 {
         margin-bottom: 12px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
@@ -48,7 +48,7 @@
 
         padding: 8px 0;
 
-        border-top: 1px solid #f0f3f6;
+        border-top: 1px solid var(--garis);
 
         font-size: 13px;
     }
@@ -58,14 +58,14 @@
     }
 
     .skor-row strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         text-align: right;
     }
 
     .jawaban {
         padding: 10px 0;
 
-        border-top: 1px solid #f0f3f6;
+        border-top: 1px solid var(--garis);
 
         font-size: 13px;
         line-height: 1.6;
@@ -78,7 +78,7 @@
     .jawaban span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -86,14 +86,14 @@
     .jawaban p {
         margin: 4px 0 0;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         white-space: pre-line;
     }
 
     .empty {
         padding: 30px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 

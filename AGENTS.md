@@ -1,7 +1,7 @@
 # Pedoman Agen AI
 
 Laravel Boost sudah terpasang di project ini. Pedoman lengkap (aturan Boost dan
-Konteks Proyek MAGENTA) ada di `CLAUDE.md`; baca file tersebut sebelum mengubah kode.
+Konteks Proyek PILARA) ada di `CLAUDE.md`; baca file tersebut sebelum mengubah kode.
 
 Ringkasan aturan utama:
 - Gunakan PHP 8.4: `C:\laragon\bin\php\php-8.4\php.exe` (untuk artisan dan composer.phar).

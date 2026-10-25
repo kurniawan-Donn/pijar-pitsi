@@ -23,9 +23,9 @@
         <nav class="x-pagination-links" aria-label="Navigasi halaman">
 
             @if ($paginator->onFirstPage())
-                <span aria-disabled="true">‹</span>
+                <span aria-disabled="true"><x-icon name="chevron-left" :size="16" /></span>
             @else
-                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Sebelumnya">‹</a>
+                <a href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="Sebelumnya"><x-icon name="chevron-left" :size="16" /></a>
             @endif
 
             @foreach ($paginator->getUrlRange(max(1, $paginator->currentPage() - 2), min($paginator->lastPage(), $paginator->currentPage() + 2)) as $page => $url)
@@ -37,9 +37,9 @@
             @endforeach
 
             @if ($paginator->hasMorePages())
-                <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Berikutnya">›</a>
+                <a href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="Berikutnya"><x-icon name="chevron-right" :size="16" /></a>
             @else
-                <span aria-disabled="true">›</span>
+                <span aria-disabled="true"><x-icon name="chevron-right" :size="16" /></span>
             @endif
 
         </nav>

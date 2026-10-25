@@ -149,7 +149,7 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 
 # Konteks Proyek
 
-MAGENTA (Sistem Informasi Magang) — Laravel 13, PHP 8.4. Rencana pengembangan per fase ada di `docs/ROADMAP.md` dan `docs/PROMPT-PENGEMBANGAN.md`; baca keduanya sebelum mengerjakan fase berikutnya.
+PILARA (platform magang PT Pilar Teknotama Sinergi; dulu bernama MAGENTA) — Laravel 13, PHP 8.4. Rencana pengembangan per fase ada di `docs/ROADMAP.md` dan `docs/PROMPT-PENGEMBANGAN.md`; baca keduanya sebelum mengerjakan fase berikutnya.
 
 ## Aturan
 

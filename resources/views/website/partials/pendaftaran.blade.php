@@ -42,15 +42,15 @@
 
                 <ul class="aside-list">
                     <li>
-                        <span class="ico">🪪</span>
+                        <span class="ico"><x-icon name="id-card" :size="18" /></span>
                         <div>Data diri & NIM <small>Nama, email aktif, nomor WhatsApp</small></div>
                     </li>
                     <li>
-                        <span class="ico">🎓</span>
+                        <span class="ico"><x-icon name="graduation-cap" :size="18" /></span>
                         <div>Data akademik <small>Kampus, program studi, fakultas</small></div>
                     </li>
                     <li>
-                        <span class="ico">📄</span>
+                        <span class="ico"><x-icon name="file-text" :size="18" /></span>
                         <div>Surat pengantar <small>PDF/JPG/PNG, maksimal 2 MB</small></div>
                     </li>
                 </ul>
@@ -59,7 +59,7 @@
                     <div class="aside-gform">
                         <p>Lebih suka Google Form?</p>
                         <a href="{{ $googleFormUrl }}" target="_blank" rel="noopener noreferrer" class="btn">
-                            Buka Google Form ↗
+                            Buka Google Form <x-icon name="external-link" :size="14" />
                         </a>
                     </div>
                 @endif
@@ -119,7 +119,7 @@
 
                         @if ($adaErrorForm)
                             <div class="alert alert-error" role="alert">
-                                <span>⚠</span>
+                                <x-icon name="triangle-alert" :size="18" />
                                 <div>
                                     <strong>Ada data yang perlu diperbaiki.</strong>
                                     Periksa kolom yang ditandai merah.
@@ -186,7 +186,7 @@
                                     <x-website.field name="tanggal_selesai" type="date" label="Tanggal Selesai" required :min="now()->addDay()->toDateString()" />
 
                                     <div class="field full" style="margin-top: -8px;">
-                                        <span class="duration-pill" id="durasi" hidden>⏱ <span></span></span>
+                                        <span class="duration-pill" id="durasi" hidden><x-icon name="clock" :size="14" /> <span></span></span>
                                     </div>
 
                                     <x-website.field name="keterangan" type="textarea" label="Motivasi / Keterangan" full maxlength="1000" placeholder="Ceritakan singkat alasan kamu ingin magang di sini (opsional)">
@@ -208,7 +208,7 @@
                                                 required
                                                 @error('dokumen') aria-invalid="true" aria-describedby="dokumen-error" @enderror
                                             >
-                                            <span class="ico" aria-hidden="true">📎</span>
+                                            <span class="ico" aria-hidden="true"><x-icon name="upload" :size="22" /></span>
                                             <div>
                                                 <strong id="dropzone-title">Klik atau seret file ke sini</strong>
                                                 <small id="dropzone-sub">PDF, JPG, atau PNG · maksimal 2 MB</small>
@@ -250,14 +250,14 @@
                     @if ($googleFormUrl)
                         <div class="method-panel" id="panel-gform" role="tabpanel" aria-labelledby="tab-gform" hidden>
                             <div class="gform-panel">
-                                <div class="icon-box">📝</div>
+                                <div class="icon-box"><x-icon name="file-text" :size="24" /></div>
                                 <h3>Daftar lewat Google Form</h3>
                                 <p>
                                     Form akan terbuka di tab baru. Pendaftaran lewat Google Form diproses manual oleh admin,
                                     jadi statusnya belum bisa dicek otomatis di website ini.
                                 </p>
                                 <a href="{{ $googleFormUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-accent">
-                                    Buka Google Form <span class="arrow">↗</span>
+                                    Buka Google Form <x-icon name="external-link" :size="16" />
                                 </a>
                             </div>
                         </div>

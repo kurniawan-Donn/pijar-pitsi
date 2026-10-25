@@ -19,7 +19,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -36,14 +36,14 @@
 
         margin: 10px 0 6px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 17px;
     }
 
     .panel p {
         margin-bottom: 18px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
         line-height: 1.7;
     }
@@ -56,13 +56,25 @@
 
         list-style: none;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 13px;
         text-align: left;
     }
 
     .syarat li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
         padding: 3px 0;
+    }
+
+    .syarat .ok .x-icon {
+        color: var(--sukses);
+    }
+
+    .syarat .belum .x-icon {
+        color: var(--teks-redup);
     }
 
     @media (max-width: 800px) {
@@ -81,15 +93,15 @@
 
     <section class="panel">
         @if ($surat?->sudahTerbit())
-            <div class="ikon">📄</div>
+            <div class="ikon"><x-icon name="file-check" :size="28" /></div>
             <strong>Surat keterangan sudah terbit</strong>
             <p>
                 Nomor {{ $surat->nomor_surat }}, tanggal {{ $surat->tanggal_surat?->translatedFormat('d F Y') }}.
                 Simpan dan lampirkan surat ini untuk keperluan kampus.
             </p>
-            <x-button :href="route('peserta.surat.unduh')">⬇ Unduh Surat (PDF)</x-button>
+            <x-button :href="route('peserta.surat.unduh')"><x-icon name="download" :size="16" /> Unduh Surat (PDF)</x-button>
         @else
-            <div class="ikon">⏳</div>
+            <div class="ikon"><x-icon name="hourglass" :size="28" /></div>
             <strong>Surat keterangan belum terbit</strong>
             <p>
                 Surat disiapkan admin setelah masa magang selesai
@@ -99,9 +111,13 @@
                 dan semua syarat berikut terpenuhi:
             </p>
             <ul class="syarat">
-                <li>{{ $peserta->biodata?->status === 'disetujui' ? '✓' : '○' }} Biodata disetujui admin</li>
-                <li>{{ $peserta->penilaian ? '✓' : '○' }} Penilaian akhir dari pembimbing</li>
-                <li>{{ $peserta->feedback ? '✓' : '○' }} Feedback magang sudah dikirim</li>
+                @foreach ([
+                    'Biodata disetujui admin' => $peserta->biodata?->status === 'disetujui',
+                    'Penilaian akhir dari pembimbing' => (bool) $peserta->penilaian,
+                    'Feedback magang sudah dikirim' => (bool) $peserta->feedback,
+                ] as $label => $ok)
+                    <li class="{{ $ok ? 'ok' : 'belum' }}"><x-icon :name="$ok ? 'circle-check' : 'clock'" :size="16" /> {{ $label }}</li>
+                @endforeach
             </ul>
         @endif
     </section>

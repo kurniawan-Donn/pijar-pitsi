@@ -36,7 +36,7 @@
 
         border-radius: 14px;
 
-        background: linear-gradient(135deg, #12345b 0%, #174c7e 100%);
+        background: linear-gradient(135deg, var(--utama-gelap) 0%, var(--utama-gelap) 100%);
 
         color: #ffffff;
 
@@ -133,10 +133,10 @@
         white-space: nowrap;
     }
 
-    .p-info { background: #eaf3fb; border-color: #c4dcf1; color: #175c95; }
-    .p-hijau { background: #ecfdf3; border-color: #abefc6; color: #067647; }
-    .p-oranye { background: #fff8f0; border-color: #fbd7ae; color: #a85a12; }
-    .p-merah { background: #fef3f2; border-color: #fecdca; color: #b42318; }
+    .p-info { background: var(--utama-muda); border-color: var(--garis-kuat); color: var(--utama-gelap); }
+    .p-hijau { background: var(--sukses-muda); border-color: #abefc6; color: var(--sukses); }
+    .p-oranye { background: var(--peringatan-muda); border-color: #fbd7ae; color: var(--peringatan); }
+    .p-merah { background: var(--bahaya-muda); border-color: #fecdca; color: var(--bahaya); }
 
     .grid-dua {
         display: grid;
@@ -151,7 +151,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -172,18 +172,18 @@
     }
 
     .panel h3 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel-head a {
-        color: #1779c9;
+        color: var(--utama);
         font-size: 12px;
         font-weight: 700;
     }
 
     .panel p {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.7;
     }
@@ -197,16 +197,16 @@
     .angka {
         padding: 12px 14px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 11px;
 
-        background: #fbfcfe;
+        background: var(--permukaan-redup);
     }
 
     .angka span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
@@ -217,23 +217,23 @@
 
         margin-top: 3px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 19px;
     }
 
     .angka-uang {
         grid-column: span 4;
 
-        background: #fff8f1;
+        background: var(--peringatan-muda);
         border-color: #f9d9bd;
     }
 
     .angka-uang strong {
-        color: #b54708;
+        color: var(--peringatan);
     }
 
     .angka-uang small {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
@@ -245,7 +245,7 @@
     }
 
     .kalender .nama-hari {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 10px;
         font-weight: 800;
         text-align: center;
@@ -261,28 +261,28 @@
 
         border-radius: 7px;
 
-        background: #f4f7fb;
-        color: #8a99a8;
+        background: var(--latar);
+        color: var(--teks-sekunder);
 
         font-size: 12px;
         font-weight: 700;
     }
 
     a.sel:hover {
-        outline: 2px solid #1779c9;
+        outline: 2px solid var(--utama);
     }
 
     .sel.hari-ini-sel {
-        outline: 2px solid #17324d;
+        outline: 2px solid var(--utama-gelap);
     }
 
-    .k-diterima { background: #19a974 !important; color: #ffffff !important; }
-    .k-menunggu { background: #fdb022 !important; color: #ffffff !important; }
-    .k-ditolak { background: #e5484d !important; color: #ffffff !important; }
+    .k-diterima { background: var(--sukses) !important; color: #ffffff !important; }
+    .k-menunggu { background: var(--peringatan) !important; color: #ffffff !important; }
+    .k-ditolak { background: var(--bahaya) !important; color: #ffffff !important; }
     .k-izin { background: #7a5af8 !important; color: #ffffff !important; }
-    .k-libur { background: #d7e0eb !important; color: #52646e !important; }
-    .k-belum { background: #ffffff !important; color: #c62828 !important; box-shadow: inset 0 0 0 1.5px #f3a7a7; }
-    .k-terkunci { background: #eef2f6 !important; color: #8a99a8 !important; text-decoration: line-through; }
+    .k-libur { background: var(--garis-kuat) !important; color: var(--teks-sekunder) !important; }
+    .k-belum { background: #ffffff !important; color: var(--bahaya) !important; box-shadow: inset 0 0 0 1.5px #f3a7a7; }
+    .k-terkunci { background: var(--garis) !important; color: var(--teks-sekunder) !important; text-decoration: line-through; }
 
     .legenda {
         display: flex;
@@ -291,7 +291,7 @@
 
         margin-top: 12px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 11px;
     }
 
@@ -319,9 +319,9 @@
 
         padding: 10px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
     }
 
@@ -335,7 +335,7 @@
 
         margin-top: 2px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -351,10 +351,10 @@
         white-space: nowrap;
     }
 
-    .b-hijau { background: #e7f6ec; color: #067647; }
-    .b-oranye { background: #fff4e5; color: #b54708; }
-    .b-merah { background: #fff0f0; color: #c62828; }
-    .b-abu { background: #eef2f6; color: #52646e; }
+    .b-hijau { background: var(--sukses-muda); color: var(--sukses); }
+    .b-oranye { background: var(--peringatan-muda); color: var(--peringatan); }
+    .b-merah { background: var(--bahaya-muda); color: var(--bahaya); }
+    .b-abu { background: var(--garis); color: var(--teks-sekunder); }
 
     .progress-track {
         height: 8px;
@@ -362,7 +362,7 @@
 
         border-radius: 999px;
 
-        background: #edf1f5;
+        background: var(--garis);
 
         overflow: hidden;
     }
@@ -372,7 +372,7 @@
 
         border-radius: 999px;
 
-        background: linear-gradient(90deg, #1779c9, #19a974);
+        background: linear-gradient(90deg, var(--utama), var(--sukses));
     }
 
     .info-baris {
@@ -382,9 +382,9 @@
 
         padding: 8px 0;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 13px;
     }
 
@@ -393,7 +393,7 @@
     }
 
     .info-baris strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         text-align: right;
     }
 
@@ -406,7 +406,7 @@
     }
 
     .kosong {
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 13px;
     }
 
@@ -466,7 +466,7 @@
         <div class="hari-ini">
             <small>Logbook hari ini</small>
             @if ($logbookHariIni)
-                <strong>✓ Sudah diisi · {{ $logbookHariIni->labelStatus() }}</strong>
+                <strong><x-icon name="circle-check" :size="16" /> Sudah diisi · {{ $logbookHariIni->labelStatus() }}</strong>
                 <x-button variant="secondary" :href="route('peserta.logbook.edit', $hariIni['tanggal']->toDateString())">Lihat isian</x-button>
             @elseif ($hariIni['wajib'])
                 <strong>Belum diisi</strong>
@@ -492,14 +492,14 @@
         <div class="pengingat">
             @if ($r['surat_terbit'])
                 <a href="{{ route('peserta.surat.show') }}" class="p-hijau">
-                    🎓 Surat keterangan magang Anda sudah terbit.
+                    <x-icon name="graduation-cap" :size="16" /> Surat keterangan magang Anda sudah terbit.
                     <strong>Unduh surat →</strong>
                 </a>
             @endif
 
             @if ($r['feedback']['dibuka'] && ! $r['feedback']['terkunci'])
                 <a href="{{ route('peserta.feedback.edit') }}" class="{{ $r['feedback']['terkirim'] ? 'p-info' : 'p-oranye' }}">
-                    ✎
+                    <x-icon name="pencil" />
                     @if ($r['feedback']['terkirim'])
                         Feedback sudah dikirim. Anda masih bisa mengubahnya sampai surat keterangan terbit.
                     @else
@@ -511,14 +511,14 @@
 
             @if ($biodata->status === 'perlu_revisi')
                 <a href="{{ route('peserta.biodata.edit') }}" class="p-merah">
-                    ☷ Admin meminta perbaikan biodata.
+                    <x-icon name="id-card" :size="16" /> Admin meminta perbaikan biodata.
                     <strong>Perbaiki →</strong>
                 </a>
             @endif
 
             @if ($r['hampir_terkunci']->isNotEmpty())
                 <a href="{{ route('peserta.logbook.edit', $r['hampir_terkunci']->first()->toDateString()) }}" class="p-oranye">
-                    ⏳ {{ $r['hampir_terkunci']->count() }} hari kerja belum diisi dan akan terkunci dalam {{ \App\Services\RingkasanPeserta::HARI_PERINGATAN_KUNCI }} hari:
+                    <x-icon name="hourglass" :size="16" /> {{ $r['hampir_terkunci']->count() }} hari kerja belum diisi dan akan terkunci dalam {{ \App\Services\RingkasanPeserta::HARI_PERINGATAN_KUNCI }} hari:
                     {{ $r['hampir_terkunci']->map(fn ($tanggal) => $tanggal->translatedFormat('d M'))->implode(', ') }}.
                     <strong>Isi sekarang →</strong>
                 </a>
@@ -526,7 +526,7 @@
 
             @if ($r['perlu_diperbaiki']->isNotEmpty())
                 <a href="#perlu-diperbaiki" class="p-merah">
-                    ✗ {{ $r['perlu_diperbaiki']->count() }} logbook ditolak / perlu review admin.
+                    <x-icon name="circle-x" :size="16" /> {{ $r['perlu_diperbaiki']->count() }} logbook ditolak / perlu review admin.
                     <strong>Lihat →</strong>
                 </a>
             @endif
@@ -672,7 +672,7 @@
                 <div class="aksi-cepat">
                     <x-button variant="secondary" :href="route('peserta.izin.create')">+ Ajukan Izin / Sakit</x-button>
                     @if ($r['periode'])
-                        <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $r['periode']['kunci']])">⬇ Rekap PDF</x-button>
+                        <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $r['periode']['kunci']])"><x-icon name="download" :size="16" /> Rekap PDF</x-button>
                     @endif
                 </div>
             </section>

@@ -32,21 +32,21 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
     }
 
     .status-bar strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .status-bar p {
         margin-top: 4px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -60,7 +60,7 @@
 
         margin-bottom: 6px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -70,7 +70,7 @@
 
         border-radius: 999px;
 
-        background: #edf1f5;
+        background: var(--garis);
 
         overflow: hidden;
     }
@@ -80,7 +80,7 @@
 
         border-radius: 999px;
 
-        background: linear-gradient(90deg, #1779c9, #19a974);
+        background: linear-gradient(90deg, var(--utama), var(--sukses));
     }
 
     .badge-status {
@@ -96,10 +96,10 @@
         vertical-align: middle;
     }
 
-    .badge-draft { background: #eef2f6; color: #52646e; }
-    .badge-diajukan { background: #fff4e5; color: #b54708; }
-    .badge-perlu_revisi { background: #fff0f0; color: #c62828; }
-    .badge-disetujui { background: #e7f6ec; color: #067647; }
+    .badge-draft { background: var(--garis); color: var(--teks-sekunder); }
+    .badge-diajukan { background: var(--peringatan-muda); color: var(--peringatan); }
+    .badge-perlu_revisi { background: var(--bahaya-muda); color: var(--bahaya); }
+    .badge-disetujui { background: var(--sukses-muda); color: var(--sukses); }
 
     fieldset.form-lock {
         min-width: 0;
@@ -116,7 +116,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -135,14 +135,14 @@
     }
 
     .foto-isi h3 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .foto-isi p {
         margin: 4px 0 12px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -173,20 +173,20 @@
 
         border-radius: 9px;
 
-        background: #e8f2fb;
-        color: #1779c9;
+        background: var(--utama-muda);
+        color: var(--utama);
 
         font-size: 13px;
         font-weight: 800;
     }
 
     .section-head h3 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .section-head p {
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -211,7 +211,7 @@
     .program-item span {
         display: block;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 700;
         text-transform: uppercase;
@@ -222,7 +222,7 @@
 
         margin-top: 3px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 13px;
     }
 
@@ -245,7 +245,7 @@
     .list-row .nomor {
         flex: 0 0 26px;
 
-        color: #8a99a8;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 800;
         text-align: center;
@@ -272,19 +272,19 @@
 
         border-radius: 8px;
 
-        color: #c62828;
+        color: var(--bahaya);
         font-size: 18px;
     }
 
     .list-remove:hover {
-        background: #fff0f0;
+        background: var(--bahaya-muda);
     }
 
     .list-add {
         margin-top: 8px;
         padding: 6px 0;
 
-        color: #1779c9;
+        color: var(--utama);
         font-size: 13px;
     }
 
@@ -307,7 +307,7 @@
         align-items: center;
         gap: 8px;
 
-        color: #34495e;
+        color: var(--teks);
         font-size: 13px;
         cursor: pointer;
     }
@@ -317,7 +317,7 @@
         width: 17px;
         height: 17px;
 
-        accent-color: #1779c9;
+        accent-color: var(--utama);
     }
 
     .check {
@@ -336,7 +336,7 @@
     .note-sensitif {
         margin: -4px 0 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -351,7 +351,7 @@
 
         padding: 14px 0;
 
-        background: linear-gradient(180deg, rgba(244, 247, 251, 0), #f4f7fb 35%);
+        background: linear-gradient(180deg, rgba(244, 247, 251, 0), var(--latar) 35%);
     }
 
     @media (max-width: 800px) {

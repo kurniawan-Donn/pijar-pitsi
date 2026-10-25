@@ -206,6 +206,17 @@ Centang setiap langkah yang berhasil.
 - [ ] Ganti gambar tanda tangan Menyetujui, lalu unduh ulang surat yang sudah terbit: tetap memakai
   tanda tangan lama.
 
+### J. Tampilan PILARA (Revisi 5 tahap 3)
+- [ ] Setelah pembaruan ini semua pengguna perlu **login ulang sekali** (nama aplikasi berubah).
+- [ ] Halaman login, sidebar, beranda (navbar + footer), dan tab browser menampilkan nama **PILARA**
+  dan logo PITSI.
+- [ ] Sidebar: semua ikon garis abu dengan gaya sama, tanpa emoji; hanya menu yang sedang dibuka
+  berwarna biru.
+- [ ] Perkecil jendela browser (atau buka di HP): sidebar tersembunyi, tombol ☰ di kiri atas membuka
+  menu; klik area gelap atau tekan Esc untuk menutup. Tidak ada geser ke samping.
+- [ ] Warna oranye hanya ada di tombol **Daftar Magang** (beranda) dan angka badge di sidebar.
+- [ ] Unduh PDF penilaian, logbook, surat keterangan, dan laporan: kop memakai logo PITSI.
+
 ---
 
 ## 6. Hal yang Sering Membingungkan

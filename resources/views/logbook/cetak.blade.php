@@ -21,7 +21,7 @@
         h1 {
             margin: 0 0 2px;
 
-            color: #12345b;
+            color: #0b6a9c;
             font-size: 14px;
             text-align: center;
         }
@@ -29,7 +29,7 @@
         .perusahaan {
             margin-bottom: 10px;
 
-            color: #4b5d70;
+            color: #6b7280;
             font-size: 10px;
             text-align: center;
         }
@@ -47,7 +47,7 @@
 
         .identitas .label {
             width: 70px;
-            color: #4b5d70;
+            color: #6b7280;
         }
 
         table.harian {
@@ -59,13 +59,13 @@
         table.harian td {
             padding: 3px 4px;
 
-            border: 1px solid #9aa7b4;
+            border: 1px solid #9ca3af;
 
             vertical-align: top;
         }
 
         table.harian th {
-            background: #e8eef5;
+            background: #e8f3f9;
 
             font-size: 8px;
             text-align: center;
@@ -121,6 +121,24 @@
             color: #6b7280;
             font-size: 7.5px;
         }
+
+        .kop-logo {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        .kop-logo td {
+            vertical-align: middle;
+        }
+
+        .kop-logo-gambar {
+            width: 60px;
+        }
+
+        .kop-logo-teks {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -131,8 +149,16 @@
     $no = 0;
 @endphp
 
-<h1>DAILY AKTIVITY MAHASISWA MAGANG</h1>
-<div class="perusahaan">{{ $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name') }}</div>
+<table class="kop-logo">
+    <tr>
+        <td class="kop-logo-gambar">@include('partials.logo-pdf', ['tinggi' => 36])</td>
+        <td class="kop-logo-teks">
+            <h1>DAILY AKTIVITY MAHASISWA MAGANG</h1>
+            <div class="perusahaan">{{ $perusahaan?->nama_perusahaan ?? $perusahaan?->nama ?? config('app.name') }}</div>
+        </td>
+        <td class="kop-logo-gambar"></td>
+    </tr>
+</table>
 
 <table class="identitas">
     <tr>

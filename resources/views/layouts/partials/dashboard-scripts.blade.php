@@ -7,6 +7,9 @@
        Batas ukuran dibaca dari data-maks-mb (bawaan 2).
 
     2. Penghitung karakter: <textarea maxlength="500" data-hitung>.
+
+    3. Tombol menu (data-buka-menu) membuka sidebar di layar kecil; overlay (data-tutup-menu)
+       atau tombol Esc menutupnya.
 --}}
 <script>
     (function () {
@@ -101,5 +104,36 @@
         });
 
         document.querySelectorAll('textarea[maxlength][data-hitung]').forEach(perbaruiHitungan);
+
+        // Menu samping di layar kecil (panel geser).
+        var tombolMenu = document.querySelector('[data-buka-menu]');
+
+        function aturMenu(terbuka) {
+            document.body.classList.toggle('menu-terbuka', terbuka);
+
+            if (tombolMenu) {
+                tombolMenu.setAttribute('aria-expanded', terbuka ? 'true' : 'false');
+                tombolMenu.setAttribute('aria-label', terbuka ? 'Tutup menu' : 'Buka menu');
+            }
+        }
+
+        if (tombolMenu) {
+            tombolMenu.addEventListener('click', function () {
+                aturMenu(! document.body.classList.contains('menu-terbuka'));
+            });
+        }
+
+        document.querySelectorAll('[data-tutup-menu]').forEach(function (elemen) {
+            elemen.addEventListener('click', function () {
+                aturMenu(false);
+            });
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && document.body.classList.contains('menu-terbuka')) {
+                aturMenu(false);
+                tombolMenu && tombolMenu.focus();
+            }
+        });
     })();
 </script>

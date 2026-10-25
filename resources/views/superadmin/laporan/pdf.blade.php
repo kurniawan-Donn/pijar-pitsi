@@ -20,7 +20,7 @@
 
         .kop {
             width: 100%;
-            border-bottom: 2px solid #12345b;
+            border-bottom: 2px solid #0b6a9c;
             margin-bottom: 10px;
         }
 
@@ -31,12 +31,12 @@
 
         h1 {
             margin: 0;
-            color: #12345b;
+            color: #0b6a9c;
             font-size: 15px;
         }
 
         .sub {
-            color: #4b5d70;
+            color: #6b7280;
             font-size: 10px;
         }
 
@@ -52,7 +52,7 @@
         }
 
         .ringkasan b {
-            color: #12345b;
+            color: #0b6a9c;
         }
 
         table.data {
@@ -109,16 +109,17 @@
 
 <body>
 
-    <div class="footer">MAGENTA · Sistem Informasi Magang — dicetak {{ now()->translatedFormat('d F Y, H:i') }}</div>
+    <div class="footer">PILARA · Platform Magang PT Pilar Teknotama Sinergi — dicetak {{ now()->translatedFormat('d F Y, H:i') }}</div>
 
     <table class="kop">
         <tr>
+            <td style="width: 46px;">@include('partials.logo-pdf', ['tinggi' => 36])</td>
             <td>
                 <h1>{{ $laporan['judul'] }}</h1>
                 <div class="sub">{{ $laporan['keterangan'] }}</div>
             </td>
             <td class="meta">
-                MAGENTA · Sistem Informasi Magang<br>
+                PILARA · Platform Magang PT Pilar Teknotama Sinergi<br>
                 Oleh {{ auth()->user()->name }}
             </td>
         </tr>

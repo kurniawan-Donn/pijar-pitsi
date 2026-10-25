@@ -33,7 +33,7 @@
 
         margin-bottom: 6px;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
         font-size: 12px;
         font-weight: 700;
     }
@@ -44,7 +44,7 @@
 
         padding: 0 10px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 8px;
 
         background: #ffffff;
@@ -65,7 +65,7 @@
 
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -74,14 +74,14 @@
     .panel h3 {
         margin-bottom: 12px;
 
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 15px;
     }
 
     .panel-note {
         margin: -6px 0 14px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -101,7 +101,7 @@
 
         padding: 10px 14px;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 10px;
 
         font-size: 13px;
@@ -114,14 +114,14 @@
     .izin-item small {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
     }
 
     .link-hapus {
         border: none;
         background: none;
 
-        color: #c62828;
+        color: var(--bahaya);
         font-family: inherit;
         font-size: 12px;
         font-weight: 700;
@@ -132,7 +132,7 @@
     .empty {
         padding: 30px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
@@ -182,7 +182,7 @@
 
             <div class="toolbar-actions">
                 <x-button variant="secondary" :href="route('peserta.izin.create')">+ Ajukan Izin / Sakit</x-button>
-                <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $periode['kunci']])">⬇ Unduh PDF</x-button>
+                <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $periode['kunci']])"><x-icon name="download" :size="16" /> Unduh PDF</x-button>
                 @if (today()->between($periode['mulai'], $periode['selesai']))
                     <x-button :href="route('peserta.logbook.edit', now()->toDateString())">Isi Logbook Hari Ini</x-button>
                 @endif

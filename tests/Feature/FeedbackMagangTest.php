@@ -70,7 +70,7 @@ class FeedbackMagangTest extends TestCase
             ->assertOk()
             ->assertSee('Feedback belum dibuka')
             ->assertSee('Jumat, 30 Oktober 2026')
-            ->assertSee('Feedback 🔒');
+            ->assertSee('aria-label="Terkunci"', false);
 
         $this->kirim()->assertSessionHas('error', 'Feedback belum dibuka.');
         $this->assertSame(0, FeedbackPeserta::count());
@@ -81,7 +81,7 @@ class FeedbackMagangTest extends TestCase
         $this->actingAs($this->akun)
             ->get(route('peserta.feedback.edit'))
             ->assertOk()
-            ->assertDontSee('Feedback 🔒')
+            ->assertDontSee('aria-label="Terkunci"', false)
             ->assertSee('Pembimbing mudah dihubungi ketika saya membutuhkan bantuan atau konsultasi.')
             ->assertSee('Hal apa yang paling Anda sukai selama mengikuti program magang?')
             ->assertSee('Ragu-ragu')

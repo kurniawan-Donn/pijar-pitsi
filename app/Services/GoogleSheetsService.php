@@ -38,7 +38,7 @@ class GoogleSheetsService
         }
 
         $client = new Client;
-        $client->setApplicationName(config('app.name', 'MAGENTA'));
+        $client->setApplicationName(config('app.name', 'PILARA'));
         $client->setAuthConfig($this->credentialsPath);
         $client->setScopes([Sheets::SPREADSHEETS]);
 

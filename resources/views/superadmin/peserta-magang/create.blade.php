@@ -9,9 +9,9 @@
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #263238;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--teks);
         min-height: 100vh;
     }
 
@@ -47,9 +47,9 @@
 
     .heading {
 
-        font-size: 26px;
+        font-size: 17px;
 
-        color: #17313d;
+        color: var(--teks);
 
         font-weight: 800;
 
@@ -57,7 +57,7 @@
 
     .heading-description {
 
-        color: #7b8b96;
+        color: var(--teks-sekunder);
 
         font-size: 13px;
 
@@ -100,7 +100,7 @@
 
     .btn-primary {
 
-        background: #0878a8;
+        background: var(--utama);
 
         color: white;
 
@@ -108,7 +108,7 @@
 
     .btn-primary:hover {
 
-        background: #075d83;
+        background: var(--utama-gelap);
 
         transform: translateY(-1px);
 
@@ -118,16 +118,16 @@
 
         background: white;
 
-        color: #52646e;
+        color: var(--teks-sekunder);
 
         border:
-            1px solid #dce5ea;
+            1px solid var(--garis);
 
     }
 
     .btn-secondary:hover {
 
-        background: #f7fafc;
+        background: var(--permukaan-redup);
 
     }
 
@@ -140,7 +140,7 @@
         background: white;
 
         border:
-            1px solid #e2eaf0;
+            1px solid var(--garis);
 
         border-radius: 14px;
 
@@ -157,7 +157,7 @@
             22px 25px;
 
         border-bottom:
-            1px solid #edf1f4;
+            1px solid var(--garis);
 
     }
 
@@ -167,7 +167,7 @@
 
         font-weight: 800;
 
-        color: #263238;
+        color: var(--teks);
 
     }
 
@@ -175,7 +175,7 @@
 
         margin-top: 5px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
 
         font-size: 12px;
 
@@ -225,7 +225,7 @@
 
         margin-bottom: 7px;
 
-        color: #34454f;
+        color: var(--teks);
 
         font-size: 12px;
 
@@ -235,7 +235,7 @@
 
     .required {
 
-        color: #d64545;
+        color: var(--bahaya);
 
     }
 
@@ -250,13 +250,13 @@
             0 13px;
 
         border:
-            1px solid #dce5ea;
+            1px solid var(--garis);
 
         border-radius: 8px;
 
         background: white;
 
-        color: #263238;
+        color: var(--teks);
 
         font-size: 13px;
 
@@ -271,7 +271,7 @@
     .form-input:focus,
     .form-select:focus {
 
-        border-color: #0878a8;
+        border-color: var(--utama);
 
         box-shadow:
             0 0 0 3px
@@ -296,7 +296,7 @@
 
         margin-top: 6px;
 
-        color: #8a99a3;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
 
@@ -308,7 +308,7 @@
 
         margin-top: 6px;
 
-        color: #b42318;
+        color: var(--bahaya);
 
         font-size: 11px;
 
@@ -320,10 +320,10 @@
 
     .sheets-box {
 
-        background: #f7fafc;
+        background: var(--permukaan-redup);
 
         border:
-            1px solid #e3ebf0;
+            1px solid var(--garis);
 
         border-radius: 10px;
 
@@ -340,7 +340,7 @@
 
         gap: 9px;
 
-        color: #0878a8;
+        color: var(--utama);
 
         font-size: 13px;
 
@@ -352,7 +352,7 @@
 
     .sheets-description {
 
-        color: #74848e;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
 
@@ -371,10 +371,10 @@
         padding:
             20px 25px;
 
-        background: #fbfcfd;
+        background: var(--permukaan-redup);
 
         border-top:
-            1px solid #edf1f4;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -801,7 +801,7 @@
                                 <div class="sheets-title">
 
                                     <span>
-                                        ▣
+                                        <x-icon name="file-spreadsheet" />
                                     </span>
 
                                     Google Sheets Absensi

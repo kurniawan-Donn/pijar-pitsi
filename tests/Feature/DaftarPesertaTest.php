@@ -155,7 +155,7 @@ class DaftarPesertaTest extends TestCase
             ->get(route('superadmin.surat.index'))
             ->assertOk()
             ->assertSeeInOrder(['Indah Siap', 'Joko Kurang'])
-            ->assertSee('Lengkap ✓', false)
+            ->assertSee('>Lengkap</span>', false)
             ->assertSee('Biodata belum disetujui.')
             // Bawaan hanya peserta selesai.
             ->assertDontSee('Kiki Aktif');

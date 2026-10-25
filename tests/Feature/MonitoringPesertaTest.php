@@ -134,7 +134,7 @@ class MonitoringPesertaTest extends TestCase
             ->get(route('superadmin.monitoring.index', ['belum_hari_ini' => 1]))
             ->assertOk()
             ->assertSee('Budi Lupa')
-            ->assertDontSee('Hari ini ✓');
+            ->assertDontSee('>Hari ini</span>', false);
     }
 
     public function test_dashboard_menampilkan_ringkasan_monitoring(): void

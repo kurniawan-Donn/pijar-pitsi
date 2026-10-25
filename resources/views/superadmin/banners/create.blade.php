@@ -4,7 +4,7 @@
 
 @section('title', 'Kelola Banner')
 @section('page_title', 'Kelola Banner')
-@section('page_subtitle', 'Atur banner yang tampil pada halaman utama MAGENTA')
+@section('page_subtitle', 'Atur banner yang tampil pada halaman utama PILARA')
 
 @push('styles')
 <style>
@@ -50,9 +50,9 @@
 
         border-radius: 13px;
 
-        background: #e8f3fc;
+        background: var(--utama-muda);
 
-        color: #1769aa;
+        color: var(--utama);
 
         display: flex;
 
@@ -63,14 +63,14 @@
         font-size: 23px;
 
         border:
-            1px solid #d6eafa;
+            1px solid var(--utama-muda);
     }
 
     .page-header h2 {
 
         font-size: 21px;
 
-        color: #173b68;
+        color: var(--utama-gelap);
 
         margin-bottom: 5px;
     }
@@ -79,7 +79,7 @@
 
         font-size: 13px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
     }
 
     /* =====================================================
@@ -91,7 +91,7 @@
         background: white;
 
         border:
-            1px solid #e4eaf1;
+            1px solid var(--garis);
 
         border-radius: 16px;
 
@@ -109,7 +109,7 @@
         padding: 20px 25px;
 
         border-bottom:
-            1px solid #edf1f5;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -137,9 +137,9 @@
 
         border-radius: 9px;
 
-        background: #edf6fd;
+        background: var(--utama-muda);
 
-        color: #1769aa;
+        color: var(--utama);
 
         display: flex;
 
@@ -152,7 +152,7 @@
 
     .banner-card-header h3 {
 
-        color: #173b68;
+        color: var(--utama-gelap);
 
         font-size: 15px;
 
@@ -161,7 +161,7 @@
 
     .banner-card-header p {
 
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
     }
@@ -179,9 +179,9 @@
 
         border-radius: 20px;
 
-        background: #ecfdf3;
+        background: var(--sukses-muda);
 
-        color: #167342;
+        color: var(--sukses);
 
         font-size: 11px;
 
@@ -195,7 +195,7 @@
 
         border-radius: 50%;
 
-        background: #22a35a;
+        background: var(--sukses);
     }
 
     .banner-body {
@@ -218,8 +218,8 @@
         background:
             linear-gradient(
                 135deg,
-                #e9f3fb,
-                #f5f8fc
+                var(--utama-muda),
+                var(--utama-muda)
             );
 
         margin-bottom: 20px;
@@ -250,12 +250,12 @@
 
         justify-content: center;
 
-        color: #8b99a9;
+        color: var(--teks-redup);
 
         gap: 10px;
 
         border:
-            1px dashed #cbd5e1;
+            1px dashed var(--garis-kuat);
 
         border-radius: 12px;
     }
@@ -275,7 +275,7 @@
 
         justify-content: center;
 
-        color: #1769aa;
+        color: var(--utama);
 
         font-size: 23px;
     }
@@ -294,7 +294,7 @@
 
     .banner-info h2 {
 
-        color: #173b68;
+        color: var(--utama-gelap);
 
         font-size: 20px;
 
@@ -303,7 +303,7 @@
 
     .banner-info p {
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
 
         font-size: 13px;
 
@@ -319,7 +319,7 @@
         background: white;
 
         border:
-            1px solid #e4eaf1;
+            1px solid var(--garis);
 
         border-radius: 16px;
 
@@ -335,7 +335,7 @@
     .empty-box {
 
         border:
-            1px dashed #cbd5e1;
+            1px dashed var(--garis-kuat);
 
         border-radius: 12px;
 
@@ -343,7 +343,7 @@
 
         text-align: center;
 
-        background: #fafcfe;
+        background: var(--utama-muda);
     }
 
     .empty-icon {
@@ -356,9 +356,9 @@
         margin:
             0 auto 15px;
 
-        background: #eaf4fc;
+        background: var(--utama-muda);
 
-        color: #1769aa;
+        color: var(--utama);
 
         display: flex;
 
@@ -371,7 +371,7 @@
 
     .empty-box h3 {
 
-        color: #173b68;
+        color: var(--utama-gelap);
 
         font-size: 17px;
 
@@ -380,7 +380,7 @@
 
     .empty-box p {
 
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 12px;
 
@@ -400,7 +400,7 @@
         background: white;
 
         border:
-            1px solid #e4eaf1;
+            1px solid var(--garis);
 
         border-radius: 16px;
 
@@ -416,7 +416,7 @@
         padding: 21px 25px;
 
         border-bottom:
-            1px solid #edf1f5;
+            1px solid var(--garis);
 
         display: flex;
 
@@ -432,9 +432,9 @@
 
         border-radius: 9px;
 
-        background: #fff5df;
+        background: var(--peringatan-muda);
 
-        color: #d88b00;
+        color: var(--peringatan);
 
         display: flex;
 
@@ -447,7 +447,7 @@
 
     .form-header h3 {
 
-        color: #173b68;
+        color: var(--utama-gelap);
 
         font-size: 15px;
 
@@ -456,7 +456,7 @@
 
     .form-header p {
 
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
     }
@@ -478,7 +478,7 @@
 
         letter-spacing: 1px;
 
-        color: #1769aa;
+        color: var(--utama);
 
         font-weight: bold;
 
@@ -514,14 +514,14 @@
 
         font-weight: bold;
 
-        color: #334155;
+        color: var(--utama-gelap);
 
         margin-bottom: 8px;
     }
 
     .required {
 
-        color: #e05252;
+        color: var(--bahaya);
     }
 
     input,
@@ -534,18 +534,15 @@
             12px 13px;
 
         border:
-            1px solid #d5dce5;
+            1px solid var(--garis-kuat);
 
         border-radius: 9px;
 
         font-size: 13px;
 
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
+        font-family: var(--font);
 
-        color: #1f2937;
+        color: var(--teks);
 
         background: white;
 
@@ -556,7 +553,7 @@
     textarea:hover,
     select:hover {
 
-        border-color: #b9c5d2;
+        border-color: var(--garis-kuat);
     }
 
     input:focus,
@@ -565,7 +562,7 @@
 
         outline: none;
 
-        border-color: #1769aa;
+        border-color: var(--utama);
 
         box-shadow:
             0 0 0 3px
@@ -587,7 +584,7 @@
 
         cursor: pointer;
 
-        background: #fafcfe;
+        background: var(--utama-muda);
     }
 
     input[type="number"] {
@@ -599,7 +596,7 @@
 
         margin-top: 6px;
 
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
 
@@ -611,7 +608,7 @@
         border: none;
 
         border-top:
-            1px solid #edf1f5;
+            1px solid var(--garis);
 
         margin:
             27px 0 22px;
@@ -629,10 +626,10 @@
 
         padding: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
 
         border:
-            1px solid #e4eaf1;
+            1px solid var(--garis);
 
         border-radius: 11px;
     }
@@ -643,7 +640,7 @@
 
         font-weight: bold;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
 
         margin-bottom: 8px;
 
@@ -685,12 +682,12 @@
         margin-top: 25px;
 
         border-top:
-            1px solid #edf1f5;
+            1px solid var(--garis);
     }
 
     .action-left {
 
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 11px;
     }
@@ -730,19 +727,19 @@
 
     .btn-secondary {
 
-        background: #eef1f5;
+        background: var(--garis);
 
-        color: #526171;
+        color: var(--teks-sekunder);
     }
 
     .btn-secondary:hover {
 
-        background: #dfe5eb;
+        background: var(--garis-kuat);
     }
 
     .btn-primary {
 
-        background: #1769aa;
+        background: var(--utama);
 
         color: white;
 
@@ -753,7 +750,7 @@
 
     .btn-primary:hover {
 
-        background: #0f4c81;
+        background: var(--utama-gelap);
 
         transform:
             translateY(-1px);
@@ -761,17 +758,17 @@
 
     .btn-danger {
 
-        background: #fff0f0;
+        background: var(--bahaya-muda);
 
-        color: #c53030;
+        color: var(--bahaya);
 
         border:
-            1px solid #ffd5d5;
+            1px solid var(--bahaya-muda);
     }
 
     .btn-danger:hover {
 
-        background: #dc3545;
+        background: var(--bahaya);
 
         color: white;
     }
@@ -784,7 +781,7 @@
 
         margin-top: 18px;
 
-        color: #98a2b0;
+        color: var(--teks-redup);
 
         font-size: 11px;
 
@@ -912,7 +909,7 @@
         <div class="page-header-left">
 
             <div class="page-header-icon">
-                ▧
+                <x-icon name="image" />
             </div>
 
             <div>
@@ -957,7 +954,7 @@
                 <div class="banner-card-title">
 
                     <div class="banner-icon">
-                        ▧
+                        <x-icon name="image" />
                     </div>
 
                     <div>
@@ -968,7 +965,7 @@
 
                         <p>
                             Banner yang sedang digunakan
-                            pada website MAGENTA.
+                            pada website PILARA.
                         </p>
 
                     </div>
@@ -1001,7 +998,7 @@
                         <div class="no-image">
 
                             <div class="no-image-icon">
-                                ▧
+                                <x-icon name="image" />
                             </div>
 
                             <span>
@@ -1053,7 +1050,7 @@
             <div class="empty-box">
 
                 <div class="empty-icon">
-                    ▧
+                    <x-icon name="image" />
                 </div>
 
                 <h3>
@@ -1063,7 +1060,7 @@
                 <p>
                     Banner yang kamu simpan pertama kali
                     akan menjadi banner utama yang tampil
-                    pada halaman website MAGENTA.
+                    pada halaman website PILARA.
                 </p>
 
             </div>
@@ -1081,7 +1078,7 @@
         <div class="form-header">
 
             <div class="form-header-icon">
-                ✎
+                <x-icon name="pencil" />
             </div>
 
             <div>
@@ -1142,7 +1139,7 @@
                             id="judul"
                             name="judul"
                             value="{{ old('judul', $banner?->judul ?? '') }}"
-                            placeholder="Contoh: Selamat Datang di MAGENTA"
+                            placeholder="Contoh: Selamat Datang di PILARA"
                             required
                         >
 
@@ -1402,7 +1399,7 @@
                             class="btn btn-primary"
                         >
 
-                            ✓
+                            <x-icon name="check" />
 
                             @if($banner)
 
@@ -1430,7 +1427,7 @@
                     style="
                         margin-top: 18px;
                         padding-top: 18px;
-                        border-top: 1px solid #edf1f5;
+                        border-top: 1px solid var(--garis);
                     "
                 >
 
@@ -1449,7 +1446,7 @@
                             class="btn btn-danger"
                         >
 
-                            🗑
+                            <x-icon name="trash" :size="16" />
                             Hapus Banner
 
                         </button>
@@ -1466,7 +1463,7 @@
 
     <div class="foot-note">
 
-        MAGENTA &nbsp;•&nbsp;
+        PILARA &nbsp;•&nbsp;
         Sistem Informasi Magang
 
     </div>

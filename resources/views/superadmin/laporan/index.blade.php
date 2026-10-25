@@ -26,7 +26,7 @@
 
         border-radius: 12px;
 
-        background: #e9eef4;
+        background: var(--garis);
     }
 
     .tab {
@@ -34,7 +34,7 @@
 
         border-radius: 9px;
 
-        color: #4b5d70;
+        color: var(--teks-sekunder);
 
         font-size: 13px;
         font-weight: 700;
@@ -43,19 +43,19 @@
     }
 
     .tab:hover {
-        color: #1779c9;
+        color: var(--utama);
     }
 
     .tab.active {
         background: #ffffff;
-        color: #1779c9;
+        color: var(--utama);
         box-shadow: 0 2px 8px rgba(15, 40, 65, .08);
     }
 
     .panel {
         background: #ffffff;
 
-        border: 1px solid #e5eaf0;
+        border: 1px solid var(--garis);
         border-radius: 13px;
 
         box-shadow: 0 4px 15px rgba(15, 40, 65, .04);
@@ -70,7 +70,7 @@
 
         padding: 18px 20px;
 
-        border-bottom: 1px solid #edf1f5;
+        border-bottom: 1px solid var(--garis);
     }
 
     .filter-form {
@@ -85,7 +85,7 @@
 
         margin-bottom: 6px;
 
-        color: #4b5d70;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 800;
         text-transform: uppercase;
@@ -97,7 +97,7 @@
 
         padding: 0 11px;
 
-        border: 1px solid #d7e0eb;
+        border: 1px solid var(--garis-kuat);
         border-radius: 7px;
 
         background: #ffffff;
@@ -117,14 +117,14 @@
     }
 
     .report-head h2 {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 18px;
     }
 
     .report-head p {
         margin-top: 3px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 13px;
     }
 
@@ -141,26 +141,26 @@
 
         border-radius: 10px;
 
-        background: #f7f9fc;
+        background: var(--permukaan-redup);
     }
 
     .summary span {
         display: block;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         font-size: 11px;
         font-weight: 700;
     }
 
     .summary strong {
-        color: #17324d;
+        color: var(--utama-gelap);
         font-size: 16px;
     }
 
     .table-wrapper {
         overflow-x: auto;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
     }
 
     table {
@@ -171,8 +171,8 @@
     th {
         padding: 11px 14px;
 
-        background: #f8fafc;
-        color: #6b7c8d;
+        background: var(--permukaan-redup);
+        color: var(--teks-sekunder);
 
         font-size: 11px;
         font-weight: 800;
@@ -185,16 +185,16 @@
     td {
         padding: 11px 14px;
 
-        border-top: 1px solid #edf1f5;
+        border-top: 1px solid var(--garis);
 
-        color: #33475b;
+        color: var(--teks);
 
         font-size: 13px;
         white-space: nowrap;
     }
 
     tbody tr:hover {
-        background: #fafcff;
+        background: var(--utama-muda);
     }
 
     td.angka {
@@ -203,21 +203,21 @@
     }
 
     td.catatan {
-        color: #b42318;
+        color: var(--bahaya);
         font-weight: 600;
     }
 
     .empty-state {
         padding: 46px 20px;
 
-        color: #7b8794;
+        color: var(--teks-sekunder);
         text-align: center;
     }
 
     .hint {
         padding: 12px 20px;
 
-        color: #8a96a3;
+        color: var(--teks-sekunder);
         font-size: 12px;
     }
 
@@ -279,10 +279,10 @@
             </form>
 
             <div class="export-actions">
-                <x-button variant="secondary" :href="route('superadmin.laporan.xlsx', $queryExport)">⬇ Excel (.xlsx)</x-button>
-                <x-button variant="secondary" :href="route('superadmin.laporan.pdf', $queryExport)">⬇ PDF</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.xlsx', $queryExport)"><x-icon name="download" :size="16" /> Excel (.xlsx)</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.pdf', $queryExport)"><x-icon name="download" :size="16" /> PDF</x-button>
                 <x-button variant="secondary" :href="route('superadmin.laporan.csv', $queryExport)">CSV</x-button>
-                <x-button variant="secondary" :href="route('superadmin.laporan.cetak', $queryExport)" target="_blank" rel="noopener">🖨 Cetak</x-button>
+                <x-button variant="secondary" :href="route('superadmin.laporan.cetak', $queryExport)" target="_blank" rel="noopener"><x-icon name="printer" :size="16" /> Cetak</x-button>
             </div>
 
         </div>

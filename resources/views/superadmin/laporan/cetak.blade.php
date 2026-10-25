@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $laporan['judul'] }} - MAGENTA</title>
+    <title>{{ $laporan['judul'] }} - {{ config('app.name') }}</title>
 
     <style>
         @page {
@@ -38,10 +38,10 @@
         .toolbar button {
             padding: 9px 16px;
 
-            border: 1px solid #1779c9;
+            border: 1px solid #2688b4;
             border-radius: 7px;
 
-            background: #1779c9;
+            background: #2688b4;
             color: #ffffff;
 
             font-weight: 700;
@@ -51,7 +51,7 @@
 
         .toolbar button.secondary {
             background: #ffffff;
-            color: #1779c9;
+            color: #2688b4;
         }
 
         header {
@@ -62,17 +62,17 @@
             padding-bottom: 10px;
             margin-bottom: 12px;
 
-            border-bottom: 2px solid #12345b;
+            border-bottom: 2px solid #0b6a9c;
         }
 
         h1 {
-            color: #12345b;
+            color: #0b6a9c;
             font-size: 18px;
         }
 
         header p {
             margin-top: 3px;
-            color: #4b5d70;
+            color: #6b7280;
         }
 
         .meta {
@@ -89,7 +89,7 @@
         }
 
         .summary strong {
-            color: #12345b;
+            color: #0b6a9c;
         }
 
         table {
@@ -166,17 +166,18 @@
 <body>
 
     <div class="toolbar">
-        <button type="button" onclick="window.print()">🖨 Cetak / Simpan PDF</button>
+        <button type="button" onclick="window.print()">Cetak / Simpan PDF</button>
         <button type="button" class="secondary" onclick="window.close()">Tutup</button>
     </div>
 
     <header>
-        <div>
+        <img src="{{ asset('images/logo-pitsi-128.png') }}" alt="Logo PT Pilar Teknotama Sinergi" style="height: 44px;">
+        <div style="flex: 1;">
             <h1>{{ $laporan['judul'] }}</h1>
             <p>{{ $laporan['keterangan'] }}</p>
         </div>
         <div class="meta">
-            MAGENTA · Sistem Informasi Magang<br>
+            PILARA · Platform Magang PT Pilar Teknotama Sinergi<br>
             Dicetak {{ now()->translatedFormat('d F Y, H:i') }} oleh {{ auth()->user()->name }}
         </div>
     </header>

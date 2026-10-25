@@ -4,20 +4,20 @@
 
 @section('title', 'Profil Perusahaan')
 @section('page_title', 'Profil Perusahaan')
-@section('page_subtitle', 'Kelola informasi perusahaan MAGENTA')
+@section('page_subtitle', 'Kelola informasi perusahaan PILARA')
 
 @push('styles')
 <style>
     body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #243b5a;
+        font-family: var(--font);
+        background: var(--latar);
+        color: var(--utama-gelap);
     }
 
     button,
     input,
     textarea {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: var(--font);
     }
 
     /* =====================================================
@@ -57,12 +57,12 @@
 
         border-radius: 9px;
 
-        background: #eaf4ff;
+        background: var(--utama-muda);
 
         border:
-            1px solid #d8eafb;
+            1px solid var(--utama-muda);
 
-        color: #1779c9;
+        color: var(--utama);
 
         display: flex;
 
@@ -74,7 +74,7 @@
     }
 
     .page-header h2 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 17px;
 
@@ -84,7 +84,7 @@
     .page-header p {
         margin-top: 4px;
 
-        color: #7c8da3;
+        color: var(--teks-sekunder);
 
         font-size: 10px;
 
@@ -110,14 +110,14 @@
             1px solid #f3dfb0;
 
         border-left:
-            4px solid #f59e0b;
+            4px solid var(--peringatan);
 
         border-radius: 10px;
 
         background: linear-gradient(
             135deg,
-            #fff8e8,
-            #fffdf7
+            var(--peringatan-muda),
+            var(--peringatan-muda)
         );
     }
 
@@ -132,7 +132,7 @@
 
         background: #fff0c7;
 
-        color: #c27a00;
+        color: var(--peringatan);
 
         display: flex;
 
@@ -150,13 +150,13 @@
 
         margin-bottom: 3px;
 
-        color: #7a5200;
+        color: var(--peringatan);
 
         font-size: 11px;
     }
 
     .notice p {
-        color: #8a6a2b;
+        color: var(--peringatan);
 
         font-size: 9px;
 
@@ -173,7 +173,7 @@
         background: #ffffff;
 
         border:
-            1px solid #e2e9f1;
+            1px solid var(--garis);
 
         border-radius: 12px;
 
@@ -192,7 +192,7 @@
         padding: 17px 20px;
 
         border-bottom:
-            1px solid #edf1f5;
+            1px solid var(--garis);
     }
 
     .form-card-icon {
@@ -204,9 +204,9 @@
 
         border-radius: 8px;
 
-        background: #eef6ff;
+        background: var(--utama-muda);
 
-        color: #1779c9;
+        color: var(--utama);
 
         display: flex;
 
@@ -218,7 +218,7 @@
     }
 
     .form-card-header h3 {
-        color: #17365d;
+        color: var(--utama-gelap);
 
         font-size: 12px;
 
@@ -228,7 +228,7 @@
     .form-card-header p {
         margin-top: 3px;
 
-        color: #8996a7;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
     }
@@ -263,7 +263,7 @@
 
         margin-bottom: 6px;
 
-        color: #334155;
+        color: var(--utama-gelap);
 
         font-size: 10px;
 
@@ -271,7 +271,7 @@
     }
 
     .required {
-        color: #e05252;
+        color: var(--bahaya);
     }
 
     .form-group input,
@@ -281,13 +281,13 @@
         padding: 10px 11px;
 
         border:
-            1px solid #d5dce5;
+            1px solid var(--garis-kuat);
 
         border-radius: 7px;
 
         background: #ffffff;
 
-        color: #1f2937;
+        color: var(--teks);
 
         font-size: 11px;
 
@@ -300,14 +300,14 @@
 
     .form-group input:hover,
     .form-group textarea:hover {
-        border-color: #b9c5d2;
+        border-color: var(--garis-kuat);
     }
 
     .form-group input:focus,
     .form-group textarea:focus {
         outline: none;
 
-        border-color: #1779c9;
+        border-color: var(--utama);
 
         box-shadow:
             0 0 0 3px
@@ -325,7 +325,7 @@
     .help {
         margin-top: 5px;
 
-        color: #8a96a5;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
 
@@ -344,7 +344,7 @@
 
         border: none;
 
-        background: #edf1f5;
+        background: var(--garis);
     }
 
     /* =====================================================
@@ -365,17 +365,17 @@
         padding-top: 18px;
 
         border-top:
-            1px solid #edf1f5;
+            1px solid var(--garis);
     }
 
     .action-left {
-        color: #8995a5;
+        color: var(--teks-sekunder);
 
         font-size: 9px;
     }
 
     .action-left b {
-        color: #e05252;
+        color: var(--bahaya);
     }
 
     .action-buttons {
@@ -413,17 +413,17 @@
     }
 
     .btn-secondary {
-        background: #eef1f5;
+        background: var(--garis);
 
-        color: #526171;
+        color: var(--teks-sekunder);
     }
 
     .btn-secondary:hover {
-        background: #dfe5eb;
+        background: var(--garis-kuat);
     }
 
     .btn-primary {
-        background: #1779c9;
+        background: var(--utama);
 
         color: #ffffff;
 
@@ -433,7 +433,7 @@
     }
 
     .btn-primary:hover {
-        background: #1265aa;
+        background: var(--utama-gelap);
 
         transform: translateY(-1px);
     }
@@ -445,7 +445,7 @@
     .foot-note {
         margin-top: 15px;
 
-        color: #98a2b0;
+        color: var(--teks-redup);
 
         font-size: 9px;
 
@@ -551,7 +551,7 @@
         <div class="page-header-left">
 
             <div class="page-header-icon">
-                ▰
+                <x-icon name="building" />
             </div>
 
             <div>
@@ -562,7 +562,7 @@
 
                 <p>
                     Informasi berikut akan digunakan
-                    pada halaman website MAGENTA.
+                    pada halaman website PILARA.
                 </p>
 
             </div>
@@ -607,7 +607,7 @@
                 Data perusahaan dapat diubah langsung
                 dari halaman ini. Perubahan yang disimpan
                 akan digunakan untuk menampilkan informasi
-                perusahaan pada website MAGENTA.
+                perusahaan pada website PILARA.
             </p>
 
         </div>
@@ -625,7 +625,7 @@
         <div class="form-card-header">
 
             <div class="form-card-icon">
-                ✎
+                <x-icon name="pencil" />
             </div>
 
             <div>
@@ -839,7 +839,7 @@
 
                         <div class="help">
                             Deskripsi singkat mengenai perusahaan
-                            yang dapat ditampilkan pada website MAGENTA.
+                            yang dapat ditampilkan pada website PILARA.
                         </div>
 
                     </div>
@@ -884,7 +884,7 @@
                             class="btn btn-primary"
                         >
 
-                            ✓
+                            <x-icon name="check" />
                             Simpan Perubahan
 
                         </button>
@@ -903,7 +903,7 @@
 
     <div class="foot-note">
 
-        MAGENTA
+        PILARA
         &nbsp;•&nbsp;
         Sistem Informasi Magang
 

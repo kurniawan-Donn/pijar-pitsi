@@ -1,6 +1,6 @@
-STRUKTUR WEBSITE SISTEM INFORMASI MAGANG (MAGENTA)
+STRUKTUR WEBSITE SISTEM INFORMASI MAGANG (PILARA)
 
-Repository ini adalah project Laravel MAGENTA (root = folder project).
+Repository ini adalah project Laravel PILARA (root = folder project).
 Rencana fitur & keputusan: docs/rencana-fitur.md; catatan per fase: docs/ROADMAP.md.
 
 AKTOR
