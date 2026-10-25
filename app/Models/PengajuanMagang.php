@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class PengajuanMagang extends Model
 {
@@ -103,5 +105,36 @@ class PengajuanMagang extends Model
     public function nomor(): string
     {
         return 'MG-'.str_pad((string) $this->id, 6, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * ID pengajuan dari nomor yang diketik pendaftar ("MG-000012", "mg000012").
+     */
+    public static function idDariNomor(string $nomor): ?int
+    {
+        if (! preg_match('/^MG-?(\d{1,10})$/i', trim($nomor), $cocok)) {
+            return null;
+        }
+
+        return (int) $cocok[1] ?: null;
+    }
+
+    /**
+     * Tampilkan surat pengantar dari disk privat; 404 bila file tidak ada.
+     */
+    public function responDokumen(): StreamedResponse
+    {
+        abort_unless(
+            $this->dokumen_path && Storage::disk('local')->exists($this->dokumen_path),
+            404,
+            'Dokumen tidak ditemukan.'
+        );
+
+        $extension = pathinfo($this->dokumen_path, PATHINFO_EXTENSION);
+
+        return Storage::disk('local')->response(
+            $this->dokumen_path,
+            "surat-pengantar-{$this->nomor()}.{$extension}"
+        );
     }
 }

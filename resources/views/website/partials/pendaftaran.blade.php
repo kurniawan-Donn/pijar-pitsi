@@ -87,7 +87,7 @@
                             <strong>{{ $berhasil['nomor'] }}</strong>
                         </div>
 
-                        <p>Simpan nomor ini. Cek status pengajuan kapan saja dengan NIM dan email <strong>{{ $berhasil['email'] }}</strong>.</p>
+                        <p>Simpan kode ini, karena kode dibutuhkan untuk cek status. Cek status kapan saja dengan kode di atas dan email <strong>{{ $berhasil['email'] }}</strong>.</p>
 
                         <div class="hero-actions" style="justify-content: center;">
                             <a href="#status" class="btn btn-primary">Cek Status Pengajuan</a>

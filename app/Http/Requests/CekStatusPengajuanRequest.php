@@ -28,7 +28,7 @@ class CekStatusPengajuanRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'status_nim' => trim((string) $this->input('status_nim')),
+            'status_kode' => strtoupper(trim((string) $this->input('status_kode'))),
             'status_email' => strtolower(trim((string) $this->input('status_email'))),
         ]);
     }
@@ -41,7 +41,7 @@ class CekStatusPengajuanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status_nim' => ['required', 'string', 'max:30'],
+            'status_kode' => ['required', 'string', 'max:20', 'regex:/^MG-?\d{1,10}$/'],
             'status_email' => ['required', 'email', 'max:255'],
         ];
     }
@@ -54,7 +54,8 @@ class CekStatusPengajuanRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'status_nim.required' => 'NIM wajib diisi.',
+            'status_kode.required' => 'Kode pengajuan wajib diisi.',
+            'status_kode.regex' => 'Format kode pengajuan seperti MG-000012.',
             'status_email.required' => 'Email wajib diisi.',
             'status_email.email' => 'Format email tidak valid.',
         ];

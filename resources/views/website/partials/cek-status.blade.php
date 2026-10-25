@@ -1,4 +1,4 @@
-{{-- Bagian cek status pengajuan (NIM + email). --}}
+{{-- Bagian cek status pengajuan (kode pengajuan + email). --}}
 @php
     $hasilStatus = session('status_pengajuan');
     $tidakDitemukan = session('status_tidak_ditemukan');
@@ -12,7 +12,7 @@
             <div class="status-intro">
                 <span class="section-label">Cek Status</span>
                 <h2>Pantau pengajuan magangmu</h2>
-                <p>Masukkan NIM dan email yang dipakai saat mendaftar lewat form website untuk melihat status terbaru serta catatan dari admin.</p>
+                <p>Masukkan kode pengajuan (contoh MG-000012) dan email yang dipakai saat mendaftar untuk melihat status terbaru serta catatan dari admin.</p>
 
                 <div class="status-legend" aria-label="Keterangan status">
                     <span class="status-pill status-menunggu">Menunggu</span>
@@ -25,7 +25,7 @@
                 <form method="POST" action="{{ route('pengajuan.status') }}" class="status-form" id="form-status">
                     @csrf
 
-                    <x-website.field name="status_nim" label="NIM" required maxlength="30" placeholder="NIM saat mendaftar" />
+                    <x-website.field name="status_kode" label="Kode Pengajuan" required maxlength="20" placeholder="Contoh: MG-000012" autocomplete="off" />
                     <x-website.field name="status_email" type="email" label="Email" required maxlength="255" placeholder="Email saat mendaftar" autocomplete="email" />
 
                     <button type="submit" class="btn btn-primary btn-block">
@@ -63,6 +63,13 @@
                                         <dd>{{ $hasil['diajukan'] }}</dd>
                                     </div>
                                 </dl>
+
+                                @if (! empty($hasil['dokumen_url']))
+                                    <p class="status-note">
+                                        <a href="{{ $hasil['dokumen_url'] }}" target="_blank" rel="noopener" class="text-link">Lihat surat pengantar <span>→</span></a>
+                                        <small>(tautan berlaku {{ \App\Http\Controllers\Website\PendaftaranController::MASA_BERLAKU_DOKUMEN }} menit)</small>
+                                    </p>
+                                @endif
 
                                 @if ($hasil['catatan'])
                                     <div class="status-note"><strong>Catatan admin:</strong> {{ $hasil['catatan'] }}</div>

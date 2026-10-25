@@ -139,7 +139,7 @@ class IzinController extends Controller
      */
     public function destroy(Request $request, IzinPeserta $izinPeserta): RedirectResponse
     {
-        Gate::authorize('view', $izinPeserta);
+        Gate::authorize('delete', $izinPeserta);
 
         if ($izinPeserta->status !== LogbookHarian::MENUNGGU) {
             return back()->with('error', 'Izin yang sudah diverifikasi admin tidak dapat dibatalkan.');
