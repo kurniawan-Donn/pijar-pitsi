@@ -100,6 +100,41 @@ class PengaturanMagangController extends Controller
     }
 
     /**
+     * Pengaturan scan kartu absensi (admin & super admin): saklar, jendela tanggal, batas harian.
+     */
+    public function simpanScan(Request $request): RedirectResponse
+    {
+        $hari = ['required', 'integer', 'min:1', 'max:31'];
+
+        $validated = $request->validateWithBag('scan', [
+            'scan_jendela_1_mulai' => $hari,
+            'scan_jendela_1_selesai' => $hari,
+            'scan_jendela_2_mulai' => $hari,
+            'scan_jendela_2_selesai' => $hari,
+            'scan_batas_harian' => ['required', 'integer', 'min:1', 'max:50'],
+        ], [], [
+            'scan_jendela_1_mulai' => 'awal jendela sisi 1–15',
+            'scan_jendela_1_selesai' => 'akhir jendela sisi 1–15',
+            'scan_jendela_2_mulai' => 'awal jendela sisi 16–31',
+            'scan_jendela_2_selesai' => 'akhir jendela sisi 16–31',
+            'scan_batas_harian' => 'batas scan per hari',
+        ]);
+
+        $pengaturan = PengaturanMagang::ambil();
+        $pengaturan->fill($validated + ['scan_aktif' => $request->boolean('scan_aktif')]);
+        $berubah = $pengaturan->getDirty();
+        $pengaturan->save();
+
+        if ($berubah) {
+            LogAktivitas::catat('ubah_pengaturan_magang', $pengaturan, 'Pengaturan scan kartu absensi diperbarui', $berubah);
+        }
+
+        return redirect()
+            ->to(route('superadmin.pengaturan-magang.index').'#scan')
+            ->with('success', 'Pengaturan scan kartu absensi disimpan.');
+    }
+
+    /**
      * Gambar tanda tangan / stempel untuk pratinjau di halaman pengaturan (khusus super admin).
      */
     public function gambar(string $jenis): Response

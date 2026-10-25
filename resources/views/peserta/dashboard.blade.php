@@ -485,6 +485,7 @@
             || ($r['feedback']['dibuka'] && ! $r['feedback']['terkunci'])
             || $r['hampir_terkunci']->isNotEmpty()
             || $r['perlu_diperbaiki']->isNotEmpty()
+            || $r['activity_kosong']->isNotEmpty()
             || $biodata->status === 'perlu_revisi';
     @endphp
 
@@ -521,6 +522,14 @@
                     <x-icon name="hourglass" :size="16" /> {{ $r['hampir_terkunci']->count() }} hari kerja belum diisi dan akan terkunci dalam {{ \App\Services\RingkasanPeserta::HARI_PERINGATAN_KUNCI }} hari:
                     {{ $r['hampir_terkunci']->map(fn ($tanggal) => $tanggal->translatedFormat('d M'))->implode(', ') }}.
                     <strong>Isi sekarang →</strong>
+                </a>
+            @endif
+
+            @if ($r['activity_kosong']->isNotEmpty())
+                <a href="{{ route('peserta.logbook.edit', $r['activity_kosong']->first()->tanggal->toDateString()) }}" class="p-oranye">
+                    <x-icon name="clipboard-list" :size="16" /> {{ $r['activity_kosong']->count() }} hari sudah ada jamnya tetapi activity belum diisi:
+                    {{ $r['activity_kosong']->take(6)->map(fn ($logbook) => $logbook->tanggal->translatedFormat('d M'))->implode(', ') }}{{ $r['activity_kosong']->count() > 6 ? ', …' : '' }}.
+                    <strong>Lengkapi →</strong>
                 </a>
             @endif
 

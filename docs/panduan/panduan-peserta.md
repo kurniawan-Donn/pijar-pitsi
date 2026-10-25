@@ -89,7 +89,41 @@ Logbook diisi **setiap hari kerja**.
   admin lalu simpan ulang.
 - Di bawah tabel ada **Rekap Periode** dan tombol **Unduh PDF**.
 
-## 7. Mengajukan Izin atau Sakit
+## 7. Isi Jam dari Kartu Absensi
+
+Jam di kartu ceklok bisa dipindahkan ke logbook tanpa mengetik satu per satu.
+
+1. Buka **Logbook Harian**, lalu klik **Isi dari kartu absensi**.
+   Tombol ini hanya aktif pada tanggal tertentu: sisi depan (tanggal 1–15) sekitar tanggal **14–17**,
+   sisi belakang (tanggal 16–31) sekitar tanggal **28 sampai tanggal 2** bulan berikutnya. Di luar itu
+   tombol tampil abu-abu dengan keterangan kapan bisa dipakai.
+2. Pilih kartu yang akan di-scan (bulan dan sisi), lalu **potret** kartu dengan kamera HP atau unggah fotonya.
+   Letakkan kartu di tempat terang, potret tegak lurus, dan pastikan seluruh tabel terlihat.
+3. Klik **Baca Kartu** dan tunggu beberapa detik.
+
+![Unggah foto kartu absensi](../../public/images/panduan/peserta-scan-kartu-unggah.jpg)
+
+4. Periksa tabel hasil scan sambil melihat foto kartu di sebelahnya:
+   - **Kuning**: perlu diperiksa (cetakan meleset, buram, atau jam tidak terlihat).
+   - **Abu-abu**: tidak bisa diubah (sudah diterima admin, belum tiba, atau tercatat izin/sakit).
+   - Perbaiki jam bila salah, lalu centang tanggal yang akan disimpan.
+   - Bila tanggal itu sudah punya jam, pilih **Pakai jam lama** atau **Pakai jam dari kartu**.
+5. Klik **Simpan ke Logbook**. Hasil scan **tidak pernah tersimpan otomatis** tanpa langkah ini.
+
+![Periksa hasil scan](../../public/images/panduan/peserta-scan-kartu-pratinjau.jpg)
+
+**Setelah disimpan:**
+
+- Jam masuk mengisi **Pagi Masuk** dan jam keluar mengisi **Siang Keluar**. Status logbook menjadi
+  **Menunggu** verifikasi admin.
+- **Activity, output, dan lokasi tetap diisi sendiri.** Logbook yang belum ada activity-nya belum bisa
+  diterima admin; dashboard mengingatkan tanggal mana yang perlu dilengkapi.
+- Foto kartu otomatis menjadi bukti di logbook tanggal-tanggal tersebut (tidak mengurangi jatah 3 file).
+- Scan boleh mengisi tanggal yang sudah melewati batas isi mundur karena datanya dari mesin, tetapi
+  admin melihat tandanya. Jam yang Anda ubah setelah scan juga terlihat oleh admin.
+- Jatah scan dibatasi per hari (bawaan 5 kali). Bila habis atau gagal, isi jam secara manual seperti biasa.
+
+## 8. Mengajukan Izin atau Sakit
 
 1. Buka menu **Ajukan Izin / Sakit**.
 2. Pilih **Izin** atau **Sakit**, lalu isi **tanggal mulai** dan **tanggal selesai** sesuai surat.
@@ -99,7 +133,7 @@ Logbook diisi **setiap hari kerja**.
 
 ![Ajukan izin atau sakit](../../public/images/panduan/peserta-izin.jpg)
 
-## 8. Rekap Kehadiran dan Uang Saku
+## 9. Rekap Kehadiran dan Uang Saku
 
 Menu **Rekap Kehadiran** menampilkan rekap per periode (tanggal **28 s.d. 27** bulan berikutnya):
 hari hadir penuh, setengah hari, izin/sakit, dan perkiraan uang saku. Hari yang ditolak tidak
@@ -107,7 +141,7 @@ dihitung. Pilih periode lain di bagian atas, atau unduh PDF.
 
 ![Rekap kehadiran](../../public/images/panduan/peserta-rekap.jpg)
 
-## 9. Feedback Magang
+## 10. Feedback Magang
 
 1. Menu **Feedback** terbuka **1 bulan sebelum tanggal selesai** magang. Sebelum itu menu tampil
    dengan ikon gembok.
@@ -118,7 +152,7 @@ dihitung. Pilih periode lain di bagian atas, atau unduh PDF.
 
 ![Feedback magang](../../public/images/panduan/peserta-feedback.jpg)
 
-## 10. Mengunduh Surat Keterangan
+## 11. Mengunduh Surat Keterangan
 
 1. Setelah magang selesai, admin menerbitkan surat keterangan bila syarat terpenuhi: biodata
    disetujui, penilaian sudah diisi, dan feedback sudah dikirim.
@@ -143,7 +177,9 @@ Setelah magang selesai, logbook dan biodata hanya bisa dilihat, tidak bisa diuba
 | Pertanyaan | Jawaban |
 |---|---|
 | Menu Feedback masih terkunci | Terbuka mulai 1 bulan sebelum tanggal selesai magang. |
-| Tanggal logbook lama tidak bisa diisi | Melewati batas isi mundur. Minta admin **membuka kunci** tanggal itu. |
+| Tanggal logbook lama tidak bisa diisi | Melewati batas isi mundur. Minta admin **membuka kunci** tanggal itu, atau isi jamnya lewat **scan kartu absensi** saat jendela scan dibuka. |
+| Tombol "Isi dari kartu absensi" abu-abu | Belum masuk jendela scan, atau fitur dimatikan admin. Keterangan di bawah tombol menunjukkan kapan bisa dipakai. |
+| Hasil scan salah tanggal | Perbaiki di tabel pratinjau sebelum menyimpan, atau hilangkan centangnya dan isi manual. |
 | Uang saku 0 padahal hadir | Jam belum lengkap (butuh pagi masuk + siang keluar, atau satu sesi lengkap), atau logbook ditolak. |
 | Periode "November" mulai 28 Oktober | Benar: periode berjalan tanggal 28 s.d. 27 bulan berikutnya. |
 | Tidak bisa login | Akun dinonaktifkan atau password salah. Hubungi admin untuk reset password. |

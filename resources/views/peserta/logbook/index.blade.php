@@ -53,6 +53,18 @@
         font-size: 13px;
     }
 
+    .scan-nonaktif {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .scan-nonaktif small {
+        color: var(--teks-sekunder);
+        font-size: 11px;
+    }
+
     .toolbar-actions {
         display: flex;
         flex-wrap: wrap;
@@ -181,6 +193,18 @@
             </form>
 
             <div class="toolbar-actions">
+                @if ($scanKartu['aktif'])
+                    @if ($scanKartu['bisa'])
+                        <x-button variant="secondary" :href="route('peserta.scan-kartu.create')"><x-icon name="camera" :size="16" /> Isi dari kartu absensi</x-button>
+                    @else
+                        <span class="scan-nonaktif" title="Scan kartu hanya bisa dipakai pada tanggal tertentu">
+                            <x-button variant="secondary" type="button" disabled><x-icon name="camera" :size="16" /> Isi dari kartu absensi</x-button>
+                            @if ($scanKartu['bukaBerikutnya'])
+                                <small>Bisa dipakai mulai {{ $scanKartu['bukaBerikutnya']->translatedFormat('d F') }}</small>
+                            @endif
+                        </span>
+                    @endif
+                @endif
                 <x-button variant="secondary" :href="route('peserta.izin.create')">+ Ajukan Izin / Sakit</x-button>
                 <x-button variant="secondary" :href="route('peserta.logbook.cetak', ['periode' => $periode['kunci']])"><x-icon name="download" :size="16" /> Unduh PDF</x-button>
                 @if (today()->between($periode['mulai'], $periode['selesai']))

@@ -52,6 +52,13 @@ class LogbookHarian extends Model
 
     public const KOLOM_JAM = ['pagi_masuk', 'pagi_keluar', 'siang_masuk', 'siang_keluar'];
 
+    /**
+     * Sumber jam: diketik peserta atau dibaca dari kartu absensi.
+     */
+    public const SUMBER_MANUAL = 'manual';
+
+    public const SUMBER_SCAN = 'scan';
+
     protected $table = 'logbook_harians';
 
     protected $guarded = ['id'];
@@ -59,6 +66,8 @@ class LogbookHarian extends Model
     protected $attributes = [
         'status_verifikasi' => self::MENUNGGU,
         'sumber' => 'aplikasi',
+        'sumber_jam' => self::SUMBER_MANUAL,
+        'di_luar_batas_isi' => false,
     ];
 
     protected function casts(): array
@@ -66,7 +75,40 @@ class LogbookHarian extends Model
         return [
             'tanggal' => 'date',
             'diverifikasi_pada' => 'datetime',
+            'jam_scan_asli' => 'array',
+            'di_luar_batas_isi' => 'boolean',
         ];
+    }
+
+    public function scanKartu(): BelongsTo
+    {
+        return $this->belongsTo(ScanKartuAbsensi::class, 'scan_kartu_absensi_id');
+    }
+
+    public function dariScan(): bool
+    {
+        return $this->sumber_jam === self::SUMBER_SCAN;
+    }
+
+    /**
+     * Jam masuk/keluar sekarang berbeda dari nilai asli hasil scan.
+     */
+    public function diubahSetelahScan(): bool
+    {
+        if (! $this->dariScan() || ! is_array($this->jam_scan_asli)) {
+            return false;
+        }
+
+        return ($this->jam_scan_asli['pagi_masuk'] ?? '') !== $this->jam('pagi_masuk')
+            || ($this->jam_scan_asli['siang_keluar'] ?? '') !== $this->jam('siang_keluar');
+    }
+
+    /**
+     * Hadir tetapi activity belum diisi (mis. dibuat dari scan kartu): belum boleh diterima admin.
+     */
+    public function activityBelumDiisi(): bool
+    {
+        return $this->kehadiran === self::HADIR && blank($this->activity);
     }
 
     public function pesertaMagang(): BelongsTo

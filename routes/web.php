@@ -11,6 +11,7 @@ use App\Http\Controllers\Peserta\FeedbackController as PesertaFeedbackController
 use App\Http\Controllers\Peserta\IzinController as PesertaIzinController;
 use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
 use App\Http\Controllers\Peserta\RekapController as PesertaRekapController;
+use App\Http\Controllers\Peserta\ScanKartuController as PesertaScanKartuController;
 use App\Http\Controllers\Peserta\SuratController as PesertaSuratController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
 use App\Http\Controllers\SuperAdmin\AlumniController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\SuperAdmin\PengaturanWebsiteController;
 use App\Http\Controllers\SuperAdmin\PenilaianController;
 use App\Http\Controllers\SuperAdmin\PerusahaanController;
 use App\Http\Controllers\SuperAdmin\PesertaMagangController;
+use App\Http\Controllers\SuperAdmin\ScanKartuController;
 use App\Http\Controllers\SuperAdmin\SuratKeteranganController;
 use App\Http\Controllers\SuperAdmin\UserController;
 use App\Http\Controllers\Website\HomeController;
@@ -95,6 +97,11 @@ Route::middleware(['auth', 'role:admin,super_admin,peserta'])
         Route::delete('/foto', 'hapusFoto')->name('foto.hapus');
     });
 
+// Foto kartu absensi di disk privat: pemiliknya, admin, dan super admin (ScanKartuAbsensiPolicy).
+Route::get('/scan-kartu/{scanKartuAbsensi}/foto', [ScanKartuController::class, 'foto'])
+    ->middleware(['auth', 'role:admin,super_admin,peserta'])
+    ->name('scan-kartu.foto');
+
 // Buku panduan sesuai role (sumber: docs/panduan).
 Route::get('/panduan/{bagian?}', [PanduanController::class, 'show'])
     ->middleware(['auth', 'role:admin,super_admin,peserta'])
@@ -136,6 +143,17 @@ Route::middleware(['auth', 'role:peserta', 'peserta.aktif'])
                 Route::get('/{tanggal}', 'edit')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('edit');
                 Route::put('/{tanggal}', 'update')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('update');
                 Route::delete('/{tanggal}', 'destroy')->where('tanggal', '\d{4}-\d{2}-\d{2}')->name('destroy');
+            });
+
+        // Isi jam logbook dari foto kartu absensi (pratinjau dulu, simpan setelah dikonfirmasi)
+        Route::controller(PesertaScanKartuController::class)
+            ->prefix('/scan-kartu')
+            ->name('scan-kartu.')
+            ->group(function () {
+                Route::get('/', 'create')->name('create');
+                Route::post('/', 'store')->name('store');
+                Route::get('/{scanKartuAbsensi}', 'show')->name('show');
+                Route::put('/{scanKartuAbsensi}', 'simpan')->name('simpan');
             });
 
         // Rekap kehadiran & uang saku semua periode
@@ -235,6 +253,9 @@ Route::middleware(['auth', 'role:admin,super_admin'])
             ->parameters(['alumni' => 'alumni']);
         Route::put('/alumni/{alumni}/urutan', [AlumniController::class, 'urutan'])->name('alumni.urutan');
 
+        // Hasil scan kartu absensi peserta (foto berdampingan dengan jam)
+        Route::get('/scan-kartu/{scanKartuAbsensi}', [ScanKartuController::class, 'show'])->name('scan-kartu.show');
+
         // Galeri dokumentasi kegiatan di beranda
         Route::resource('dokumentasi', DokumentasiController::class)
             ->except('show')
@@ -266,6 +287,7 @@ Route::middleware(['auth', 'role:admin,super_admin'])
                 Route::get('/gambar/{jenis}', 'gambar')->can('kelola-pengaturan-magang')->name('gambar');
                 Route::post('/tarif', 'simpanTarif')->can('kelola-pengaturan-magang')->name('tarif.store');
                 Route::delete('/tarif/{tarifUangSaku}', 'hapusTarif')->can('kelola-pengaturan-magang')->name('tarif.destroy');
+                Route::put('/scan', 'simpanScan')->name('scan');
                 Route::post('/libur', 'simpanLibur')->name('libur.store');
                 Route::delete('/libur/{hariLibur}', 'hapusLibur')->name('libur.destroy');
             });

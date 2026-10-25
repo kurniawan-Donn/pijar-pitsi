@@ -77,6 +77,10 @@
         min-width: 240px;
 
         line-height: 1.55;
+    }
+
+    /* Baris baru di activity tetap tampil, tanpa ikut merender spasi markup. */
+    .lb-teks {
         white-space: pre-line;
     }
 
@@ -110,6 +114,16 @@
     .lb-diterima { background: var(--sukses-muda); color: var(--sukses); }
     .lb-ditolak { background: var(--bahaya-muda); color: var(--bahaya); }
     .lb-review { background: var(--peringatan-muda); color: var(--peringatan); }
+    .lb-scan { background: var(--utama-muda); color: var(--utama-gelap); }
+    .lb-manual { background: var(--permukaan-redup); color: var(--teks-sekunder); box-shadow: inset 0 0 0 1px var(--garis); }
+
+    .lb-tanda {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+
+        margin-top: 4px;
+    }
 
     .lb-bukti a {
         display: block;
@@ -235,7 +249,30 @@
                             @elseif ($logbook->jenisKehadiran() === 'setengah_hari')
                                 <span class="lb-badge lb-review">Setengah hari</span>
                             @endif
-                            {{ $logbook->activity }}
+                            @if ($logbook->activity)
+                                <span class="lb-teks">{{ $logbook->activity }}</span>
+                            @endif
+
+                            {{-- Sumber jam & penanda dari scan kartu absensi --}}
+                            @if ($logbook->kehadiran === 'hadir')
+                                <span class="lb-tanda">
+                                    @if ($logbook->activityBelumDiisi())
+                                        <span class="lb-badge lb-review">Activity belum diisi</span>
+                                    @endif
+                                    @if ($logbook->dariScan())
+                                        <span class="lb-badge lb-scan">Scan kartu</span>
+                                    @elseif ($mode === 'admin')
+                                        <span class="lb-badge lb-manual">Manual</span>
+                                    @endif
+                                    @if ($mode === 'admin' && $logbook->diubahSetelahScan())
+                                        <span class="lb-badge lb-review" title="Hasil scan asli: {{ ($logbook->jam_scan_asli['pagi_masuk'] ?? '') ?: '–' }} – {{ ($logbook->jam_scan_asli['siang_keluar'] ?? '') ?: '–' }}">Diubah setelah scan (asli {{ ($logbook->jam_scan_asli['pagi_masuk'] ?? '') ?: '–' }}–{{ ($logbook->jam_scan_asli['siang_keluar'] ?? '') ?: '–' }})</span>
+                                    @endif
+                                    @if ($mode === 'admin' && $logbook->di_luar_batas_isi)
+                                        <span class="lb-badge lb-ditolak">Di luar batas isi mundur</span>
+                                    @endif
+                                </span>
+                            @endif
+
                             @if ($logbook->output || $logbook->lokasi)
                                 <span class="lb-meta">
                                     @if ($logbook->output) Output: {{ $logbook->output }} @endif
@@ -255,6 +292,9 @@
                     <td class="lb-bukti">
                         @if ($logbook?->izin?->bukti_path)
                             <a href="{{ route($mode === 'admin' ? 'superadmin.izin-bukti.show' : 'peserta.izin.bukti', $logbook->izin) }}" target="_blank" rel="noopener">{{ $logbook->izin->bukti_nama }}</a>
+                        @endif
+                        @if ($logbook?->scan_kartu_absensi_id)
+                            <a href="{{ $mode === 'admin' ? route('superadmin.scan-kartu.show', $logbook->scan_kartu_absensi_id) : route('scan-kartu.foto', $logbook->scan_kartu_absensi_id) }}" target="_blank" rel="noopener">Kartu absensi</a>
                         @endif
                         @foreach ($logbook?->buktis ?? [] as $bukti)
                             <a href="{{ route($mode === 'admin' ? 'superadmin.logbook-bukti.show' : 'peserta.logbook.bukti', $bukti) }}" target="_blank" rel="noopener">{{ $bukti->nama_asli }}</a>

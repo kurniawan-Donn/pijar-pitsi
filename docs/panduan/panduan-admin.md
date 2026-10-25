@@ -74,6 +74,20 @@ menunggu, biodata menunggu tinjauan). Di HP, buka menu lewat tombol garis tiga d
 5. **Unduh PDF** mencetak logbook satu periode (format Daily Aktivitas).
 6. **Impor Riwayat dari Buku Kerja Lama** (opsional): unggah file `.xlsx` lama milik peserta.
 
+**Jam dari scan kartu absensi.** Logbook yang jamnya diisi dari foto kartu ceklok diberi penanda:
+
+| Penanda | Arti |
+|---|---|
+| **Scan kartu** / **Manual** | Sumber jam: dibaca dari foto kartu atau diketik peserta. |
+| **Diubah setelah scan (asli …)** | Peserta mengubah jam hasil scan; nilai aslinya ditampilkan. |
+| **Di luar batas isi mundur** | Tanggal diisi lewat scan setelah batas isi mundur lewat. |
+| **Activity belum diisi** | Jam sudah ada, activity belum. Logbook ini **tidak bisa diterima** sampai peserta melengkapinya. |
+
+Di kolom Bukti, klik **Kartu absensi** untuk membuka foto kartu berdampingan dengan hasil bacaan dan jam
+yang tersimpan; baris kuning berarti jam di logbook berbeda dari hasil scan.
+
+![Foto kartu berdampingan dengan jam](../../public/images/panduan/admin-scan-kartu.jpg)
+
 ![Verifikasi logbook](../../public/images/panduan/admin-logbook.jpg)
 
 ## 7. Monitoring
@@ -118,10 +132,13 @@ menunggu verifikasi, dan izin yang menunggu.
 
 ![Laporan dan export](../../public/images/panduan/admin-laporan.jpg)
 
-## 11. Hari Libur
+## 11. Hari Libur dan Scan Kartu
 
 Menu **Hari Libur** (di dalam Pengaturan Magang): tambah tanggal libur nasional atau cuti bersama.
 Hari libur tidak dihitung sebagai hari kerja di logbook dan rekap.
+
+Di halaman yang sama ada bagian **Scan Kartu Absensi** (bisa diubah admin dan super admin): saklar fitur
+scan, jendela tanggal scan untuk sisi 1–15 dan 16–31, dan batas scan per peserta per hari.
 
 ![Hari libur](../../public/images/panduan/admin-hari-libur.jpg)
 

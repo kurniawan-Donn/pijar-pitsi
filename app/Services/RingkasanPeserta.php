@@ -60,6 +60,13 @@ class RingkasanPeserta
                 ->limit(10)
                 ->get(),
             'hampir_terkunci' => $this->hampirTerkunci($peserta, $hariIni),
+            // Jam sudah terisi (mis. dari scan kartu) tetapi activity belum: admin belum bisa menerima.
+            'activity_kosong' => LogbookHarian::where('peserta_magang_id', $peserta->id)
+                ->where('kehadiran', LogbookHarian::HADIR)
+                ->where('status_verifikasi', '!=', LogbookHarian::DITERIMA)
+                ->where(fn ($q) => $q->whereNull('activity')->orWhere('activity', ''))
+                ->orderBy('tanggal')
+                ->get(),
             'izin_menunggu' => IzinPeserta::where('peserta_magang_id', $peserta->id)
                 ->where('status', LogbookHarian::MENUNGGU)
                 ->orderBy('tanggal_mulai')

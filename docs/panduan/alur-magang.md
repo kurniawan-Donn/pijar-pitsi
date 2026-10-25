@@ -48,7 +48,7 @@ flowchart TD
 | 7 | Login pertama dan mengganti password | Peserta | Halaman **Login** → **Profil** | Akun aktif dengan password sendiri |
 | 8 | Mengisi biodata dan pas foto, lalu mengirim | Peserta | **Biodata** → **Kirim untuk Ditinjau** | Biodata "Menunggu ditinjau" |
 | 9 | Meninjau biodata | Admin | **Biodata** → **Setujui biodata** / **Minta revisi** | Disetujui (terkunci) atau dikembalikan ke peserta |
-| 10 | Mengisi logbook setiap hari kerja; mengajukan izin/sakit bila tidak masuk | Peserta | **Logbook Harian**, **Ajukan Izin / Sakit** | Logbook "Menunggu" |
+| 10 | Mengisi logbook setiap hari kerja (jam bisa diisi dari foto kartu absensi); mengajukan izin/sakit bila tidak masuk | Peserta | **Logbook Harian**, **Isi dari kartu absensi**, **Ajukan Izin / Sakit** | Logbook "Menunggu" |
 | 11 | Memverifikasi logbook dan izin | Admin | **Logbook & Absensi** → **Simpan Verifikasi** | Diterima (terkunci) / Ditolak (bisa diperbaiki) |
 | 12 | Rekap kehadiran dan uang saku per periode (tanggal 28 s.d. 27) | Sistem | **Rekap Kehadiran** (peserta), **Rekap Uang Saku** (admin) | Jumlah hari penuh, setengah hari, izin/sakit, uang saku |
 | 13 | Rotasi divisi dan mentor per periode | Admin | Detail peserta → **Divisi & Mentor per Periode** | Divisi tercetak di logbook dan surat |
