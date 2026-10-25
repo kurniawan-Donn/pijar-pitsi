@@ -2550,6 +2550,21 @@
         color: var(--white);
     }
 
+    /* Latar footer biru: logo diberi alas putih dan tagline dibuat terang agar terbaca. */
+    .footer-grid .logo-mark {
+        width: 46px;
+        height: 46px;
+        padding: 5px;
+
+        border-radius: 12px;
+
+        background: var(--white);
+    }
+
+    .footer-grid .logo-teks small {
+        color: rgba(255, 255, 255, .78);
+    }
+
     .footer-grid p {
         max-width: 340px;
 

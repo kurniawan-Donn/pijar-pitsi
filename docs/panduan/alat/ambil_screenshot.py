@@ -23,7 +23,7 @@ import websockets
 
 sys.stdout.reconfigure(encoding='utf-8')
 
-BASIS = 'http://127.0.0.1:8020'
+BASIS = os.environ.get('PANDUAN_BASIS', 'http://127.0.0.1:8020')
 PROYEK = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 KELUAR = os.path.join(PROYEK, 'public', 'images', 'panduan')
 PROFIL = os.path.join(os.environ.get('TEMP', '/tmp'), 'chrome-profil-panduan')

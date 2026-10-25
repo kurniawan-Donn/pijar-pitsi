@@ -153,7 +153,7 @@
                                 <p>Gunakan data asli sesuai kartu mahasiswa.</p>
 
                                 <div class="field-grid">
-                                    <x-website.field name="nama" label="Nama Lengkap" required full autocomplete="name" maxlength="255" placeholder="Contoh: Siti Rahmawati" />
+                                    <x-website.field name="nama" label="Nama Lengkap" required full autocomplete="name" maxlength="255" placeholder="Contoh: Dony Kurniawan" />
                                     <x-website.field name="nim" label="NIM" required maxlength="30" placeholder="Contoh: 2201234567" pattern="[A-Za-z0-9.\-]+" />
                                     <x-website.field name="no_hp" type="tel" label="No. HP / WhatsApp" required autocomplete="tel" maxlength="20" placeholder="08xxxxxxxxxx" pattern="[0-9+\-\s]{8,20}" />
                                     <x-website.field name="email" type="email" label="Email Aktif" required full autocomplete="email" maxlength="255" placeholder="nama@email.com" hint="Dipakai untuk cek status pengajuan." />
@@ -167,8 +167,8 @@
                                 <p>Informasi kampus asal kamu.</p>
 
                                 <div class="field-grid">
-                                    <x-website.field name="asal_kampus" label="Asal Kampus" required full maxlength="255" placeholder="Contoh: Universitas Negeri Jakarta" />
-                                    <x-website.field name="program_studi" label="Program Studi" required maxlength="255" placeholder="Contoh: Sistem Informasi" />
+                                    <x-website.field name="asal_kampus" label="Asal Kampus" required full maxlength="255" placeholder="Contoh: Politeknik Negeri Madiun" />
+                                    <x-website.field name="program_studi" label="Program Studi" required maxlength="255" placeholder="Contoh: Teknologi Informasi" />
                                     <x-website.field name="fakultas" label="Fakultas" maxlength="255" placeholder="Opsional" />
                                 </div>
                             </fieldset>
