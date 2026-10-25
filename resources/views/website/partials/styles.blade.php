@@ -781,6 +781,136 @@
     }
 
     /* =========================================================
+       FAQ (ACCORDION)
+    ========================================================== */
+
+    .faq-wrap {
+        max-width: 820px;
+
+        margin: 0 auto;
+    }
+
+    .faq-kategori {
+        margin: 28px 0 12px;
+
+        color: var(--primary-dark);
+
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+    }
+
+    .faq-kategori:first-child {
+        margin-top: 0;
+    }
+
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .faq-item {
+        border-radius: var(--radius-sm);
+
+        transition: box-shadow .3s var(--ease), border-color .3s var(--ease);
+    }
+
+    .faq-item[open] {
+        border-color: #b8dcec;
+
+        box-shadow: var(--shadow);
+    }
+
+    .faq-item summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+
+        padding: 18px 22px;
+
+        color: var(--navy);
+
+        font-size: 16px;
+        font-weight: 700;
+
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-item summary:focus-visible {
+        outline: 3px solid var(--primary-soft);
+        border-radius: var(--radius-sm);
+    }
+
+    .faq-ikon {
+        position: relative;
+
+        flex-shrink: 0;
+
+        width: 28px;
+        height: 28px;
+
+        border-radius: 50%;
+
+        background: var(--primary-soft);
+    }
+
+    .faq-ikon::before,
+    .faq-ikon::after {
+        content: "";
+
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        width: 12px;
+        height: 2px;
+
+        border-radius: 2px;
+
+        background: var(--primary);
+
+        transform: translate(-50%, -50%);
+        transition: transform .3s var(--ease);
+    }
+
+    .faq-ikon::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .faq-item[open] .faq-ikon::after {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .faq-jawaban {
+        padding: 0 22px 20px;
+
+        color: var(--muted);
+
+        font-size: 15px;
+        line-height: 1.75;
+    }
+
+    @media (max-width: 600px) {
+        .faq-item summary {
+            padding: 16px 18px;
+
+            font-size: 15px;
+        }
+
+        .faq-jawaban {
+            padding: 0 18px 18px;
+        }
+    }
+
+    /* =========================================================
        HIGHLIGHT (QUICK CARD)
     ========================================================== */
 

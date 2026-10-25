@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Banner;
 use App\Models\Divisi;
+use App\Models\Faq;
 use App\Models\HariLibur;
 use App\Models\IzinPeserta;
 use App\Models\LogbookHarian;
@@ -120,6 +121,11 @@ class AksesRouteTest extends TestCase
         'superadmin.divisi.store' => self::LOGIN,
         'superadmin.divisi.update' => self::LOGIN,
         'superadmin.divisi.destroy' => self::LOGIN,
+        'superadmin.faq.index' => self::LOGIN,
+        'superadmin.faq.store' => self::LOGIN,
+        'superadmin.faq.update' => self::LOGIN,
+        'superadmin.faq.destroy' => self::LOGIN,
+        'superadmin.faq.urutan' => self::LOGIN,
         'superadmin.peserta-magang.penempatan.update' => self::LOGIN,
         'superadmin.peserta-magang.biodata' => self::LOGIN,
         'superadmin.peserta-magang.biodata.program' => self::LOGIN,
@@ -328,6 +334,7 @@ class AksesRouteTest extends TestCase
                 ),
                 'tarifUangSaku' => TarifUangSaku::create(['berlaku_mulai' => fake()->unique()->date(), 'tarif_hari_penuh' => 60000, 'tarif_setengah_hari' => 30000]),
                 'hariLibur' => HariLibur::create(['tanggal' => fake()->unique()->date(), 'keterangan' => 'Libur Akses']),
+                'faq' => Faq::factory()->create(),
                 'divisi' => Divisi::create(['nama' => fake()->unique()->words(3, true)]),
                 'tanggal' => now()->toDateString(),
                 'logbookBukti' => tap(

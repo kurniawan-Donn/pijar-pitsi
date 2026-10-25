@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Models\Faq;
 use App\Models\PengaturanWebsite;
 use App\Models\Perusahaan;
 use App\Models\PesertaMagang;
@@ -18,6 +19,7 @@ class HomeController extends Controller
     {
         return view('website.index', [
             'banners' => Banner::aktif()->get(),
+            'faqs' => Faq::tampil()->berurutan()->get(),
             'perusahaan' => Perusahaan::first(),
             'pengaturan' => PengaturanWebsite::first(),
             'statistik' => [
