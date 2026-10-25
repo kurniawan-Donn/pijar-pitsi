@@ -136,6 +136,7 @@ Centang setiap langkah yang berhasil.
   - [ ] pastikan tanggal besok **terkunci 🔒**.
 - [ ] **Ajukan Izin/Sakit**: pilih *Sakit* untuk 2 hari ke depan + upload surat → tanggal-tanggalnya terisi "Sakit".
 - [ ] Lihat **Rekap Periode** di bawah tabel, lalu klik **Unduh PDF**.
+- [ ] Buka **Dashboard**: status logbook hari ini, ringkasan periode, kalender berwarna, dan pengingat (hari hampir terkunci, logbook ditolak) tampil.
 
 ### E. Admin memverifikasi (kembali ke **Admin**)
 - [ ] **Monitoring**: peserta tampil dengan progres biodata dan "Hari ini ✓".

@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Peserta;
 
 use App\Http\Controllers\Controller;
-use App\Models\BiodataPeserta;
+use App\Services\RingkasanPeserta;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
-     * Dashboard peserta magang. Ringkasan biodata & logbook menyusul
-     * di tahap berikutnya (lihat docs/rencana-fitur.md).
+     * Dashboard peserta magang: logbook hari ini, rekap periode berjalan,
+     * logbook yang perlu diperbaiki, biodata, penempatan, dan pengingat.
      */
-    public function __invoke(Request $request): View
+    public function __invoke(Request $request, RingkasanPeserta $ringkasan): View
     {
-        $peserta = $request->user()->pesertaMagang->load(['biodata', 'pengajuanMagang.mahasiswa', 'user']);
+        $peserta = $request->user()->pesertaMagang;
 
         return view('peserta.dashboard', [
             'peserta' => $peserta,
-            'biodata' => BiodataPeserta::untuk($peserta),
+            'r' => $ringkasan->untuk($peserta),
         ]);
     }
 }
