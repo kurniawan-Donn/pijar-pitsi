@@ -22,6 +22,7 @@ class FeedbackPeserta extends Model
         return [
             'skor' => 'array',
             'pernyataan' => 'boolean',
+            'bersedia_tampil_alumni' => 'boolean',
             'dikirim_pada' => 'datetime',
             'jumlah_kirim' => 'integer',
         ];

@@ -12,6 +12,7 @@ use App\Http\Controllers\Peserta\LogbookController as PesertaLogbookController;
 use App\Http\Controllers\Peserta\RekapController as PesertaRekapController;
 use App\Http\Controllers\Peserta\SuratController as PesertaSuratController;
 use App\Http\Controllers\SuperAdmin\AkunPesertaController;
+use App\Http\Controllers\SuperAdmin\AlumniController;
 use App\Http\Controllers\SuperAdmin\AspekPenilaianController;
 use App\Http\Controllers\SuperAdmin\BannerController;
 use App\Http\Controllers\SuperAdmin\BiodataPesertaController;
@@ -212,6 +213,12 @@ Route::middleware(['auth', 'role:admin,super_admin'])
 
         // Kelola banner
         Route::resource('banners', BannerController::class);
+
+        // Alumni di website publik (parameter tetap "alumni", bukan "alumnus")
+        Route::resource('alumni', AlumniController::class)
+            ->except('show')
+            ->parameters(['alumni' => 'alumni']);
+        Route::put('/alumni/{alumni}/urutan', [AlumniController::class, 'urutan'])->name('alumni.urutan');
 
         // FAQ website publik
         Route::resource('faq', FaqController::class)->only(['index', 'store', 'update', 'destroy']);

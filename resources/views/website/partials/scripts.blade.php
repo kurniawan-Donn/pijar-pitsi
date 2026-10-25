@@ -327,6 +327,52 @@
     }
 
     /* -----------------------------------------------------------
+       ALUMNI: CAROUSEL & POPUP
+    ----------------------------------------------------------- */
+    const alumniTrack = document.querySelector('.alumni-track');
+
+    if (alumniTrack) {
+        const tombolGeser = [...document.querySelectorAll('.alumni-geser')];
+        const aturTombol = () => {
+            // Toleransi beberapa piksel karena padding jalur & pembulatan snap.
+            const maks = alumniTrack.scrollWidth - alumniTrack.clientWidth - 8;
+            tombolGeser.forEach((tombol) => {
+                tombol.disabled = tombol.dataset.arah === '-1' ? alumniTrack.scrollLeft <= 8 : alumniTrack.scrollLeft >= maks;
+            });
+        };
+
+        tombolGeser.forEach((tombol) => tombol.addEventListener('click', () => {
+            const kartu = alumniTrack.querySelector('.alumni-card');
+            const langkah = kartu ? kartu.offsetWidth + 20 : alumniTrack.clientWidth;
+            const maks = alumniTrack.scrollWidth - alumniTrack.clientWidth;
+            const tujuan = Math.min(maks, Math.max(0, alumniTrack.scrollLeft + langkah * Number(tombol.dataset.arah)));
+            alumniTrack.scrollTo({ left: tujuan, behavior: 'smooth' });
+        }));
+
+        alumniTrack.addEventListener('scroll', aturTombol, { passive: true });
+        window.addEventListener('resize', aturTombol);
+        aturTombol();
+    }
+
+    document.querySelectorAll('[data-dialog]').forEach((kartu) => {
+        const dialog = document.getElementById(kartu.dataset.dialog);
+
+        if (!dialog || typeof dialog.showModal !== 'function') {
+            return;
+        }
+
+        kartu.addEventListener('click', () => dialog.showModal());
+        dialog.querySelector('.alumni-tutup')?.addEventListener('click', () => dialog.close());
+
+        // Klik di luar kotak popup (backdrop) menutup popup.
+        dialog.addEventListener('click', (event) => {
+            if (event.target === dialog) {
+                dialog.close();
+            }
+        });
+    });
+
+    /* -----------------------------------------------------------
        TOMBOL LOADING FORM CEK STATUS
     ----------------------------------------------------------- */
     document.getElementById('form-status')?.addEventListener('submit', (event) => {

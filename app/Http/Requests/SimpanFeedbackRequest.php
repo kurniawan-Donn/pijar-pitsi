@@ -29,6 +29,7 @@ class SimpanFeedbackRequest extends FormRequest
             'rekomendasi' => ['required', Rule::in(array_keys(config('feedback.rekomendasi')))],
             'evaluasi_keseluruhan' => ['required', 'string', 'max:2000'],
             'pernyataan' => ['accepted'],
+            'bersedia_tampil_alumni' => ['nullable', 'boolean'],
         ];
 
         foreach (array_keys(config('feedback.pertanyaan_skala')) as $nomor) {

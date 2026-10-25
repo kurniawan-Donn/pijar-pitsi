@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Website;
 
 use App\Http\Controllers\Controller;
+use App\Models\Alumni;
 use App\Models\Banner;
 use App\Models\Faq;
 use App\Models\PengaturanWebsite;
@@ -20,6 +21,7 @@ class HomeController extends Controller
         return view('website.index', [
             'banners' => Banner::aktif()->get(),
             'faqs' => Faq::tampil()->berurutan()->get(),
+            'alumnis' => Alumni::publik()->berurutan()->with('pesertaMagang.feedback')->get(),
             'perusahaan' => Perusahaan::first(),
             'pengaturan' => PengaturanWebsite::first(),
             'statistik' => [

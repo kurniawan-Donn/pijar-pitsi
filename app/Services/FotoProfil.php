@@ -49,18 +49,7 @@ class FotoProfil
      */
     public function simpan(User $user, UploadedFile $file, string $field = 'foto'): string
     {
-        $gambar = @imagecreatefromstring((string) file_get_contents($file->getRealPath()));
-
-        if ($gambar === false) {
-            throw ValidationException::withMessages([$field => 'File foto tidak dapat dibaca. Coba foto lain.']);
-        }
-
-        $gambar = $this->putarSesuaiExif($gambar, $file);
-        $persegi = $this->potongPersegi($gambar);
-
-        ob_start();
-        imagejpeg($persegi, null, 85);
-        $isi = (string) ob_get_clean();
+        $isi = $this->olah($file, $field);
 
         $path = self::FOLDER.'/'.$user->id.'-'.Str::random(12).'.jpg';
         Storage::disk('local')->put($path, $isi);
@@ -73,6 +62,26 @@ class FotoProfil
         }
 
         return $path;
+    }
+
+    /**
+     * Potong persegi + perkecil + simpan ulang sebagai JPG. Mengembalikan isi file.
+     * Dipakai juga untuk foto alumni.
+     */
+    public function olah(UploadedFile $file, string $field = 'foto'): string
+    {
+        $gambar = @imagecreatefromstring((string) file_get_contents($file->getRealPath()));
+
+        if ($gambar === false) {
+            throw ValidationException::withMessages([$field => 'File foto tidak dapat dibaca. Coba foto lain.']);
+        }
+
+        $persegi = $this->potongPersegi($this->putarSesuaiExif($gambar, $file));
+
+        ob_start();
+        imagejpeg($persegi, null, 85);
+
+        return (string) ob_get_clean();
     }
 
     public function hapus(User $user): void

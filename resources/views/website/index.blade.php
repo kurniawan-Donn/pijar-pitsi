@@ -101,15 +101,15 @@
         $websiteUrl ? ['🌐', 'Website', $perusahaan->website, $websiteUrl] : null,
     ]);
 
-    $menu = [
+    // Alumni & FAQ hanya muncul di menu bila ada data yang ditampilkan.
+    $menu = array_filter([
         '#beranda' => 'Beranda',
-        '#pengumuman' => 'Pengumuman',
-        '#persyaratan' => 'Persyaratan',
-        '#alur' => 'Alur',
-        '#daftar' => 'Daftar',
+        '#tentang' => 'Tentang',
+        '#alumni' => $alumnis->isNotEmpty() ? 'Alumni' : null,
+        '#faq' => $faqs->isNotEmpty() ? 'FAQ' : null,
+        '#daftar' => 'Daftar Magang',
         '#status' => 'Cek Status',
-        '#kontak' => 'Kontak',
-    ];
+    ]);
 @endphp
 
 <!DOCTYPE html>
@@ -156,8 +156,7 @@
             </ul>
 
             <div class="nav-actions">
-                <a href="{{ route('login') }}" class="btn btn-outline nav-cta" title="Login peserta magang, admin, dan super admin">Login</a>
-                <a href="#daftar" class="btn btn-accent nav-cta">Daftar Magang</a>
+                <a href="{{ route('login') }}" class="btn btn-accent nav-cta" title="Login peserta magang, admin, dan super admin">Login</a>
             </div>
 
             <button type="button" class="nav-toggle" aria-label="Buka menu" aria-controls="nav-menu" aria-expanded="false">
@@ -321,8 +320,10 @@
         </section>
 
         {{-- =================================================
-             PERSYARATAN
+             TENTANG = PERSYARATAN + ALUR (tautan "Tentang" di navbar)
         ================================================== --}}
+        <div id="tentang">
+
         <section id="persyaratan" class="section section-light">
             <div class="container">
 
@@ -370,6 +371,15 @@
 
             </div>
         </section>
+
+        </div>
+
+        {{-- =================================================
+             ALUMNI (tampil bila ada alumni yang ditampilkan)
+        ================================================== --}}
+        @if ($alumnis->isNotEmpty())
+            @include('website.partials.alumni')
+        @endif
 
         {{-- =================================================
              FAQ (tampil bila ada pertanyaan yang ditampilkan)
