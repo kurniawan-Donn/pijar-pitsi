@@ -20,7 +20,7 @@
 <style>
     .tata-pratinjau {
         display: grid;
-        grid-template-columns: 340px minmax(0, 1fr);
+        grid-template-columns: 240px minmax(0, 1fr);
         gap: 18px;
         align-items: start;
     }
@@ -125,7 +125,7 @@
     }
 
     .tabel-scan input[type="time"] {
-        width: 108px;
+        width: 118px;
         height: 34px;
         padding: 0 6px;
 
@@ -146,15 +146,29 @@
         font-size: 12px;
     }
 
+    .ket {
+        min-width: 190px;
+
+        line-height: 1.45;
+    }
+
     .ket li {
         margin-left: 14px;
     }
 
     .lama-baru label {
-        display: block;
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
 
+        margin-bottom: 3px;
+
+        color: var(--teks);
         font-size: 12.5px;
-        white-space: nowrap;
+    }
+
+    .lama-baru input {
+        margin-top: 3px;
     }
 
     .tanda {
@@ -192,7 +206,7 @@
         .foto-kartu {
             position: static;
 
-            max-width: 340px;
+            max-width: 300px;
         }
     }
 </style>

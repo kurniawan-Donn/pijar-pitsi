@@ -27,6 +27,7 @@ Menu **Sistem → Pengaturan**. Admin hanya bisa melihat halaman ini (kecuali ba
 | Gambar tanda tangan & stempel | Unggah tanda tangan Mengetahui, tanda tangan Menyetujui, dan stempel (PNG berlatar transparan, maksimal 1 MB). Pratinjau muncul sebelum disimpan. |
 | Tarif uang saku | Tarif hari penuh dan setengah hari, berlaku mulai tanggal tertentu. Tarif lama tetap dipakai untuk tanggal sebelumnya. |
 | Hari libur | Libur nasional dan cuti bersama (admin juga bisa mengelola). |
+| Scan kartu absensi | Saklar fitur, jendela scan (bawaan sisi 1–15: tanggal 14–17; sisi 16–31: tanggal 28 s.d. 2), batas scan per peserta per hari (bawaan 5). Admin juga bisa mengubah. Kunci API Gemini diatur di file `.env` server (`GEMINI_API_KEY`, `GEMINI_MODEL`), bukan di web. |
 
 ![Pengaturan magang](../../public/images/panduan/sa-pengaturan.jpg)
 

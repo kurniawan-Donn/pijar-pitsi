@@ -77,6 +77,10 @@
         min-width: 240px;
 
         line-height: 1.55;
+    }
+
+    /* Baris baru di activity tetap tampil, tanpa ikut merender spasi markup. */
+    .lb-teks {
         white-space: pre-line;
     }
 
@@ -245,7 +249,9 @@
                             @elseif ($logbook->jenisKehadiran() === 'setengah_hari')
                                 <span class="lb-badge lb-review">Setengah hari</span>
                             @endif
-                            {{ $logbook->activity }}
+                            @if ($logbook->activity)
+                                <span class="lb-teks">{{ $logbook->activity }}</span>
+                            @endif
 
                             {{-- Sumber jam & penanda dari scan kartu absensi --}}
                             @if ($logbook->kehadiran === 'hadir')

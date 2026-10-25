@@ -1041,7 +1041,7 @@ Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
 
 ## 10. Revisi 6: Isi Jam Logbook dari Kartu Absensi
 
-Status: **dikerjakan**; keputusan pemilik di 10.9. Branch: `fase-32-scan-kartu-absensi`.
+Status: **selesai dibangun**; uji akurasi dengan Gemini sungguhan menunggu `GEMINI_API_KEY` di `.env` (perintah `php artisan kartu:uji-akurasi`). Keputusan pemilik di 10.9. Branch: `fase-32-scan-kartu-absensi`.
 Dikerjakan setelah modul logbook stabil (Revisi 5 sudah selesai dan di-merge).
 
 ### 10.1 Latar belakang
@@ -1165,7 +1165,18 @@ masuk test otomatis.
    ini; tanggal 28–2 → sisi 16–31 bulan dari tanggal 28). Kartu bulan lain tetap bisa diisi manual.
 4. **Tanggal Izin/Sakit:** dilewati, baris tampil kuning dengan peringatan; tidak ditimpa.
 
-### 10.10 Urutan pengerjaan
+### 10.10 Catatan implementasi
+
+- Peserta selesai magang tidak bisa scan (route peserta dijaga `peserta.aktif`).
+- Scan yang gagal dibaca tetap dihitung dalam batas harian, karena AI tetap dipanggil.
+- Logbook dari scan di luar batas isi mundur tetap boleh dibuka peserta untuk melengkapi activity
+  (tanggal lewat batas lain tetap terkunci).
+- Admin tidak bisa menerima logbook Hadir tanpa activity; hari lain dalam pilihan yang sama tetap diproses.
+- Biaya: Gemini 2.5 Flash tier berbayar US$0,30 per 1 juta token masukan dan US$2,50 per 1 juta token
+  keluaran (termasuk token berpikir), menurut halaman harga resmi per 26-10-2026. Token per scan dicatat
+  di `scan_kartu_absensis` (`token_masuk`, `token_keluar`).
+
+### 10.11 Urutan pengerjaan
 
 | Langkah | Isi |
 |---|---|

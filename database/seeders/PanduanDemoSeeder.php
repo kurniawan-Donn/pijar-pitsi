@@ -16,6 +16,7 @@ use App\Models\PengaturanMagang;
 use App\Models\PenilaianPeserta;
 use App\Models\Perusahaan;
 use App\Models\PesertaMagang;
+use App\Models\ScanKartuAbsensi;
 use App\Models\SuratKeterangan;
 use App\Models\User;
 use App\Services\FotoAlumni;
@@ -27,6 +28,7 @@ use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -66,6 +68,9 @@ class PanduanDemoSeeder extends Seeder
             'mengetahui_jabatan' => 'Staff GA & HRD',
             'menyetujui_nama' => 'Hendra Kusuma',
             'menyetujui_jabatan' => 'Manager GA & FA',
+            // Demo: jendela sisi 1–15 dibuka sepanjang bulan agar halaman scan bisa dipotret kapan saja.
+            'scan_jendela_1_mulai' => 1,
+            'scan_jendela_1_selesai' => 31,
         ]);
 
         $tandaTangan = app(TandaTanganDokumen::class);
@@ -104,6 +109,7 @@ class PanduanDemoSeeder extends Seeder
         $rina->penempatans()->create(['periode' => '2026-10', 'divisi_id' => $divisi['Divisi Konsultan']->id, 'mentor_nama' => 'Maya Lestari', 'mentor_jabatan' => 'Senior Consultant']);
 
         $this->logbook($rina, $hariIni, $admin);
+        $this->scanKartu($rina, $hariIni);
 
         $izin = IzinPeserta::create([
             'peserta_magang_id' => $rina->id,
@@ -299,6 +305,65 @@ class PanduanDemoSeeder extends Seeder
                 'diverifikasi_pada' => $status === LogbookHarian::MENUNGGU ? null : now(),
             ]);
         }
+    }
+
+    /**
+     * Satu scan kartu yang belum disimpan (untuk pratinjau) dan dua logbook yang jamnya dari scan.
+     */
+    private function scanKartu(PesertaMagang $peserta, CarbonImmutable $hariIni): void
+    {
+        $bulan = $hariIni->subDays(10);
+        $sisi = $bulan->day <= 15 ? ScanKartuAbsensi::SISI_AWAL : ScanKartuAbsensi::SISI_AKHIR;
+        [$awal, $akhir] = ScanKartuAbsensi::rentangSisi($sisi, $bulan->year, $bulan->month);
+
+        $hasil = collect(range($awal, min($akhir, $hariIni->subDay()->month === $bulan->month ? $hariIni->subDay()->day : $akhir)))
+            ->filter(fn (int $hari) => ! $bulan->setDay($hari)->isWeekend())
+            ->values()
+            ->map(fn (int $hari, int $i) => [
+                'tanggal' => $hari,
+                'jam_masuk' => sprintf('07:%02d', 45 + ($i * 7) % 15),
+                'jam_keluar' => $i % 6 === 5 ? null : sprintf('16:%02d', 30 + ($i * 11) % 25),
+                'keyakinan' => $i % 6 === 5 ? 0.62 : 0.95,
+                'ragu' => $i % 6 === 5,
+                'catatan' => $i % 6 === 5 ? ['Cetakan jam keluar tidak terlihat.'] : [],
+            ])
+            ->all();
+
+        $path = ScanKartuAbsensi::FOLDER.'/'.$peserta->id.'/contoh-kartu.jpg';
+        Storage::disk('local')->put($path, file_get_contents($this->gambar(600, 800, [238, 118, 35], 'Contoh kartu')->getRealPath()));
+
+        $scan = ScanKartuAbsensi::create([
+            'peserta_magang_id' => $peserta->id,
+            'tahun' => $bulan->year,
+            'bulan' => $bulan->month,
+            'sisi' => $sisi,
+            'foto_path' => $path,
+            'status' => ScanKartuAbsensi::DIPRATINJAU,
+            'hasil' => $hasil,
+            'jumlah_terbaca' => count($hasil),
+            'model' => 'gemini-2.5-flash',
+        ]);
+
+        // Dua logbook terakhir di kartu ini jamnya dari scan; yang terbaru diubah peserta setelah scan.
+        $bacaan = collect($hasil)->keyBy('tanggal');
+
+        LogbookHarian::where('peserta_magang_id', $peserta->id)->where('kehadiran', LogbookHarian::HADIR)
+            ->whereYear('tanggal', $bulan->year)->whereMonth('tanggal', $bulan->month)
+            ->orderByDesc('tanggal')->limit(2)->get()
+            ->filter(fn (LogbookHarian $logbook) => $bacaan->has($logbook->tanggal->day))
+            ->each(function (LogbookHarian $logbook, int $i) use ($bacaan, $scan) {
+                $asli = $bacaan[$logbook->tanggal->day];
+
+                $logbook->update([
+                    'pagi_masuk' => $i === 0 ? '08:00' : $asli['jam_masuk'],
+                    'pagi_keluar' => null,
+                    'siang_masuk' => null,
+                    'siang_keluar' => $asli['jam_keluar'] ?? '16:30',
+                    'sumber_jam' => LogbookHarian::SUMBER_SCAN,
+                    'scan_kartu_absensi_id' => $scan->id,
+                    'jam_scan_asli' => ['pagi_masuk' => $asli['jam_masuk'] ?? '', 'siang_keluar' => $asli['jam_keluar'] ?? ''],
+                ]);
+            });
     }
 
     private function penilaian(PesertaMagang $peserta, User $penilai): void

@@ -372,7 +372,7 @@ class BacaKartuAbsensi
     /**
      * Putar sesuai orientasi kamera, perkecil, simpan ulang sebagai JPG (EXIF terbuang).
      */
-    private function siapkanFoto(UploadedFile $foto): string
+    public function siapkanFoto(UploadedFile $foto): string
     {
         $gambar = @imagecreatefromstring((string) file_get_contents($foto->getRealPath()));
 

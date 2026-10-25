@@ -114,13 +114,13 @@
 
         <section class="panel">
             <p class="ringkas">
-                Di-scan {{ $scan->created_at->translatedFormat('d F Y H:i') }}
+                Di-scan {{ $scan->created_at->translatedFormat('d F Y H:i') }} ·
                 @if ($scan->sudahDisimpan())
-                    · disimpan peserta {{ $scan->disimpan_pada->translatedFormat('d F Y H:i') }} ({{ $scan->jumlah_disimpan }} tanggal)
+                    disimpan peserta {{ $scan->disimpan_pada->translatedFormat('d F Y H:i') }} ({{ $scan->jumlah_disimpan }} tanggal).
                 @else
-                    · <b>belum disimpan</b> peserta
+                    <b>belum disimpan</b> peserta.
                 @endif
-                . Baris kuning: jam di logbook berbeda dari hasil scan.
+                Baris kuning: jam di logbook berbeda dari hasil scan.
             </p>
 
             <div style="overflow-x: auto;">

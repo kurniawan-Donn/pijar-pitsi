@@ -228,6 +228,21 @@ Centang setiap langkah yang berhasil.
 - [ ] Di HP: sentuh foto sekali untuk melihat keterangan, sentuh lagi untuk memperbesar.
 - [ ] Foto yang disembunyikan tidak tampil di beranda; bila semua disembunyikan, bagiannya hilang.
 
+### L. Isi jam dari kartu absensi (Revisi 6)
+- [ ] Isi `GEMINI_API_KEY` (dan bila perlu `GEMINI_MODEL`) di `.env`, lalu uji akurasi dengan foto contoh:
+  `C:\laragon\bin\php\php-8.4\php.exe artisan kartu:uji-akurasi` (memanggil Gemini, berbayar).
+- [ ] (Admin) **Pengaturan Magang → Scan Kartu Absensi**: pastikan aktif. Untuk mencoba di luar tanggal
+  14–17 / 28–2, ubah sementara jendela sisi 1–15 menjadi tanggal 1–31.
+- [ ] (Peserta) **Logbook Harian → Isi dari kartu absensi** → pilih kartu → potret/unggah foto → **Baca Kartu**.
+- [ ] Tabel pratinjau: baris kuning perlu diperiksa, abu-abu tidak bisa diubah. Ubah satu jam, pilih lama/baru
+  pada tanggal yang sudah punya jam, lalu **Simpan ke Logbook**.
+- [ ] Logbook terisi jamnya dengan tanda **Scan kartu** dan **Activity belum diisi**; dashboard mengingatkan.
+  Lengkapi activity satu tanggal.
+- [ ] (Admin) Verifikasi logbook: penanda Scan/Manual, **diubah setelah scan**, **di luar batas isi mundur**,
+  dan **Kartu absensi** (foto berdampingan dengan jam). Coba **Diterima** pada tanggal tanpa activity:
+  muncul pesan bahwa tanggal itu tidak diterima.
+- [ ] Scan lebih dari batas harian: tombol Baca Kartu ditolak dengan pesan.
+
 ---
 
 ## 6. Hal yang Sering Membingungkan
