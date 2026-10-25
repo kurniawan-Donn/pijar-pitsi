@@ -150,9 +150,15 @@
                 @foreach ($menu as $href => $label)
                     <li><a href="{{ $href }}">{{ $label }}</a></li>
                 @endforeach
+
+                {{-- Di layar kecil tombol masuk tampil di dalam menu. --}}
+                <li class="nav-menu-masuk"><a href="{{ route('login') }}">Masuk Peserta →</a></li>
             </ul>
 
-            <a href="#daftar" class="btn btn-accent nav-cta">Daftar Magang</a>
+            <div class="nav-actions">
+                <a href="{{ route('login') }}" class="btn btn-outline nav-cta" title="Login peserta magang untuk mengisi biodata dan logbook">Masuk Peserta</a>
+                <a href="#daftar" class="btn btn-accent nav-cta">Daftar Magang</a>
+            </div>
 
             <button type="button" class="nav-toggle" aria-label="Buka menu" aria-controls="nav-menu" aria-expanded="false">
                 <span></span><span></span><span></span>
