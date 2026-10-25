@@ -1037,3 +1037,133 @@ Keputusan ikon: **Lucide** (lisensi ISC), outline, garis 1.75, tanpa emoji.
 | 3 | `fase-27-ui-pilara` | Identitas PILARA, token warna, ikon seragam, komponen UI, tampilan HP |
 | 4 | `fase-28-dokumentasi` | Tabel + CRUD dokumentasi, galeri Beranda, lightbox |
 | 5 | `fase-29-panduan` | Menu Panduan per role, `docs/panduan/`, buku alur + diagram |
+
+
+## 10. Revisi 6: Isi Jam Logbook dari Kartu Absensi
+
+Status: **direncanakan**, menunggu keputusan pemilik (10.9). Branch: `fase-32-scan-kartu-absensi`.
+Dikerjakan setelah modul logbook stabil (Revisi 5 sudah selesai dan di-merge).
+
+### 10.1 Latar belakang
+
+Kantor memakai mesin ceklok dengan kartu absensi kertas (dot-matrix). Peserta memotret kartu,
+sistem membaca jam dengan Gemini, peserta memeriksa lalu menyimpan.
+
+- Satu kartu = satu bulan kalender; depan tanggal 1–15, belakang 16–31.
+- Yang dipakai hanya **Pagi Masuk** → `pagi_masuk` dan **Siang Keluar** → `siang_keluar`. Lembur diabaikan.
+- Ada kode tanggal kecil di depan jam (mis. "19 7:54"); cetakan sering meleset ke baris tanggal sebelah.
+- Bulan ditulis tangan → tidak dibaca otomatis; peserta memilih bulan, tahun, dan sisi.
+
+**Catatan foto contoh:** ada di `docs/reverensi/kartu-absensi-depan.webp` dan
+`docs/reverensi/kartu-absensi-belakang.webp` (folder sudah di-ignore Git; format .webp, bukan .jpg).
+
+**Bacaan manual foto contoh (kunci jawaban uji akurasi, Oktober 2026):**
+
+| Sisi | Tanggal | Masuk | Keluar | Catatan |
+|---|---|---|---|---|
+| Depan | 1 | 07:57 | 16:30 | |
+| Depan | 2 | 08:06 | 16:40 | |
+| Depan | 5 | 08:06 | 16:36 | 3–4 Sabtu–Minggu |
+| Depan | 7 | 08:04 | 16:41 | 6 kosong (Selasa) |
+| Depan | 8 | 07:57 | 16:38 | |
+| Depan | 9 | 08:06 | 16:42 | |
+| Depan | 12 | 07:57 | 16:41 | tercetak di baris 11 (11 = Minggu) |
+| Depan | 13 | 08:10 | 16:49 | tercetak di antara baris 12–13 |
+| Depan | 14 | 08:02 | – | tercetak di antara baris 13–14 |
+| Depan | 15 | 08:05 | 16:37 | tercetak di antara baris 14–15 |
+| Belakang | 16 | 07:54 | 16:54 | |
+| Belakang | 19 | 07:58 | 16:37 | 17–18 Sabtu–Minggu |
+| Belakang | 20 | 07:58 | 16:35 | |
+| Belakang | 21 | 08:08 | 16:37 | |
+| Belakang | 22 | 07:47 | 16:45 | |
+| Belakang | 23 | 08:05 | – | belum keluar saat difoto |
+
+Baris tanggal 12–15 sisi depan adalah kasus sulit (meleset) dan perlu dikonfirmasi pemilik (10.9).
+
+### 10.2 Cara baca (Gemini)
+
+- `GEMINI_API_KEY` dan `GEMINI_MODEL` di `.env` (tidak di-commit); `.env.example` hanya berisi nama kuncinya.
+  Per 26-10-2026 keduanya **belum ada** di `.env`.
+- Panggilan lewat `Http` facade Laravel ke REST API Gemini (tanpa package baru), timeout + retry singkat.
+- Foto dikecilkan di server (sisi terpanjang ±1600 px, JPG, EXIF dibuang) sebelum dikirim.
+- Prompt meminta **JSON terstruktur** (`responseMimeType: application/json` + `responseSchema`):
+  `[{tanggal, jam_masuk, jam_keluar, keyakinan (0–1), catatan}]`. Prompt menjelaskan: sisi kartu dan
+  rentang tanggalnya, kolom yang dipakai, kode tanggal di depan jam, cetakan bisa meleset sehingga
+  harus dipasangkan ke tanggal paling masuk akal, serta **kalender bulan itu** (hari Sabtu/Minggu dan
+  hari libur) sebagai petunjuk.
+- Validasi server: format `HH:MM` valid, tanggal di dalam sisi kartu dan ada di bulan itu, jam masuk
+  < jam keluar, tidak ada tanggal ganda, keyakinan rendah (< 0,8) atau masalah validasi → baris kuning.
+- Respons mentah tidak disimpan; yang disimpan hanya hasil yang sudah divalidasi.
+
+### 10.3 Alur peserta
+
+1. Halaman Logbook → tombol **Isi dari kartu absensi** (aktif sesuai jendela scan).
+2. Pilih bulan, tahun, sisi kartu → potret (kamera HP, `capture="environment"`) atau unggah foto.
+3. Tabel pratinjau: tanggal, jam masuk, jam keluar (bisa diedit). Baris meragukan berwarna kuning
+   dengan keterangan; baris terkunci (diterima/belum tiba) tampil abu-abu dan tidak bisa dipilih.
+4. Bila tanggal sudah punya jam: tampil **lama vs baru**, peserta memilih per baris.
+5. **Simpan** (tidak pernah otomatis). Activity, output, lokasi tetap diisi peserta seperti biasa.
+6. Foto kartu menjadi bukti di logbook tanggal-tanggal yang terisi.
+
+### 10.4 Aturan
+
+- Tanggal **Diterima** atau **belum tiba** tidak bisa diubah scan.
+- Scan boleh mengisi tanggal di luar batas isi mundur (data dari mesin) → ditandai untuk admin.
+- Setiap logbook mencatat **sumber jam**: `manual` atau `scan`. Bila jam hasil scan diubah peserta,
+  nilai asli scan disimpan dan admin melihat tanda **diubah setelah scan**.
+- Menyimpan hasil scan mengembalikan status ke **Menunggu** (sama seperti simpan manual).
+- Pengisian jam manual tetap ada.
+
+### 10.5 Pengaturan (admin & super admin)
+
+Di Pengaturan Magang (bagian baru "Scan Kartu Absensi", boleh diubah admin juga):
+
+| Pengaturan | Nilai awal |
+|---|---|
+| Saklar fitur scan | aktif |
+| Jendela sisi 1–15 | tanggal 14 s.d. 17 |
+| Jendela sisi 16–31 | tanggal 28 s.d. tanggal 2 bulan berikutnya |
+| Batas scan per peserta per hari | 5 |
+
+Di luar jendela, tombol nonaktif dengan keterangan kapan bisa dipakai.
+
+### 10.6 Sisi admin
+
+- Verifikasi logbook: badge **Scan/Manual**, tanda **diubah setelah scan** dan **di luar batas isi
+  mundur**, tombol **Lihat kartu** yang membuka foto berdampingan dengan data jam.
+- LogAktivitas `scan_kartu_absensi`: peserta, waktu, sisi, bulan, jumlah baris terbaca/tersimpan.
+  Tanpa API key dan tanpa respons mentah.
+
+### 10.7 Rancangan data
+
+- Tabel baru `scan_kartu_absensis`: peserta, bulan, tahun, sisi (`1-15`/`16-31`), foto_path (disk
+  privat), status (`dipratinjau`/`disimpan`), jumlah_baris, hasil (JSON tervalidasi), model, token
+  masuk/keluar (untuk menghitung biaya), dibuat_oleh, timestamps.
+- `logbook_harians` ditambah: `sumber_jam` (`manual`/`scan`, bawaan manual), `scan_kartu_absensi_id`,
+  `jam_scan_asli` (JSON: pagi_masuk, siang_keluar hasil scan), `di_luar_batas_isi` (boolean).
+- Foto kartu: satu file per scan, ditautkan ke logbook lewat `scan_kartu_absensi_id` (tidak
+  digandakan ke `logbook_buktis` dan tidak memakan jatah 3 bukti per hari). Akses lewat Policy:
+  pemilik dan admin/super admin.
+- `pengaturan_magangs` ditambah: `scan_aktif`, `scan_jendela_1_mulai/selesai`,
+  `scan_jendela_2_mulai/selesai`, `scan_batas_harian`.
+
+### 10.8 Test
+
+Gemini di-mock (`Http::fake`). Validasi hasil scan, tanggal diterima/masa depan, jendela scan, batas
+harian, akses foto kartu (peserta lain 403), lama vs baru, penanda diubah/di luar batas, LogAktivitas.
+Uji akurasi nyata dengan dua foto contoh (memanggil Gemini sungguhan) dilaporkan terpisah, tidak
+masuk test otomatis.
+
+### 10.9 Keputusan yang dibutuhkan
+
+Dicatat di percakapan; diisi setelah pemilik menjawab.
+
+### 10.10 Urutan pengerjaan
+
+| Langkah | Isi |
+|---|---|
+| 1 | Migration + pengaturan + model, service Gemini (dengan mock), validasi hasil |
+| 2 | Uji akurasi dua foto contoh (Gemini sungguhan), sesuaikan prompt |
+| 3 | Alur peserta: unggah/kamera → pratinjau → lama vs baru → simpan |
+| 4 | Sisi admin: badge, penanda, lihat kartu; LogAktivitas |
+| 5 | Test, panduan peserta/admin, laporan akurasi + perkiraan biaya |
